@@ -85,6 +85,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 }
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 
 \lstset{
     basicstyle=\ttfamily\scriptsize,
@@ -3197,6 +3198,41 @@ reemplazan. La web y la página de cámara se sirven por HTTPS, requisito de
 los navegadores para usar la cámara del teléfono, y la página de cámara se
 publica en \texttt{/camara/} a través de la web, por lo que bastan los puertos
 80 y 443.
+
+\subsection{Costos de la infraestructura}
+
+El Cuadro~\ref{tab:costos} detalla el costo mensual del servidor con los
+precios de lista de Google Cloud para \texttt{southamerica-west1} (en dólares,
+sin impuestos, octubre de 2026), calculado sobre 730 horas al mes. El costo
+lo determina la máquina virtual; el disco, la IP y el tráfico suman menos del
+6\,\%. El mismo servidor admite otras modalidades de contratación, de menor
+costo, que se comparan en la segunda parte del cuadro.
+
+\begin{table}[!htbp]
+\caption{Costo mensual del servidor en Google Cloud}
+\label{tab:costos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.30\textwidth}L{0.44\textwidth}R{0.16\textwidth}}
+\toprule
+\textbf{Concepto} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
+\midrule
+Máquina virtual & \texttt{c4a-highcpu-8} bajo demanda: US\$0.4333 por hora & 316.34 \\
+Disco & 77~GB a US\$0.143 por GB (disco balanceado en Santiago) & 11.01 \\
+IP externa & US\$0.005 por hora & 3.65 \\
+Tráfico de salida (estimado) & 20~GB a US\$0.19 por GB & 3.80 \\
+\midrule
+\textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Modalidades de la máquina virtual}} \\
+Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
+Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
+Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
+Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Base de datos}
 
