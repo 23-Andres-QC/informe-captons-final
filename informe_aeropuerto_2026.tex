@@ -7,7 +7,7 @@
 \renewcommand{\tablename}{Cuadro}
 \renewcommand{\refname}{Referencias}
 
-\usepackage{placeins}
+\usepackage[section]{placeins}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -123,7 +123,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
     \vspace{0.5cm}
 
-    {\Large 16/09/2026 \par}
+    {\Large 07/10/2026 \par}
 
     \vfill
 
@@ -165,7 +165,7 @@ marco regulatorio de la Ley N.\textdegree~29733 de Protección de Datos
 Personales del Perú.
 
 El objetivo general del proyecto es diseñar un sistema capaz de detectar,
-rastrear y re-identificar pasajeros de forma anónima a través de
+rastrear y re-identificar pasajeros de forma seudónima a través de
 múltiples cámaras, integrado en un flujo de trabajo que combine la
 gestión operativa de la congestión con la generación de insights
 comerciales. Entre los objetivos específicos destacan procesar video CCTV
@@ -214,10 +214,8 @@ más recurrentes en los aeropuertos internacionales de alto tránsito. Las
 zonas comerciales mal distribuidas generan aglomeraciones frente a tiendas
 que los propios clientes terminan abandonando sin ser atendidos a tiempo,
 mientras que la falta de visibilidad sobre el comportamiento real del
-pasajero impide responder preguntas comerciales elementales: qué tiendas
-visita, cuánto tiempo permanece en cada una, qué rutas sigue entre el
-check-in y su puerta de embarque, y qué tan bien convierte cada local el
-flujo de personas que pasa frente a él en visitas reales. El Aeropuerto
+pasajero impide responder preguntas comerciales elementales sobre su
+recorrido. El Aeropuerto
 Internacional Jorge Chávez, operado por Lima Airport Partners (LAP), no es
 la excepción: decenas de cámaras CCTV cubren la terminal, pero fueron
 instaladas con fines exclusivamente de vigilancia y no de analítica, y en
@@ -284,10 +282,7 @@ generar insights comerciales confiables, el sistema debe ser capaz de:
     captación comercial.
 \end{itemize}
 
-Para cubrir estas capas se combinan un detector de personas (YOLO26m), un
-seguidor local híbrido con memoria visual y un codificador de
-re-identificación (YOLO26s-ReID) con una galería global compartida entre
-cámaras. La integración en un aeropuerto real exige, además, procesar
+La integración en un aeropuerto real exige, además, procesar
 varios streams de video simultáneos, desplegar el pipeline sobre una
 arquitectura tolerante a fallos parciales y exponer los resultados en un
 dashboard útil tanto para el equipo de operaciones de LAP como para los
@@ -307,7 +302,7 @@ pipeline desplegable, bajo un marco ético explícito.
     \item \textbf{Objetivo general:}
 
     Diseñar un sistema de visión computacional multicámara capaz de
-    detectar, rastrear y re-identificar pasajeros de forma anónima a
+    detectar, rastrear y re-identificar pasajeros de forma seudónima a
     través de las cámaras CCTV del aeropuerto Jorge Chávez, integrando la
     gestión operativa de la congestión con la generación de insights
     comerciales, sin recurrir a reconocimiento facial ni a ningún
@@ -334,7 +329,7 @@ pipeline desplegable, bajo un marco ético explícito.
         e integrarlas en un dashboard para la operación y los locales.
         \item Diseñar un modelo de datos en PostgreSQL/PostGIS que
         conserve la trazabilidad entre cámara, tracklet, identidad
-        anónima, trayectoria y evento, sin almacenar imágenes ni
+        seudónima, trayectoria y evento, sin almacenar imágenes ni
         embeddings.
         \item Establecer salvaguardas éticas frente a menores de edad,
         re-identificación indirecta, retención de datos, transparencia,
@@ -356,12 +351,10 @@ de cámaras independientes. Este proceso exige la inspección visual
 continua de pantallas divididas para detectar aglomeraciones, sin ninguna
 agregación automática de la información a nivel de todo el aeropuerto.
 
-La naturaleza de la infraestructura existente introduce, además, una
-complejidad técnica considerable. Las cámaras fueron instaladas con fines
-de seguridad, en su mayoría no comparten campos de visión, cada una
-transmite un stream RGB independiente y no existe ningún mecanismo
-automático para seguir a un mismo pasajero de una cámara a otra, medir su
-permanencia frente a un local o generar mapas de calor a escala de
+La infraestructura existente añade una complejidad técnica considerable:
+cada cámara transmite un stream RGB independiente y no existe ningún
+mecanismo automático para seguir a un mismo pasajero de una cámara a otra,
+medir su permanencia frente a un local o generar mapas de calor a escala de
 terminal. Esta complejidad, sumada a la falta de herramientas
 automáticas, afecta tanto la gestión operativa de la congestión como las
 decisiones comerciales de los locales.
@@ -375,7 +368,7 @@ sistema.
 
 \subsubsection{Variables operativas y de datos}
 \begin{itemize}
-    \item \textbf{Variable de salida principal:} identidad anónima global
+    \item \textbf{Variable de salida principal:} identidad seudónima global
     de cada pasajero (\texttt{global\_id}) junto con su trayectoria
     espacio-temporal dentro del aeropuerto, siguiendo el enfoque de
     re-identificación por trayectoria y apariencia de Mendes et
@@ -438,9 +431,9 @@ y Law~\cite{wonglaw2023}.
     infraestructura actual del aeropuerto.
     \item \textbf{Datos propios limitados:} el video anotado del
     aeropuerto Jorge Chávez es reducido en esta etapa, por lo que se
-    utilizan modelos preentrenados y datasets complementarios (HABOOF,
-    Mall Dataset, MSP60K y Roboflow person detection) mientras se
-    recolectan datos propios.
+    utilizan modelos preentrenados, sin entrenamiento propio, y la
+    validación se realiza con video grabado en el campus de la Universidad
+    ESAN.
     \item \textbf{Anotación manual costosa:} etiquetar trayectorias
     multicámara para validar la re-identificación es lento y exige
     revisión manual.
@@ -453,26 +446,12 @@ y Law~\cite{wonglaw2023}.
 \end{itemize}
 
 \subsubsection{Restricciones éticas}
-\begin{itemize}
-    \item \textbf{Confidencialidad:} las imágenes de pasajeros son datos
-    personales y deben protegerse conforme a la Ley N.\textdegree~29733 y
-    a estándares internacionales de referencia como el GDPR.
-    \item \textbf{Prohibición de biometría facial:} el sistema no debe
-    almacenar ni procesar rasgos faciales; en su lugar utiliza apariencia
-    corporal combinada con restricciones espacio-temporales entre
-    cámaras~\cite{mendes2023,ryan2023}.
-    \item \textbf{Exclusión de menores de edad:} se requiere un
-    clasificador de edad aproximada que excluya a los menores del
-    análisis comercial individualizado y los mantenga solo en conteos
-    agregados.
-    \item \textbf{Sesgo algorítmico:} un dataset poco representativo
-    puede producir inferencias sesgadas, riesgo documentado en la caída
-    de desempeño entre dominios de los modelos de atributos
-    peatonales~\cite{jin2024}.
-    \item \textbf{Transparencia:} el pasajero debe ser informado, mediante
-    señalización visible, de que la terminal cuenta con analítica de
-    video, conforme a la Ley N.\textdegree~29733.
-\end{itemize}
+El sistema debe proteger la confidencialidad de las imágenes de los
+pasajeros, no procesar rasgos faciales~\cite{mendes2023,ryan2023}, excluir a
+los menores de edad del análisis individualizado, controlar el sesgo
+algorítmico~\cite{jin2024} e informar a los pasajeros mediante señalización
+visible, conforme a la Ley N.\textdegree~29733. El riesgo y la medida de cada
+una se detallan en el análisis ético.
 
 \subsubsection{Restricciones legales}
 \begin{itemize}
@@ -508,13 +487,7 @@ la siguiente manera.
 El manejo simultáneo de varios streams CCTV, con diferencias de
 resolución, tasa de cuadros e iluminación, exige un pipeline robusto de
 detección, seguimiento local, re-identificación, proyección y
-almacenamiento de trayectorias. En la arquitectura propuesta, YOLO26m
-detecta a las personas en cada cuadro; un seguidor híbrido por cámara las
-asocia en el tiempo mediante movimiento, superposición, escala y
-apariencia corporal; el codificador YOLO26s-ReID resume cada tracklet en
-un prototipo de apariencia; y una galería global compartida decide qué
-tracklets pertenecen a la misma persona, respetando restricciones físicas
-y temporales entre cámaras. Esto implica decisiones sobre cuántas vistas
+almacenamiento de trayectorias. Esto implica decisiones sobre cuántas vistas
 se acumulan por tracklet, qué umbrales de similitud se aceptan, cuándo se
 actualiza la memoria visual y qué métricas guían la validación (IDF1,
 precisión y recall de asociación, y rendimiento por cámara).
@@ -532,7 +505,7 @@ escenas aeroportuarias comparables~\cite{zhou2026,ryan2023}.
 El uso de video CCTV para analítica con inteligencia artificial implica
 consideraciones éticas esenciales. Las imágenes de pasajeros son datos
 personales y requieren anonimización, control de acceso y retención
-limitada (en AeroVision, ningún video se almacena), conforme a la Ley N.\textdegree~29733 y a lineamientos
+limitada (en la operación no se graba el video; solo los videos procesados del piloto se conservan como evidencia de la validación), conforme a la Ley N.\textdegree~29733 y a lineamientos
 internacionales como el GDPR. Cabe precisar que el \texttt{global\_id} es
 un seudónimo técnico y no un dato anónimo en sentido estricto: una
 trayectoria seudónima sigue siendo información sobre una persona y debe
@@ -572,9 +545,10 @@ proyecto establece seis salvaguardas:
     \item \textbf{2. Re-identificación indirecta} \\
     \textit{Riesgo:} la combinación de trayectoria, hora y zona podría
     permitir identificar indirectamente a una persona real. \\
-    \textit{Solución:} identificadores anónimos válidos solo durante la
-    sesión de análisis, derivados de un identificador aleatorio de
-    sesión, sin cruce con otros sistemas.
+    \textit{Solución:} identificadores seudónimos derivados de un
+    identificador aleatorio de sesión, sin cruce con otros sistemas; en el
+    modo en vivo, la memoria de identidades los conserva como máximo 7 días
+    desde la última vez que se ve a la persona.
 
     \item \textbf{3. Retención de datos} \\
     \textit{Riesgo:} conservar video e historiales de forma indefinida
@@ -608,7 +582,9 @@ proyecto establece seis salvaguardas:
     reutilizarse con fines comerciales sin autorización. \\
     \textit{Solución:} definición contractual del alcance permitido de
     los datos entre el operador y los locales, con aprobación explícita
-    para nuevos usos, y control de acceso por rol en la aplicación.
+    para nuevos usos, y separación de los perfiles administrador y
+    comercial en la aplicación, prevista con autenticación en el backend (el
+    prototipo usa un acceso de demostración).
 \end{itemize}
 
 \subsubsection{Análisis social}
@@ -733,9 +709,9 @@ antecedente usa cámaras térmicas, mientras que AeroVision trabaja sobre
 CCTV RGB, lo que exige anonimización algorítmica en lugar de la
 anonimización física que ofrece el sensor térmico.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-1.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-1.png}
 \caption{Framework de seguimiento multiobjeto basado en centroides.}
 \label{fig:ant1}
 \end{figure}
@@ -788,13 +764,13 @@ estructura significativa a nivel de grupo y de multitud. Esta idea
 sustenta, en el sistema propuesto, el uso de Kernel Density Estimation
 para hotspots y de PrefixSpan para rutas frecuentes, ambos calculados
 solo a partir de coordenadas y marcas de tiempo asociadas a un
-identificador anónimo. Queda pendiente para trabajo futuro distinguir
+identificador seudónimo. Queda pendiente para trabajo futuro distinguir
 entre viajeros individuales y grupos al calcular el tiempo de permanencia
 y la tasa de captación por tienda.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-2.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-2.png}
 \caption{Curva de velocidad y trayectoria de un grupo de tres peatones.}
 \label{fig:ant2}
 \end{figure}
@@ -851,9 +827,9 @@ coincidencia mutua y sin ambigüedad, y separa tracklets cuando una
 fusión deja de ser coherente. La escala del experimento (cuatro cámaras,
 91 horas) es, sin embargo, mucho menor que la de un aeropuerto completo.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-3.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-3.png}
 \caption{Pipeline de extracción de trayectorias.}
 \label{fig:ant3}
 \end{figure}
@@ -903,9 +879,9 @@ metodología. La caída de desempeño entre dominios es, sin embargo, una
 advertencia: cualquier módulo demográfico deberá validarse con imágenes
 del aeropuerto de Lima antes de asumir un desempeño equivalente.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-4.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-4.png}
 \caption{Metodología de LLM-PAR.}
 \label{fig:ant4}
 \end{figure}
@@ -954,9 +930,9 @@ que el sistema propuesto debe validar estas métricas con datos propios.
 En AeroVision, este tipo de verificación geométrica se activa en el modo
 calibrado, cuando las homografías de las cámaras están validadas.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-5.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-5.png}
 \caption{Resultados del tracking en el conjunto de prueba.}
 \label{fig:ant5}
 \end{figure}
@@ -1003,9 +979,9 @@ objetos pequeños propios de una terminal. Por su publicación reciente,
 estas métricas aún no tienen adopción amplia, por lo que su uso en este
 trabajo es una decisión metodológica temprana.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-6.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-6.png}
 \caption{Pipeline de evaluación de eventos.}
 \label{fig:ant6}
 \end{figure}
@@ -1049,9 +1025,9 @@ Chávez y su integración con un mapa. La ausencia de métricas
 cuantitativas deja una laguna que el sistema propuesto busca cubrir
 reportando precisión, recall e IDF1 con datos etiquetados.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-7.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-7.png}
 \caption{a) Casos de éxito; b) casos fallidos por exceso de personas.}
 \label{fig:ant7}
 \end{figure}
@@ -1093,9 +1069,9 @@ conectadas permite generar mapas de calor y métricas de flujo, y admite
 la predicción de congestión, que queda como trabajo futuro, ya que el
 sistema propuesto reporta por ahora la congestión observada.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-8.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-8.png}
 \caption{Visualización de aglomeraciones en la estación.}
 \label{fig:ant8}
 \end{figure}
@@ -1145,9 +1121,9 @@ memoria visual para los cruces y oclusiones. La evaluación de
 arquitecturas como AirMOTR queda como trabajo futuro, cuando se disponga
 de suficientes datos propios.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{figuras/antecedentes/antecedente-9.png}
+\includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-9.png}
 \caption{Estructura del pipeline de seguimiento.}
 \label{fig:ant9}
 \end{figure}
@@ -1158,11 +1134,12 @@ El Cuadro~\ref{tab:antecedentes} resume las métricas principales, el
 dominio de evaluación y el aporte de cada antecedente al sistema
 propuesto.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \centering
 \caption{Resumen comparativo de los nueve antecedentes revisados.}
 \label{tab:antecedentes}
-\begin{tabular}{@{}p{3.2cm}p{2.8cm}p{3cm}p{6.5cm}@{}}
+\footnotesize
+\begin{tabular}{@{}L{0.18\textwidth}L{0.17\textwidth}L{0.17\textwidth}L{0.38\textwidth}@{}}
 \toprule
 \textbf{Antecedente} & \textbf{Dominio de evaluación} & \textbf{Métrica clave} & \textbf{Aporte al sistema propuesto} \\
 \midrule
@@ -1193,13 +1170,7 @@ marco ético adecuado al contexto regulatorio latinoamericano.
 
 El vacío que aborda este trabajo es, por tanto, más amplio que el de
 cualquier antecedente aislado, pero más concreto que el de un sistema
-comercial genérico. El prototipo integra YOLO26m para la detección, un
-seguidor local híbrido con memoria visual, el codificador YOLO26s-ReID y
-una galería global compartida para la re-identificación sin biometría,
-homografía para el mapeo sobre un plano 2D común, un motor de eventos con
-minería de patrones (KDE, PrefixSpan y grafo origen-destino) y un
-dashboard de insights, desplegados con un servicio de visión en Python,
-un backend en Go, PostgreSQL/PostGIS y Vue.js. La predicción de
+comercial genérico. La predicción de
 congestión, la especialización del seguimiento con arquitecturas tipo
 AirMOTR y el clasificador de edad para la exclusión de menores no se
 presentan como componentes implementados, sino como trabajo futuro.
@@ -1215,7 +1186,8 @@ que cubre, su historia de usuario, precondiciones, flujo principal, flujos
 alternativos y postcondiciones. El sistema tiene dos actores: el
 \textbf{Usuario comercial}, que consulta el análisis y los insights, y el
 \textbf{Usuario administrador}, que monitorea, configura el mapa y procesa
-los videos.
+los videos. Los casos de uso describen el sistema objetivo; en el prototipo,
+el inicio de sesión (CU-01) es de demostración y no distingue roles.
 
 \textbf{CU-01: Iniciar y cerrar sesión}
 
@@ -1240,9 +1212,9 @@ temporalmente.
 
 \textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-01.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-01.png}
 \caption{CU-01: Iniciar y cerrar sesión}
 \label{fig:cu01}
 \end{figure}
@@ -1270,11 +1242,11 @@ trayectorias disponibles.
 muestra el aviso ``sin observaciones''.
 
 \textbf{Postcondiciones:} Estado actual del aeropuerto visible con
-identificadores anónimos.
+identificadores seudónimos.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-02.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-02.png}
 \caption{CU-02: Monitorear personas y trayectorias en vivo}
 \label{fig:cu02}
 \end{figure}
@@ -1301,9 +1273,9 @@ rechaza con un mensaje.
 
 \textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-03.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-03.png}
 \caption{CU-03: Reproducir histórico de movimiento}
 \label{fig:cu03}
 \end{figure}
@@ -1319,22 +1291,21 @@ rechaza con un mensaje.
 
 \textbf{Flujo principal:}
 \begin{enumerate}
-    \item El usuario pulsa ``Puesto/zona''.
-    \item El usuario marca los vértices y cierra el polígono.
-    \item El usuario define nombre, tipo y color.
-    \item El usuario guarda los cambios.
-    \item El sistema valida y registra la zona.
+    \item El usuario pulsa ``Editar'' y luego ``+ Zona''.
+    \item El usuario marca los vértices sobre el plano y pulsa ``Terminar zona''.
+    \item El usuario define nombre, tipo, color y, si es INTERIOR o FRONTAGE, su local.
+    \item El sistema valida la geometría y registra la zona.
 \end{enumerate}
 
 \textbf{Flujos alternativos:} Si cancela, se descarta el borrador. Si la
-geometría es inválida o la zona fue modificada por otro usuario, el sistema
-rechaza el cambio. Para eliminar una zona, el sistema pide confirmación.
+geometría es inválida, el sistema rechaza el cambio. Para quitar una zona,
+el usuario pulsa ``Eliminar zona''.
 
 \textbf{Postcondiciones:} Zona disponible en el mapa y en los insights.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-04.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-04.png}
 \caption{CU-04: Configurar zonas del mapa}
 \label{fig:cu04}
 \end{figure}
@@ -1343,27 +1314,27 @@ rechaza el cambio. Para eliminar una zona, el sistema pide confirmación.
 \textbf{Actor principal:} Usuario administrador \\
 \textbf{Requerimiento:} RF-03
 
-\textbf{Historia de usuario:} Como usuario administrador, quiero ubicar las cámaras en el plano y definir su área de cobertura, para que el sistema sepa qué zona física observa cada una.
+\textbf{Historia de usuario:} Como usuario administrador, quiero ubicar y orientar las cámaras en el plano, para que el sistema sepa qué zona física observa cada una.
 
 \textbf{Precondiciones:} Sesión de usuario administrador en la pantalla ``Configuración''.
 
 \textbf{Flujo principal:}
 \begin{enumerate}
-    \item El usuario pulsa ``Asignar cámara'' y marca su ubicación.
-    \item El usuario define nombre, fuente, color y orientación.
-    \item El usuario dibuja el área de cobertura.
-    \item El usuario guarda los cambios.
+    \item El usuario pulsa ``Editar'' y luego ``+ Cámara'', y marca su ubicación.
+    \item El usuario define su nombre, su posición (X, Y) y su dirección.
+    \item El usuario arrastra la cámara para moverla y su círculo para girarla; el plano muestra su campo de visión.
+    \item El sistema guarda la pose al soltarla.
 \end{enumerate}
 
-\textbf{Flujos alternativos:} El usuario puede arrastrar los vértices para
-ajustar la cobertura. Un dispositivo ya asignado a otra cámara no aparece
-como opción.
+\textbf{Flujos alternativos:} Una cámara con trayectorias no se puede
+eliminar. Volver a publicar el Build no reemplaza una pose ajustada a mano.
 
-\textbf{Postcondiciones:} Cámara y cobertura registradas en el plano.
+\textbf{Postcondiciones:} Cámara registrada en el plano con su posición y
+dirección.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-05.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-05.png}
 \caption{CU-05: Configurar cámaras y cobertura}
 \label{fig:cu05}
 \end{figure}
@@ -1373,26 +1344,25 @@ como opción.
 \textbf{Actor principal:} Usuario administrador \\
 \textbf{Requerimiento:} RF-02
 
-\textbf{Historia de usuario:} Como usuario administrador, quiero ver el video en vivo de una cámara asignada, para verificar directamente lo que ocurre en una zona específica.
+\textbf{Historia de usuario:} Como usuario administrador, quiero ver en vivo lo que capta cada teléfono conectado como cámara, con las detecciones del modelo, para verificar directamente lo que ocurre en una zona.
 
-\textbf{Precondiciones:} Cámara con dispositivo asignado y acceso seguro al sistema.
+\textbf{Precondiciones:} Teléfonos unidos desde la página de cámara.
 
 \textbf{Flujo principal:}
 \begin{enumerate}
-    \item El usuario selecciona la cámara.
-    \item El usuario pulsa ``Activar cámara'' y concede el permiso del navegador.
-    \item El sistema muestra el video y el movimiento detectado.
-    \item El usuario pulsa ``Detener''.
+    \item El usuario abre la pantalla ``Teléfonos''.
+    \item El sistema muestra cada teléfono con las cajas, el ID y el género que publica el modelo.
+    \item El usuario puede quitar un teléfono de la lista.
 \end{enumerate}
 
-\textbf{Flujos alternativos:} Si no hay dispositivo asignado o se deniega el
-permiso, el sistema muestra un aviso y deshabilita la activación.
+\textbf{Flujos alternativos:} Si el modelo no está procesando, se ve el
+video directo del teléfono.
 
-\textbf{Postcondiciones:} Cámara liberada al detener o al salir de la pantalla.
+\textbf{Postcondiciones:} El teléfono quitado deja de enviar video.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-06.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-06.png}
 \caption{CU-06: Ver cámara en vivo}
 \label{fig:cu06}
 \end{figure}
@@ -1418,9 +1388,9 @@ muestra el mapa vacío con un aviso.
 
 \textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-07.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-07.png}
 \caption{CU-07: Consultar mapa de calor}
 \label{fig:cu07}
 \end{figure}
@@ -1445,9 +1415,9 @@ muestra el mapa vacío con un aviso.
 
 \textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-08.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-08.png}
 \caption{CU-08: Consultar insights por zona}
 \label{fig:cu08}
 \end{figure}
@@ -1471,9 +1441,9 @@ sistema muestra un aviso.
 
 \textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-09.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-09.png}
 \caption{CU-09: Analizar flujos entre zonas}
 \label{fig:cu09}
 \end{figure}
@@ -1499,9 +1469,9 @@ muestra el progreso.
 
 \textbf{Postcondiciones:} Reporte descargado.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-10.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-10.png}
 \caption{CU-10: Exportar reporte}
 \label{fig:cu10}
 \end{figure}
@@ -1511,7 +1481,7 @@ muestra el progreso.
 \textbf{Actor principal:} Usuario administrador \\
 \textbf{Requerimiento:} RF-06
 
-\textbf{Historia de usuario:} Como usuario administrador, quiero que el sistema procese los videos de varias cámaras y siga a las personas de forma anónima entre ellas, para obtener trayectorias completas sin identificar a nadie.
+\textbf{Historia de usuario:} Como usuario administrador, quiero que el sistema procese los videos de varias cámaras y siga a las personas de forma seudónima entre ellas, para obtener trayectorias completas sin identificar a nadie.
 
 \textbf{Precondiciones:} Videos y configuración de cámaras disponibles.
 
@@ -1524,7 +1494,7 @@ muestra el progreso.
     \item El sistema asocia a la misma persona entre cámaras.
     \item El sistema ubica cada posición en el plano.
     \item El sistema reconcilia las identidades y registra las
-    trayectorias anónimas.
+    trayectorias seudónimas.
 \end{enumerate}
 
 \textbf{Flujos alternativos:} Si una cámara no está calibrada, la
@@ -1536,32 +1506,32 @@ ese momento.
 
 \FloatBarrier
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.85\columnwidth]{figuras/casos-de-uso/cu-11.png}
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-11.png}
 \caption{CU-11: Procesar videos multicámara}
 \label{fig:cu11}
 \end{figure}
 \subsection{Requerimientos Funcionales y No Funcionales}
 
-\begin{table}[!ht]
+\begin{table}[!htbp]
 \caption{Requisitos Funcionales y No Funcionales}
 \label{tab:requisitos}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{0.9}
-\begin{tabular}{p{1cm}p{2.2cm}p{6cm}p{7.5cm}}
+\begin{tabular}{L{0.07\textwidth}L{0.12\textwidth}L{0.29\textwidth}L{0.41\textwidth}}
 \hline
 \textbf{ID} & \textbf{Tipo} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
 \hline
 RF-01 & Funcional & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; el usuario comercial consulta y el usuario administrador además configura y procesa \\
-RF-02 & Funcional & Monitoreo en vivo sobre el mapa 2D & Plano con personas anónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
-RF-03 & Funcional & Personalización del mapa, cámaras y zonas & Ubicar cámaras con su cobertura y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
+RF-02 & Funcional & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
+RF-03 & Funcional & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
 RF-04 & Funcional & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
 RF-05 & Funcional & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
-RF-06 & Funcional & Seguimiento multicámara anónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador anónimo y registrar trayectorias \\
-RNF-01 & No Funcional & Seguridad & Contraseñas almacenadas con hash, conexión segura, autorización por rol verificada en el backend y límite de peticiones por IP \\
+RF-06 & Funcional & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
+RNF-01 & No Funcional & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash y autorización por rol en el backend, previstas para producción \\
 RNF-02 & No Funcional & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 7 días sin ver a la persona; cumplimiento de la Ley N.\textdegree~29733 \\
 RNF-03 & No Funcional & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
 RNF-04 & No Funcional & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
@@ -1583,12 +1553,12 @@ RNF-13 & No Funcional & Reproducibilidad & Pesos, configuración y versiones de 
 \section{Metodología}
 
 AeroVision propone una metodología de tres partes encadenadas para
-transformar el video CCTV en trayectorias espaciales anónimas y,
+transformar el video CCTV en trayectorias espaciales seudónimas y,
 posteriormente, convertir esas trayectorias en indicadores operativos y
 comerciales. En la primera parte se construye y estabiliza el seguimiento
 local de personas dentro de cada cámara. En la segunda, los tracklets de
 todas las cámaras se asocian mediante una galería global compartida,
-reciben un identificador anónimo y se proyectan sobre un plano 2D común
+reciben un identificador seudónimo y se proyectan sobre un plano 2D común
 mediante homografía. En la tercera, las trayectorias históricas se
 procesan para detectar zonas de concentración, rutas frecuentes, flujos
 entre zonas y métricas de comportamiento.
@@ -1920,7 +1890,7 @@ definen en un archivo de configuración versionado junto con los pesos de
 los modelos y se ajustaron sobre los videos del piloto, por lo que deben
 revisarse al incorporar cámaras nuevas.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Parámetros del seguimiento local}
 \label{tab:tracker_params}
 \centering
@@ -1967,7 +1937,7 @@ cámara sigue trabajando de manera independiente, pero sus tracklets se
 comparan contra una misma memoria global para decidir qué observaciones
 pertenecen a la misma persona, y sus posiciones se transforman a un
 sistema espacial común correspondiente al plano físico del aeropuerto.
-El resultado es un identificador anónimo global para cada persona.
+El resultado es un identificador seudónimo global para cada persona.
 
 \subsubsection{Registro técnico de cámaras}
 
@@ -1978,7 +1948,7 @@ de cámaras comparten campo de visión y qué transiciones entre cámaras son
 físicamente posibles. El identificador de cada cámara debe coincidir con
 el nombre de su video y con el registrado en la base de datos.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Configuración técnica de las cámaras}
 \label{tab:camera_configuration}
 \centering
@@ -2306,7 +2276,7 @@ entendida como una similitud y no como una probabilidad de acierto.
 Los umbrales de este apartado se calibraron con tracklets etiquetados
 manualmente sobre los videos del piloto (Cuadro~\ref{tab:assoc_params}).
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Parámetros de la asociación multicámara}
 \label{tab:assoc_params}
 \centering
@@ -2350,7 +2320,7 @@ Una persona nueva comienza sin identificador público:
 Esta regla evita inflar el conteo con detecciones fugaces que no aportan
 información suficiente para una identidad confiable.
 
-\subsubsection{Identificador global anónimo}
+\subsubsection{Identificador global seudónimo}
 
 Los tracklets asociados reciben un \textit{global\_id}, que es un
 seudónimo técnico válido solo durante la sesión de análisis. Durante el
@@ -2402,7 +2372,7 @@ visual de una persona más allá de su recorrido observado. Por otro,
 mantiene acotada la galería, lo que reduce el costo de cada comparación
 y el riesgo de fusionar a una persona nueva con alguien que ya se fue.
 
-De igual forma, el video no se almacena. Cada cuadro se procesa en
+De igual forma, en la operación el video no se almacena. Cada cuadro se procesa en
 memoria y se descarta después de extraer sus detecciones; tampoco se
 guardan recortes ni cuadros sueltos. Al finalizar la sesión, lo único
 que persiste es la base de datos con las trayectorias seudónimas, los
@@ -2434,9 +2404,9 @@ los insights.
 \subsubsection{Configuración del mapa y zonas}
 
 El plano 2D utiliza un único sistema de coordenadas para todas las
-cámaras. Sobre este plano se almacenan polígonos de cobertura de cámara
-y polígonos semánticos correspondientes a zonas operativas y
-comerciales.
+cámaras. El plano incluye el contorno del piso transitable y los
+obstáculos, que no son zonas de análisis; sobre él se registran la pose de
+cada cámara y los polígonos de las zonas operativas y comerciales.
 
 Para cada establecimiento comercial se diferencian dos geometrías:
 
@@ -2490,7 +2460,8 @@ Junto con esta tabla se registran, para cada sesión, las identidades
 con su estimación de género consolidada y el manifiesto de
 reproducibilidad. Los videos anotados con los identificadores solo se
 generan de forma opcional durante el piloto, para la validación visual
-del seguimiento, y no forman parte de la operación ni se conservan.
+del seguimiento; no forman parte de la operación y se conservan solo como
+evidencia del piloto.
 
 \subsection{Parte III: Procesamiento histórico y generación de insights}
 
@@ -2511,7 +2482,7 @@ en un evento mediante reglas operativas definidas previamente
 \textit{spatial\_events}, con su instante de inicio, su instante de fin
 cuando corresponde y su confianza.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Eventos espaciales de AeroVision}
 \label{tab:spatial_events}
 \centering
@@ -2538,8 +2509,8 @@ y comerciales.
 Los registros generados durante la operación se ordenan por
 \textit{global\_id} y marca de tiempo. En esta etapa se consolidan las
 observaciones simultáneas de una misma persona vista por varias cámaras
-en una sola posición, dando mayor peso a la cámara que la observa con
-mayor tamaño aparente; se eliminan duplicados y se corrigen saltos
+en una sola posición, ponderando cada observación por la confianza del
+detector; se eliminan duplicados y se corrigen saltos
 espaciales físicamente inconsistentes.
 
 A partir de los registros se generan dos representaciones
@@ -2665,7 +2636,7 @@ establecimiento que posteriormente ingresan:
 
 \begin{equation}
 CaptureRate(z)=
-\frac{Visits(z)}
+\frac{\big|\{global\_id:\ EXPOSURE(z)\ \text{y luego}\ ENTER(z)\}\big|}
 {Exposure(z)}
 \times100.
 \end{equation}
@@ -2698,15 +2669,11 @@ aglomeración o una cola.
 
 \subsubsection{Visualización de resultados}
 
-Los resultados se presentan en una aplicación web desarrollada en
-Vue.js, organizada en dos vistas. La primera es el mapa 2D del
-aeropuerto, con cámaras, zonas, coberturas, trayectorias, flujos y mapas
-de calor. La segunda es el módulo de insights, con visitas, exposición,
-tasa de captación, tiempo de permanencia, rutas frecuentes, flujo
-origen-destino, congestión y comparaciones históricas.
-
-Los identificadores globales solo se utilizan para construir las
-trayectorias internas y no se presentan como información de identidad
+Los resultados se consultan en la aplicación web
+(Sección~\ref{sec:arquitectura}): la reproducción de cada sesión sobre el
+plano, el tablero de insights con métricas, mapas de calor, rutas y flujos, y
+el registro de capturas. Los identificadores globales solo se usan para
+construir las trayectorias y no se presentan como información de identidad
 personal.
 
 \subsection{Validación transversal}
@@ -2715,7 +2682,7 @@ La metodología se valida por componentes, cada uno con métricas
 coherentes con el problema que resuelve
 (Cuadro~\ref{tab:validation_methodology}).
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Validación de los componentes}
 \label{tab:validation_methodology}
 \centering
@@ -2788,14 +2755,6 @@ agregada:
 \end{aligned}
 \end{equation}
 
-La metodología sigue, por tanto, un orden estricto: primero se estabiliza
-la identidad de la persona dentro de cada cámara; luego los tracklets se
-asocian entre cámaras mediante la galería global y se proyectan sobre el
-plano 2D; y finalmente las trayectorias y eventos se consolidan para
-generar análisis históricos, operativos y comerciales. Esta separación
-permite que la analítica histórica trabaje sobre datos estructurados sin
-volver a procesar el video crudo.
-
 \subsection{Flujo de la metodología}
 
 La Figura~\ref{fig:flujo} resume el flujo general de la metodología, desde
@@ -2803,7 +2762,7 @@ la captura del video CCTV hasta la generación de insights: seguimiento
 local por cámara, asociación multicámara con mapeo 2D, y procesamiento
 histórico de las trayectorias.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/metodologia/flujo.png}
     \caption{Flujo de la metodología del proyecto.}
@@ -2821,7 +2780,7 @@ de Gantt (Figura~\ref{fig:gantt}), que muestra las entregas programadas de
 cada integrante y facilita la identificación de plazos, dependencias y
 cargas de trabajo.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/gestion/gantt.png}
     \caption{Diagrama de Gantt del proyecto.}
@@ -2834,7 +2793,7 @@ cada integrante y su estado de cumplimiento. Las actas sirvieron como
 mecanismo formal de seguimiento para evaluar el progreso individual y
 colectivo, y para detectar a tiempo retrasos o desviaciones del plan.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/gestion/actas.png}
     \caption{Actas de reuniones del proyecto.}
@@ -2852,12 +2811,13 @@ notebooks del modelo, se encuentra en
 Para distribuir adecuadamente las funciones del equipo se definieron los
 roles del Cuadro~\ref{tab:roles}.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \centering
 \caption{Roles y responsabilidades de cada integrante}
 \label{tab:roles}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{L{4.2cm} L{2.6cm} L{9cm}}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{L{0.27\textwidth} L{0.15\textwidth} L{0.48\textwidth}}
 \toprule
 \textbf{Rol} & \textbf{Responsable} & \textbf{Responsabilidades} \\
 \midrule
@@ -2941,7 +2901,7 @@ versión~2.0, y \texttt{config\_insights.json}) y su fundamento se expone en la
 Metodología. El Cuadro~\ref{tab:algoritmos} relaciona cada algoritmo con lo que
 produce.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Algoritmos del sistema por parte}
 \label{tab:algoritmos}
 \centering
@@ -2968,7 +2928,7 @@ una cámara. En cada instante detecta a las personas de todas las cámaras en un
 solo lote y asocia cada detección con un track mediante una cascada de etapas
 resuelta con el algoritmo Hungarian (Algoritmo~\ref{alg:local}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Seguimiento local por cámara}
 \label{alg:local}
 \begin{algorithmic}[1]
@@ -2997,7 +2957,7 @@ resume en un prototipo de apariencia corporal y se compara con una galería
 global que solo admite candidatas físicamente compatibles
 (Algoritmo~\ref{alg:reid}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Asociación multicámara con galería global}
 \label{alg:reid}
 \begin{algorithmic}[1]
@@ -3030,7 +2990,7 @@ Cada observación con los pies visibles se lleva al plano en metros con la
 homografía de su cámara. En paralelo, CLIP vota el género de cada identidad a
 partir de vistas del cuerpo completo (Algoritmo~\ref{alg:mapa}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Proyección al plano y estimación de género}
 \label{alg:mapa}
 \begin{algorithmic}[1]
@@ -3055,7 +3015,7 @@ Transforma los puntos de una sesión en eventos y métricas sin volver a procesa
 video. Primero corrige las posiciones con el plano del sitio y después aplica
 las reglas de eventos y los algoritmos de minería (Algoritmo~\ref{alg:historico}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Procesamiento histórico}
 \label{alg:historico}
 \begin{algorithmic}[1]
@@ -3082,7 +3042,7 @@ memoria de identidades para que cada persona conserve su ID aunque salga y
 vuelva, pase a otro teléfono o el modelo se reinicie
 (Algoritmo~\ref{alg:vivo}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Modelo en vivo de dos carriles}
 \label{alg:vivo}
 \begin{algorithmic}[1]
@@ -3117,7 +3077,7 @@ referencias del plano coincida con la real; un giro y una traslación llevan
 esas referencias a sus coordenadas manteniendo el recorrido dentro del piso; y
 el resultado es una homografía de píxeles a metros para ese teléfono.
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htbp]
 \caption{Ubicación en el plano desde un teléfono}
 \label{alg:ubicacion}
 \begin{algorithmic}[1]
@@ -3136,21 +3096,21 @@ el resultado es una homografía de píxeles a metros para ese teléfono.
 \end{algorithm}
 
 \section{Arquitectura del Sistema}
+\label{sec:arquitectura}
 
 El sistema se compone de servicios en contenedores Docker que se ejecutan en
-una máquina virtual de Google Cloud con procesador ARM y sin GPU. El análisis de
-sesiones grabadas y el monitoreo en vivo usan backends y bases de datos
-separados; la aplicación web reúne ambos
-(Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
+una máquina virtual de Google Cloud. El análisis de sesiones grabadas y el
+monitoreo en vivo usan backends y bases de datos separados, y la aplicación
+web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
 \caption{Arquitectura de AeroVision.}
 \label{fig:arquitectura}
 \end{figure}
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Componentes del sistema}
 \label{tab:componentes}
 \centering
@@ -3164,23 +3124,89 @@ separados; la aplicación web reúne ambos
 \texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones e insights \\
 \texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias y analítica \\
 \texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
-\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos \\
-\texttt{backend-vivo} & Go & Teléfonos, relevo de video y detecciones, memoria de identidades \\
+\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
+\texttt{backend-vivo} & Go & Teléfonos, cola de videos, relevo de video y detecciones, memoria de identidades \\
 \texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
-Build e Insights & Python & Partes I y II sobre video grabado, y Parte III \\
+Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Usuarios y acceso}
+
+El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
+hace en él.
+
+\begin{table}[!htbp]
+\caption{Usuarios del sistema}
+\label{tab:usuarios}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.16\textwidth}L{0.19\textwidth}L{0.33\textwidth}L{0.22\textwidth}}
+\toprule
+\textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
+\midrule
+Administrador & Web, con usuario y contraseña & Configura sitios, cámaras, locales y zonas; activa el modo en vivo; gestiona teléfonos, videos y sesiones & Todas las secciones \\
+Comercial & Web, con usuario y contraseña & Consulta y exporta métricas, reproduce sesiones y revisa capturas & En vivo, Insights y Registros \\
+Operador de cámara & Página de cámara del teléfono, sin cuenta & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
+Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/\{sitio\}/...} \\
+Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En el prototipo, el acceso a la web es de demostración, con un único usuario
+que tiene todas las funciones; la separación de los perfiles administrador y
+comercial, con autenticación en el backend, está prevista para la puesta en
+producción. La página de cámara no pide cuenta y se usa en redes de confianza.
+
+\subsection{Infraestructura en Google Cloud}
+
+El sistema se despliega en Compute Engine con la configuración del
+Cuadro~\ref{tab:gcp}.
+
+\begin{table}[!htbp]
+\caption{Configuración del servidor en Google Cloud}
+\label{tab:gcp}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.22\textwidth}L{0.70\textwidth}}
+\toprule
+\textbf{Elemento} & \textbf{Configuración} \\
+\midrule
+Instancia & Compute Engine, \texttt{aeropuerto-scl} \\
+Tipo de máquina & \texttt{c4a-highcpu-8}: 8 vCPU Google Axion (Arm Neoverse-V2, arm64) y 16~GB de RAM, sin GPU \\
+Región y zona & \texttt{southamerica-west1-a} (Santiago de Chile) \\
+Disco y sistema & 77~GB; Ubuntu 24.04.5 LTS \\
+Contenedores & Docker 29.8 y Docker Compose 5.6; siete servicios con reinicio automático \\
+Red & IP externa con las reglas de firewall \texttt{http-server} y \texttt{https-server}: solo los puertos 80 y 443 \\
+Configuración & \texttt{servidor.env} (versionado, sin secretos) y \texttt{.env} (contraseñas aleatorias de las bases) \\
+Base PostGIS & Imagen \texttt{imresamu/postgis:17-3.5}, compilada para arm64 \\
+Modelo en vivo & Perfil \texttt{modelo}: 7 núcleos y YOLO26s a 640~px en CPU \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El despliegue se hace con \texttt{git pull} y \texttt{scripts/levantar.sh}, que
+detecta la máquina virtual, lee su IP pública, aplica \texttt{servidor.env} y
+\texttt{.env}, y construye y levanta los contenedores. Cada imagen ejecuta
+sus pruebas al construirse; si una falla, los servicios en marcha no se
+reemplazan. La web y la página de cámara se sirven por HTTPS, requisito de
+los navegadores para usar la cámara del teléfono, y la página de cámara se
+publica en \texttt{/camara/} a través de la web, por lo que bastan los puertos
+80 y 443.
 
 \subsection{Base de datos}
 
 Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
 todo lo que se analiza en ellos; \texttt{vivo-db} (PostgreSQL~17 con pgvector)
 guarda solo la memoria de identidades del modo en vivo
-(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que el backend
-aplica al iniciar.
+(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
+backends aplican al iniciar.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/base-de-datos.png}
 \caption{Modelo entidad-relación de las bases de datos.}
@@ -3189,92 +3215,134 @@ aplica al iniciar.
 
 \begin{itemize}
     \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
-    y \texttt{zones}. Las coordenadas están en metros en un sistema local
-    (SRID~0); las zonas INTERIOR y FRONTAGE deben pertenecer a un local y su
-    geometría debe ser válida.
-    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (de tipo BUILD
-    o LIVE), \texttt{identities}, \texttt{tracklets} y
-    \texttt{trajectory\_points}. La geometría de cada punto se calcula en la
-    base y se conserva la posición original del modelo junto a la ajustada al
-    piso.
+    y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
+    INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
+    válida.
+    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD o LIVE),
+    \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
+    geometría de cada punto se calcula en la base y se conserva la posición
+    original del modelo junto a la ajustada al piso.
     \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
     calculada en la base, y \texttt{session\_analytics}, con los parámetros y
     los resultados de la Parte~III.
     \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
-    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes.
+    \texttt{numeracion}, con vectores Re-ID de 512 valores y sin imágenes.
 \end{itemize}
 
 \subsection{Backend}
 
+El backend se divide en dos servicios en Go (Figura~\ref{fig:backend} y
+Cuadro~\ref{tab:api}):
+
 \begin{itemize}
-    \item \textbf{\texttt{backend}:} servicio en Go con arquitectura
-    hexagonal. El núcleo (dominio, puertos y casos de uso) no depende de HTTP
-    ni de SQL; los adaptadores implementan la API REST, los repositorios
-    PostGIS y el relevo de video por WebSocket. Todas las rutas siguen el
-    esquema \texttt{/api/v1/sites/\{sitio\}/...}: configuración, plano,
-    cámaras, locales, zonas, sesiones, reproducción, puntos e insights.
-    \item \textbf{\texttt{backend-vivo}:} servicio en Go que mantiene la lista
-    de teléfonos, recibe los videos de prueba en disco temporal, retransmite
-    video y detecciones por WebSocket y guarda la memoria de identidades. La
-    acción ``Olvidar a todos'' vacía la memoria y rechaza cualquier guardado
-    anterior.
+    \item \textbf{\texttt{backend}:} arquitectura hexagonal. El núcleo
+    (\texttt{domain}, \texttt{ports} y \texttt{services}) contiene las
+    entidades, las validaciones y los casos de uso, sin depender de HTTP ni de
+    SQL. Los adaptadores de entrada (\texttt{httpapi} y \texttt{relay})
+    exponen la API REST y el relevo por WebSocket, y los de salida
+    (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
+    PostGIS y en memoria.
+    \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
+    cola de videos subidos en disco temporal, el relevo de video y
+    detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
+    todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
+    guardado anterior.
 \end{itemize}
 
-Ambos ejecutan \texttt{go vet} y sus pruebas al construir la imagen; la de
-\texttt{backend} incluye una prueba de integración contra PostGIS que recorre
-el ciclo completo de un sitio.
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
+\caption{Arquitectura de los servicios del backend.}
+\label{fig:backend}
+\end{figure}
+
+\begin{table}[!htbp]
+\caption{Recursos de las API}
+\label{tab:api}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{L{0.42\textwidth}L{0.50\textwidth}}
+\toprule
+\textbf{Ruta} & \textbf{Uso} \\
+\midrule
+\multicolumn{2}{@{}l}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
+\texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
+\texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
+\texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
+\texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
+\texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
+\texttt{/media/\{archivo\}} & Videos procesados del Build \\
+\midrule
+\multicolumn{2}{@{}l}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
+\texttt{/telefonos} & Teléfonos conectados como cámaras \\
+\texttt{/videos} & Cola de videos subidos y resumen de cada uno \\
+\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
+\texttt{/personas} & Memoria de identidades \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Frontend}
 
-Aplicación Vue~3 con TypeScript, servida por nginx, que también redirige
-\texttt{/api/}, \texttt{/vivo/} y \texttt{/camara/} a sus servicios, añade
-cabeceras de seguridad y limita las peticiones por IP. Cada sitio tiene las
-mismas secciones:
+Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
+servida por nginx, que además redirige \texttt{/api/}, \texttt{/vivo/} y
+\texttt{/camara/} a sus servicios, añade cabeceras de seguridad y limita las
+peticiones por IP. El código se organiza por funcionalidades sobre un núcleo
+común (Figura~\ref{fig:frontend}), y cada sitio tiene las mismas secciones:
 
 \begin{itemize}
     \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
-    sincronizados o, en modo en vivo, muestra lo que ven los teléfonos.
+    sincronizados o, en modo en vivo, muestra lo que ven los teléfonos y
+    permite iniciar y guardar una captura.
     \item \textbf{Insights:} tablero de métricas, mapas de calor, rutas y
     flujos, filtrable por sesión y zona y exportable a PDF y CSV.
     \item \textbf{Registros:} capturas guardadas con fecha y rango de hora.
-    \item \textbf{Configuración:} cámaras, locales y zonas sobre el plano.
-    \item \textbf{Teléfonos y Videos:} cámaras de teléfono con el proceso del
-    modelo y prueba del modelo con un video, sin guardarlo.
+    \item \textbf{Configuración:} cámaras, locales y zonas sobre el plano
+    (Figura~\ref{fig:web-config}).
+    \item \textbf{Teléfonos:} cámaras de teléfono con el proceso del modelo y
+    la memoria de personas.
+    \item \textbf{Videos:} cola de videos de prueba, procesados de a uno y sin
+    guardarse.
 \end{itemize}
 
-\subsection{Despliegue}
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/frontend.png}
+\caption{Arquitectura del frontend.}
+\label{fig:frontend}
+\end{figure}
 
-Un mismo archivo \texttt{compose.yaml} define los siete servicios. En el
-servidor, \texttt{scripts/levantar.sh} toma la configuración de
-\texttt{servidor.env} y las contraseñas de \texttt{.env}, lee la IP pública de
-la máquina y construye y levanta los contenedores. Solo se publican los puertos
-80 y 443: la web y la página de cámara se sirven por HTTPS, requisito de los
-navegadores para acceder a la cámara. El modelo en vivo corre en CPU con
-YOLO26s, y el Build y la Parte~III se ejecutan por lotes y publican sus
-resultados por la API.
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/web-configuracion.png}
+\caption{Configuración: zonas y cámaras sobre el plano del sitio.}
+\label{fig:web-config}
+\end{figure}
 
 \section{Primera Prueba de Validación: ESAN, Edificios A y B}
 
-La primera validación del sistema se realizó en el patio en forma de L entre
-los Edificios A y B de la Universidad ESAN, registrado en la aplicación como el
-sitio \textit{ESAN}. Se ejecutó en dos etapas: con tres cámaras fijas, para
-validar las Partes I a III, y con teléfonos usados como cámaras en vivo.
+La primera validación se realizó en el patio en forma de L entre los
+Edificios A y B de la Universidad ESAN, registrado en la aplicación como el
+sitio \textit{ESAN}, en dos etapas: con tres cámaras fijas, para validar las
+Partes I a III, y con teléfonos usados como cámaras en vivo.
 
 \subsection{Escenario y plano del sitio}
 
 El plano del patio se obtuvo de un levantamiento desde las cámaras: se
-marcaron en la imagen los puntos del suelo y de los objetos, y se llevaron a
+marcaron en la imagen los puntos del suelo y de los objetos y se llevaron a
 metros con las homografías del Build. El plano contiene el contorno del piso
-(patio, descanso bajo el entrepiso y tramo norte de la L), los ascensores y los
-objetos que nadie atraviesa: la carpa azul, dos máquinas expendedoras, un tacho
-y los contenedores de reciclaje (Figura~\ref{fig:plano-esan}). El 100\,\% de los
-puntos de cam01 y cam02 y el 99.6\,\% de los de cam03 caen dentro del piso. Se
-definieron las zonas Piso, Ascensores, Tacho y Reciclaje, y los locales Carpa
-azul, Expendedora negra y Expendedora roja, cada uno con su zona INTERIOR.
+transitable (patio, descanso bajo el entrepiso y tramo norte de la L), los
+ascensores y los objetos que nadie atraviesa: la carpa azul, dos máquinas
+expendedoras, un tacho y los contenedores de reciclaje
+(Figura~\ref{fig:plano-esan}). El 100\,\% de los puntos de cam01 y cam02 y el
+99.6\,\% de los de cam03 caen dentro del piso. Las zonas de análisis son
+Ascensores, Tacho y Reciclaje, y los locales Carpa azul, Expendedora negra y
+Expendedora roja, cada uno con su zona INTERIOR.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/plano-patio-esan.png}
+\safeincludegraphics[width=0.75\linewidth]{figuras/validacion/plano-patio-esan.png}
 \caption{Plano del patio entre los Edificios A y B: piso, carpa azul,
 expendedoras (derecha), tacho (verde), reciclaje (izquierda) y ascensores
 (línea roja).}
@@ -3287,12 +3355,12 @@ Se procesaron tres videos de cámaras con vista al patio, de
 $1280 \times 720$ a 15~FPS y 126~s de duración común, con desfases de reloj de
 +1.0~s (cam02) y +3.0~s (cam03) respecto de cam01. El sistema reconoció a 16
 personas y registró 13\,689 puntos de trayectoria
-(Figuras~\ref{fig:build-camara} a \ref{fig:build-trayectorias}). El
-Cuadro~\ref{tab:resultados-build} resume las mediciones.
+(Figuras~\ref{fig:dataset-camara} a~\ref{fig:dataset-insights}); el
+Cuadro~\ref{tab:resultados-dataset} resume las mediciones.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \caption{Resultados de la prueba con cámaras fijas}
-\label{tab:resultados-build}
+\label{tab:resultados-dataset}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
@@ -3312,27 +3380,37 @@ Velocidad mediana al caminar & 0.87~m/s \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/build-camara-01.jpg}
-\caption{Cámara cam01 procesada: identificador global (G), local (L) y género
-de cada persona.}
-\label{fig:build-camara}
-\end{figure}
-
-\begin{figure}[H]
+\begin{minipage}[t]{0.49\linewidth}
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/build-mapa-2d.jpg}
-\caption{Mapa 2D en el segundo 60: posiciones y recorridos sobre el plano junto
-a las tres cámaras sincronizadas.}
-\label{fig:build-mapa}
-\end{figure}
-
-\begin{figure}[H]
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-camara-01.jpg}
+\caption{Cámara cam01 procesada: identificador global (G), local (L) y
+género.}
+\label{fig:dataset-camara}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
 \centering
-\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/build-trayectorias.png}
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-trayectorias.png}
 \caption{Trayectorias de las 16 personas durante los 126~s.}
-\label{fig:build-trayectorias}
+\label{fig:dataset-trayectorias}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-en-vivo.png}
+\caption{En vivo: la sesión reproducida sobre el plano, con las cámaras
+sincronizadas y las personas presentes en cada instante.}
+\label{fig:dataset-en-vivo}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-insights.png}
+\caption{Insights de la sesión: personas, género, visitas, permanencia,
+captación, densidad y mapas de movimiento y de calor.}
+\label{fig:dataset-insights}
 \end{figure}
 
 \subsection{Prueba con cámaras de teléfono}
@@ -3343,62 +3421,44 @@ sistema desplegado en el servidor. El procedimiento fue:
 \begin{enumerate}
     \item Cada teléfono abrió la página de cámara del servidor
     (\texttt{https://<servidor>/camara/}) y pulsó ``Unirse con la cámara'',
-    sin instalar ninguna aplicación (Figura~\ref{fig:val-telefono}).
-    \item El modelo en vivo procesó todos los teléfonos a la vez y la sección
-    Teléfonos mostró sus cajas, ID y género (Figura~\ref{fig:val-telefonos}).
+    sin instalar ninguna aplicación.
+    \item El modelo en vivo procesó todos los teléfonos a la vez, y la sección
+    Teléfonos mostró sus cajas, ID y género, junto con la memoria de
+    personas (Figura~\ref{fig:telefonos-memoria}).
     \item En el modo en vivo, los teléfonos tomaron el lugar de cam01, cam02 y
     cam03 por orden de llegada, con su posición y rumbo ajustados en
     Configuración. El iPhone se calibró con una grabación de una persona
     caminando: cuadro de $640 \times 853$~px, focal de 575~px y como
     referencias los contenedores de reciclaje y el tacho verde.
-    \item Las personas detectadas se ubicaron sobre el plano del patio
-    (Figura~\ref{fig:val-vivo}). Lo registrado entre ``Iniciar captura'' y
-    ``Terminar y guardar'' se guardó como una sesión LIVE, visible en
-    Registros (Figura~\ref{fig:val-registros}) y analizada en Insights con el
-    mismo tablero que una sesión grabada (Figura~\ref{fig:val-insights}).
+    \item Lo registrado entre ``Iniciar captura'' y ``Terminar y guardar'' se
+    guardó como una sesión LIVE, visible en Registros
+    (Figura~\ref{fig:telefonos-registros}) y analizada en Insights con el mismo
+    tablero que una sesión grabada.
 \end{enumerate}
 
+El 6 de octubre de 2026, entre las 17:21 y las 20:33, se guardaron cinco
+capturas de entre 15~s y 1~min~59~s, con 641 posiciones en el plano y 28
+personas en total. La memoria de identidades reunió a 10 personas: la que más
+se vio apareció en cuatro teléfonos distintos y conservó el mismo ID en todos.
 En el servidor, sin GPU, el modelo en vivo procesó unos 9 cuadros por segundo
 sin personas y entre 4 y 6 con una a cuatro personas, mientras cada teléfono
 enviaba 15 cuadros por segundo. La estimación de género, evaluada sobre 169
 recortes del patio etiquetados manualmente, acertó en el 91\,\% de los casos
 (92\,\% en el servidor, con 19~ms por recorte).
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.45\linewidth]{figuras/validacion/telefono-camara.png}
-\caption{Página de cámara en el teléfono.}
-\label{fig:val-telefono}
+\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-registros.png}
+\caption{Registros: las cinco capturas en vivo guardadas con los teléfonos.}
+\label{fig:telefonos-registros}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-modelo.png}
-\caption{Sección Teléfonos: detecciones del modelo en vivo sobre los teléfonos
-del patio.}
-\label{fig:val-telefonos}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/en-vivo-plano.png}
-\caption{Modo en vivo: personas vistas por los teléfonos ubicadas sobre el
-plano del patio.}
-\label{fig:val-vivo}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/registros.png}
-\caption{Registros: capturas en vivo guardadas.}
-\label{fig:val-registros}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/insights-captura.png}
-\caption{Insights de una captura en vivo.}
-\label{fig:val-insights}
+\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
+\caption{Teléfonos: memoria de personas con su género, las cámaras donde se
+vio a cada una y cuándo.}
+\label{fig:telefonos-memoria}
 \end{figure}
 
 \section{Referencias Bibliográficas}

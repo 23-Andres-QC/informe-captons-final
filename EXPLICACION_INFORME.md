@@ -10,6 +10,6 @@
 6. **Metodología.** Parte I (seguimiento por cámara), Parte II (re-identificación multicámara, mapa 2D y género) y Parte III (eventos, mapas de calor, rutas y métricas comerciales).
 7. **Planificación y Gestión del Proyecto.** Cronograma, actas, roles y gestión de riesgos.
 8. **Algoritmos.** Pseudocódigo de cada parte del sistema y de su funcionamiento en vivo con teléfonos.
-9. **Arquitectura del Sistema.** Servicios, base de datos, backend, frontend y despliegue.
-10. **Primera Prueba de Validación: ESAN, Edificios A y B.** Plano del patio, prueba con cámaras fijas y prueba con cámaras de teléfono.
+9. **Arquitectura del Sistema.** Servicios, usuarios y acceso, infraestructura en Google Cloud, base de datos, backend y frontend.
+10. **Primera Prueba de Validación: ESAN, Edificios A y B.** Plano del patio, prueba con tres cámaras fijas y prueba con teléfonos como cámaras en vivo, con capturas de la aplicación.
 11. **Referencias Bibliográficas.**
