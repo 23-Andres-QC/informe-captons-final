@@ -3125,7 +3125,7 @@ web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
 \texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias y analítica \\
 \texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
 \texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
-\texttt{backend-vivo} & Go & Teléfonos, cola de videos, relevo de video y detecciones, memoria de identidades \\
+\texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
 \texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
 Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
 \bottomrule
@@ -3243,7 +3243,7 @@ Cuadro~\ref{tab:api}):
     (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
     PostGIS y en memoria.
     \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
-    cola de videos subidos en disco temporal, el relevo de video y
+    lista de videos subidos en disco temporal, el relevo de video y
     detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
     todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
     guardado anterior.
@@ -3276,7 +3276,7 @@ Cuadro~\ref{tab:api}):
 \midrule
 \multicolumn{2}{@{}l}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
 \texttt{/telefonos} & Teléfonos conectados como cámaras \\
-\texttt{/videos} & Cola de videos subidos y resumen de cada uno \\
+\texttt{/videos} & Videos subidos y resumen de cada uno \\
 \texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
 \texttt{/personas} & Memoria de identidades \\
 \bottomrule
@@ -3302,7 +3302,7 @@ común (Figura~\ref{fig:frontend}), y cada sitio tiene las mismas secciones:
     (Figura~\ref{fig:web-config}).
     \item \textbf{Teléfonos:} cámaras de teléfono con el proceso del modelo y
     la memoria de personas.
-    \item \textbf{Videos:} cola de videos de prueba, procesados de a uno y sin
+    \item \textbf{Videos:} videos de prueba, procesados todos a la vez y sin
     guardarse.
 \end{itemize}
 
