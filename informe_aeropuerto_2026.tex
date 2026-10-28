@@ -214,8 +214,9 @@ en el comedor de ESAN, con dos teléfonos grabando el mismo espacio, dio el
 mismo identificador a cada persona en las dos cámaras. Las pruebas de estrés
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
 16 cuadros por segundo por video con dos cámaras 1080p, que la estimación de
-género es lo que más carga la CPU y que siete cámaras de 60~fps están en el
-límite del equipo. El informe cierra con el plan de negocio de AeroVision, que
+género es lo que más carga la CPU y que siete cámaras de 60~fps se procesan
+completas a unos 2.7 cuadros por segundo por cámara en 3 veces la duración
+del video. El informe cierra con el plan de negocio de AeroVision, que
 lleva la misma tecnología a la medición de captación de tiendas y de audiencia
 de espacios publicitarios. El diseño incluye salvaguardas frente a menores de
 edad, re-identificación indirecta, retención de datos, transparencia, sesgo
@@ -4088,7 +4089,13 @@ tres análisis: \textit{solo multitracking}, \textit{solo género} y
 
 El modelo procesa como una cámara en vivo: si no alcanza al video, salta
 cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
-segundo que logra procesar y en la fracción de cuadros que salta.
+segundo que logra procesar y en la fracción de cuadros que salta. Las siete
+cámaras se procesaron con el mismo modelo y el análisis \textit{ambos}, pero
+sin el reloj del tiempo real, sobre sus primeros 2 minutos y con tres ritmos:
+1.5 y 5 cuadros por segundo fijos, y uno adaptado en el que el video avanza 3
+veces más lento que el reloj y cada pasada toma el cuadro de ese instante,
+con un tope de 15 cuadros por segundo. En los tres se procesa cada cuadro
+elegido de las siete cámaras, sin saltar ninguno por atraso.
 
 \subsection{Resultados de la validación con pares de cámaras}
 
@@ -4146,40 +4153,48 @@ video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
 6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
 la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
 Cuadro~\ref{tab:siete} resume las siete cámaras y la
-Figura~\ref{fig:consumo-modos} compara los dos escenarios.
+Figura~\ref{fig:siete-ritmos} compara los tres ritmos. Con el ritmo
+adaptado, 2 minutos de video tardaron 6 minutos (3.0 veces) y el modelo
+procesó 2.7 cuadros por segundo por cámara; una repetición dio 2.2, porque la
+duración de cada pasada varía con la carga del equipo.
 
 \begin{table}[H]
-\caption{Siete cámaras 1080p a 60~fps procesadas a la vez}
+\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (análisis
+\textit{ambos}, primeros 2 minutos)}
 \label{tab:siete}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{L{0.38\textwidth}R{0.15\textwidth}R{0.15\textwidth}R{0.15\textwidth}}
 \toprule
-\textbf{Medición} & \textbf{Solo multitracking} & \textbf{Solo género} & \textbf{Ambos} \\
+\textbf{Medición} & \textbf{1.5 c/s fijos} & \textbf{Adaptado (3 veces el video)} & \textbf{5 c/s fijos} \\
 \midrule
-Cuadros procesados por segundo, por video & 2.0 & 1.5 & 1.5 \\
-Cuadros procesados por segundo, en total & 14.0 & 10.5 & 10.3 \\
-Milisegundos por paso & 512 & 577 & 696 \\
-Cuadros saltados & 97\,\% & 97\,\% & 98\,\% \\
-Núcleos de CPU del modelo, promedio (p95) & 1.8 (2.1) & 6.3 (7.7) & 5.5 (7.3) \\
-CPU de todo el equipo & 35\,\% & 56\,\% & 70\,\% \\
-Uso de la GPU, promedio (p95) & 47 (98)\,\% & 48 (84)\,\% & 46 (94)\,\% \\
-Memoria de la GPU & 4.5~GB & 4.5~GB & 4.5~GB \\
-Memoria RAM del modelo & 3.4~GB & 2.9~GB & 2.9~GB \\
-Potencia de la GPU & 49~W & 49~W & 47~W \\
-Personas contadas por cámara & 126 a 216 & 111 a 186 & 109 a 184 \\
+Cuadros procesados por segundo, por cámara & 1.5 & 2.7 & 5.0 \\
+Cuadros procesados, en total & 1\,253 & 2\,296 & 4\,193 \\
+Tiempo de proceso (veces el video) & 167~s (1.4) & 361~s (3.0) & 513~s (4.3) \\
+Milisegundos por pasada de las 7 cámaras & 767 & 894 & 702 \\
+\quad de ellos, seguimiento en la CPU & 409 & 594 & 412 \\
+Núcleos de CPU del modelo & 8.3 & 4.5 & 6.7 \\
+CPU de todo el equipo & 63\,\% & 39\,\% & 57\,\% \\
+Uso de la GPU & 28\,\% & 20\,\% & 26\,\% \\
+Memoria de la GPU & 3.4~GB & 3.4~GB & 3.4~GB \\
+Memoria RAM del modelo & 2.2~GB & 3.9~GB & 1.8~GB \\
+Potencia de la GPU & 36~W & 30~W & 35~W \\
+Personas contadas por cámara & 117 a 200 & 130 a 236 & 145 a 253 \\
+Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.30) & 0.043 (0.24) & 0.030 (0.15) \\
+Detecciones con ID global & 76\,\% & 81\,\% & 85\,\% \\
+IDs vistos en más de una cámara & 323 & 354 & 405 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/pruebas/consumo-por-modo.png}
-\caption{Cuadros procesados por video, núcleos de CPU y uso de la GPU según el
-análisis: promedio de los cinco pares 1080p a 23~fps y siete cámaras 1080p a
-60~fps.}
-\label{fig:consumo-modos}
+\safeincludegraphics[width=\linewidth]{figuras/pruebas/siete-camaras.png}
+\caption{Siete cámaras 1080p a 60~fps según el ritmo: cuadros procesados por
+cámara, tiempo de proceso frente a la duración del video y movimiento de una
+persona entre dos cuadros procesados seguidos.}
+\label{fig:siete-ritmos}
 \end{figure}
 
 \subsection{Análisis de los resultados}
@@ -4199,16 +4214,20 @@ análisis: promedio de los cinco pares 1080p a 23~fps y siete cámaras 1080p a
     18 del que tiene menos (P3); con el género, su CPU llega a 5.8 núcleos.
     \item \textbf{La GPU no es el cuello de botella.} En los pares la GPU
     trabaja entre 50\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
-    que sube con el género y con la gente; con siete cámaras la GPU tiene
-    picos de 84\,\% a 98\,\% y usa 4.5~GB.
-    \item \textbf{Siete cámaras de 60~fps están en el límite del equipo.} Se
-    procesan 1.5 a 2 cuadros por segundo por video (10 a 14 en total) y se
-    salta el 97\,\% de los cuadros: el seguimiento pierde continuidad. Para
-    ese caso conviene el análisis \textit{solo multitracking}, procesar a una
-    tasa fija menor (5~cuadros por segundo) o procesar por lotes y no en
-    tiempo real.
-    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 3.4~GB de
-    RAM y la GPU consume entre 47 y 61~W; el equipo arranca una tanda en 2.5 a
+    que sube con el género y con la gente; con siete cámaras la GPU trabaja
+    solo entre 20 y 28\,\%.
+    \item \textbf{Siete cámaras de 60~fps se procesan completas a un ritmo
+    menor.} Sin el reloj del tiempo real, una pasada de las siete cámaras
+    toma de 0.7 a 0.9~s, dos tercios en el seguimiento en la CPU. Con un tope
+    de 3 veces la duración del video, el modelo procesa unos 2.7 cuadros por
+    segundo por cámara sin saltar ninguno por atraso; a 5 cuadros por segundo
+    el movimiento entre cuadros seguidos baja a la mitad (p90 de 0.15 alturas
+    de la caja frente a 0.30 a 1.5 cuadros por segundo), el 85\,\% de las
+    detecciones lleva ID global y más IDs se reconocen entre cámaras, pero
+    tarda 4.3 veces el video. Para siete cámaras conviene procesar por lotes y
+    no en tiempo real.
+    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 3.9~GB de
+    RAM y la GPU consume entre 30 y 61~W; el equipo arranca una tanda en 2.5 a
     9~s.
 \end{itemize}
 
@@ -4534,12 +4553,14 @@ el modelo completo.
 
 La capacidad sale de las pruebas de estrés (Sección~\ref{sec:pruebas}): con
 el modelo completo, la RTX~4060 procesa unos 32 cuadros por segundo en total
-con dos cámaras 1080p y de 10 a 14 con siete cámaras 1080p de 60~fps y mucha
-gente. Tres horas pico a 5 cuadros por segundo son 54\,000 cuadros por cámara
-al día; diez cámaras de pantalla toman entonces de 11 a 15 horas de proceso
-nocturno, dentro del día. Una cámara de tienda, con 12 horas de apertura,
-suma 216\,000 cuadros al día: diez cámaras exigen unos 25 cuadros por segundo
-sostenidos, por encima de lo medido con el modelo completo en siete cámaras;
+con dos cámaras 1080p, y unos 6 a 8 con siete cámaras 1080p de 60~fps a la
+vez y mucha gente, porque el seguimiento de cada cámara corre en la CPU; por
+eso el lote se procesa de dos en dos cámaras. Tres horas pico a 5 cuadros por
+segundo son 54\,000 cuadros por cámara al día; diez cámaras de pantalla toman
+entonces unas 5 horas de proceso nocturno, dentro del día. Una cámara de
+tienda, con 12 horas de apertura, suma 216\,000 cuadros al día: diez cámaras
+exigen unos 25 cuadros por segundo sostenidos todo el día, cerca del límite
+medido con el modelo completo;
 por eso el tope de 10 cámaras por computadora supone el modo liviano, sin Re-ID
 ni género, que según las mismas pruebas libera la mayor parte de la CPU
 (\textit{solo multitracking} usa 1.7 núcleos frente a 4.4 con el género).
