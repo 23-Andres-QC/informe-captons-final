@@ -215,8 +215,8 @@ mismo identificador a cada persona en las dos cámaras. Las pruebas de estrés
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
 16 cuadros por segundo por video con dos cámaras 1080p, que la estimación de
 género es lo que más carga la CPU y que siete cámaras de 60~fps se procesan
-completas a unos 2.7 cuadros por segundo por cámara en 3 veces la duración
-del video. El informe cierra con el plan de negocio de AeroVision, que
+completas a 5 cuadros por segundo por cámara en 3 veces la duración del
+video. El informe cierra con el plan de negocio de AeroVision, que
 lleva la misma tecnología a la medición de captación de tiendas y de audiencia
 de espacios publicitarios. El diseño incluye salvaguardas frente a menores de
 edad, re-identificación indirecta, retención de datos, transparencia, sesgo
@@ -1438,7 +1438,9 @@ muestra el mapa vacío con un aviso.
     \item El sistema muestra visitas, pass-by, permanencia, captación, densidad y su evolución en el tiempo.
 \end{enumerate}
 
-\textbf{Flujos alternativos:} El usuario puede comparar dos periodos.
+\textbf{Flujos alternativos:} El usuario marca hasta cinco rangos de tiempo
+en la línea de tiempo de la sesión; el tablero muestra solo esos rangos y
+compara sus indicadores con la sesión completa.
 
 \textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales.
 
@@ -1931,7 +1933,8 @@ El Cuadro~\ref{tab:tracker_params} resume los parámetros configurables
 del seguidor y los valores utilizados en el piloto. Sus valores se
 definen en un archivo de configuración versionado junto con los pesos de
 los modelos y se ajustaron sobre los videos del piloto, por lo que deben
-revisarse al incorporar cámaras nuevas.
+revisarse al incorporar cámaras nuevas. La sección Videos usa valores más
+sensibles para videos de cualquier origen (Sección~\ref{sec:videos}).
 
 \begin{table}[H]
 \caption{Parámetros del seguimiento local}
@@ -3222,6 +3225,7 @@ el resultado es una homografía de píxeles a metros para ese teléfono.
 \end{algorithm}
 
 \subsection{Videos subidos: varias cámaras grabadas a la vez}
+\label{sec:videos}
 
 La sección Videos procesa grabaciones de cualquier origen, como si fueran
 cámaras en vivo: si el modelo no alcanza al video, salta cuadros. El Build se
@@ -3235,7 +3239,8 @@ ajustes más sensibles sobre la misma lógica de las Partes I y II:
     de unas 12 a unas 40 personas por cuadro.
     \item \textbf{Seguidor:} abre tracks desde 0.15 de confianza y personas de
     12~px de alto; en los cruces, la apariencia pesa 0.8 en la asignación (no
-    0.22) y un track sigue a una caja sin comparar apariencias solo si se
+    0.22), dentro de ella el vector de la ResNet18 pesa 0.8 frente al color
+    (no 0.20) y un track sigue a una caja sin comparar apariencias solo si se
     solapa con ella al menos 0.25.
     \item \textbf{Re-identificación:} en vez de YOLO26s-ReID, que estira cada
     recorte a un cuadrado, se promedian OSNet-AIN y PersonViT (ViT-S), ambos
@@ -3601,7 +3606,12 @@ nueve secciones, y cada rol ve solo las suyas:
     (Figura~\ref{fig:web-videos}).
     \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
     calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
-    franja y fecha, exportable a PDF y CSV y enviable por correo
+    franja y fecha, y una línea de tiempo de la sesión en la que se marcan
+    hasta cinco rangos (arrastrando, escribiendo el inicio y el fin o
+    haciendo clic en la línea): todo el tablero muestra solo esos rangos, los
+    mapas distinguen cada uno por color y una tabla compara sus indicadores
+    con la sesión completa. Es exportable a PDF y CSV, con los rangos y los
+    mapas de cada uno, y enviable por correo
     (Figuras~\ref{fig:web-insights} y~\ref{fig:web-insights-pdf}).
     \item \textbf{Ventas:} tickets reales o simulados, conversión por local
     elegido en el plano, cuándo se vende, emparejamiento de cada compra con la
@@ -4090,8 +4100,10 @@ tres análisis: \textit{solo multitracking}, \textit{solo género} y
 El modelo procesa como una cámara en vivo: si no alcanza al video, salta
 cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
 segundo que logra procesar y en la fracción de cuadros que salta. Las siete
-cámaras se procesaron con el mismo modelo y el análisis \textit{ambos}, pero
-sin el reloj del tiempo real, sobre sus primeros 2 minutos y con tres ritmos:
+cámaras se procesaron con el mismo modelo, el análisis \textit{ambos}, el
+mismo lector en la GPU y la misma preparación de la pasada siguiente mientras
+se procesa la anterior, pero sin el reloj del tiempo real, sobre sus primeros
+2 minutos y con tres ritmos:
 1.5 y 5 cuadros por segundo fijos, y uno adaptado en el que el video avanza 3
 veces más lento que el reloj y cada pasada toma el cuadro de ese instante,
 con un tope de 15 cuadros por segundo. En los tres se procesa cada cuadro
@@ -4153,10 +4165,11 @@ video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
 6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
 la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
 Cuadro~\ref{tab:siete} resume las siete cámaras y la
-Figura~\ref{fig:siete-ritmos} compara los tres ritmos. Con el ritmo
-adaptado, 2 minutos de video tardaron 6 minutos (3.0 veces) y el modelo
-procesó 2.7 cuadros por segundo por cámara; una repetición dio 2.2, porque la
-duración de cada pasada varía con la carga del equipo.
+Figura~\ref{fig:siete-ritmos} compara los tres ritmos. A 5 cuadros por
+segundo fijos, 2 minutos de video tardaron 6 minutos (3.0 veces) y se
+procesaron los 600 cuadros elegidos de cada cámara. El ritmo adaptado tardó
+lo mismo pero procesó menos, 3.9 cuadros por segundo por cámara: cuando una
+pasada se demora, salta al cuadro que marca el reloj.
 
 \begin{table}[H]
 \caption{Siete cámaras 1080p a 60~fps procesadas a la vez (análisis
@@ -4169,21 +4182,21 @@ duración de cada pasada varía con la carga del equipo.
 \toprule
 \textbf{Medición} & \textbf{1.5 c/s fijos} & \textbf{Adaptado (3 veces el video)} & \textbf{5 c/s fijos} \\
 \midrule
-Cuadros procesados por segundo, por cámara & 1.5 & 2.7 & 5.0 \\
-Cuadros procesados, en total & 1\,253 & 2\,296 & 4\,193 \\
-Tiempo de proceso (veces el video) & 167~s (1.4) & 361~s (3.0) & 513~s (4.3) \\
-Milisegundos por pasada de las 7 cámaras & 767 & 894 & 702 \\
-\quad de ellos, seguimiento en la CPU & 409 & 594 & 412 \\
-Núcleos de CPU del modelo & 8.3 & 4.5 & 6.7 \\
-CPU de todo el equipo & 63\,\% & 39\,\% & 57\,\% \\
-Uso de la GPU & 28\,\% & 20\,\% & 26\,\% \\
-Memoria de la GPU & 3.4~GB & 3.4~GB & 3.4~GB \\
-Memoria RAM del modelo & 2.2~GB & 3.9~GB & 1.8~GB \\
-Potencia de la GPU & 36~W & 30~W & 35~W \\
-Personas contadas por cámara & 117 a 200 & 130 a 236 & 145 a 253 \\
-Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.30) & 0.043 (0.24) & 0.030 (0.15) \\
-Detecciones con ID global & 76\,\% & 81\,\% & 85\,\% \\
-IDs vistos en más de una cámara & 323 & 354 & 405 \\
+Cuadros procesados por segundo, por cámara & 1.5 & 3.9 & 5.0 \\
+Cuadros procesados, en total & 1\,260 & 3\,234 & 4\,200 \\
+Tiempo de proceso (veces el video) & 153~s (1.3) & 363~s (3.0) & 364~s (3.0) \\
+Milisegundos por pasada de las 7 cámaras & 794 & 632 & 603 \\
+\quad de ellos, seguimiento en la CPU & 588 & 503 & 463 \\
+Núcleos de CPU del modelo & 7.9 & 7.6 & 11.0 \\
+CPU de todo el equipo & 61\,\% & 61\,\% & 77\,\% \\
+Uso de la GPU & 31\,\% & 28\,\% & 38\,\% \\
+Memoria de la GPU & 3.8~GB & 3.8~GB & 3.8~GB \\
+Memoria RAM del modelo & 4.3~GB & 4.0~GB & 4.7~GB \\
+Potencia de la GPU & 41~W & 36~W & 45~W \\
+Personas contadas por cámara & 122 a 201 & 142 a 241 & 141 a 248 \\
+Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.31) & 0.033 (0.17) & 0.030 (0.15) \\
+Detecciones con ID global & 76\,\% & 82\,\% & 85\,\% \\
+IDs vistos en más de una cámara & 326 & 342 & 393 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -4215,19 +4228,18 @@ persona entre dos cuadros procesados seguidos.}
     \item \textbf{La GPU no es el cuello de botella.} En los pares la GPU
     trabaja entre 50\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
     que sube con el género y con la gente; con siete cámaras la GPU trabaja
-    solo entre 20 y 28\,\%.
-    \item \textbf{Siete cámaras de 60~fps se procesan completas a un ritmo
-    menor.} Sin el reloj del tiempo real, una pasada de las siete cámaras
-    toma de 0.7 a 0.9~s, dos tercios en el seguimiento en la CPU. Con un tope
-    de 3 veces la duración del video, el modelo procesa unos 2.7 cuadros por
-    segundo por cámara sin saltar ninguno por atraso; a 5 cuadros por segundo
-    el movimiento entre cuadros seguidos baja a la mitad (p90 de 0.15 alturas
-    de la caja frente a 0.30 a 1.5 cuadros por segundo), el 85\,\% de las
-    detecciones lleva ID global y más IDs se reconocen entre cámaras, pero
-    tarda 4.3 veces el video. Para siete cámaras conviene procesar por lotes y
-    no en tiempo real.
-    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 3.9~GB de
-    RAM y la GPU consume entre 30 y 61~W; el equipo arranca una tanda en 2.5 a
+    solo entre 28 y 38\,\%.
+    \item \textbf{Siete cámaras de 60~fps se procesan completas a 5 cuadros
+    por segundo.} Sin el reloj del tiempo real, una pasada de las siete
+    cámaras toma 0.6~s, tres cuartos en el seguimiento en la CPU, y 2 minutos
+    de video se procesan en 3 veces su duración sin saltar ningún cuadro
+    elegido. Frente a 1.5 cuadros por segundo, el movimiento entre cuadros
+    seguidos baja a la mitad (p90 de 0.15 alturas de la caja frente a 0.31),
+    el 85\,\% de las detecciones lleva ID global (76\,\%) y más IDs se
+    reconocen entre cámaras. Para siete cámaras conviene procesar por lotes a
+    una tasa fija de 5 cuadros por segundo y no en tiempo real.
+    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 4.7~GB de
+    RAM y la GPU consume entre 36 y 61~W; el equipo arranca una tanda en 2.5 a
     9~s.
 \end{itemize}
 
@@ -4553,8 +4565,8 @@ el modelo completo.
 
 La capacidad sale de las pruebas de estrés (Sección~\ref{sec:pruebas}): con
 el modelo completo, la RTX~4060 procesa unos 32 cuadros por segundo en total
-con dos cámaras 1080p, y unos 6 a 8 con siete cámaras 1080p de 60~fps a la
-vez y mucha gente, porque el seguimiento de cada cámara corre en la CPU; por
+con dos cámaras 1080p, y unos 12 con siete cámaras 1080p de 60~fps a la vez
+y mucha gente, porque el seguimiento de cada cámara corre en la CPU; por
 eso el lote se procesa de dos en dos cámaras. Tres horas pico a 5 cuadros por
 segundo son 54\,000 cuadros por cámara al día; diez cámaras de pantalla toman
 entonces unas 5 horas de proceso nocturno, dentro del día. Una cámara de
