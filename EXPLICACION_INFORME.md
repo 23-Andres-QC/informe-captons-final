@@ -13,6 +13,6 @@
 9. **Arquitectura del Sistema.** Servicios, usuarios y roles, cuentas y solicitudes, despliegue local con GPU, costos frente a la nube, base de datos, backend y frontend con sus nueve secciones.
 10. **Primera Prueba de Validación: ESAN, Edificios A y B.** Plano del patio, prueba con tres cámaras fijas y prueba con teléfonos como cámaras en vivo.
 11. **Segunda Prueba de Validación: ESAN, Comedor.** Dos teléfonos en el comedor procesados como una tanda de Videos, con el mismo ID en las dos cámaras.
-12. **Pruebas de Validación y Estrés del Modelo.** Ajustes medidos con videos etiquetados, cinco pares de cámaras con los tres análisis (solo multitracking, solo género y ambos) y estrés con dos y siete cámaras de 60 fps: cuadros por segundo, CPU, GPU, memoria y potencia.
+12. **Pruebas de Validación y Estrés del Modelo.** Validación de cada pieza con videos etiquetados (detector; Re-ID YOLO26s-ReID, OSNet-AIN, PersonViT y CLIP-ReID; seguidor con ResNet18; asociación entre cámaras) con su probabilidad de acierto antes y después, cinco pares de cámaras con los tres análisis (solo multitracking, solo género y ambos) y estrés con dos y siete cámaras de 60 fps: cuadros por segundo, CPU, GPU, memoria y potencia.
 13. **Plan de Negocio.** Problema, clientes, productos (captación de tienda y audiencia), lo construido, mercado y competencia, FODA, Canvas, precios, costo por cámara con la capacidad medida, pronóstico, validación comercial y cronograma.
 14. **Referencias Bibliográficas.**
