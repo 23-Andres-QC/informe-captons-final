@@ -17,6 +17,7 @@
 \usepackage{tikz}
 \usepackage{float}
 \usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{listings}
@@ -1540,42 +1541,50 @@ ese momento.
 \end{figure}
 \subsection{Requerimientos Funcionales y No Funcionales}
 
-\begin{table}[H]
-\caption{Requisitos Funcionales y No Funcionales}
-\label{tab:requisitos}
-\centering
-\footnotesize
+{\footnotesize
 \setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{0.9}
-\begin{tabular}{L{0.07\textwidth}L{0.12\textwidth}L{0.29\textwidth}L{0.41\textwidth}}
-\hline
-\textbf{ID} & \textbf{Tipo} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
-\hline
-RF-01 & Funcional & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; superadmin hace todo, seguridad opera En vivo, Teléfonos y Videos, y negocio consulta Insights y Ventas \\
-RF-02 & Funcional & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
-RF-03 & Funcional & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
-RF-04 & Funcional & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
-RF-05 & Funcional & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
-RF-06 & Funcional & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
-RF-07 & Funcional & Ventas y conversión por local & Cargar tickets de caja, emparejar cada compra con una visita, mostrar conversión, patrones por hora y pronóstico \\
-RF-08 & Funcional & Procesamiento de videos subidos & Procesar hasta 10 videos a la vez, con IDs compartidos entre los del mismo lugar, sin guardar el video \\
-RF-09 & Funcional & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos temporales de exportación \\
-RNF-01 & No Funcional & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
-RNF-02 & No Funcional & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; género solo en conteos de grupos de 5 o más; cumplimiento de la Ley N.\textdegree~29733 \\
-RNF-03 & No Funcional & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
-RNF-04 & No Funcional & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
-RNF-05 & No Funcional & Fluidez de visualización & Animación continua y respuesta inmediata a la interacción \\
-RNF-06 & No Funcional & Disponibilidad & Verificación de estado y recuperación automática ante fallos \\
-RNF-07 & No Funcional & Portabilidad & Despliegue en contenedores; plano local sin servicios externos \\
-RNF-08 & No Funcional & Usabilidad & Confirmación antes de borrar; interfaz aprendible sin capacitación extensa \\
-RNF-09 & No Funcional & Mantenibilidad & API versionada, migraciones de base de datos versionadas y pruebas automatizadas \\
-RNF-10 & No Funcional & Compatibilidad & Funcionamiento en navegadores modernos; cámara solo con conexión segura \\
-RNF-11 & No Funcional & Precisión del seguimiento & Identidades consistentes dentro de cada cámara y entre cámaras, validadas con videos etiquetados \\
-RNF-12 & No Funcional & Rendimiento del procesamiento de video & Procesamiento de varias cámaras simultáneas al ritmo del video \\
-RNF-13 & No Funcional & Reproducibilidad & Pesos, configuración y versiones de dependencias registrados con huella SHA-256 en cada sesión de análisis \\
-\hline
-\end{tabular}
-\end{table}
+\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{L{0.08\textwidth}L{0.30\textwidth}L{0.52\textwidth}}
+\caption{Requisitos Funcionales y No Funcionales}
+\label{tab:requisitos} \\
+\toprule
+\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\textit{Requisitos (continuación)}} \\
+\toprule
+\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\multicolumn{3}{@{}l}{\textbf{Funcionales}} \\[2pt]
+RF-01 & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; superadmin hace todo, seguridad opera En vivo, Teléfonos y Videos, y negocio consulta Insights y Ventas \\
+RF-02 & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
+RF-03 & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
+RF-04 & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
+RF-05 & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
+RF-06 & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
+RF-07 & Ventas y conversión por local & Cargar tickets de caja, emparejar cada compra con una visita, mostrar conversión, patrones por hora y pronóstico \\
+RF-08 & Procesamiento de videos subidos & Procesar hasta 10 videos a la vez, con IDs compartidos entre los del mismo lugar, sin guardar el video \\
+RF-09 & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos temporales de exportación \\
+\midrule
+\multicolumn{3}{@{}l}{\textbf{No funcionales}} \\[2pt]
+RNF-01 & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
+RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; género solo en conteos de grupos de 5 o más; cumplimiento de la Ley N.\textdegree~29733 \\
+RNF-03 & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
+RNF-04 & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
+RNF-05 & Fluidez de visualización & Animación continua y respuesta inmediata a la interacción \\
+RNF-06 & Disponibilidad & Verificación de estado y recuperación automática ante fallos \\
+RNF-07 & Portabilidad & Despliegue en contenedores; plano local sin servicios externos \\
+RNF-08 & Usabilidad & Confirmación antes de borrar; interfaz aprendible sin capacitación extensa \\
+RNF-09 & Mantenibilidad & API versionada, migraciones de base de datos versionadas y pruebas automatizadas \\
+RNF-10 & Compatibilidad & Funcionamiento en navegadores modernos; cámara solo con conexión segura \\
+RNF-11 & Precisión del seguimiento & Identidades consistentes dentro de cada cámara y entre cámaras, validadas con videos etiquetados \\
+RNF-12 & Rendimiento del procesamiento de video & Procesamiento de varias cámaras simultáneas al ritmo del video \\
+RNF-13 & Reproducibilidad & Pesos, configuración y versiones de dependencias registrados con huella SHA-256 en cada sesión de análisis \\
+\end{longtable}
+}
 
 \FloatBarrier
 
