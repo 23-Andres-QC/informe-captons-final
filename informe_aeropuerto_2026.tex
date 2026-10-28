@@ -329,8 +329,9 @@ pipeline desplegable, bajo un marco ético explícito.
         (YOLO26m) y un seguidor local híbrido por cámara que mantenga
         identidades estables ante cruces y oclusiones.
         \item Resolver la re-identificación multicámara mediante
-        embeddings de apariencia corporal (YOLO26s-ReID) y una galería
-        global compartida, combinados con restricciones físicas y
+        embeddings de apariencia corporal (YOLO26s-ReID; OSNet-AIN y
+        PersonViT para videos de cualquier origen) y una galería global
+        compartida, combinados con restricciones físicas y
         temporales entre cámaras, sin biometría facial.
         \item Proyectar las trayectorias sobre un plano 2D común del
         aeropuerto mediante homografía, y asignar zonas comerciales
@@ -591,17 +592,19 @@ proyecto establece seis salvaguardas:
     \textit{Solución:} evaluación con datos diversos y reporte de
     métricas desagregadas antes del despliegue. La estimación de género
     no se usa como identificación ni como base única de decisiones, se
-    muestra solo en forma agregada y conserva la categoría ``sin
-    determinar''.
+    guarda solo como conteo por sesión, conserva la categoría ``sin
+    determinar'' y oculta toda categoría de menos de 5 personas (y la
+    siguiente, si permitiera deducirla).
 
     \item \textbf{6. Uso del sistema} \\
     \textit{Riesgo:} los datos capturados por seguridad podrían
     reutilizarse con fines comerciales sin autorización. \\
     \textit{Solución:} definición contractual del alcance permitido de
     los datos entre el operador y los locales, con aprobación explícita
-    para nuevos usos, y separación de los perfiles administrador y
-    comercial en la aplicación, prevista con autenticación en el backend (el
-    prototipo usa un acceso de demostración).
+    para nuevos usos. En la aplicación, cada cuenta tiene un rol: seguridad
+    opera En vivo, Teléfonos y Videos, negocio solo consulta Insights y Ventas,
+    y exportar o enviar reportes exige un permiso temporal que aprueba el
+    superadmin; una bitácora registra quién hizo qué y desde dónde.
 \end{itemize}
 
 \subsubsection{Análisis social}
@@ -635,7 +638,11 @@ el procesamiento por lotes del detector con un cuadro por cámara, la
 ejecución del codificador de re-identificación en GPU solo sobre vistas
 muestreadas y una arquitectura en contenedores que permite escalar el
 cómputo según la demanda real, evitando el sobreaprovisionamiento
-constante.
+constante. En las pruebas de estrés (Sección~\ref{sec:pruebas}), la GPU del
+equipo de despliegue consumió entre 47 y 61~W procesando de dos a siete
+cámaras a la vez, y el plan de negocio prevé procesar por lotes solo las horas
+necesarias, a 5 cuadros por segundo, en lugar de mantener el modelo encendido
+todo el día.
 
 \section{Marco Teórico}
 \label{sec:related}
@@ -726,7 +733,7 @@ antecedente usa cámaras térmicas, mientras que AeroVision trabaja sobre
 CCTV RGB, lo que exige anonimización algorítmica en lugar de la
 anonimización física que ofrece el sensor térmico.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-1.png}
 \caption{Framework de seguimiento multiobjeto basado en centroides.}
@@ -785,7 +792,7 @@ identificador seudónimo. Queda pendiente para trabajo futuro distinguir
 entre viajeros individuales y grupos al calcular el tiempo de permanencia
 y la tasa de captación por tienda.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-2.png}
 \caption{Curva de velocidad y trayectoria de un grupo de tres peatones.}
@@ -844,7 +851,7 @@ coincidencia mutua y sin ambigüedad, y separa tracklets cuando una
 fusión deja de ser coherente. La escala del experimento (cuatro cámaras,
 91 horas) es, sin embargo, mucho menor que la de un aeropuerto completo.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-3.png}
 \caption{Pipeline de extracción de trayectorias.}
@@ -896,7 +903,7 @@ metodología. La caída de desempeño entre dominios es, sin embargo, una
 advertencia: cualquier módulo demográfico deberá validarse con imágenes
 del aeropuerto de Lima antes de asumir un desempeño equivalente.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-4.png}
 \caption{Metodología de LLM-PAR.}
@@ -947,7 +954,7 @@ que el sistema propuesto debe validar estas métricas con datos propios.
 En AeroVision, este tipo de verificación geométrica se activa en el modo
 calibrado, cuando las homografías de las cámaras están validadas.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-5.png}
 \caption{Resultados del tracking en el conjunto de prueba.}
@@ -996,7 +1003,7 @@ objetos pequeños propios de una terminal. Por su publicación reciente,
 estas métricas aún no tienen adopción amplia, por lo que su uso en este
 trabajo es una decisión metodológica temprana.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-6.png}
 \caption{Pipeline de evaluación de eventos.}
@@ -1042,7 +1049,7 @@ Chávez y su integración con un mapa. La ausencia de métricas
 cuantitativas deja una laguna que el sistema propuesto busca cubrir
 reportando precisión, recall e IDF1 con datos etiquetados.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-7.png}
 \caption{a) Casos de éxito; b) casos fallidos por exceso de personas.}
@@ -1086,7 +1093,7 @@ conectadas permite generar mapas de calor y métricas de flujo, y admite
 la predicción de congestión, que queda como trabajo futuro, ya que el
 sistema propuesto reporta por ahora la congestión observada.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-8.png}
 \caption{Visualización de aglomeraciones en la estación.}
@@ -1138,7 +1145,7 @@ memoria visual para los cruces y oclusiones. La evaluación de
 arquitecturas como AirMOTR queda como trabajo futuro, cuando se disponga
 de suficientes datos propios.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{figuras/antecedentes/antecedente-9.png}
 \caption{Estructura del pipeline de seguimiento.}
@@ -1151,7 +1158,7 @@ El Cuadro~\ref{tab:antecedentes} resume las métricas principales, el
 dominio de evaluación y el aporte de cada antecedente al sistema
 propuesto.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \centering
 \caption{Resumen comparativo de los nueve antecedentes revisados.}
 \label{tab:antecedentes}
@@ -1203,8 +1210,9 @@ que cubre, su historia de usuario, precondiciones, flujo principal, flujos
 alternativos y postcondiciones. El sistema tiene dos actores: el
 \textbf{Usuario comercial}, que consulta el análisis y los insights, y el
 \textbf{Usuario administrador}, que monitorea, configura el mapa y procesa
-los videos. Los casos de uso describen el sistema objetivo; en el prototipo,
-el inicio de sesión (CU-01) es de demostración y no distingue roles.
+los videos. En la aplicación, el usuario comercial corresponde al rol
+negocio y el administrador a los roles superadmin y seguridad
+(Sección~\ref{sec:arquitectura}).
 
 \textbf{CU-01: Iniciar y cerrar sesión}
 
@@ -1229,7 +1237,7 @@ temporalmente.
 
 \textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-01.png}
 \caption{CU-01: Iniciar y cerrar sesión}
@@ -1261,7 +1269,7 @@ muestra el aviso ``sin observaciones''.
 \textbf{Postcondiciones:} Estado actual del aeropuerto visible con
 identificadores seudónimos.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-02.png}
 \caption{CU-02: Monitorear personas y trayectorias en vivo}
@@ -1290,7 +1298,7 @@ rechaza con un mensaje.
 
 \textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-03.png}
 \caption{CU-03: Reproducir histórico de movimiento}
@@ -1320,7 +1328,7 @@ el usuario pulsa ``Eliminar zona''.
 
 \textbf{Postcondiciones:} Zona disponible en el mapa y en los insights.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-04.png}
 \caption{CU-04: Configurar zonas del mapa}
@@ -1349,7 +1357,7 @@ eliminar. Volver a publicar el Build no reemplaza una pose ajustada a mano.
 \textbf{Postcondiciones:} Cámara registrada en el plano con su posición y
 dirección.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-05.png}
 \caption{CU-05: Configurar cámaras y cobertura}
@@ -1377,7 +1385,7 @@ video directo del teléfono.
 
 \textbf{Postcondiciones:} El teléfono quitado deja de enviar video.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-06.png}
 \caption{CU-06: Ver cámara en vivo}
@@ -1405,7 +1413,7 @@ muestra el mapa vacío con un aviso.
 
 \textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-07.png}
 \caption{CU-07: Consultar mapa de calor}
@@ -1432,7 +1440,7 @@ muestra el mapa vacío con un aviso.
 
 \textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-08.png}
 \caption{CU-08: Consultar insights por zona}
@@ -1458,7 +1466,7 @@ sistema muestra un aviso.
 
 \textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-09.png}
 \caption{CU-09: Analizar flujos entre zonas}
@@ -1472,11 +1480,12 @@ sistema muestra un aviso.
 
 \textbf{Historia de usuario:} Como usuario comercial, quiero exportar los insights de un periodo en CSV o PDF, para compartir los resultados con mi equipo o usarlos fuera del sistema.
 
-\textbf{Precondiciones:} Insights cargados para un periodo.
+\textbf{Precondiciones:} Insights cargados para un periodo y, para el rol
+negocio, un permiso de exportación vigente aprobado en Solicitudes.
 
 \textbf{Flujo principal:}
 \begin{enumerate}
-    \item El usuario pulsa ``Exportar''.
+    \item El usuario pulsa ``Exportar'' o ``Enviar'' (por correo).
     \item El usuario elige el formato CSV o PDF.
     \item El sistema genera y descarga el archivo.
 \end{enumerate}
@@ -1486,7 +1495,7 @@ muestra el progreso.
 
 \textbf{Postcondiciones:} Reporte descargado.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-10.png}
 \caption{CU-10: Exportar reporte}
@@ -1523,7 +1532,7 @@ ese momento.
 
 \FloatBarrier
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-11.png}
 \caption{CU-11: Procesar videos multicámara}
@@ -1531,7 +1540,7 @@ ese momento.
 \end{figure}
 \subsection{Requerimientos Funcionales y No Funcionales}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Requisitos Funcionales y No Funcionales}
 \label{tab:requisitos}
 \centering
@@ -1603,6 +1612,10 @@ el codificador YOLO26s-ReID con una galería global compartida para la
 asociación entre cámaras; homografía para la proyección espacial; un
 modelo CLIP local, opcional, para la estimación agregada de género;
 PostGIS para el almacenamiento espacial; y Vue.js para la visualización.
+La misma metodología se aplica, con ajustes más sensibles, a los videos de
+cualquier origen que se suben a la sección Videos: detector a 1280~px y
+codificador de re-identificación que promedia OSNet-AIN y PersonViT, ambos
+preentrenados en MSMT17 (Sección~\ref{sec:algoritmos}).
 
 Ningún modelo se entrena dentro del proyecto: todos los pesos son
 preentrenados, se cargan desde disco sin descargas ni telemetría, y cada
@@ -1910,7 +1923,7 @@ definen en un archivo de configuración versionado junto con los pesos de
 los modelos y se ajustaron sobre los videos del piloto, por lo que deben
 revisarse al incorporar cámaras nuevas.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Parámetros del seguimiento local}
 \label{tab:tracker_params}
 \centering
@@ -1968,7 +1981,7 @@ de cámaras comparten campo de visión y qué transiciones entre cámaras son
 físicamente posibles. El identificador de cada cámara debe coincidir con
 el nombre de su video y con el registrado en la base de datos.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Configuración técnica de las cámaras}
 \label{tab:camera_configuration}
 \centering
@@ -2296,7 +2309,7 @@ entendida como una similitud y no como una probabilidad de acierto.
 Los umbrales de este apartado se calibraron con tracklets etiquetados
 manualmente sobre los videos del piloto (Cuadro~\ref{tab:assoc_params}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Parámetros de la asociación multicámara}
 \label{tab:assoc_params}
 \centering
@@ -2505,7 +2518,7 @@ en un evento mediante reglas operativas definidas previamente
 \textit{spatial\_events}, con su instante de inicio, su instante de fin
 cuando corresponde y su confianza.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Eventos espaciales de AeroVision}
 \label{tab:spatial_events}
 \centering
@@ -2664,9 +2677,9 @@ CaptureRate(z)=
 \times100.
 \end{equation}
 
-Este indicador se interpreta únicamente como tasa de ingreso al local. No
-es una tasa de conversión de compra, ya que el sistema no dispone de
-información de ventas. Cuando no hay pasajeros expuestos, el indicador
+Este indicador se interpreta únicamente como tasa de ingreso al local; la
+conversión de compra se calcula aparte con los tickets de caja (ver
+\emph{Ventas y conversión}). Cuando no hay pasajeros expuestos, el indicador
 se reporta como no disponible en lugar de cero.
 
 \subsubsection{Densidad y congestión}
@@ -2690,12 +2703,52 @@ un flujo intenso pero continuo, mientras que una concentración
 persistente con velocidad reducida es más consistente con una
 aglomeración o una cola.
 
+\subsubsection{Tráfico por período y embudo}
+
+Para comparar días y franjas sin reprocesar el video, el backend agrega cada
+sesión con la misma lógica de la Parte~III: consolida las posiciones de cada
+persona en una por instante de 0.2~s, asigna a cada posición su zona y forma
+\textit{estancias} con los tramos seguidos en una zona (una salida de menos
+de 1~s se considera ruido del borde). Por zona y en ventanas de 5, 15 y 60
+minutos guarda las personas distintas, las visitas, cuántas personas
+\textbf{se detienen} (estancia de al menos 5~s) y cuántas quedan
+\textbf{interesadas} (al menos 30~s), y un histograma de permanencia; los
+segundos-persona se acumulan además por celda de 1~m y hora para el mapa de
+calor por franja. Los dos umbrales se ajustan por sitio. Con estos agregados,
+cada tienda tiene un embudo:
+\begin{equation}
+\text{Pasan por el frente} \rightarrow \text{Se detienen} \rightarrow
+\text{Entran} \rightarrow \text{Compran}.
+\end{equation}
+Una prueba con ocho personas sintéticas procesadas por la Parte~III exige que
+el backend obtenga los mismos tramos, eventos y totales.
+
+\subsubsection{Ventas y conversión}
+
+Los tickets de caja (cargados uno a uno, desde un CSV o por la API) se
+emparejan con las visitas: cada ticket se asigna a la persona cuya estancia en
+el INTERIOR del local cubre la hora de la venta o terminó justo antes, con una
+tolerancia de 90~s entre los relojes de la caja y de las cámaras. Una persona
+paga una vez por visita, un ticket tiene una sola persona y se asignan primero
+las parejas más probables; cada pareja guarda su confianza, que baja cuando
+varias personas podían haber comprado. De ahí salen la conversión
+(tickets entre visitantes) y el ticket promedio por local y hora:
+\begin{equation}
+Conversion(z)=\frac{Tickets(z)}{Visitantes(z)}\times100.
+\end{equation}
+El pronóstico de ingresos, tickets y visitantes usa Holt-Winters aditivo con
+tendencia amortiguada, con patrón semanal sobre la serie diaria o diario sobre
+la horaria; los pesos se eligen por el menor error al predecir cada punto con
+los anteriores, y esos errores dan una banda del 80\,\%. Con menos de dos
+semanas de historial se omite el patrón semanal.
+
 \subsubsection{Visualización de resultados}
 
 Los resultados se consultan en la aplicación web
 (Sección~\ref{sec:arquitectura}): la reproducción de cada sesión sobre el
-plano, el tablero de insights con métricas, mapas de calor, rutas y flujos, y
-el registro de capturas. Los identificadores globales solo se usan para
+plano, el tablero de insights con métricas, mapas de calor, rutas y flujos,
+el tráfico por franja y fecha con el embudo de cada tienda, las ventas con su
+conversión y pronóstico, y el registro de capturas. Los identificadores globales solo se usan para
 construir las trayectorias y no se presentan como información de identidad
 personal.
 
@@ -2705,7 +2758,7 @@ La metodología se valida por componentes, cada uno con métricas
 coherentes con el problema que resuelve
 (Cuadro~\ref{tab:validation_methodology}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Validación de los componentes}
 \label{tab:validation_methodology}
 \centering
@@ -2720,7 +2773,7 @@ Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sob
 Estimación de género & Proporción de identidades sin determinar y precisión desagregada frente a etiquetas manuales. \\
 Homografía & Error de reproyección en puntos de control. \\
 Eventos & Precisión, recall y F1. \\
-Rendimiento & Cuadros por segundo por cámara y tiempo por componente. \\
+Rendimiento & Cuadros por segundo por cámara, cuadros saltados, CPU, GPU, memoria y potencia (Sección~\ref{sec:pruebas}). \\
 Histórico & Comparación con trayectorias conocidas. \\
 \hline
 \end{tabular}
@@ -2785,7 +2838,7 @@ la captura del video CCTV hasta la generación de insights: seguimiento
 local por cámara, asociación multicámara con mapeo 2D, y procesamiento
 histórico de las trayectorias.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/metodologia/flujo.png}
     \caption{Flujo de la metodología del proyecto.}
@@ -2804,7 +2857,7 @@ de seguimiento. Su diagrama de Gantt (Figura~\ref{fig:gantt}) muestra, por
 semana, quién ejecuta cada tarea y su porcentaje de avance, y facilita la
 identificación de plazos, dependencias y cargas de trabajo.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/gestion/gantt.jpg}
     \caption{Diagrama de Gantt por sprints semanales, al 26 de octubre de 2026 (sprint 11).}
@@ -2816,7 +2869,7 @@ El resumen del panel (Figura~\ref{fig:avance}) registra, al cierre del sprint
 avance promedio de 65.5\,\% repartido de forma pareja entre los integrantes
 (entre 61\,\% y 69\,\%).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \safeincludegraphics[width=\linewidth]{figuras/gestion/avance-metricas.jpg}
     \caption{Panel Scrum: estado de las tareas y avance por responsable.}
@@ -2829,7 +2882,7 @@ cada integrante y su estado de cumplimiento. Las actas sirvieron como
 mecanismo formal de seguimiento para evaluar el progreso individual y
 colectivo, y para detectar a tiempo retrasos o desviaciones del plan.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
     \safeincludegraphics[width=0.75\linewidth]{figuras/gestion/actas.jpg}
     \caption{Actas semanales del proyecto, del 26 de agosto al 20 de octubre de 2026.}
@@ -2840,7 +2893,7 @@ El desarrollo y las pruebas se hicieron en el campus de ESAN, con la
 computadora del equipo y teléfonos conectados como cámaras
 (Figura~\ref{fig:evidencia}).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.40\linewidth}
 \centering
@@ -2867,7 +2920,7 @@ autores entre el 30 de septiembre y el 28 de octubre de 2026.
 Para distribuir adecuadamente las funciones del equipo se definieron los
 roles del Cuadro~\ref{tab:roles}.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \centering
 \caption{Roles y responsabilidades de cada integrante}
 \label{tab:roles}
@@ -2950,6 +3003,7 @@ incertidumbre y mantener el control durante toda la ejecución del
 proyecto.
 
 \section{Algoritmos}
+\label{sec:algoritmos}
 
 Esta sección resume los algoritmos que ejecuta el sistema en cada parte. Los
 umbrales corresponden a la configuración vigente (\texttt{config\_lap01.json},
@@ -2957,7 +3011,7 @@ versión~2.0, y \texttt{config\_insights.json}) y su fundamento se expone en la
 Metodología. El Cuadro~\ref{tab:algoritmos} relaciona cada algoritmo con lo que
 produce.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Algoritmos del sistema por parte}
 \label{tab:algoritmos}
 \centering
@@ -2985,7 +3039,7 @@ una cámara. En cada instante detecta a las personas de todas las cámaras en un
 solo lote y asocia cada detección con un track mediante una cascada de etapas
 resuelta con el algoritmo Hungarian (Algoritmo~\ref{alg:local}).
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Seguimiento local por cámara}
 \label{alg:local}
 \begin{algorithmic}[1]
@@ -3014,7 +3068,7 @@ resume en un prototipo de apariencia corporal y se compara con una galería
 global que solo admite candidatas físicamente compatibles
 (Algoritmo~\ref{alg:reid}).
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Asociación multicámara con galería global}
 \label{alg:reid}
 \begin{algorithmic}[1]
@@ -3047,7 +3101,7 @@ Cada observación con los pies visibles se lleva al plano en metros con la
 homografía de su cámara. En paralelo, CLIP vota el género de cada identidad a
 partir de vistas del cuerpo completo (Algoritmo~\ref{alg:mapa}).
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Proyección al plano y estimación de género}
 \label{alg:mapa}
 \begin{algorithmic}[1]
@@ -3072,7 +3126,7 @@ Transforma los puntos de una sesión en eventos y métricas sin volver a procesa
 video. Primero corrige las posiciones con el plano del sitio y después aplica
 las reglas de eventos y los algoritmos de minería (Algoritmo~\ref{alg:historico}).
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Procesamiento histórico}
 \label{alg:historico}
 \begin{algorithmic}[1]
@@ -3102,7 +3156,7 @@ y vuelva, pase a otro teléfono o el modelo se reinicie
 punto de su color sobre la cabeza, su ID global y su género, en lugar de una
 caja que la tape.
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Modelo en vivo de tres carriles}
 \label{alg:vivo}
 \begin{algorithmic}[1]
@@ -3139,7 +3193,7 @@ referencias del plano coincida con la real; un giro y una traslación llevan
 esas referencias a sus coordenadas manteniendo el recorrido dentro del piso; y
 el resultado es una homografía de píxeles a metros para ese teléfono.
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Ubicación en el plano desde un teléfono}
 \label{alg:ubicacion}
 \begin{algorithmic}[1]
@@ -3200,7 +3254,7 @@ qué hace el modelo: \textit{solo multitracking} (IDs compartidos, sin CLIP),
 (Algoritmo~\ref{alg:videos}). El video se guarda en disco temporal solo
 mientras se procesa y queda únicamente un resumen.
 
-\begin{algorithm}[!htbp]
+\begin{algorithm}[H]
 \caption{Procesamiento de una tanda de videos}
 \label{alg:videos}
 \begin{algorithmic}[1]
@@ -3236,14 +3290,14 @@ usar la GPU directamente. El análisis de sesiones grabadas y el
 monitoreo en vivo usan backends y bases de datos separados, y la aplicación
 web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
 \caption{Arquitectura de AeroVision.}
 \label{fig:arquitectura}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Componentes del sistema}
 \label{tab:componentes}
 \centering
@@ -3270,7 +3324,7 @@ Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
 El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
 hace en él.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Usuarios del sistema}
 \label{tab:usuarios}
 \centering
@@ -3304,21 +3358,21 @@ correo los reportes de Insights solo durante el tiempo elegido. La página de
 cámara se une con un código que el superadmin crea en Teléfonos y que viaja en
 el primer mensaje del WebSocket, nunca en la URL.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=0.85\linewidth]{figuras/plataforma/login.png}
 \caption{Ingreso a la aplicación.}
 \label{fig:login}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
 \caption{Cuentas: usuarios con sus roles, estado y último ingreso.}
 \label{fig:cuentas}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/solicitudes.png}
 \caption{Solicitudes de cambio de correo y de permisos de exportación.}
@@ -3333,7 +3387,7 @@ en vivo, que también procesa los videos subidos, corre fuera de Docker para
 usar la GPU. Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
 Docker con YOLO26s a 640~px.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Configuración del equipo de despliegue}
 \label{tab:infra}
 \centering
@@ -3378,7 +3432,7 @@ interrumpible y mucho menos que la nube a demanda, el video no sale de la red y
 el costo es fijo; este cálculo sostiene el costo por cámara del plan de negocio
 (Sección~\ref{sec:negocio}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Costo mensual del procesamiento: computadora propia y nube}
 \label{tab:costos}
 \centering
@@ -3414,7 +3468,7 @@ guarda solo la memoria de identidades del modo en vivo
 (Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
 backends aplican al iniciar.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/base-de-datos.png}
 \caption{Modelo entidad-relación de las bases de datos.}
@@ -3426,7 +3480,7 @@ backends aplican al iniciar.
     y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
     INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
     válida.
-    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD o LIVE),
+    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD, LIVE o VIDEO),
     \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
     geometría de cada punto se calcula en la base y se conserva la posición
     original del modelo junto a la ajustada al piso.
@@ -3476,14 +3530,14 @@ Cuadro~\ref{tab:api}):
     guardado anterior.
 \end{itemize}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
 \caption{Arquitectura de los servicios del backend.}
 \label{fig:backend}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Recursos de las API}
 \label{tab:api}
 \centering
@@ -3544,7 +3598,7 @@ nueve secciones, y cada rol ve solo las suyas:
     visita que la hizo y pronóstico con simulador de escenarios
     (Figura~\ref{fig:web-ventas}).
     \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
-    con fecha, duración, personas y puntos (Figura~\ref{fig:web-registros}).
+    con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
     \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
     umbrales de tráfico y tamaño mínimo de grupo para el género
     (Figura~\ref{fig:web-config}).
@@ -3554,14 +3608,14 @@ nueve secciones, y cada rol ve solo las suyas:
     \item \textbf{Solicitudes:} cambios de correo y permisos de exportación.
 \end{enumerate}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/frontend.png}
 \caption{Arquitectura del frontend.}
 \label{fig:frontend}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/web-configuracion.png}
 \caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio,
@@ -3569,7 +3623,7 @@ umbrales de tráfico y privacidad del género.}
 \label{fig:web-config}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/videos.png}
 \caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
@@ -3577,7 +3631,7 @@ el selector de análisis y el resumen de cada video.}
 \label{fig:web-videos}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/insights.png}
 \caption{Insights de una captura en vivo: el género se muestra solo en grupos
@@ -3585,14 +3639,14 @@ de 5 o más personas.}
 \label{fig:web-insights}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=0.7\linewidth]{figuras/plataforma/insights-pdf.png}
 \caption{Reporte de Insights exportado a PDF.}
 \label{fig:web-insights-pdf}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
 \caption{Ventas: selección de locales en el plano y pestañas de resumen,
@@ -3600,14 +3654,8 @@ pronóstico, patrones, emparejamiento, tickets y datos.}
 \label{fig:web-ventas}
 \end{figure}
 
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/registros.png}
-\caption{Registros de lo capturado en vivo.}
-\label{fig:web-registros}
-\end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
 \caption{Teléfonos: código de unión en QR, cámaras conectadas y memoria de
@@ -3635,7 +3683,7 @@ expendedoras, un tacho y los contenedores de reciclaje
 Ascensores, Tacho y Reciclaje, y los locales Carpa azul, Expendedora negra y
 Expendedora roja, cada uno con su zona INTERIOR.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=0.75\linewidth]{figuras/validacion/plano-patio-esan.png}
 \caption{Plano del patio entre los Edificios A y B: piso, carpa azul,
@@ -3653,7 +3701,7 @@ personas y registró 13\,689 puntos de trayectoria
 (Figuras~\ref{fig:dataset-camara} a~\ref{fig:dataset-insights}); el
 Cuadro~\ref{tab:resultados-dataset} resume las mediciones.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Resultados de la prueba con cámaras fijas}
 \label{tab:resultados-dataset}
 \centering
@@ -3675,7 +3723,7 @@ Velocidad mediana al caminar & 0.87~m/s \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.49\linewidth}
 \centering
@@ -3692,7 +3740,7 @@ género.}
 \end{minipage}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-en-vivo.png}
 \caption{En vivo: la sesión de las tres cámaras reproducida sobre el plano del
@@ -3701,11 +3749,12 @@ instante.}
 \label{fig:dataset-en-vivo}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-insights.png}
-\caption{Insights de la sesión: personas, género, visitas, permanencia,
-captación, densidad y mapas de movimiento y de calor.}
+\caption{Insights de la sesión en la versión actual: personas, permanencia,
+captación, densidad y género, que se muestra solo como ``sin determinar''
+porque hombres y mujeres quedan, cada uno, bajo el grupo mínimo de 5.}
 \label{fig:dataset-insights}
 \end{figure}
 
@@ -3730,7 +3779,8 @@ teléfonos se unen a la computadora local con un código QR
     referencias los contenedores de reciclaje y el tacho verde.
     \item Lo registrado entre ``Iniciar captura'' y ``Terminar y guardar'' se
     guardó como una sesión LIVE, visible en Registros
-    (Figura~\ref{fig:telefonos-registros}) y analizada en Insights con el mismo
+    (Figura~\ref{fig:telefonos-registros}, con las capturas posteriores, del
+    13 al 26 de octubre) y analizada en Insights con el mismo
     tablero que una sesión grabada.
 \end{enumerate}
 
@@ -3744,14 +3794,16 @@ enviaba 15 cuadros por segundo. La estimación de género, evaluada sobre 169
 recortes del patio etiquetados manualmente, acertó en el 91\,\% de los casos
 (92\,\% en el servidor, con 19~ms por recorte).
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-registros.png}
-\caption{Registros: las cinco capturas en vivo guardadas con los teléfonos.}
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/registros.png}
+\caption{Registros: capturas en vivo guardadas con los teléfonos en ESAN, con
+fecha, hora, duración, personas y puntos; cada una se abre en Insights o se
+reproduce sobre el plano.}
 \label{fig:telefonos-registros}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
 \caption{Teléfonos, el 6 de octubre: memoria de personas con las cámaras donde
@@ -3788,7 +3840,7 @@ calor y la última posición de quien ya salió
 uno de los caminantes recibe por unos segundos un segundo ID en cam04, y en
 cam05 los dos caminantes comparten un ID en parte del recorrido.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-en-vivo.png}
 \caption{Comedor de ESAN: la sesión de dos teléfonos reproducida sobre el
@@ -3810,7 +3862,7 @@ Los cambios del modelo de Videos se aceptaron solo si mejoraban la medición
 sobre videos de interiores con personas etiquetadas, grabados por pares de
 cámaras que observan el mismo lugar (Cuadro~\ref{tab:ajustes-videos}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Ajustes del modelo de Videos y su efecto medido}
 \label{tab:ajustes-videos}
 \centering
@@ -3861,7 +3913,7 @@ segundo que logra procesar y en la fracción de cuadros que salta.
 El Cuadro~\ref{tab:pares-modos} promedia los cinco pares por análisis y el
 Cuadro~\ref{tab:pares-detalle} muestra cada par.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Pares de cámaras 1080p a 23~fps: promedio de los cinco pares}
 \label{tab:pares-modos}
 \centering
@@ -3884,7 +3936,7 @@ Potencia de la GPU & 59~W & 57~W & 57~W \\
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Detalle por par: cuadros por segundo por video, núcleos de CPU y uso
 de la GPU según el análisis (multitracking / género / ambos)}
 \label{tab:pares-detalle}
@@ -3914,7 +3966,7 @@ la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
 Cuadro~\ref{tab:siete} resume las siete cámaras y la
 Figura~\ref{fig:consumo-modos} compara los dos escenarios.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Siete cámaras 1080p a 60~fps procesadas a la vez}
 \label{tab:siete}
 \centering
@@ -3939,7 +3991,7 @@ Personas contadas por cámara & 126 a 216 & 111 a 186 & 109 a 184 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/pruebas/consumo-por-modo.png}
 \caption{Cuadros procesados por video, núcleos de CPU y uso de la GPU según el
@@ -4019,7 +4071,7 @@ pasajeros~\cite{mn-jcdecaux}, que no es la audiencia de cada pantalla; en la
 vía pública ya existe medición sindicada~\cite{mn-ooh}, pero dentro de los
 recintos no hay medición con cámaras (Cuadro~\ref{tab:clientes}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Clientes, su pregunta y por qué pagarían}
 \label{tab:clientes}
 \centering
@@ -4044,7 +4096,7 @@ Universidades, clínicas, bancos, municipalidades & Captación o audiencia & ¿C
 Los dos productos funcionan en cualquier lugar con una cámara que vea la
 entrada o el espacio a medir (Cuadro~\ref{tab:productos}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Productos de AeroVision}
 \label{tab:productos}
 \centering
@@ -4086,7 +4138,7 @@ personas que pasan por el frente, las que se detienen (estancia de al menos
 5~s), las que entran y las que compran (Secciones~\ref{sec:arquitectura}
 y~\ref{sec:pruebas}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Capas construidas y su valor comercial}
 \label{tab:construido}
 \centering
@@ -4120,7 +4172,7 @@ los servicios gestionados son lo que más crece: el espacio de un software que
 reutiliza cámaras. El Cuadro~\ref{tab:mercado} dimensiona el mercado peruano
 por locales comerciales.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Mercado en Perú por locales (supuesto de trabajo)}
 \label{tab:mercado}
 \centering
@@ -4142,7 +4194,7 @@ la Línea~1 del Metro de Lima movió 203.9 millones de pasajeros en 2025 en 26
 estaciones~\cite{energiminas}. El Cuadro~\ref{tab:competencia} compara a los
 competidores.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Competidores y diferencia de AeroVision}
 \label{tab:competencia}
 \centering
@@ -4172,7 +4224,7 @@ recintos y estar en Lima con precios en soles.
 El Cuadro~\ref{tab:foda} resume el análisis FODA y el
 Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{FODA de AeroVision, octubre de 2026}
 \label{tab:foda}
 \centering
@@ -4199,7 +4251,7 @@ Fondos de ProInnóvate e incubadoras & Cámaras de los clientes de calidad o án
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Estrategias cruzadas del FODA}
 \label{tab:foda-cruces}
 \centering
@@ -4223,7 +4275,7 @@ El lado del cliente es distinto para cada producto; el de la operación es uno
 solo, porque los dos productos usan la misma tecnología y el mismo equipo
 (Cuadros~\ref{tab:canvas-cliente} y~\ref{tab:canvas-operacion}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Modelo Canvas: lado del cliente}
 \label{tab:canvas-cliente}
 \centering
@@ -4242,7 +4294,7 @@ Ingresos & Diagnóstico, prueba de vitrina y monitoreo mensual por tienda & Estu
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Modelo Canvas: lado de la operación}
 \label{tab:canvas-operacion}
 \centering
@@ -4269,7 +4321,7 @@ suma unos S/~9\,000 de venta al mes si su captación sube de 10\,\% a 11\,\%
 (supuesto); un dueño de medios que cobra 10\,\% más por sus mejores pantallas,
 de S/~5\,000 al mes cada una, gana S/~500 más por pantalla.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Precios (sin IGV)}
 \label{tab:precios}
 \centering
@@ -4310,7 +4362,7 @@ por eso el tope de 10 cámaras por computadora supone el modo liviano, sin Re-ID
 ni género, que según las mismas pruebas libera la mayor parte de la CPU
 (\textit{solo multitracking} usa 1.7 núcleos frente a 4.4 con el género).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Costo por cámara al mes}
 \label{tab:costo-camara}
 \centering
@@ -4348,7 +4400,7 @@ cada computadora nueva se compra con ventas ya cobradas, la caja nunca baja de
 la reserva y el paso a tiempo completo llega cuando el negocio puede pagarlo,
 hacia 2029 (Cuadros~\ref{tab:caja} y~\ref{tab:crecimiento}).
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Caja mes a mes, noviembre de 2026 a diciembre de 2027}
 \label{tab:caja}
 \centering
@@ -4375,7 +4427,7 @@ computadoras) y se pagan S/~30.8 mil a los fundadores. A fin de 2027 el
 ingreso recurrente (unos S/~3\,300 al mes) cubre el 73\,\% del pago a los
 fundadores; el resto lo cubren los diagnósticos y estudios.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Crecimiento sin capital externo, escenario base}
 \label{tab:crecimiento}
 \centering
@@ -4403,7 +4455,7 @@ En 2031 el ingreso vendría en un 58\,\% de tiendas, 37\,\% de publicidad y
 financiera (Cuadro~\ref{tab:estres-financiero}) muestra que tener dos
 productos reparte el riesgo.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Prueba de estrés financiera}
 \label{tab:estres-financiero}
 \centering
@@ -4430,7 +4482,7 @@ Entre noviembre de 2026 y marzo de 2027 se validan las hipótesis del plan
 hasta diciembre de 2027. La hipótesis técnica sobre el costo (la número 7)
 parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Hipótesis, prueba y criterio de validación}
 \label{tab:hipotesis}
 \centering
@@ -4452,7 +4504,7 @@ parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
 \end{tabular}
 \end{table}
 
-\begin{table}[!htbp]
+\begin{table}[H]
 \caption{Cronograma de próximos pasos}
 \label{tab:cronograma}
 \centering
