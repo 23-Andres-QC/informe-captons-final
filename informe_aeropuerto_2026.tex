@@ -2973,7 +2973,7 @@ II. Mapa y género & Homografía imagen--plano y CLIP con votación & Posición 
 III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE, PrefixSpan y grafo origen-destino & Eventos, métricas e insights por zona y local \\
 En vivo & Modelo de tres carriles con memoria de identidades & Cajas, ID y género en tiempo real desde teléfonos \\
 En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
-Videos & YOLO26 a 1280~px, OSNet-AIN y PersonViT con asociador compartido por tanda & IDs compartidos entre los videos de un mismo lugar y género \\
+Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN + PersonViT; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -3188,7 +3188,13 @@ ajustes más sensibles sobre la misma lógica de las Partes I y II:
 
 Los videos que se suben juntos forman una \textit{tanda}: empiezan a la vez y
 comparten un asociador multicámara, así la misma persona lleva el mismo ID
-global en todos ellos. Para evaluar cada parte por separado, el usuario elige
+global en todos ellos. Es el mismo asociador de la Parte~II (galería global,
+identidades provisionales, detección de cambio de persona, enlace promedio,
+margen de ambigüedad y preferencia mutua), en modo visual-temporal porque los
+videos no traen calibración: cada video es una cámara, todas se consideran
+solapadas y una persona puede pasar de una a otra en hasta 60~s. Cambian solo
+el codificador de apariencia y sus umbrales, llevados a la escala de
+OSNet-AIN y PersonViT. Para evaluar cada parte por separado, el usuario elige
 qué hace el modelo: \textit{solo multitracking} (IDs compartidos, sin CLIP),
 \textit{solo género} (cada video con sus propios IDs) o \textit{ambos}
 (Algoritmo~\ref{alg:videos}). El video se guarda en disco temporal solo
