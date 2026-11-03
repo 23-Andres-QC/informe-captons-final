@@ -1173,13 +1173,21 @@ propuesto.
 \textbf{Antecedente} & \textbf{Dominio de evaluación} & \textbf{Métrica clave} & \textbf{Aporte al sistema propuesto} \\
 \hline
 Giannopoulou et al.~\cite{giannopoulou2026} & Aeropuerto real (Atenas) & mAP 0.87; 100\,\% de fiabilidad & Respalda un detector YOLO y un seguimiento local liviano en arquitectura modular \\
+\hline
 Zhao et al.~\cite{zhao2023} & Aeropuerto real (Shanghai) & Detección de grupo en 3.21--4.49~s & Sustenta KDE y PrefixSpan en la minería de patrones \\
+\hline
 Mendes et al.~\cite{mendes2023} & Entorno comercial real & 82\,\% de re-ID correcta & Precedente directo de la re-identificación multicámara sin rostro \\
+\hline
 Jin et al.~\cite{jin2024} & 8 dominios (MSP60K) & F1 86.94 / 72.05 entre dominios & Habilita inferencia demográfica sin biometría \\
+\hline
 Yang et al.~\cite{yang2023} & WILDTRACK / MMPTRACK & MOTA 95.2\,\% & Valida la verificación geométrica sobre un plano común \\
+\hline
 Zakharova et al.~\cite{zakharova2026} & FSD / SUC (CCTV real) & Evaluación multigranular & Criterio para evaluar el motor de eventos \\
+\hline
 Ryan et al.~\cite{ryan2023} & Aeropuerto real (Dublín) & Cualitativo (sin MOTA) & Valida la arquitectura completa en el dominio aeroportuario \\
+\hline
 Wong y Law~\cite{wonglaw2023} & Grand Central / Stanford Stadium & MOTA 73.7\,\%; MSE 0.258 & Grafo origen-destino y predicción de congestión futura \\
+\hline
 Zhou et al.~\cite{zhou2026} & Aeropuerto (AirportPassenger) & MOTA 79.6\,\% (AirMOTR) & Referencia para especializar el seguimiento local \\
 \hline
 \end{tabular}
@@ -1567,29 +1575,51 @@ ese momento.
 \hline
 \endlastfoot
 \multicolumn{3}{|l|}{\textbf{Funcionales}} \\[2pt]
+\hline
 RF-01 & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; superadmin hace todo, seguridad opera En vivo, Teléfonos y Videos, y negocio consulta Insights y Ventas \\
+\hline
 RF-02 & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
+\hline
 RF-03 & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
+\hline
 RF-04 & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
+\hline
 RF-05 & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
+\hline
 RF-06 & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
+\hline
 RF-07 & Ventas y conversión por local & Cargar tickets de caja, emparejar cada compra con una visita, mostrar conversión, patrones por hora y pronóstico \\
+\hline
 RF-08 & Procesamiento de videos subidos & Procesar hasta 10 videos a la vez, con IDs compartidos entre los del mismo lugar, sin guardar el video \\
+\hline
 RF-09 & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos temporales de exportación \\
 \hline
 \multicolumn{3}{|l|}{\textbf{No funcionales}} \\[2pt]
+\hline
 RNF-01 & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
+\hline
 RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; género solo en conteos de grupos de 5 o más; cumplimiento de la Ley N.\textdegree~29733 \\
+\hline
 RNF-03 & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
+\hline
 RNF-04 & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
+\hline
 RNF-05 & Fluidez de visualización & Animación continua y respuesta inmediata a la interacción \\
+\hline
 RNF-06 & Disponibilidad & Verificación de estado y recuperación automática ante fallos \\
+\hline
 RNF-07 & Portabilidad & Despliegue en contenedores; plano local sin servicios externos \\
+\hline
 RNF-08 & Usabilidad & Confirmación antes de borrar; interfaz aprendible sin capacitación extensa \\
+\hline
 RNF-09 & Mantenibilidad & API versionada, migraciones de base de datos versionadas y pruebas automatizadas \\
+\hline
 RNF-10 & Compatibilidad & Funcionamiento en navegadores modernos; cámara solo con conexión segura \\
+\hline
 RNF-11 & Precisión del seguimiento & Identidades consistentes dentro de cada cámara y entre cámaras, validadas con videos etiquetados \\
+\hline
 RNF-12 & Rendimiento del procesamiento de video & Procesamiento de varias cámaras simultáneas al ritmo del video \\
+\hline
 RNF-13 & Reproducibilidad & Pesos, configuración y versiones de dependencias registrados con huella SHA-256 en cada sesión de análisis \\
 \end{longtable}
 }
@@ -1951,17 +1981,29 @@ sensibles para videos de cualquier origen (Sección~\ref{sec:videos}).
 \textbf{Parámetro} & \textbf{Valor} & \textbf{Función} \\
 \hline
 Confianza mínima de detección & 0.30 & Detecciones que el seguidor puede usar. \\
+\hline
 IoU de supresión del detector & 0.50 & Fusión de cajas redundantes en YOLO26m. \\
+\hline
 Confianza de asociación & 0.35 & Detecciones admitidas en la asociación principal. \\
+\hline
 Confianza para nuevo track & 0.60 & Detecciones que pueden iniciar una identidad. \\
+\hline
 Confirmaciones y ventana & 3 en 5 cuadros & Detecciones necesarias para publicar un track. \\
+\hline
 Edad máxima & 120 cuadros & Tiempo que un track perdido puede recuperarse. \\
+\hline
 Umbrales de movimiento e IoU & 0.55 / 0.12 & Coherencia exigida en la segunda etapa. \\
+\hline
 Umbrales de color y distancia & 0.72 / 0.95 & Coherencia exigida en la recuperación. \\
+\hline
 Tamaño de galería & 24 vistas & Vistas fiables conservadas por track. \\
+\hline
 Peso profundo y calibración & 0.20; 1.123 / $-$0.075 & Mezcla entre color y ResNet18. \\
+\hline
 Intervalo de apariencia & 5 cuadros & Frecuencia de refresco de la galería. \\
+\hline
 Altura mínima & 40 px & Tamaño mínimo de una persona válida. \\
+\hline
 FPS de referencia & 15 & Base para escalar edad y ventana. \\
 \hline
 \end{tabular}
@@ -2009,14 +2051,23 @@ el nombre de su video y con el registrado en la base de datos.
 \textbf{Campo} & \textbf{Uso} \\
 \hline
 camera\_id & Identificador interno único (por ejemplo, \texttt{cam01}). \\
+\hline
 stream\_uri & Origen RTSP o archivo de video. \\
+\hline
 fps / resolución & Configuración efectiva del stream. \\
+\hline
 timestamp\_offset & Corrección temporal de la cámara. \\
+\hline
 $H$ & Matriz de homografía (si la cámara está calibrada). \\
+\hline
 coverage\_polygon & Área visible sobre el plano. \\
+\hline
 max\_error\_m & Error máximo aceptado en los puntos de control. \\
+\hline
 overlaps & Pares de cámaras con campo de visión compartido. \\
+\hline
 transitions & Cámaras de destino posibles, con ventana $[t_{\min},t_{\max}]$ y, en modo calibrado, distancia y dirección admisibles. \\
+\hline
 mode & Modo de asociación: visual-temporal o calibrado. \\
 \hline
 \end{tabular}
@@ -2337,18 +2388,31 @@ manualmente sobre los videos del piloto (Cuadro~\ref{tab:assoc_params}).
 \textbf{Parámetro} & \textbf{Valor} & \textbf{Función} \\
 \hline
 Intervalo de muestreo & 0.4~s & Frecuencia de vistas para el codificador. \\
+\hline
 Vistas por tracklet / identidad & 10 / 40 & Objetivo para considerar descrita a una persona. \\
+\hline
 Intervalo de verificación & 2~s & Revisión de identidades ya descritas. \\
+\hline
 Umbral de fusión $\tau$ & 0.60 & Similitud mínima entre fichas. \\
+\hline
 Enlace promedio $\tau_{\text{avg}}$ & 0.55 & Evita encadenar personas distintas. \\
+\hline
 Umbral en una sola cámara & 0.70 & Re-entradas con igual fondo e iluminación. \\
+\hline
 Margen de ambigüedad $m$ & 0.05 & Posterga decisiones dudosas. \\
+\hline
 Corte por cambio de persona & 0.40 $\times$ 2 & Similitud y vistas seguidas para cortar. \\
+\hline
 Vistas mínimas (unión / nueva) & 4 / 5 & Evidencia para unirse o crear una identidad. \\
+\hline
 Duración mínima visible & 2~s & Requisito para una identidad nueva. \\
+\hline
 Ventana de candidatos & 90~s & Antigüedad máxima de una candidata. \\
+\hline
 Ventana de re-entrada & 120~s & Re-aparición en la misma cámara. \\
+\hline
 Separación entre tracklets & 2~s & Ausencia que inicia un tracklet nuevo. \\
+\hline
 Tolerancia de sincronía & 0.15~s & Agrupación de cuadros simultáneos. \\
 \hline
 \end{tabular}
@@ -2546,10 +2610,15 @@ cuando corresponde y su confianza.
 \textbf{Evento} & \textbf{Regla operativa} \\
 \hline
 EXPOSURE & Cruce por la zona FRONTAGE del establecimiento. \\
+\hline
 ENTER & Transición desde el exterior o FRONTAGE hacia INTERIOR. \\
+\hline
 DWELL & Permanencia dentro de INTERIOR durante un tiempo mínimo. \\
+\hline
 EXIT & Transición desde INTERIOR hacia el exterior. \\
+\hline
 RETURN & Nuevo ENTER después de un EXIT y un intervalo mínimo. \\
+\hline
 QUEUE & Permanencia en una zona de cola con velocidad reducida. \\
 \hline
 \end{tabular}
@@ -2786,12 +2855,19 @@ coherentes con el problema que resuelve
 \textbf{Componente} & \textbf{Validación} \\
 \hline
 Detección & Precisión, recall y mAP. \\
+\hline
 Seguimiento local & IDF1 y cambios de ID frente a anotaciones; fragmentación (IDs de uno o dos cuadros y duración mediana), reapariciones y cruces como auditoría sin anotaciones. \\
+\hline
 Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sobre pares de tracklets etiquetados; personas contadas frente a reales. \\
+\hline
 Estimación de género & Proporción de identidades sin determinar y precisión desagregada frente a etiquetas manuales. \\
+\hline
 Homografía & Error de reproyección en puntos de control. \\
+\hline
 Eventos & Precisión, recall y F1. \\
+\hline
 Rendimiento & Cuadros por segundo por cámara, cuadros saltados, CPU, GPU, memoria y potencia (Sección~\ref{sec:pruebas}). \\
+\hline
 Histórico & Comparación con trayectorias conocidas. \\
 \hline
 \end{tabular}
@@ -2985,12 +3061,19 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
 \textbf{Interesado} & \textbf{Poder} & \textbf{Interés} & \textbf{Estrategia} \\
 \hline
 LAP (socio externo) & Alto & Alto & Gestionar de cerca; reunión por hito \\
+\hline
 Docente del curso & Alto & Alto & Gestionar de cerca; reunión por hito \\
+\hline
 Equipo del proyecto & Alto & Alto & Gestionar de cerca; reunión semanal de cierre \\
+\hline
 Regulador (ANPD) & Alto & Bajo & Mantener satisfecho; privacidad por diseño \\
+\hline
 Locales comerciales & Medio & Alto & Mantener informado; tablero de Insights \\
+\hline
 Seguridad y operaciones & Medio & Alto & Mantener informado; tablero y reportes \\
+\hline
 Universidad ESAN & Medio & Alto & Mantener informado; campus de validación \\
+\hline
 Pasajeros & Bajo & Bajo & Monitorear; señalización y datos seudónimos \\
 \hline
 \end{tabular}
@@ -3032,13 +3115,21 @@ conveniente tener \textbf{4 puntos}:}
 \textbf{N.\textdegree} & \textbf{Paquete} & \textbf{Contenido} \\
 \hline
 1 & Gestión del proyecto & Acta, cronograma, costos, riesgos, actas semanales y panel Scrum \\
+\hline
 2 & Seguimiento local & Detección y seguimiento por cámara (Parte~I) \\
+\hline
 3 & Multicámara y Re-ID & Re-identificación y galería global entre cámaras (Parte~II) \\
+\hline
 4 & Calibración y mapa 2D & Calibración de cámaras y proyección de personas al plano \\
+\hline
 5 & Histórico e Insights & Procesamiento histórico y tablero de insights (Parte~III) \\
+\hline
 6 & Plataforma & Backend, bases de datos y aplicación web \\
+\hline
 7 & Teléfonos, Videos y Ventas & Teléfonos como cámaras, videos subidos y ventas por local \\
+\hline
 8 & Validación y pruebas & Pruebas en ESAN, validación con videos etiquetados y pruebas de estrés \\
+\hline
 9 & Documentación y negocio & Informe final y plan de negocio \\
 \hline
 \end{tabular}
@@ -3110,11 +3201,17 @@ conveniente tener \textbf{3 puntos}:}
 \textbf{N.\textdegree} & \textbf{Fase} & \textbf{Semanas} \\
 \hline
 1 & Planificación y datos & 2 \\
+\hline
 2 & Seguimiento local & 3 \\
+\hline
 3 & Re-ID multicámara & 3 \\
+\hline
 4 & Histórico e Insights & 3 \\
+\hline
 5 & Teléfonos, Videos y Ventas & 2 \\
+\hline
 6 & Validaciones y pruebas & 2 \\
+\hline
 7 & Informe final y negocio & 1 \\
 \hline
 \multicolumn{2}{|l|}{\textbf{Total}} & \textbf{16} \\
@@ -3213,15 +3310,23 @@ conveniente tener \textbf{3 puntos}:}
 \textbf{Concepto} & \textbf{S/} \\
 \hline
 Horas del equipo (640~h $\times$ S/~25) & 16\,000 \\
+\hline
 Computadora con GPU (S/~125 $\times$ 4 meses) & 500 \\
+\hline
 Primer despliegue en Google Cloud & $\approx$ 1\,250 \\
+\hline
 \textbf{Línea base} & \textbf{17\,750} \\
+\hline
 Reserva de contingencia (10\,\%) & 1\,775 \\
+\hline
 \textbf{Presupuesto total} & \textbf{19\,525} \\
 \hline
 Valor planificado (68.75\,\%) & 12\,203 \\
+\hline
 Valor ganado (65.5\,\%) & 11\,626 \\
+\hline
 Variación del cronograma (SV) & $-$577 \\
+\hline
 SPI & 0.95 \\
 \hline
 \end{tabular}
@@ -3259,13 +3364,21 @@ conveniente tener \textbf{3 puntos}:}
 \textbf{Métrica} & \textbf{Resultado} & \textbf{Meta} \\
 \hline
 Error de calibración mediano & 0.28 a 0.48~m & $<$ 0.75~m \\
+\hline
 Detecciones ubicadas en el plano & 93\,\% & $>$ 90\,\% \\
+\hline
 Precisión de la asociación multicámara & 0.99 & $\geq$ 0.95 \\
+\hline
 Recall de la asociación multicámara & 0.86 & por fijar \\
+\hline
 IDF1 del seguimiento local & 40\,\% (antes 35\,\%) & por fijar \\
+\hline
 Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & por fijar \\
+\hline
 IDs que mezclan personas & 28\,\% (antes 60\,\%) & por fijar \\
+\hline
 Acierto del género & 91\,\% & por fijar \\
+\hline
 Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
 \hline
 \end{tabular}
@@ -3282,11 +3395,17 @@ Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
 \textbf{Herramienta} & \textbf{Aplicación} \\
 \hline
 Causa y efecto & IDs que mezclan personas: el seguidor decide por movimiento en cruces, ropa parecida, personas lejanas y oclusiones \\
+\hline
 Pareto & 53\,\% de los saltos de ID ocurre al recuperar a una persona perdida y 47\,\% en cruces \\
+\hline
 Histograma & Permanencia por zona (Parte~III) \\
+\hline
 Hoja de verificación & Lista de Definición de Terminado (Sección~\ref{sec:scrum}) \\
+\hline
 Dispersión & Más personas por cámara, menos cuadros por segundo (el par con más gente: 13 frente a 18 cuadros por segundo) \\
+\hline
 Gráfico de control & Error de calibración frente al límite de 0.75~m \\
+\hline
 Diagrama de flujo & Flujo de la metodología (Figura~\ref{fig:flujo}) \\
 \hline
 \end{tabular}
@@ -3329,8 +3448,11 @@ conveniente tener \textbf{3 puntos}:}
 \textbf{Rol} & \textbf{Responsable} & \textbf{Responsabilidades} \\
 \hline
 Líder del proyecto y Data Engineer & Neciosup & Elaboración de informes, gestión de tareas, seguimiento del avance y reporte general; preparación de los datos y configuración de los equipos de cómputo. \\
+\hline
 Data Scientist & Quiliche & Implementación y desarrollo de los modelos de detección, seguimiento y re-identificación. \\
+\hline
 Comunicación y documentación & Almeyda & Elaboración de la documentación del proyecto y de los informes en \LaTeX. \\
+\hline
 Integración & López & Gestión del repositorio, desarrollo de los casos de uso e integración de los componentes. \\
 \hline
 \end{tabular}
@@ -3351,13 +3473,21 @@ estuvieran cubiertos.
 \textbf{Paquete (EDT)} & \textbf{Neciosup} & \textbf{Quiliche} & \textbf{Almeyda} & \textbf{López} \\
 \hline
 1 Gestión del proyecto & A/R & C & C & C \\
+\hline
 2 Seguimiento local & C & A/R & I & C \\
+\hline
 3 Multicámara y Re-ID & C & A/R & I & C \\
+\hline
 4 Calibración y mapa 2D & R & A & I & C \\
+\hline
 5 Histórico e Insights & C & A & I & R \\
+\hline
 6 Plataforma & C & C & I & A/R \\
+\hline
 7 Teléfonos, Videos y Ventas & C & A & I & R \\
+\hline
 8 Validación y pruebas & A & R & I & C \\
+\hline
 9 Documentación y negocio & R & C & A/R & C \\
 \hline
 \end{tabular}
@@ -3398,11 +3528,17 @@ estuvieran cubiertos.
 \textbf{Comunicación} & \textbf{Destinatarios} & \textbf{Frecuencia} & \textbf{Responsable} \\
 \hline
 Reunión de seguimiento y cierre de sprint & Equipo & Semanal (miércoles) & Líder \\
+\hline
 Actas con tareas y estado & Equipo y docente & Semanal & Líder \\
+\hline
 Panel Scrum y Gantt & Equipo & Continua & Equipo \\
+\hline
 Repositorio Git (247 commits) & Equipo técnico & Continua & López \\
+\hline
 Informe y presentaciones & Docente & Según hitos & Almeyda y Neciosup \\
+\hline
 Coordinación con LAP & LAP & Por hito & Neciosup \\
+\hline
 Mensajería diaria \confirmar{canal} & Equipo & Diaria & Equipo \\
 \hline
 \end{tabular}
@@ -3444,11 +3580,17 @@ consideró conveniente tener \textbf{3 puntos}:}
 \textbf{Ítem} & \textbf{Tipo} & \textbf{Fuente} & \textbf{Costo o condición} \\
 \hline
 Computadora con GPU RTX 4060 & Hardware & Propia & $\approx$ S/~4\,500 de referencia \\
+\hline
 Teléfonos como cámaras & Hardware & Integrantes & Sin costo \\
+\hline
 Máquina virtual de Google Cloud & Servicio & Google Cloud & $\approx$ US\$~334.80 al mes; reemplazada por la computadora local \\
+\hline
 YOLO26 (detector) & Modelo & Ultralytics & Gratuito, licencia AGPL; resolver antes de uso comercial \\
+\hline
 OSNet-AIN, PersonViT, CLIP, ResNet18 & Modelos & Preentrenados & Verificar licencia \\
+\hline
 PostgreSQL, PostGIS, pgvector, Go, Vue, Docker & Software & Código abierto & Sin costo \\
+\hline
 Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de datos \\
 \hline
 \end{tabular}
@@ -3499,14 +3641,23 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
 \textbf{ID} & \textbf{Riesgo} & \textbf{RBS} & \textbf{P} & \textbf{I} & \textbf{P$\times$I} \\
 \hline
 R1 & Abandono de un integrante & Gestión & 2 & 5 & 10 \\
+\hline
 R2 & Sin video anotado del aeropuerto & Técnico & 4 & 4 & 16 \\
+\hline
 R3 & Re-identificación imperfecta & Técnico & 4 & 4 & 16 \\
+\hline
 R4 & Dependencia de una sola computadora con GPU & Infraestructura & 3 & 4 & 12 \\
+\hline
 R5 & Retraso del cronograma & Gestión & 4 & 3 & 12 \\
+\hline
 R6 & Incumplimiento de la Ley N.\textdegree~29733 & Legal y ético & 2 & 5 & 10 \\
+\hline
 R7 & Licencia AGPL del detector & Legal y ético & 3 & 3 & 9 \\
+\hline
 R8 & Acceso a datos con LAP & Externo & 3 & 4 & 12 \\
+\hline
 R9 & Cámaras de calidad variable & Técnico & 3 & 3 & 9 \\
+\hline
 R10 & Sesgo en la estimación de género & Legal y ético & 3 & 3 & 9 \\
 \hline
 \end{tabular}
@@ -3670,11 +3821,17 @@ produce.
 \textbf{Parte} & \textbf{Algoritmo} & \textbf{Resultado} \\
 \hline
 I. Seguimiento local & YOLO26m y seguidor híbrido con asociación en cascada (Hungarian) & \textit{local\_id} estable por persona y cámara \\
+\hline
 II. Multicámara & YOLO26s-ReID y galería global con reglas físicas & \textit{global\_id} seudónimo por persona \\
+\hline
 II. Mapa y género & Homografía imagen--plano y CLIP con votación & Posición en metros, velocidad, dirección y género \\
+\hline
 III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE, PrefixSpan y grafo origen-destino & Eventos, métricas e insights por zona y local \\
+\hline
 En vivo & Modelo de tres carriles con memoria de identidades & Cajas, ID y género en tiempo real desde teléfonos \\
+\hline
 En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
+\hline
 Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN + PersonViT; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
 \hline
 \end{tabular}
@@ -3958,12 +4115,19 @@ web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
 \textbf{Componente} & \textbf{Tecnología} & \textbf{Función} \\
 \hline
 \texttt{web} & Vue~3, TypeScript, nginx & Interfaz y proxy hacia los backends y la cámara \\
+\hline
 \texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones, insights, tráfico, ventas, cuentas y solicitudes \\
+\hline
 \texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias, analítica, ventas y cuentas \\
+\hline
 \texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
+\hline
 \texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
+\hline
 \texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
+\hline
 \texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
+\hline
 Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
 \hline
 \end{tabular}
@@ -3985,10 +4149,15 @@ hace en él.
 \textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
 \hline
 Superadmin & Web, con cuenta & Configura sitios, cámaras, locales y zonas; crea cuentas; aprueba solicitudes; aplica la retención & Todas las secciones \\
+\hline
 Seguridad & Web, con cuenta & Activa el modo en vivo, une teléfonos y procesa videos & En vivo, Videos y Teléfonos \\
+\hline
 Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permiso aprobado & Insights y Ventas \\
+\hline
 Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
+\hline
 Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/\{sitio\}/...} \\
+\hline
 Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
 \hline
 \end{tabular}
@@ -4048,11 +4217,17 @@ Docker con YOLO26s a 640~px.
 \textbf{Elemento} & \textbf{Configuración} \\
 \hline
 Procesador & Intel Core i7-13620H: 10 núcleos y 16 hilos \\
+\hline
 GPU & NVIDIA GeForce RTX~4060 Laptop, 8~GB \\
+\hline
 Memoria & 16~GB de RAM \\
+\hline
 Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
+\hline
 Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, para teléfonos y videos subidos \\
+\hline
 Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
+\hline
 Configuración & \texttt{.env} con las contraseñas de las bases, la cuenta semilla y la llave de los scripts \\
 \hline
 \end{tabular}
@@ -4095,16 +4270,25 @@ el costo es fijo; este cálculo sostiene el costo por cámara del plan de negoci
 Computadora propia con GPU & US\$~1\,200 en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
 \hline
 \multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
+\hline
 Máquina virtual & Bajo demanda: US\$0.4333 por hora & 316.34 \\
+\hline
 Disco, IP y tráfico & 77~GB, IP externa y 20~GB de salida & 18.46 \\
+\hline
 \textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
+\hline
 Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
+\hline
 Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
+\hline
 Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
+\hline
 Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
 \hline
 \multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
+\hline
 A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
+\hline
 Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
 \hline
 \end{tabular}
@@ -4198,24 +4382,39 @@ Cuadro~\ref{tab:api}):
 \textbf{Ruta} & \textbf{Uso} \\
 \hline
 \multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
+\hline
 \texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
+\hline
 \texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
+\hline
 \texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
+\hline
 \texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
+\hline
 \texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
+\hline
 \texttt{/media/\{archivo\}} & Videos procesados del Build \\
+\hline
 \texttt{/trafico/...} & Resumen, serie, calor, permanencia y embudo por período y franja; umbrales \\
+\hline
 \texttt{/ventas/...} & Tickets, resumen, patrones, pronóstico, simulados y emparejamiento \\
 \hline
 \multicolumn{2}{|l|}{\textit{backend}: cuentas y privacidad, \texttt{/api/v1}} \\
+\hline
 \texttt{/auth/...} & Ingreso, salida, cambio y recuperación de contraseña \\
+\hline
 \texttt{/usuarios} · \texttt{/usuarios/solicitudes} & Cuentas, roles y solicitudes \\
+\hline
 \texttt{/mi/...} & Perfil, cambio de correo y exportación con permiso \\
+\hline
 \texttt{/auditoria} · \texttt{/privacidad} & Bitácora, retención y depuración \\
 \hline
 \multicolumn{2}{|l|}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
+\hline
 \texttt{/telefonos} & Teléfonos conectados como cámaras \\
+\hline
 \texttt{/videos} & Videos subidos por tandas, análisis elegido y resumen de cada uno \\\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
+\hline
 \texttt{/personas} & Memoria de identidades \\
 \hline
 \end{tabular}
@@ -4367,12 +4566,19 @@ Cuadro~\ref{tab:resultados-dataset} resume las mediciones.
 \textbf{Medición} & \textbf{Resultado} \\
 \hline
 Identificadores locales tras ajustar umbrales & De 88 a 80 \\
+\hline
 Tracks de personas lejanas (altura mediana $< 60$~px) & De 7 a 1 \\
+\hline
 Precisión / recall de la asociación multicámara & 0.99 / 0.86 \\
+\hline
 Llamadas al codificador Re-ID con muestreo adaptativo & $-34\,\%$ (precisión 0.99, recall 0.91) \\
+\hline
 Altura estimada de las cámaras & 8.3 / 9.3 / 9.5~m \\
+\hline
 Error de calibración entre cámaras (mediana) & 0.28 a 0.48~m; 98 a 100\,\% bajo 1~m \\
+\hline
 Detecciones ubicadas en el plano & 93\,\% \\
+\hline
 Velocidad mediana al caminar & 0.87~m/s \\
 \hline
 \end{tabular}
@@ -4576,7 +4782,9 @@ la misma cámara en ese momento.
 \textbf{Medición} & \textbf{YOLO26s-ReID} & \textbf{OSNet-AIN} & \\
 \hline
 La más parecida en la otra cámara es la misma persona & 58\,\% & 78\,\% & \\
+\hline
 Tramos de la misma persona unidos entre cámaras, con $\sim$1\,\% de uniones de personas distintas & 31\,\% & 59\,\% & \\
+\hline
 Tiempo de cómputo, relativo al del Build & 1 & 0.5 & \\
 \hline
 \multicolumn{4}{|l|}{\textit{Modelos recientes: 4 pares, 4\,372 recortes, en la misma cámara}} \\
@@ -4584,9 +4792,13 @@ Tiempo de cómputo, relativo al del Build & 1 & 0.5 & \\
 \textbf{Re-ID} & \textbf{Acierto a 2~s} & \textbf{Acierto a 10~s} & \textbf{ms por recorte} \\
 \hline
 OSNet-AIN & 92.4\,\% & 80.0\,\% & 1.3 \\
+\hline
 PersonViT ViT-S & 93.4\,\% & 81.0\,\% & 1.5 \\
+\hline
 CLIP-ReID ViT-B & 93.2\,\% & 81.2\,\% & 2.7 \\
+\hline
 \textbf{OSNet-AIN + PersonViT (elegido)} & \textbf{94.3\,\%} & \textbf{82.8\,\%} & \textbf{2.6} \\
+\hline
 OSNet-AIN + PersonViT + CLIP-ReID & 94.5\,\% & 83.3\,\% & 5.7 \\
 \hline
 \end{tabular}
@@ -4624,9 +4836,13 @@ etiquetadas cada uno}
 \textbf{Medición} & \textbf{Antes} & \textbf{Modelo actual} \\
 \hline
 IDF1 (la persona conserva su ID) & 35\,\% & 40\,\% \\
+\hline
 Cambios de ID & 4\,422 & 2\,940 ($-34$\,\%) \\
+\hline
 IDs por persona & 3.8 & 2.9 \\
+\hline
 Error total de conteo de personas & 109 & 97 \\
+\hline
 Tiempo por cuadro & 96~ms & 97~ms \\
 \hline
 \end{tabular}
@@ -4670,8 +4886,11 @@ parezca a cada tramo de la identidad, no solo al promedio
 \textbf{Variante} & \textbf{IDs que mezclan personas} & \textbf{Personas contadas} \\
 \hline
 Asociador anterior (promedio de la identidad) & 60\,\% & 82 y 89 por cámara \\
+\hline
 Unir solo dentro de 15~s, con la regla de cada tramo (primeros 160~s) & 5\,\% (antes 41\,\%) & 109 IDs (antes 56): parte a las personas \\
+\hline
 Unir solo dentro de 30~s / 60~s & -- & 194 y 195 / 159 y 160 por cámara \\
+\hline
 \textbf{OSNet-AIN + PersonViT con la regla de cada tramo (elegida)} & \textbf{28\,\%} & \textbf{135 y 139 por cámara} \\
 \hline
 \end{tabular}
@@ -4760,13 +4979,21 @@ Cuadro~\ref{tab:pares-detalle} muestra cada par.
 \textbf{Medición} & \textbf{Solo multitracking} & \textbf{Solo género} & \textbf{Ambos} \\
 \hline
 Cuadros procesados por segundo, por video & 17.0 & 15.5 & 15.9 \\
+\hline
 Milisegundos por cuadro & 46 & 50 & 51 \\
+\hline
 Cuadros saltados & 27\,\% & 34\,\% & 33\,\% \\
+\hline
 Núcleos de CPU del modelo, promedio (p95) & 1.7 (1.8) & 4.4 (5.8) & 4.4 (5.7) \\
+\hline
 CPU de todo el equipo & 28\,\% & 46\,\% & 44\,\% \\
+\hline
 Uso de la GPU & 68\,\% & 63\,\% & 63\,\% \\
+\hline
 Memoria de la GPU & 2.8~GB & 2.8~GB & 2.8~GB \\
+\hline
 Memoria RAM del modelo & 1.4~GB & 1.5~GB & 1.5~GB \\
+\hline
 Potencia de la GPU & 59~W & 57~W & 57~W \\
 \hline
 \end{tabular}
@@ -4784,9 +5011,13 @@ de la GPU según el análisis (multitracking / género / ambos)}
 \textbf{Par} & \textbf{Personas por cámara} & \textbf{Cuadros por segundo} & \textbf{Núcleos de CPU} & \textbf{Uso de la GPU} \\
 \hline
 P1 & 46 y 46 & 18.1 / 16.9 / 16.0 & 1.7 / 4.7 / 4.8 & 72 / 67 / 65\,\% \\
+\hline
 P2 & 86 y 81 & 13.1 / 12.4 / 12.7 & 1.7 / 5.7 / 5.8 & 58 / 52 / 50\,\% \\
+\hline
 P3 & 35 y 26 & 18.2 / 17.7 / 18.6 & 1.7 / 3.7 / 3.7 & 69 / 66 / 66\,\% \\
+\hline
 P4 & 70 y 64 & 17.7 / 15.3 / 15.4 & 1.7 / 4.7 / 4.7 & 71 / 65 / 67\,\% \\
+\hline
 P5 & 16 y 33 & 17.7 / 15.4 / 16.8 & 1.6 / 3.0 / 3.0 & 68 / 65 / 67\,\% \\
 \hline
 \end{tabular}
@@ -4818,19 +5049,33 @@ pasada se demora, salta al cuadro que marca el reloj.
 \textbf{Medición} & \textbf{1.5 c/s fijos} & \textbf{Adaptado (3 veces el video)} & \textbf{5 c/s fijos} \\
 \hline
 Cuadros procesados por segundo, por cámara & 1.5 & 3.9 & 5.0 \\
+\hline
 Cuadros procesados, en total & 1\,260 & 3\,234 & 4\,200 \\
+\hline
 Tiempo de proceso (veces el video) & 153~s (1.3) & 363~s (3.0) & 364~s (3.0) \\
+\hline
 Milisegundos por pasada de las 7 cámaras & 794 & 632 & 603 \\
+\hline
 \quad de ellos, seguimiento en la CPU & 588 & 503 & 463 \\
+\hline
 Núcleos de CPU del modelo & 7.9 & 7.6 & 11.0 \\
+\hline
 CPU de todo el equipo & 61\,\% & 61\,\% & 77\,\% \\
+\hline
 Uso de la GPU & 31\,\% & 28\,\% & 38\,\% \\
+\hline
 Memoria de la GPU & 3.8~GB & 3.8~GB & 3.8~GB \\
+\hline
 Memoria RAM del modelo & 4.3~GB & 4.0~GB & 4.7~GB \\
+\hline
 Potencia de la GPU & 41~W & 36~W & 45~W \\
+\hline
 Personas contadas por cámara & 122 a 201 & 142 a 241 & 141 a 248 \\
+\hline
 Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.31) & 0.033 (0.17) & 0.030 (0.15) \\
+\hline
 Detecciones con ID global & 76\,\% & 82\,\% & 85\,\% \\
+\hline
 IDs vistos en más de una cámara & 326 & 342 & 393 \\
 \hline
 \end{tabular}
@@ -4930,10 +5175,15 @@ recintos no hay medición con cámaras (Cuadro~\ref{tab:clientes}).
 \textbf{Cliente} & \textbf{Producto} & \textbf{Su pregunta} & \textbf{Cómo lo resuelve hoy} & \textbf{Por qué pagaría} \\
 \hline
 Cadena de tiendas, supermercados, conveniencia o farmacias & Captación & ¿Qué locales captan poco y por qué? & Ventas y, a veces, un contador de entradas & Compara locales y actúa sobre vitrina, personal y horarios \\
+\hline
 Tienda a la calle, en galería, mall o aeropuerto & Captación & ¿Mi vitrina funciona? ¿Vale la pena este local? & Mira sus ventas & Decide vitrina, personal o renovación del local \\
+\hline
 Dueño de medios (pantallas en aeropuerto, malls y estaciones) & Audiencia & ¿Cuánto vale cada pantalla? & El flujo total del recinto & Vende por audiencia medida y cobra más por los mejores espacios \\
+\hline
 Marca o agencia de medios & Audiencia & ¿Dónde pongo mi aviso? & Lo que dice el medio & Deja de pagar por lugares que no rinden \\
+\hline
 Operador del recinto & Valor de locales & ¿Cuánto cobrar por cada local? & Experiencia & Sustento para fijar y renovar rentas \\
+\hline
 Universidades, clínicas, bancos, municipalidades & Captación o audiencia & ¿Cuánta gente pasa, entra y se queda, y a qué hora? & Conteos a mano o nada & Ajusta personal, horarios y uso de espacios \\
 \hline
 \end{tabular}
@@ -4955,8 +5205,11 @@ entrada o el espacio a medir (Cuadro~\ref{tab:productos}).
  & \textbf{Captación de tienda} & \textbf{Audiencia para publicidad} \\
 \hline
 Pregunta & ¿En qué paso pierdo a la gente que pasa por mi puerta? & ¿Cuánta gente ve este lugar o pantalla? \\
+\hline
 Qué mide & Personas que pasan, se detienen frente a la vitrina, entran y cuánto se quedan; con los tickets, cuántas compran & Personas dentro del campo de visión de la pantalla durante al menos 2~s, por hora y día \\
+\hline
 Qué cámara & La de la entrada de la tienda (del cliente) & Las del recinto que miran el espacio (con permiso del operador) \\
+\hline
 Entrega & Diagnóstico de 2 semanas; prueba de vitrina; luego informe mensual y comparación entre tiendas & Estudio de un lugar antes de colocar el aviso; luego certificación mensual por pantalla \\
 \hline
 \end{tabular}
@@ -4997,10 +5250,15 @@ y~\ref{sec:pruebas}).
 \textbf{Capa} & \textbf{Qué hace hoy} & \textbf{Valor comercial} \\
 \hline
 Modelo de visión (Python, GPU) & Detecta y sigue personas (YOLO26 y seguidor híbrido), las re-identifica entre cámaras (YOLO26s-ReID en el Build y en vivo; OSNet-AIN y PersonViT en Videos) y las proyecta sobre un plano 2D calibrado & Mide recorridos de punta a punta, no solo cruces de puerta \\
+\hline
 Insights y tráfico & Visitas, exposición, captación, permanencia, densidad, congestión, mapas de calor, rutas, origen-destino y embudo pasan--se detienen--entran--compran por período y franja & Las métricas que compran retail, malls y operaciones \\
+\hline
 Ventas & Tickets de caja (CSV), emparejamiento de cada compra con una visita, conversión por local, patrones por hora, pronóstico Holt-Winters y simulador de escenarios & Une tráfico con ingresos \\
+\hline
 En vivo y Videos & Teléfonos como cámaras unidos con un código QR; hasta 10 grabaciones a la vez con IDs compartidos entre cámaras y análisis elegible & Demo inmediata en cualquier local, sin instalar nada \\
+\hline
 Plataforma & API en Go, PostgreSQL/PostGIS y pgvector, web Vue; roles superadmin, seguridad y negocio; argon2id; bitácora; solicitudes de permisos & Base seria para vender a empresas \\
+\hline
 Privacidad & Sin reconocimiento facial ni imágenes guardadas, IDs seudónimos, vectores Re-ID borrados a las 24 horas, género solo en conteos de 5 o más, puntos borrados a los 90 días & Argumento de venta frente a la Ley N.\textdegree~29733 \\
 \hline
 \end{tabular}
@@ -5031,7 +5289,9 @@ por locales comerciales.
 \textbf{Nivel} & \textbf{Cálculo} & \textbf{Unidades} & \textbf{Ingreso anual potencial} \\
 \hline
 TAM Perú & 9\,000+ comercios en los 88 malls de ACCEP~\cite{accep}, 20\,000+ tiendas de Gamarra~\cite{peruretail}, 1\,911 supermercados y tiendas de conveniencia~\cite{forbes}, $\sim$2\,800 boticas de cadena~\cite{gestion} y más de 1\,000 tiendas Mass~\cite{massretail} & $\sim$34\,700 locales & $\sim$S/~62.0 millones (S/~149 al mes) \\
+\hline
 SAM & Lima, locales con cámara IP utilizable ($\sim$30\,\% del TAM) & $\sim$10\,400 locales & $\sim$S/~18.6 millones \\
+\hline
 SOM a 2031 & Meta del plan & 750 locales y 350 pantallas & $\sim$S/~2.1 millones \\
 \hline
 \end{tabular}
@@ -5053,11 +5313,17 @@ competidores.
 \textbf{Competidor} & \textbf{Tipo} & \textbf{Precio de referencia} & \textbf{Diferencia de AeroVision} \\
 \hline
 V-Count~\cite{vcount} & Sensor 3D propio y nube & $\sim$US\$~50 por sensor al mes & Usa la cámara existente y mide también a quienes pasan y se detienen \\
+\hline
 FootfallCam~\cite{footfallcam} & Contador en puerta; analítica con CCTV existente & $\sim$US\$~8.90 por equipo al mes más hardware & Diagnóstico corto en soles, sin equipos, con prueba de vitrina y soporte en Lima \\
+\hline
 ShopperTrak~\cite{shoppertrak} & Sensores y comparativos globales & Cotización, grandes cadenas & Precio para tiendas pequeñas y medianas \\
+\hline
 Xovis~\cite{xovis} & Sensor 3D premium (aeropuertos) & US\$~1\,800 a 3\,500 por sensor más licencia & Inversión 10 a 20 veces menor \\
+\hline
 Analítica de la cámara (Hikvision~\cite{hikvision}, Axis~\cite{axis}) & Conteo de línea en la cámara & Incluido según el modelo de cámara & Recorrido completo con cualquier marca \\
+\hline
 Medidores de vía pública~\cite{mn-ooh} & Audiencia sindicada en la calle & Cotización & Audiencia dentro de malls y aeropuertos, por pantalla \\
+\hline
 Conteo manual o consultora & Estudio puntual & S/~3\,000 a 10\,000 por estudio (estimado) & Dato continuo, todos los días \\
 \hline
 \end{tabular}
@@ -5124,8 +5390,11 @@ Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 \textbf{Cruce} & \textbf{Estrategia} \\
 \hline
 FO & Usar el contacto en LAP para llegar a las tiendas del terminal y a JCDecaux, y llevar esos casos a malls, galerías y cadenas \\
+\hline
 DO & Usar ProInnóvate e incubadoras para financiar la validación independiente de precisión mientras el equipo trabaja a medio tiempo \\
+\hline
 FA & Vender privacidad por diseño y procesamiento dentro de la red del cliente como respuesta a la Ley N.\textdegree~29733 \\
+\hline
 DA & Estudios cortos y pagados con métricas firmadas; resolver la licencia del detector antes del primer contrato \\
 \hline
 \end{tabular}
@@ -5148,9 +5417,13 @@ solo, porque los dos productos usan la misma tecnología y el mismo equipo
 \textbf{Bloque} & \textbf{Captación de tienda} & \textbf{Audiencia para publicidad} \\
 \hline
 Segmentos & Tiendas a la calle, en galerías, malls y el terminal de LAP con cámara IP en la entrada; luego cadenas de 10+ locales; también universidades, clínicas y bancos & JCDecaux en el terminal de LAP; administradores de pantallas en malls, galerías y estaciones; agencias y marcas \\
+\hline
 Propuesta de valor & Saber en qué paso pierde clientes, por hora, y si una vitrina nueva funciona, con su propia cámara & Audiencia medida de cada pantalla para vender o comprar por audiencia y no por espacio \\
+\hline
 Canales & Visita con demo en el teléfono (En vivo); contacto de LAP; asociaciones de comerciantes; integradores de CCTV con 20\,\% de comisión el primer año; LinkedIn & Contacto de LAP con JCDecaux; charla en ACCEP; agencias con el caso del aeropuerto \\
+\hline
 Relación & Diagnóstico con conteo manual de control; informe mensual automático, alertas y una llamada al mes & Cuenta dedicada; certificación mensual; revisión trimestral \\
+\hline
 Ingresos & Diagnóstico, prueba de vitrina y monitoreo mensual por tienda & Estudio por lugar y certificación mensual por pantalla \\
 \hline
 \end{tabular}
@@ -5167,8 +5440,11 @@ Ingresos & Diagnóstico, prueba de vitrina y monitoreo mensual por tienda & Estu
 \textbf{Bloque} & \textbf{Contenido} \\
 \hline
 Recursos clave & Software ya construido; la computadora del equipo con RTX~4060 y una con GPU de 16~GB en 2027; 3 fundadores a medio tiempo (visión por computadora, backend y venta); contacto en LAP \\
+\hline
 Actividades clave & Exportar grabaciones del NVR y procesarlas de noche; calibrar la puerta o la zona de visión de cada cámara ($\sim$1 hora); control de calidad con conteo manual de 15 minutos; redactar el informe con una recomendación; contactar 30 tiendas por trimestre \\
+\hline
 Socios clave & LAP; integradores de CCTV; ESAN (prueba de precisión e incubadora); contador y asesoría legal en la Ley N.\textdegree~29733; tiendas de cómputo en Lima \\
+\hline
 Estructura de costos & Por cámara al mes: S/~43 en tiendas y S/~46 en pantallas; por estudio, $\sim$10\,\% de su precio; contador S/~150 al mes; una computadora de S/~4\,500 por cada 10 cámaras; constitución, contratos, marca y web $\sim$S/~3\,535 una vez; S/~1\,500 por fundador al mes desde junio de 2027, solo si hay caja \\
 \hline
 \end{tabular}
@@ -5194,10 +5470,15 @@ de S/~5\,000 al mes cada una, gana S/~500 más por pantalla.
 \textbf{Producto} & \textbf{Línea} & \textbf{Qué incluye} & \textbf{Precio} \\
 \hline
 Captación & Diagnóstico & 2 semanas: pasan, se detienen, entran, permanencia, horas pico y conversión si hay tickets & S/~900 por tienda \\
+\hline
 Captación & Prueba de vitrina & Vitrina actual frente a la nueva & S/~1\,200 por prueba \\
+\hline
 Captación & Monitoreo & Informe mensual, comparación entre tiendas y alertas & S/~149 al mes por tienda (2 cámaras); S/~75 por cámara adicional; S/~129 desde 10 tiendas \\
+\hline
 Audiencia & Estudio de un lugar & 2 semanas: audiencia por hora y día, tiempo de exposición y comparación & S/~4\,000 por lugar \\
+\hline
 Audiencia & Certificación & Audiencia mensual de cada pantalla & S/~180 al mes por pantalla \\
+\hline
 Extra & Valor de locales & Índice de valor por local y renta sugerida & S/~15\,000 por estudio \\
 \hline
 \end{tabular}
@@ -5237,11 +5518,17 @@ ni género, que según las mismas pruebas libera la mayor parte de la CPU
 \textbf{Concepto} & \textbf{Tienda 2027} & \textbf{Tienda 2031} & \textbf{Pantalla 2027} & \textbf{Pantalla 2031} \\
 \hline
 Computadora: S/~125 de amortización y S/~130 de energía entre 10 cámaras & S/~26 & S/~26 & S/~26 & S/~26 \\
+\hline
 Traslado del video & S/~3 & S/~2 & S/~3 & S/~2 \\
+\hline
 Soporte y control de calidad & S/~10 & S/~8 & S/~14 & S/~11 \\
+\hline
 Nube central (web, base, respaldos) & S/~4 & S/~2 & S/~3 & S/~3 \\
+\hline
 \textbf{Costo por cámara} & \textbf{S/~43} & \textbf{S/~38} & \textbf{S/~46} & \textbf{S/~42} \\
+\hline
 Precio por cámara & $\sim$S/~99 & $\sim$S/~99 & S/~180 & S/~180 \\
+\hline
 \textbf{Margen bruto} & \textbf{57\,\%} & \textbf{62\,\%} & \textbf{74\,\%} & \textbf{77\,\%} \\
 \hline
 \end{tabular}
@@ -5275,12 +5562,19 @@ hacia 2029 (Cuadros~\ref{tab:caja} y~\ref{tab:crecimiento}).
 \textbf{Mes} & \textbf{Qué pasa} & \textbf{Entra} & \textbf{Sale} & \textbf{Caja al cierre} \\
 \hline
 Nov 2026 -- ene 2027 & Pruebas, entrevistas y prueba de precisión & -- & S/~0 & S/~5\,000 \\
+\hline
 Feb 2027 & 2 diagnósticos; adelanto del primer estudio de audiencia; S.A.C., contratos y disco & S/~3\,800 & S/~3\,545 & S/~5\,255 \\
+\hline
 Mar 2027 & 2 diagnósticos; saldo del estudio de audiencia & S/~3\,800 & S/~215 & S/~8\,840 \\
+\hline
 Abr 2027 & 2 diagnósticos; primera tienda en monitoreo; adelanto del estudio de locales de LAP; segunda computadora & S/~9\,449 & S/~6\,115 & S/~12\,174 \\
+\hline
 Jun 2027 & Saldo del estudio LAP; segundo estudio de audiencia; empieza el pago a los fundadores & S/~10\,847 & S/~6\,800 & S/~17\,104 \\
+\hline
 Jul 2027 & Primeras 4 pantallas certificadas & S/~4\,216 & S/~4\,815 & S/~16\,505 \\
+\hline
 Oct 2027 & Tercer estudio de audiencia; 7 tiendas en monitoreo & S/~5\,023 & S/~5\,015 & S/~11\,372 \\
+\hline
 Dic 2027 & 10 tiendas y 10 pantallas (25 cámaras); tercera computadora & S/~3\,290 & S/~9\,479 & \textbf{S/~5\,000} \\
 \hline
 \end{tabular}
@@ -5302,9 +5596,13 @@ fundadores; el resto lo cubren los diagnósticos y estudios.
 \textbf{Año} & \textbf{Locales} & \textbf{Pantallas} & \textbf{Cámaras} & \textbf{PCs} & \textbf{Ingresos} & \textbf{Caja para el equipo} & \textbf{Equivale a} \\
 \hline
 2027 & 10 & 10 & 25 & 3 & S/~51 mil & S/~30.8 mil & S/~1\,500 al mes por fundador desde junio \\
+\hline
 2028 & 60 & 40 & 130 & 15 & S/~206 mil & S/~79 mil & $\sim$S/~2\,200 al mes por fundador \\
+\hline
 2029 & 180 & 100 & 370 & 41 & S/~525 mil & S/~222 mil & 2 a 3 personas a tiempo completo \\
+\hline
 2030 & 400 & 200 & 800 & 89 & S/~1.11~M & S/~490 mil & $\sim$6 personas a tiempo completo \\
+\hline
 2031 & 750 & 350 & 1\,475 & 163 & S/~1.99~M & S/~927 mil & $\sim$11 personas a tiempo completo \\
 \hline
 \end{tabular}
@@ -5330,10 +5628,15 @@ productos reparte el riesgo.
 \textbf{Qué sale mal} & \textbf{Caja 2028} & \textbf{Caja 2031} & \textbf{Lectura} \\
 \hline
 Nada (escenario base) & S/~79 mil & S/~927 mil & -- \\
+\hline
 Los locales pagan S/~99 y no S/~149 & S/~61 mil & S/~633 mil & Se sostiene \\
+\hline
 Se consigue la mitad de locales & S/~76 mil & S/~728 mil & Se sostiene, más lento \\
+\hline
 Procesar y operar cada cámara cuesta el doble & S/~54 mil & S/~609 mil & Se sostiene \\
+\hline
 La publicidad vende la mitad & S/~55 mil & S/~701 mil & Se sostiene con los locales \\
+\hline
 Nadie compra en 2027 & -- & -- & La reserva sigue intacta \\
 \hline
 \end{tabular}
@@ -5357,12 +5660,19 @@ parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
 \textbf{\#} & \textbf{Hipótesis} & \textbf{Prueba} & \textbf{Criterio} \\
 \hline
 1 & A las tiendas les importa su captación y no la tienen & 10 entrevistas sin mostrar el producto & 7 de 10 confirman \\
+\hline
 2 & Las tiendas pagan S/~900 por el diagnóstico y S/~149 al mes & Oferta del diagnóstico pagado & 5 diagnósticos pagados; 3 pasan a monitoreo \\
+\hline
 3 & El conteo en la puerta es preciso & 3 tramos de 15 minutos contados a mano & Error $\leq 5\,\%$ en entradas y $\leq 10\,\%$ en quienes pasan; $\geq 90\,\%$ de acierto en ``se detiene'' \\
+\hline
 4 & Las tiendas valoran probar su vitrina & Oferta en los 3 primeros diagnósticos & 1 de 3 la contrata \\
+\hline
 5 & Un dueño de medios quiere audiencia por pantalla & Reuniones con JCDecaux y 2 administradores de pantallas & 1 estudio pagado \\
+\hline
 6 & La audiencia medida cambia lo que paga un anunciante & 1 mes de audiencia entregado a 2 anunciantes & 1 la usa para comprar o fijar tarifa \\
+\hline
 7 & La grabación se obtiene y procesa a bajo costo & 10 días de video del NVR de 3 tiendas & 3 de 3 la entregan; 10 cámaras por computadora \\
+\hline
 8 & Tienda y operador aceptan el tratamiento de datos & Contrato de encargo de tratamiento & Firmado en los 3 primeros clientes \\
 \hline
 \end{tabular}
@@ -5379,12 +5689,19 @@ parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
 \textbf{Período} & \textbf{Hito} \\
 \hline
 Nov 2026 -- ene 2027 & Lectura de grabaciones del NVR y modo liviano; 10 entrevistas; prueba de precisión con conteo manual \\
+\hline
 Feb 2027 & Constitución de la S.A.C., contratos de encargo de tratamiento y detector con licencia resuelta; primeros diagnósticos pagados y primer estudio de audiencia \\
+\hline
 Mar 2027 & Cierre de la validación comercial: 5 diagnósticos y 1 estudio de audiencia \\
+\hline
 Abr 2027 & Primera tienda en monitoreo; estudio de valor de locales con LAP; segunda computadora \\
+\hline
 Jun 2027 & Pago de S/~1\,500 al mes por fundador \\
+\hline
 Jul 2027 & Zona de visión por pantalla; primeras 4 pantallas certificadas \\
+\hline
 Oct 2027 & 7 tiendas en monitoreo; tercer estudio de audiencia \\
+\hline
 Dic 2027 & 10 tiendas y 10 pantallas (25 cámaras); tercera computadora \\
 \hline
 \end{tabular}
