@@ -3097,7 +3097,11 @@ conveniente tener \textbf{4 puntos}:}
     \item \textbf{Alcance del proyecto.} El trabajo necesario para
     entregarlas: desarrollo, validación, documentación y plan de negocio.
 
-    \item \textbf{Requisitos priorizados (MoSCoW).} \textit{Debe:} RF-01,
+    \item \textbf{Requisitos priorizados (MoSCoW).} MoSCoW es una técnica de
+    priorización que clasifica cada requisito en cuatro grupos: lo que se
+    \textit{debe} entregar (\textit{Must}), lo que se \textit{debería}
+    (\textit{Should}), lo que se \textit{podría} (\textit{Could}) y lo que no se
+    hará esta vez (\textit{Won't}). \textit{Debe:} RF-01,
     RF-02, RF-06, RNF-02 y RNF-11. \textit{Debería:} RF-03, RF-04, RF-05 y
     RF-08. \textit{Podría:} RF-07, RF-09 y la estimación de género.
     \textit{No esta vez:} clasificador de edad, predicción de congestión y
@@ -5329,7 +5333,12 @@ millones en 2025 y crecería cerca de 13\,\% al año hasta US\$~2\,670 millones
 en 2030~\cite{mordor}. El hardware aún concentra el 63\,\% del ingreso, pero
 los servicios gestionados son lo que más crece: el espacio de un software que
 reutiliza cámaras. El Cuadro~\ref{tab:mercado} dimensiona el mercado peruano
-por locales comerciales.
+por locales comerciales con tres niveles: el TAM (mercado total disponible)
+es todo lo que se podría vender si todos los locales compraran; el SAM
+(mercado al que se puede servir) es la parte del TAM que el producto puede
+atender hoy, aquí los locales de Lima con cámara IP utilizable; y el SOM
+(mercado que se espera captar) es la parte del SAM que el plan se propone
+ganar.
 
 \begin{table}[H]
 \caption{Mercado en Perú por locales (supuesto de trabajo)}
@@ -5388,8 +5397,14 @@ recintos y estar en Lima con precios en soles.
 
 \subsection{Análisis FODA}
 
-El Cuadro~\ref{tab:foda} resume el análisis FODA y el
-Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
+El análisis FODA (fortalezas, oportunidades, debilidades y amenazas) es una
+herramienta de planificación estratégica que separa lo que depende del propio
+negocio (fortalezas y debilidades) de lo que viene del entorno (oportunidades
+y amenazas). Al cruzar ambos lados se obtienen estrategias: usar las
+fortalezas para aprovechar oportunidades (FO), superar debilidades con
+oportunidades (DO), usar fortalezas frente a amenazas (FA) y reducir
+debilidades para evitar amenazas (DA). El Cuadro~\ref{tab:foda} resume el
+análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 
 \begin{table}[H]
 \caption{FODA de AeroVision, octubre de 2026}
@@ -5455,8 +5470,12 @@ DA & Estudios cortos y pagados con métricas firmadas; resolver la licencia del 
 
 \subsection{Modelo Canvas}
 
-El lado del cliente es distinto para cada producto; el de la operación es uno
-solo, porque los dos productos usan la misma tecnología y el mismo equipo
+El Modelo Canvas de negocio, propuesto por Osterwalder y Pigneur, describe en
+una sola vista cómo una empresa crea, entrega y captura valor, mediante nueve
+bloques: segmentos de clientes, propuesta de valor, canales, relación con los
+clientes, fuentes de ingresos, recursos clave, actividades clave, socios clave
+y estructura de costos. Aquí se separa en dos lados. El lado del cliente es
+distinto para cada producto; el de la operación es uno solo, porque los dos productos usan la misma tecnología y el mismo equipo
 (Cuadros~\ref{tab:canvas-cliente} y~\ref{tab:canvas-operacion}).
 
 \begin{table}[H]
@@ -5505,8 +5524,9 @@ Estructura de costos & Por cámara al mes: S/~43 en tiendas y S/~46 en pantallas
 
 \subsection{Precios y valor para el cliente}
 
-Cada producto se vende con un estudio corto para entrar y un informe mensual
-para quedarse (Cuadro~\ref{tab:precios}). Una tienda que paga S/~149 al mes y
+La estrategia de precios define cuánto se cobra y con qué esquema: cada
+producto se vende con un estudio corto de pago único para entrar y un informe
+mensual recurrente para quedarse (Cuadro~\ref{tab:precios}). Una tienda que paga S/~149 al mes y
 recibe 2\,000 personas al día, con 25\,\% de conversión y un ticket de S/~60,
 suma unos S/~9\,000 de venta al mes si su captación sube de 10\,\% a 11\,\%
 (supuesto); un dueño de medios que cobra 10\,\% más por sus mejores pantallas,
@@ -5539,7 +5559,10 @@ Extra & Valor de locales & Índice de valor por local y renta sugerida & S/~15\,
 
 \subsection{Costo por cámara y capacidad medida}
 
-La unidad de costo es la cámara. El procesamiento es por lotes, no en vivo:
+Este análisis calcula cuánto cuesta atender a un cliente y cuánto queda
+después de pagarlo: el margen bruto es la diferencia entre el precio y el costo
+por cámara, dividida entre el precio. La unidad de costo es la cámara. El
+procesamiento es por lotes, no en vivo:
 la computadora toma las grabaciones que el NVR del recinto ya guarda (2 a 4
 semanas), procesa solo las horas necesarias a 5 cuadros por segundo, entrega
 conteos y tasas y borra el video. Una cámara de tienda procesa unas 12 horas
@@ -5598,7 +5621,10 @@ BT5B de Luz del Sur~\cite{osinergmin}.
 
 \subsection{Pronóstico financiero}
 
-Con S/~5\,000 de reserva y los fundadores a medio tiempo, no se gasta nada
+El pronóstico financiero estima los ingresos y la caja del negocio en el
+tiempo: la caja es el dinero disponible al cierre de cada período, es decir, lo
+que entra menos lo que sale. Con S/~5\,000 de reserva y los fundadores a medio
+tiempo, no se gasta nada
 hasta la primera venta: el software se prueba en la computadora del equipo,
 cada computadora nueva se compra con ventas ya cobradas, la caja nunca baja de
 la reserva y el paso a tiempo completo llega cuando el negocio puede pagarlo,
@@ -5667,7 +5693,9 @@ tienda; los precios y costos de este plan, con una computadora por cada 10
 cámaras renovada a los 3 años; y 15\,\% de lo que queda guardado como reserva.
 En 2031 el ingreso vendría en un 58\,\% de tiendas, 37\,\% de publicidad y
 5\,\% de estudios de locales, con 82\,\% recurrente. La prueba de estrés
-financiera (Cuadro~\ref{tab:estres-financiero}) muestra que tener dos
+financiera (Cuadro~\ref{tab:estres-financiero}) es un análisis de
+sensibilidad: cambia un supuesto a la vez (precio, número de locales, costo o
+ventas de publicidad) y mide cuánto varía la caja. Muestra que tener dos
 productos reparte el riesgo.
 
 \begin{table}[H]
@@ -5697,7 +5725,10 @@ Nadie compra en 2027 & -- & -- & La reserva sigue intacta \\
 
 \subsection{Plan de validación comercial y cronograma}
 
-Entre noviembre de 2026 y marzo de 2027 se validan las hipótesis del plan
+Una hipótesis es un supuesto del plan que todavía no está comprobado; se
+valida con una prueba concreta y un criterio que dice cuándo se considera
+cumplida. Entre noviembre de 2026 y marzo de 2027 se validan las hipótesis del
+plan
 (Cuadro~\ref{tab:hipotesis}); el Cuadro~\ref{tab:cronograma} ordena los pasos
 hasta diciembre de 2027. La hipótesis técnica sobre el costo (la número 7)
 parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
