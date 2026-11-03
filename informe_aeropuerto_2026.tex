@@ -5079,25 +5079,38 @@ Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 \label{tab:foda}
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{L{0.45\textwidth}L{0.45\textwidth}}
-\toprule
-\textbf{Fortalezas} & \textbf{Debilidades} \\
-\midrule
-Plataforma completa y funcionando: visión, tráfico, ventas, cuentas y Videos & Equipo de tres fundadores a medio tiempo \\
-Usa las cámaras del cliente, sin hardware nuevo & Precisión aún no validada contra conteo manual en tienda \\
-Privacidad por diseño, sin reconocimiento facial & Detector con licencia AGPL \\
-Procesamiento en una computadora propia de bajo costo fijo & Lectura del NVR y modo liviano por construir \\
-Contacto en LAP y presencia en Lima & Sin clientes pagados todavía \\
-\midrule
-\textbf{Oportunidades} & \textbf{Amenazas} \\
-\midrule
-Mercado de conteo de personas que crece $\sim$13\,\% al año & Competidores que también usan el CCTV existente \\
-Sin medición de audiencia dentro de los recintos & Analítica incluida en las cámaras nuevas \\
-JCDecaux en el nuevo Jorge Chávez y pantallas en malls y estaciones & Desconfianza hacia las cámaras y exigencias de la Ley N.\textdegree~29733 \\
-Miles de locales en malls, galerías, supermercados y boticas & Proveedores globales con comparativos de retail \\
-Fondos de ProInnóvate e incubadoras & Cámaras de los clientes de calidad o ángulo variables \\
-\bottomrule
+\setlength{\fboxsep}{0pt}
+\newcommand{\fodacelda}[3]{\colorbox{#1}{\parbox[t][5.6cm][t]{0.455\textwidth}{%
+    \vspace{3pt}\centering\textbf{#2}\par\vspace{2pt}\hrule\vspace{2pt}
+    \begin{minipage}{0.42\textwidth}\raggedright\footnotesize
+    \begin{itemize}[leftmargin=1.1em,itemsep=1pt,topsep=1pt]
+    #3
+    \end{itemize}\end{minipage}}}}
+\begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+\fodacelda{green!14}{Fortalezas}{%
+    \item Plataforma completa y funcionando: visión, tráfico, ventas, cuentas y Videos
+    \item Usa las cámaras del cliente, sin hardware nuevo
+    \item Privacidad por diseño, sin reconocimiento facial
+    \item Procesamiento en una computadora propia de bajo costo fijo
+    \item Contacto en LAP y presencia en Lima} &
+\fodacelda{orange!16}{Debilidades}{%
+    \item Equipo de tres fundadores a medio tiempo
+    \item Precisión aún no validada contra conteo manual en tienda
+    \item Detector con licencia AGPL
+    \item Lectura del NVR y modo liviano por construir
+    \item Sin clientes pagados todavía} \\[4pt]
+\fodacelda{blue!12}{Oportunidades}{%
+    \item Mercado de conteo de personas que crece $\sim$13\,\% al año
+    \item Sin medición de audiencia dentro de los recintos
+    \item JCDecaux en el nuevo Jorge Chávez y pantallas en malls y estaciones
+    \item Miles de locales en malls, galerías, supermercados y boticas
+    \item Fondos de ProInnóvate e incubadoras} &
+\fodacelda{red!12}{Amenazas}{%
+    \item Competidores que también usan el CCTV existente
+    \item Analítica incluida en las cámaras nuevas
+    \item Desconfianza hacia las cámaras y exigencias de la Ley N.\textdegree~29733
+    \item Proveedores globales con comparativos de retail
+    \item Cámaras de los clientes de calidad o ángulo variables}
 \end{tabular}
 \end{table}
 
