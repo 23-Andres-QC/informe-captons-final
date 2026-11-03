@@ -2980,12 +2980,15 @@ consideró conveniente tener \textbf{6 puntos}:}
     validación en el patio de ESAN (6 de octubre de 2026), segunda en el
     comedor (27 de octubre de 2026), avance del 63\,\% de las tareas en el
     sprint~11 y cierre en el sprint~16
-    \confirmar{fecha de entrega final}.
+    \confirmar{fecha de entrega final}. Presupuesto resumido: línea base de
+    costos de S/~19\,525, con contingencia (Sección~\ref{sec:costos}).
 
     \item \textbf{Supuestos y restricciones.} Se usan modelos preentrenados, se
     valida con video grabado en ESAN y LAP apoya el proyecto. Restricciones:
     sin video anotado del aeropuerto, GPU necesaria, Ley
-    N.\textdegree~29733 y equipo de cuatro integrantes.
+    N.\textdegree~29733 y equipo de cuatro integrantes. Riesgos de alto nivel:
+    sin video anotado del aeropuerto (R2) y re-identificación imperfecta (R3)
+    (Sección~\ref{sec:riesgos}).
 
     \item \textbf{Líder, autoridad y criterio de éxito.} Neciosup Saavedra,
     Leslie, como líder; patrocinio académico del docente
@@ -3185,7 +3188,7 @@ conveniente tener \textbf{3 puntos}:}
     para cerrar en los 5 sprints restantes
     \confirmar{completar el burndown con el historial semanal del panel}.
 
-    \item \textbf{Control y compresión.} Como hay un leve atraso, se prioriza
+    \item \textbf{Control del cronograma.} Como hay un leve atraso, se prioriza
     el backlog con MoSCoW (Sección~\ref{sec:alcance}) para asegurar los
     entregables que se deben y se reasigna carga si hace falta.
 \end{enumerate}
@@ -3281,7 +3284,9 @@ conveniente tener \textbf{3 puntos}:}
 
 \begin{enumerate}
     \item \textbf{Presupuesto (supuestos de trabajo).} El
-    Cuadro~\ref{tab:presupuesto} resume la línea base. Las horas del equipo
+    Cuadro~\ref{tab:presupuesto} resume la estimación de costos de las
+    actividades, la reserva de contingencia y la línea base de costos. Las
+    horas del equipo
     (640~h a S/~25) son un supuesto
     \confirmar{valor por hora y horas reales}; la computadora con GPU se
     amortiza a S/~125 al mes durante 4 meses y el primer despliegue en Google
@@ -3290,6 +3295,7 @@ conveniente tener \textbf{3 puntos}:}
     (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Valor ganado al sprint 11.} Valor planificado:
+    (sobre los S/~17\,750 de las actividades, sin la reserva)
     68.75\,\% $\times$ S/~17\,750 $=$ S/~12\,203. Valor ganado:
     65.5\,\% $\times$ S/~17\,750 $=$ S/~11\,626. Variación del cronograma:
     $-$S/~577. SPI $=$ 0.95 (0.91 si se mide solo por tareas completadas). El
@@ -3315,11 +3321,11 @@ Computadora con GPU (S/~125 $\times$ 4 meses) & 500 \\
 \hline
 Primer despliegue en Google Cloud & $\approx$ 1\,250 \\
 \hline
-\textbf{Línea base} & \textbf{17\,750} \\
+\textbf{Estimación de costos de las actividades} & \textbf{17\,750} \\
 \hline
 Reserva de contingencia (10\,\%) & 1\,775 \\
 \hline
-\textbf{Presupuesto total} & \textbf{19\,525} \\
+\textbf{Línea base de costos} & \textbf{19\,525} \\
 \hline
 Valor planificado (68.75\,\%) & 12\,203 \\
 \hline
@@ -3556,7 +3562,9 @@ consideró conveniente tener \textbf{3 puntos}:}
     ($\approx$ S/~4\,500 de referencia), teléfonos de los integrantes sin costo
     y, en el primer despliegue, una máquina virtual de Google Cloud
     ($\approx$ US\$~334.80 al mes a precio de lista) reemplazada por la
-    computadora local.
+    computadora local. La decisión fue un análisis de comprar o arrendar: la
+    computadora propia cuesta unos US\$~70 al mes frente a US\$~334.80 de la
+    nube (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Modelos y software.} YOLO26 (Ultralytics) es gratuito con
     licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT,
@@ -3601,7 +3609,7 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
 
 \textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
 (capítulo 11, Gestión de los Riesgos) y PMBOK 7.\textordfeminine{} edición
-(sección 2.5.7), y para fines del proyecto, se consideró conveniente tener
+(Dominio de desempeño de la incertidumbre, sección 2.8), y para fines del proyecto, se consideró conveniente tener
 \textbf{4 puntos}:}
 
 \begin{enumerate}
@@ -4096,6 +4104,9 @@ una computadora local con GPU; el modelo en vivo corre fuera de Docker para
 usar la GPU directamente. El análisis de sesiones grabadas y el
 monitoreo en vivo usan backends y bases de datos separados, y la aplicación
 web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
+El código fuente de todos los componentes, las migraciones de la base de datos
+y los notebooks del modelo están en
+\url{https://github.com/23-Andres-QC/Aeropuerto}.
 
 \begin{figure}[H]
 \centering
@@ -5138,6 +5149,47 @@ mercado y de precios son de fuentes públicas consultadas el 27 de octubre de
 2026; los montos marcados como estimados y las tasas de conversión son
 supuestos del plan.
 
+\subsection{Relación del plan con la guía PMBOK}
+
+El plan de negocio no es un proyecto sino el caso que justifica continuarlo
+después del curso. Por eso se ordena con los documentos y técnicas que la
+guía PMBOK, 6.\textordfeminine{} edición~\cite{pmbok6}, asigna a ese fin: el
+\textit{caso de negocio} y el \textit{plan de gestión de beneficios}
+(documentos de negocio del proyecto, capítulo~1), y las técnicas de costos y
+riesgos de los capítulos 6, 7 y 11. De la 7.\textordfeminine{} edición~\cite{pmbok7}
+se toman la entrega de valor (Estándar, capítulo~2) y el dominio de
+desempeño de la medición (sección 2.7). El Cuadro~\ref{tab:pmbok-negocio}
+indica dónde está cada elemento.
+
+\begin{table}[H]
+\caption{Elementos del plan de negocio y su equivalente en la guía PMBOK}
+\label{tab:pmbok-negocio}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.30\textwidth}|L{0.34\textwidth}|L{0.24\textwidth}|}
+\hline
+\textbf{Elemento del plan} & \textbf{Equivalente en PMBOK} & \textbf{Dónde} \\
+\hline
+El problema y quién paga; mercado y competencia; FODA & Caso de negocio: necesidad del negocio y análisis de la situación (PMBOK 6, cap.~1) & Cuadros~\ref{tab:clientes}, \ref{tab:mercado}, \ref{tab:competencia} y~\ref{tab:foda} \\
+\hline
+Productos, precios y valor para el cliente & Entrega de valor (PMBOK 7, cap.~2) & Cuadros~\ref{tab:productos} y~\ref{tab:precios} \\
+\hline
+Costo por cámara & Estimación de costos ascendente (PMBOK 6, cap.~7) & Cuadro~\ref{tab:costo-camara} \\
+\hline
+Pronóstico de ingresos y caja & Análisis costo-beneficio del caso de negocio; flujo de caja y requisitos de financiamiento (PMBOK 6, cap.~7) & Cuadros~\ref{tab:caja} y~\ref{tab:crecimiento} \\
+\hline
+Prueba de estrés financiera & Análisis de sensibilidad (PMBOK 6, cap.~11) & Cuadro~\ref{tab:estres-financiero} \\
+\hline
+Hipótesis y criterios de validación & Plan de gestión de beneficios: beneficios esperados y métricas; y medición (PMBOK 7, sección 2.7) & Cuadro~\ref{tab:hipotesis} \\
+\hline
+Cronograma de próximos pasos & Lista de hitos (PMBOK 6, cap.~6) & Cuadro~\ref{tab:cronograma} \\
+\hline
+Normativa y privacidad & Restricciones y riesgo legal R6 del plan de riesgos & Sección~\ref{sec:riesgos} \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Resumen}
 
 \textbf{Problema.} En un lugar con público hay dos preguntas de dinero que
@@ -5233,8 +5285,9 @@ calcula, para el operador, el valor de cada local según su tráfico.
 \subsection{Lo que ya está construido}
 
 AeroVision ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
-repositorio suma 247 commits entre el 30 de septiembre y el 28 de octubre de
-2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
+código está en el repositorio
+\url{https://github.com/23-Andres-QC/Aeropuerto}, que suma 247 commits entre
+el 30 de septiembre y el 28 de octubre de 2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
 personas que pasan por el frente, las que se detienen (estancia de al menos
 5~s), las que entran y las que compran (Secciones~\ref{sec:arquitectura}
 y~\ref{sec:pruebas}).
