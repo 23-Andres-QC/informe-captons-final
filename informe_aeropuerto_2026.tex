@@ -22,6 +22,7 @@
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{needspace}
+\usepackage{colortbl}
 \usetikzlibrary{shapes,arrows,positioning}
 \setcounter{tocdepth}{1}
 
@@ -84,6 +85,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \end{tikzpicture}%
     }%
 }
+
+\newcommand{\confirmar}[1]{\colorbox{yellow}{\footnotesize [CONFIRMAR: #1]}}
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
@@ -1202,6 +1205,7 @@ AirMOTR y el clasificador de edad para la exclusión de menores no se
 presentan como componentes implementados, sino como trabajo futuro.
 
 \section{Especificación de Requerimientos}
+\label{sec:requerimientos}
 
 \subsection{Casos de Uso del Sistema}
 
@@ -2859,16 +2863,263 @@ histórico de las trayectorias.
 \end{figure}
 
 \section{Planificación y Gestión del Proyecto}
+\label{sec:gestion}
+
+Esta sección presenta el plan de dirección del proyecto según las áreas de
+conocimiento de la guía PMBOK, 6.\textordfeminine{} edición~\cite{pmbok6}, y los dominios de
+desempeño de la 7.\textordfeminine{} edición~\cite{pmbok7}. Se agregan los
+lineamientos de PRINCE2~\cite{axelos2017} y el marco Scrum~\cite{scrumguide}, que
+guían la ejecución. Los cuadros de interesados, riesgos, roles,
+comunicaciones y adquisiciones son las matrices del plan.
+
+\subsection{Acta de constitución del proyecto}
+\label{sec:acta}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 4, Gestión de la Integración), y para fines del proyecto, se
+consideró conveniente tener \textbf{6 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Justificación.} Las cámaras CCTV del aeropuerto Jorge Chávez
+    se instalaron para seguridad y no permiten seguir a un pasajero entre
+    cámaras, medir su permanencia ni su captación en tiendas, lo que genera
+    aglomeraciones mal gestionadas y ventas perdidas.
+
+    \item \textbf{Objetivos.} Objetivo general: diseñar un sistema multicámara
+    que detecte, rastree y re-identifique pasajeros de forma seudónima, sin
+    biometría facial. Metas medibles: más del 90\,\% de detecciones ubicadas en
+    el plano (logrado 93\,\%), error de calibración mediano bajo 0.75~m
+    (logrado 0.28 a 0.48~m) y precisión de asociación de al menos 0.95
+    (logrado 0.99).
+
+    \item \textbf{Alcance y exclusiones.} Incluye detección, seguimiento local,
+    re-identificación, mapa 2D, minería histórica, tablero de insights,
+    teléfonos como cámaras, videos subidos, ventas y plan de negocio. Queda
+    fuera el clasificador de edad, la predicción de congestión y el
+    entrenamiento de modelos propios.
+
+    \item \textbf{Entregables e hitos.} Sistema desplegado en computadora con
+    GPU, informe final, pruebas de estrés y plan de negocio. Hitos: primera
+    validación en el patio de ESAN (6 de octubre de 2026), segunda en el
+    comedor (27 de octubre de 2026), avance del 63\,\% de las tareas en el
+    sprint~11 y cierre en el sprint~16
+    \confirmar{fecha de entrega final}.
+
+    \item \textbf{Supuestos y restricciones.} Se usan modelos preentrenados, se
+    valida con video grabado en ESAN y LAP apoya el proyecto. Restricciones:
+    sin video anotado del aeropuerto, GPU necesaria, Ley
+    N.\textdegree~29733 y equipo de cuatro integrantes.
+
+    \item \textbf{Líder, autoridad y criterio de éxito.} Neciosup Saavedra,
+    Leslie, como líder; patrocinio académico del docente
+    \confirmar{nombre del docente} y socio externo LAP. Éxito: métricas de
+    calidad en meta, plataforma funcional en los tres roles e informe
+    entregado a tiempo.
+\end{enumerate}
+
+\subsection{Project Canvas y creación de valor}
+\label{sec:canvas}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 4) y PMBOK 7.\textordfeminine{} edición (Estándar, capítulo 2, entrega
+de valor), y para fines del proyecto, se consideró conveniente tener
+\textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Propósito (¿por qué?).} Reducir la congestión mal gestionada
+    en zonas comerciales y dar visibilidad del recorrido del pasajero sin usar
+    reconocimiento facial.
+
+    \item \textbf{Producto y enfoque (¿qué y cómo?).} Plataforma de visión
+    computacional en tres partes (seguimiento local, multicámara con mapa 2D,
+    histórico), gestionada con un enfoque híbrido de Scrum y Gantt.
+
+    \item \textbf{Valor para cada público.} Para LAP: menos aglomeraciones y
+    menos vigilancia manual. Para los locales: captación y conversión
+    medibles (una subida de captación de 10\,\% a 11\,\% equivale a unos
+    S/~9\,000 de venta al mes, según el plan de negocio,
+    Sección~\ref{sec:negocio}). Para los pasajeros: menores esperas y datos
+    seudónimos.
+
+    \item \textbf{Plazos y costo (¿cuándo y cuánto?).} 16 sprints semanales con
+    cierre cada miércoles y procesamiento en computadora propia de costo fijo
+    bajo (Secciones~\ref{sec:cronograma} y~\ref{sec:costos}).
+\end{enumerate}
+
+\subsection{Análisis de interesados}
+\label{sec:interesados}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 13, Gestión de los Interesados) y PMBOK 7.\textordfeminine{} edición
+(Dominio de desempeño de los interesados, sección 2.1), y para fines del
+proyecto, se consideró conveniente tener \textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Identificación.} LAP, docente del curso, locales
+    comerciales, personal de seguridad y operaciones, Universidad ESAN,
+    regulador (ANPD, Ley N.\textdegree~29733), pasajeros y el propio equipo.
+
+    \item \textbf{Matriz poder/interés.} El Cuadro~\ref{tab:interesados}
+    clasifica a cada interesado. Los niveles son una propuesta
+    \confirmar{validar con el equipo}.
+
+    \item \textbf{Estrategia de gestión.} Gestionar de cerca a LAP y al docente
+    con reuniones por hito; mantener informados a locales y seguridad con el
+    tablero de Insights y reportes; mantener satisfecho al regulador con
+    privacidad por diseño.
+
+    \item \textbf{Monitoreo de pasajeros.} No se les identifica ni se guardan
+    imágenes; se informa mediante señalización visible y se trabaja solo con
+    identificadores seudónimos.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Matriz poder/interés de los interesados}
+\label{tab:interesados}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.26\textwidth}L{0.11\textwidth}L{0.11\textwidth}L{0.34\textwidth}}
+\toprule
+\textbf{Interesado} & \textbf{Poder} & \textbf{Interés} & \textbf{Estrategia} \\
+\midrule
+LAP (socio externo) & Alto & Alto & Gestionar de cerca; reunión por hito \\
+Docente del curso & Alto & Alto & Gestionar de cerca; reunión por hito \\
+Equipo del proyecto & Alto & Alto & Gestionar de cerca; reunión semanal de cierre \\
+Regulador (ANPD) & Alto & Bajo & Mantener satisfecho; privacidad por diseño \\
+Locales comerciales & Medio & Alto & Mantener informado; tablero de Insights \\
+Seguridad y operaciones & Medio & Alto & Mantener informado; tablero y reportes \\
+Universidad ESAN & Medio & Alto & Mantener informado; campus de validación \\
+Pasajeros & Bajo & Bajo & Monitorear; señalización y datos seudónimos \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Alcance, requisitos y EDT}
+\label{sec:alcance}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 5, Gestión del Alcance), y para fines del proyecto, se consideró
+conveniente tener \textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Alcance del producto.} Funciones de los requisitos RF-01 a
+    RF-09 y los casos de uso CU-01 a CU-11 de la
+    Sección~\ref{sec:requerimientos}.
+
+    \item \textbf{Alcance del proyecto.} El trabajo necesario para
+    entregarlas: desarrollo, validación, documentación y plan de negocio.
+
+    \item \textbf{Requisitos priorizados (MoSCoW).} \textit{Debe:} RF-01,
+    RF-02, RF-06, RNF-02 y RNF-11. \textit{Debería:} RF-03, RF-04, RF-05 y
+    RF-08. \textit{Podría:} RF-07, RF-09 y la estimación de género.
+    \textit{No esta vez:} clasificador de edad, predicción de congestión y
+    entrenamiento propio \confirmar{ajustar prioridades}.
+
+    \item \textbf{EDT en nueve paquetes.} El Cuadro~\ref{tab:edt} descompone el
+    trabajo en nueve paquetes.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Estructura de desglose del trabajo (EDT)}
+\label{tab:edt}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.04\textwidth}L{0.28\textwidth}L{0.52\textwidth}}
+\toprule
+\textbf{N.\textdegree} & \textbf{Paquete} & \textbf{Contenido} \\
+\midrule
+1 & Gestión del proyecto & Acta, cronograma, costos, riesgos, actas semanales y panel Scrum \\
+2 & Seguimiento local & Detección y seguimiento por cámara (Parte~I) \\
+3 & Multicámara y Re-ID & Re-identificación y galería global entre cámaras (Parte~II) \\
+4 & Calibración y mapa 2D & Calibración de cámaras y proyección de personas al plano \\
+5 & Histórico e Insights & Procesamiento histórico y tablero de insights (Parte~III) \\
+6 & Plataforma & Backend, bases de datos y aplicación web \\
+7 & Teléfonos, Videos y Ventas & Teléfonos como cámaras, videos subidos y ventas por local \\
+8 & Validación y pruebas & Pruebas en ESAN, validación con videos etiquetados y pruebas de estrés \\
+9 & Documentación y negocio & Informe final y plan de negocio \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Enfoque de desarrollo}
+\label{sec:enfoque}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 7.\textordfeminine{} edición
+(Dominio de desempeño del enfoque de desarrollo y ciclo de vida, sección 2.3),
+y para fines del proyecto, se consideró conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Componente predictivo.} Acta, alcance, hitos del curso y
+    entregas, con fechas fijadas y seguimiento en el diagrama de Gantt.
+
+    \item \textbf{Componente ágil.} Desarrollo en sprints semanales con Scrum,
+    porque los requisitos evolucionaron (Build, En vivo, Videos, Ventas) y
+    había incertidumbre técnica.
+
+    \item \textbf{Validación iterativa.} Cada componente del modelo se comparó
+    con alternativas y se aceptó solo si mejoraba la medición
+    (Sección~\ref{sec:pruebas}). Ejemplos de respuesta al cambio: pasar de una
+    máquina virtual sin GPU a la computadora local con GPU y cambiar
+    YOLO26s-ReID por OSNet-AIN y PersonViT en Videos.
+\end{enumerate}
 
 \subsection{Cronograma y tareas}
+\label{sec:cronograma}
 
-El proyecto se gestionó con la metodología \textbf{Scrum}, organizada en
-sprints semanales que permitieron trabajar en ciclos cortos de entrega y
-revisión continua. La planificación se lleva en un panel Scrum compartido por
-el equipo, con 16 sprints semanales que cierran cada miércoles con una reunión
-de seguimiento. Su diagrama de Gantt (Figura~\ref{fig:gantt}) muestra, por
-semana, quién ejecuta cada tarea y su porcentaje de avance, y facilita la
-identificación de plazos, dependencias y cargas de trabajo.
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 6, Gestión del Cronograma), y para fines del proyecto, se consideró
+conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Actividades y ruta crítica.} El proyecto se gestionó con la
+    metodología \textbf{Scrum}, organizada en sprints semanales que permitieron
+    trabajar en ciclos cortos de entrega y revisión continua. La planificación
+    se lleva en un panel Scrum compartido por el equipo, con 16 sprints
+    semanales que cierran cada miércoles con una reunión de seguimiento. Su
+    diagrama de Gantt (Figura~\ref{fig:gantt}) muestra, por semana, quién
+    ejecuta cada tarea y su porcentaje de avance, y facilita la identificación
+    de plazos, dependencias y cargas de trabajo. La ruta crítica propuesta
+    (Cuadro~\ref{tab:ruta}) suma 16 semanas; la calibración y el mapa 2D, y la
+    plataforma web, tienen holgura \confirmar{contrastar con el Gantt real}.
+
+    \item \textbf{Burndown y velocidad.} Al cierre del sprint~11 (26 de
+    octubre) el panel (Figura~\ref{fig:avance}) registra 96 tareas: 60
+    completadas (63\,\%), 5 en curso y 31 por iniciar, con un avance promedio
+    de 65.5\,\% repartido de forma pareja entre los integrantes (entre 61\,\%
+    y 69\,\%). Quedaban 36 tareas pendientes frente a las 30 del avance ideal;
+    la velocidad media fue de 5.5 tareas por sprint frente a las 7.2 necesarias
+    para cerrar en los 5 sprints restantes
+    \confirmar{completar el burndown con el historial semanal del panel}.
+
+    \item \textbf{Control y compresión.} Como hay un leve atraso, se prioriza
+    el backlog con MoSCoW (Sección~\ref{sec:alcance}) para asegurar los
+    entregables que se deben y se reasigna carga si hace falta.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Ruta crítica propuesta (16 semanas)}
+\label{tab:ruta}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.05\textwidth}L{0.50\textwidth}R{0.14\textwidth}}
+\toprule
+\textbf{N.\textdegree} & \textbf{Fase} & \textbf{Semanas} \\
+\midrule
+1 & Planificación y datos & 2 \\
+2 & Seguimiento local & 3 \\
+3 & Re-ID multicámara & 3 \\
+4 & Histórico e Insights & 3 \\
+5 & Teléfonos, Videos y Ventas & 2 \\
+6 & Validaciones y pruebas & 2 \\
+7 & Informe final y negocio & 1 \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{Total}} & \textbf{16} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[H]
     \centering
@@ -2876,11 +3127,6 @@ identificación de plazos, dependencias y cargas de trabajo.
     \caption{Diagrama de Gantt por sprints semanales, al 26 de octubre de 2026 (sprint 11).}
     \label{fig:gantt}
 \end{figure}
-
-El resumen del panel (Figura~\ref{fig:avance}) registra, al cierre del sprint
-11, 96 tareas: 60 completadas (63\,\%), 5 en curso y 31 por iniciar, con un
-avance promedio de 65.5\,\% repartido de forma pareja entre los integrantes
-(entre 61\,\% y 69\,\%).
 
 \begin{figure}[H]
     \centering
@@ -2928,10 +3174,148 @@ notebooks del modelo, se encuentra en
 \url{https://github.com/23-Andres-QC/Aeropuerto}, con 247 commits de tres
 autores entre el 30 de septiembre y el 28 de octubre de 2026.
 
-\subsection{Roles y responsabilidades}
+\subsection{Costos y valor ganado}
+\label{sec:costos}
 
-Para distribuir adecuadamente las funciones del equipo se definieron los
-roles del Cuadro~\ref{tab:roles}.
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 7, Gestión de los Costos), y para fines del proyecto, se consideró
+conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Presupuesto (supuestos de trabajo).} El
+    Cuadro~\ref{tab:presupuesto} resume la línea base. Las horas del equipo
+    (640~h a S/~25) son un supuesto
+    \confirmar{valor por hora y horas reales}; la computadora con GPU se
+    amortiza a S/~125 al mes durante 4 meses y el primer despliegue en Google
+    Cloud se estima en un mes de servicio a precio de lista, unos S/~1\,250
+    \confirmar{meses reales}
+    (Cuadro~\ref{tab:costos}).
+
+    \item \textbf{Valor ganado al sprint 11.} Valor planificado:
+    68.75\,\% $\times$ S/~17\,750 $=$ S/~12\,203. Valor ganado:
+    65.5\,\% $\times$ S/~17\,750 $=$ S/~11\,626. Variación del cronograma:
+    $-$S/~577. SPI $=$ 0.95 (0.91 si se mide solo por tareas completadas). El
+    costo real y el CPI requieren las horas efectivamente trabajadas.
+
+    \item \textbf{Pronóstico.} Si el ritmo se mantiene, el cierre tomaría
+    $\approx$ 16.8 sprints, casi uno más de lo previsto.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Presupuesto del proyecto y valor ganado al sprint 11}
+\label{tab:presupuesto}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.52\textwidth}R{0.26\textwidth}}
+\toprule
+\textbf{Concepto} & \textbf{S/} \\
+\midrule
+Horas del equipo (640~h $\times$ S/~25) & 16\,000 \\
+Computadora con GPU (S/~125 $\times$ 4 meses) & 500 \\
+Primer despliegue en Google Cloud & $\approx$ 1\,250 \\
+\textbf{Línea base} & \textbf{17\,750} \\
+Reserva de contingencia (10\,\%) & 1\,775 \\
+\textbf{Presupuesto total} & \textbf{19\,525} \\
+\midrule
+Valor planificado (68.75\,\%) & 12\,203 \\
+Valor ganado (65.5\,\%) & 11\,626 \\
+Variación del cronograma (SV) & $-$577 \\
+SPI & 0.95 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Calidad: métricas y siete herramientas}
+\label{sec:calidad}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 8, Gestión de la Calidad), y para fines del proyecto, se consideró
+conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Métricas de calidad.} El Cuadro~\ref{tab:metricas-calidad}
+    reúne las métricas medidas y su meta. Falta fijar la meta de las últimas
+    métricas \confirmar{metas}.
+
+    \item \textbf{Siete herramientas básicas.} El
+    Cuadro~\ref{tab:siete-herramientas} indica cómo se aplicó cada una.
+
+    \item \textbf{Verificación continua.} Cada imagen ejecuta sus pruebas al
+    construirse, cada ejecución exporta un manifiesto con huellas SHA-256 y
+    los cambios de modelo se aceptan solo si mejoran la medición con videos
+    etiquetados.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Métricas de calidad del proyecto}
+\label{tab:metricas-calidad}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.42\textwidth}L{0.22\textwidth}L{0.20\textwidth}}
+\toprule
+\textbf{Métrica} & \textbf{Resultado} & \textbf{Meta} \\
+\midrule
+Error de calibración mediano & 0.28 a 0.48~m & $<$ 0.75~m \\
+Detecciones ubicadas en el plano & 93\,\% & $>$ 90\,\% \\
+Precisión de la asociación multicámara & 0.99 & $\geq$ 0.95 \\
+Recall de la asociación multicámara & 0.86 & por fijar \\
+IDF1 del seguimiento local & 40\,\% (antes 35\,\%) & por fijar \\
+Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & por fijar \\
+IDs que mezclan personas & 28\,\% (antes 60\,\%) & por fijar \\
+Acierto del género & 91\,\% & por fijar \\
+Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Las siete herramientas básicas de calidad aplicadas al proyecto}
+\label{tab:siete-herramientas}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.22\textwidth}L{0.60\textwidth}}
+\toprule
+\textbf{Herramienta} & \textbf{Aplicación} \\
+\midrule
+Causa y efecto & IDs que mezclan personas: el seguidor decide por movimiento en cruces, ropa parecida, personas lejanas y oclusiones \\
+Pareto & 53\,\% de los saltos de ID ocurre al recuperar a una persona perdida y 47\,\% en cruces \\
+Histograma & Permanencia por zona (Parte~III) \\
+Hoja de verificación & Lista de Definición de Terminado (Sección~\ref{sec:scrum}) \\
+Dispersión & Más personas por cámara, menos cuadros por segundo (el par con más gente: 13 frente a 18 cuadros por segundo) \\
+Gráfico de control & Error de calibración frente al límite de 0.75~m \\
+Diagrama de flujo & Flujo de la metodología (Figura~\ref{fig:flujo}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Roles, organigrama y matriz RACI}
+\label{sec:roles}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 9, Gestión de los Recursos) y PMBOK 7.\textordfeminine{} edición
+(Dominio del equipo, sección 2.2), y para fines del proyecto, se consideró
+conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Organigrama.} Docente del curso (patrocinio)
+    $\rightarrow$ líder del proyecto (Neciosup) $\rightarrow$ Data Scientist
+    (Quiliche), Comunicación y documentación (Almeyda) e Integración (López).
+    LAP es socio externo. Los roles se definieron como en el
+    Cuadro~\ref{tab:roles}.
+
+    \item \textbf{Matriz RACI.} El Cuadro~\ref{tab:raci} asigna cada paquete de
+    la EDT: R responsable, A aprueba, C consultado, I informado. Es una
+    propuesta basada en los roles actuales
+    \confirmar{validar con el equipo}.
+
+    \item \textbf{Recursos físicos y trabajo en equipo.} Computadora con GPU
+    RTX 4060 y teléfonos como cámaras. La carga está equilibrada (avance entre
+    61\,\% y 69\,\% por integrante) y se refuerza con la reunión semanal de
+    cierre y las actas.
+\end{enumerate}
 
 \begin{table}[H]
 \centering
@@ -2958,12 +3342,205 @@ Esta asignación permitió optimizar la colaboración, evitar duplicidades y
 asegurar que los aspectos técnicos, documentales y de coordinación
 estuvieran cubiertos.
 
-\subsection{Gestión de riesgos}
+\begin{table}[H]
+\centering
+\caption{Matriz RACI por paquete de la EDT}
+\label{tab:raci}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.38\textwidth}cccc}
+\toprule
+\textbf{Paquete (EDT)} & \textbf{Neciosup} & \textbf{Quiliche} & \textbf{Almeyda} & \textbf{López} \\
+\midrule
+1 Gestión del proyecto & A/R & C & C & C \\
+2 Seguimiento local & C & A/R & I & C \\
+3 Multicámara y Re-ID & C & A/R & I & C \\
+4 Calibración y mapa 2D & R & A & I & C \\
+5 Histórico e Insights & C & A & I & R \\
+6 Plataforma & C & C & I & A/R \\
+7 Teléfonos, Videos y Ventas & C & A & I & R \\
+8 Validación y pruebas & A & R & I & C \\
+9 Documentación y negocio & R & C & A/R & C \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-Durante la ejecución se estableció un plan de gestión de riesgos centrado
-en el \textbf{posible abandono de un integrante}, considerado el riesgo
-más crítico por la dependencia de actividades especializadas. El plan
-tiene los siguientes componentes.
+\subsection{Comunicaciones y habilidades blandas}
+\label{sec:comunicaciones}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 10, Gestión de las Comunicaciones) y PMBOK 7.\textordfeminine{} edición
+(sección 2.5.4), y para fines del proyecto, se consideró conveniente tener
+\textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Matriz de comunicaciones.} El
+    Cuadro~\ref{tab:comunicaciones} define qué se comunica, a quién, con qué
+    frecuencia y quién es responsable.
+
+    \item \textbf{Habilidades blandas.} \textit{Liderazgo y motivación:} el
+    líder reparte tareas por rol y revisa el avance cada semana.
+    \textit{Negociación y resolución de conflictos:} priorizar entre
+    profundizar el modelo y completar plataforma y plan de negocio con plazo
+    fijo \confirmar{reemplazar por un ejemplo real del equipo}.
+
+    \item \textbf{Registro de lecciones.} Las actas semanales documentan
+    compromisos y su cumplimiento, y alimentan las lecciones aprendidas
+    (Sección~\ref{sec:lecciones}).
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Matriz de comunicaciones}
+\label{tab:comunicaciones}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.30\textwidth}L{0.20\textwidth}L{0.16\textwidth}L{0.16\textwidth}}
+\toprule
+\textbf{Comunicación} & \textbf{Destinatarios} & \textbf{Frecuencia} & \textbf{Responsable} \\
+\midrule
+Reunión de seguimiento y cierre de sprint & Equipo & Semanal (miércoles) & Líder \\
+Actas con tareas y estado & Equipo y docente & Semanal & Líder \\
+Panel Scrum y Gantt & Equipo & Continua & Equipo \\
+Repositorio Git (247 commits) & Equipo técnico & Continua & López \\
+Informe y presentaciones & Docente & Según hitos & Almeyda y Neciosup \\
+Coordinación con LAP & LAP & Por hito & Neciosup \\
+Mensajería diaria \confirmar{canal} & Equipo & Diaria & Equipo \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Adquisiciones}
+\label{sec:adquisiciones}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 12, Gestión de las Adquisiciones), y para fines del proyecto, se
+consideró conveniente tener \textbf{3 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Hardware y nube.} Computadora con GPU RTX 4060 propia
+    ($\approx$ S/~4\,500 de referencia), teléfonos de los integrantes sin costo
+    y, en el primer despliegue, una máquina virtual de Google Cloud
+    ($\approx$ US\$~334.80 al mes a precio de lista) reemplazada por la
+    computadora local.
+
+    \item \textbf{Modelos y software.} YOLO26 (Ultralytics) es gratuito con
+    licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT,
+    CLIP y ResNet18 son preentrenados y su licencia debe verificarse
+    \confirmar{licencias}. PostgreSQL, PostGIS, pgvector, Go, Vue y Docker son
+    de código abierto.
+
+    \item \textbf{Datos del aeropuerto.} El acceso a video real depende de LAP
+    y requiere un marco contractual de tratamiento de datos
+    \confirmar{estado actual}.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Matriz de adquisiciones}
+\label{tab:adquisiciones}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.25\textwidth}L{0.14\textwidth}L{0.18\textwidth}L{0.27\textwidth}}
+\toprule
+\textbf{Ítem} & \textbf{Tipo} & \textbf{Fuente} & \textbf{Costo o condición} \\
+\midrule
+Computadora con GPU RTX 4060 & Hardware & Propia & $\approx$ S/~4\,500 de referencia \\
+Teléfonos como cámaras & Hardware & Integrantes & Sin costo \\
+Máquina virtual de Google Cloud & Servicio & Google Cloud & $\approx$ US\$~334.80 al mes; reemplazada por la computadora local \\
+YOLO26 (detector) & Modelo & Ultralytics & Gratuito, licencia AGPL; resolver antes de uso comercial \\
+OSNet-AIN, PersonViT, CLIP, ResNet18 & Modelos & Preentrenados & Verificar licencia \\
+PostgreSQL, PostGIS, pgvector, Go, Vue, Docker & Software & Código abierto & Sin costo \\
+Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de datos \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Gestión de riesgos}
+\label{sec:riesgos}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(capítulo 11, Gestión de los Riesgos) y PMBOK 7.\textordfeminine{} edición
+(sección 2.5.7), y para fines del proyecto, se consideró conveniente tener
+\textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Identificación.} Se conserva el plan sobre el abandono de un
+    integrante (R1), descrito al final de esta sección. Se suman: R2 sin video
+    anotado del aeropuerto; R3 re-identificación imperfecta; R4 dependencia de
+    una sola computadora con GPU; R5 retraso del cronograma; R6
+    incumplimiento de la Ley N.\textdegree~29733; R7 licencia AGPL del
+    detector; R8 acceso a datos con LAP; R9 cámaras de calidad variable; R10
+    sesgo en la estimación de género.
+
+    \item \textbf{Análisis cualitativo.} Probabilidad (P) e impacto (I) de 1 a
+    5; nivel $=$ P $\times$ I (Cuadros~\ref{tab:riesgos} y~\ref{tab:matriz-riesgos}).
+    Altos: R2 y R3 ($4 \times 4 = 16$). Medios: R4, R5 y R8 (12), R1 y R6
+    (10), R7, R9 y R10 (9) \confirmar{calificar con el equipo}.
+
+    \item \textbf{Estructura de desglose (RBS).} Técnico: R2, R3, R9.
+    Infraestructura: R4. Gestión y organización: R1, R5. Legal y ético: R6,
+    R7, R10. Externo: R8.
+
+    \item \textbf{Respuesta y seguimiento.} Mitigar con documentación, actas y
+    Git (R1); modelos preentrenados y validación en ESAN (R2); galería global
+    y reglas físicas (R3); respaldo y contenedores (R4); priorización MoSCoW
+    (R5); sin rostros, retención limitada y señalización (R6); evaluar un
+    detector libre (R7); marco contractual (R8). Los riesgos se revisan en la
+    reunión semanal.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\caption{Registro de riesgos con análisis cualitativo (propuesta)}
+\label{tab:riesgos}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.05\textwidth}L{0.30\textwidth}L{0.17\textwidth}ccc}
+\toprule
+\textbf{ID} & \textbf{Riesgo} & \textbf{RBS} & \textbf{P} & \textbf{I} & \textbf{P$\times$I} \\
+\midrule
+R1 & Abandono de un integrante & Gestión & 2 & 5 & 10 \\
+R2 & Sin video anotado del aeropuerto & Técnico & 4 & 4 & 16 \\
+R3 & Re-identificación imperfecta & Técnico & 4 & 4 & 16 \\
+R4 & Dependencia de una sola computadora con GPU & Infraestructura & 3 & 4 & 12 \\
+R5 & Retraso del cronograma & Gestión & 4 & 3 & 12 \\
+R6 & Incumplimiento de la Ley N.\textdegree~29733 & Legal y ético & 2 & 5 & 10 \\
+R7 & Licencia AGPL del detector & Legal y ético & 3 & 3 & 9 \\
+R8 & Acceso a datos con LAP & Externo & 3 & 4 & 12 \\
+R9 & Cámaras de calidad variable & Técnico & 3 & 3 & 9 \\
+R10 & Sesgo en la estimación de género & Legal y ético & 3 & 3 & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Matriz de probabilidad e impacto (oscuro: alto; medio: medio; claro: bajo)}
+\label{tab:matriz-riesgos}
+\footnotesize
+\renewcommand{\arraystretch}{1.5}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{c|c|c|c|c|c}
+\multicolumn{1}{c}{} & \multicolumn{5}{c}{\textbf{Impacto}} \\
+\textbf{Prob.} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} \\
+\hline
+\textbf{5} & \cellcolor{gray!25} & \cellcolor{gray!45} & \cellcolor{gray!45} & \cellcolor{gray!70} & \cellcolor{gray!70} \\
+\hline
+\textbf{4} & \cellcolor{gray!25} & \cellcolor{gray!25} & \cellcolor{gray!45}R5 & \cellcolor{gray!70}R2, R3 & \cellcolor{gray!70} \\
+\hline
+\textbf{3} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!45}R7, R9, R10 & \cellcolor{gray!45}R4, R8 & \cellcolor{gray!70} \\
+\hline
+\textbf{2} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!25} & \cellcolor{gray!45} & \cellcolor{gray!45}R1, R6 \\
+\hline
+\textbf{1} & \cellcolor{gray!10} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!25} & \cellcolor{gray!25} \\
+\end{tabular}
+\end{table}
+
+El plan principal de gestión de riesgos, vigente desde el inicio de la
+ejecución, se centra en el \textbf{posible abandono de un integrante},
+considerado el riesgo más crítico por la dependencia de actividades
+especializadas. Tiene los siguientes componentes.
 
 \begin{itemize}
     \item \textbf{Propósito.} Definir acciones preventivas y correctivas
@@ -3014,6 +3591,66 @@ tiene los siguientes componentes.
 Este enfoque permitió anticipar escenarios adversos, reducir la
 incertidumbre y mantener el control durante toda la ejecución del
 proyecto.
+
+\subsection{Scrum aplicado}
+\label{sec:scrum}
+
+\textit{Teniendo en cuenta la metodología de la Scrum Guide~\cite{scrumguide}
+(marco Scrum, unidad 4 del curso), y para fines del proyecto, se consideró
+conveniente tener \textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Roles.} Product Owner:
+    \confirmar{¿docente, LAP representado o un integrante?} Scrum Master:
+    Neciosup (líder) \confirmar{confirmar}. Equipo de desarrollo: Quiliche,
+    Almeyda, López y Neciosup.
+
+    \item \textbf{Eventos.} Sprint semanal (16 en total). Sprint Planning:
+    asignación de tareas en el panel y las actas. Daily:
+    \confirmar{¿hubo?} Sprint Review: reunión de cierre de los miércoles
+    frente al Gantt. Retrospectiva: \confirmar{fecha y mejoras}.
+
+    \item \textbf{Artefactos y Definición de Terminado.} Product Backlog:
+    requisitos y casos de uso priorizados. Sprint Backlog: tareas del panel
+    (96 al sprint 11). Incremento: funcionalidad probada por bloque
+    (seguimiento local, Re-ID, mapa 2D y primera validación, Parte~III y
+    plataforma, Teléfonos, Videos y Ventas)
+    \confirmar{verificar contra el panel}. \textit{Terminado} significa:
+    funciona en la computadora de despliegue, pasan las pruebas automáticas, se
+    valida con datos etiquetados cuando aplica y queda registrado en el
+    repositorio y el acta.
+
+    \item \textbf{Mejora continua.} Mejoras ya documentadas: pasar de la
+    máquina virtual sin GPU (4 a 6 cuadros por segundo) a la computadora con
+    GPU; aceptar cambios de modelo solo si mejoran la medición; procesar por
+    lotes a 5 cuadros por segundo para siete cámaras
+    \confirmar{agregar mejoras de proceso del equipo}.
+\end{enumerate}
+
+\subsection{Lecciones aprendidas}
+\label{sec:lecciones}
+
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+(registro de lecciones aprendidas, capítulos 4 y 10), y para fines del
+proyecto, se consideró conveniente tener \textbf{4 puntos}:}
+
+\begin{enumerate}
+    \item \textbf{Hardware.} La máquina virtual sin GPU procesaba 4 a 6 cuadros
+    por segundo; el hardware debe dimensionarse al inicio.
+
+    \item \textbf{Validación con datos.} Comparar cada componente con
+    alternativas evita decidir a ojo; mantener un conjunto etiquetado de
+    validación.
+
+    \item \textbf{Calibración.} En el comedor, usar la focal de otra grabación
+    impedía unir a los caminantes; conviene calibrar con referencias de cada
+    escenario.
+
+    \item \textbf{Gestión.} La privacidad se diseñó desde el inicio, el
+    seguimiento semanal detectó el leve atraso (SPI 0.95) y el seguimiento
+    local (IDF1 40\,\%) sigue siendo el límite técnico
+    \confirmar{agregar lecciones de gestión del equipo}.
+\end{enumerate}
 
 \section{Algoritmos}
 \label{sec:algoritmos}
@@ -4905,6 +5542,23 @@ Reglamento de la Ley N.\textdegree~29733, Ley de Protección de Datos
 Personales,'' 2024. [En línea]. Disponible:
 \url{https://www.gob.pe/institucion/anpd/normas-legales/6554453-n-016-2024-jus}
 
+
+\bibitem{pmbok6}
+Project Management Institute, \textit{A Guide to the Project Management Body of
+Knowledge (PMBOK Guide)}, 6.\textordfeminine{} ed. Newtown Square, PA: PMI, 2017.
+
+\bibitem{pmbok7}
+Project Management Institute, \textit{The Standard for Project Management and A
+Guide to the Project Management Body of Knowledge (PMBOK Guide)},
+7.\textordfeminine{} ed. Newtown Square, PA: PMI, 2021.
+
+\bibitem{axelos2017}
+AXELOS, \textit{Managing Successful Projects with PRINCE2}, edición 2017.
+Londres: The Stationery Office (TSO), 2018.
+
+\bibitem{scrumguide}
+K.~Schwaber y J.~Sutherland, \textit{The Scrum Guide}, 2017. [En línea].
+Disponible: \url{https://www.scrumguides.org}
 
 \end{thebibliography}
 \endgroup
