@@ -4284,7 +4284,8 @@ el primer mensaje del WebSocket, nunca en la URL.
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
-\caption{Cuentas: usuarios con sus roles, estado y último ingreso.}
+\caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
+se taparon en la figura).}
 \label{fig:cuentas}
 \end{figure}
 
@@ -4650,8 +4651,10 @@ nueve secciones, y cada rol ve solo las suyas:
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/web-configuracion.png}
-\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio,
-umbrales de tráfico.}
+\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
+las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
+cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
+pegada al comedor), y umbrales de tráfico.}
 \label{fig:web-config}
 \end{figure}
 
@@ -4666,7 +4669,9 @@ el resumen de cada video.}
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/insights.png}
-\caption{Insights de una captura en vivo: personas, permanencia, captación y densidad.}
+\caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
+Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
+de tiempo y resumen de la sesión.}
 \label{fig:web-insights}
 \end{figure}
 
@@ -4689,8 +4694,8 @@ pronóstico, patrones, emparejamiento, tickets y datos.}
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
-\caption{Teléfonos: código de unión en QR, cámaras conectadas y memoria de
-personas, que se olvida tras 24 horas.}
+\caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
+conectadas y memoria de personas, que se olvida tras 24 horas.}
 \label{fig:web-telefonos}
 \end{figure}
 
@@ -5042,7 +5047,7 @@ más gente a la vez que el comedor, y de 2 a 3 veces más que la primera
 grabación del pasillo; aun
 así se procesaron al ritmo del video, unas 14 pasadas por segundo de las dos
 cámaras, en la GPU de la computadora local dentro de Docker
-(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:pasillo-calor}).
+(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:insights-09nov-web}).
 
 \begin{table}[H]
 \caption{Grabaciones de zonas con dos teléfonos: de menos a más gente}
@@ -5098,14 +5103,25 @@ posición y el rumbo de cada cámara.}
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-plano-calor.png}
-\caption{Patio, 9 de noviembre, como se ve en En vivo: a la izquierda, el
-seguimiento a los 104~s, con 27 personas en el plano, su ID global, su rastro
+\caption{Patio, 9 de noviembre, con el cálculo de En vivo: a la izquierda, el
+seguimiento a los 104~s, con 27 personas detectadas en ese momento, su ID global, su rastro
 de los últimos 10~s y en gris la última posición de quien ya salió; a la
 derecha, el mapa de calor de toda la sesión, con el mismo cálculo y la misma
 escala de color de la plataforma (celdas de 0.5~m, hasta 40 puntos por
 persona y celda). La mayor presencia está en el centro del patio, donde se
 cruzan las vistas de las dos cámaras.}
 \label{fig:patio-09nov-calor}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-en-vivo-web.png}
+\caption{La misma grabación del patio en la plataforma (En vivo, «Ir a:
+Patio»), a los 104~s: seguimiento, mapa de calor y la lista de quién está en
+ese instante, con las cámaras que lo vieron y su tiempo en el plano. La
+plataforma marca 34 en el plano porque cuenta también a quien está entre dos
+detecciones, con su posición estimada.}
+\label{fig:patio-09nov-web}
 \end{figure}
 
 \begin{figure}[H]
@@ -5122,13 +5138,33 @@ cam06, dobla en la esquina noreste y sale por el brazo este, bajo cam07.}
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-plano-calor.png}
-\caption{Pasillo del Edificio D, 9 de noviembre, como se ve en En vivo: a la
-izquierda, el seguimiento a los 124.5~s, con 17 personas en el plano (G133
+\caption{Pasillo del Edificio D, 9 de noviembre, con el cálculo de En vivo: a la
+izquierda, el seguimiento a los 124.5~s, con 17 personas detectadas en ese momento (G133
 sale bajo cam07, como en la Figura~\ref{fig:pasillo-camaras}); a la derecha,
 el mapa de calor de toda la sesión, calculado como en la plataforma. El calor
 marca el camino de la escalera por el brazo norte, la esquina noreste y el
 brazo este hasta cam07.}
 \label{fig:pasillo-calor}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-en-vivo-web.png}
+\caption{La grabación del pasillo en la plataforma (En vivo, «Ir a: Pasillo
+del Edificio D»), a los 124.5~s: 128 personas en la sesión y 18 en el plano,
+con el seguimiento sobre la L del pasillo, junto al comedor, y el mapa de calor
+de la escalera de cam06 al brazo este de cam07.}
+\label{fig:pasillo-web}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/insights-09nov-web.png}
+\caption{Insights de las dos grabaciones del 9 de noviembre: arriba el pasillo
+(128 personas, 33\,815 puntos, 2~min 34~s), abajo el patio (149 personas,
+64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan «sin
+determinar».}
+\label{fig:insights-09nov-web}
 \end{figure}
 
 Lo que muestran estas grabaciones:
