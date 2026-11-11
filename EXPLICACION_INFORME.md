@@ -394,7 +394,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 ---
 
 ## 12. Estructura del informe
-Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra secciones y subsecciones.
+Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra solo las secciones.
 
 - Resumen ejecutivo
 1. Introducción y objetivos
