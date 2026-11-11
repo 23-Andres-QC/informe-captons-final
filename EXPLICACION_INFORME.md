@@ -215,7 +215,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - El video se borra al terminar; queda solo el resumen.
 
 **6.4 Grabaciones de las zonas (patio, comedor y pasillo del Edificio D):**
-- Las dos cámaras de una zona van como una tanda de Videos (*solo multitracking*), cada una con su desfase en segundos.
+- Las dos cámaras de una zona van como una tanda de Videos, cada una con su desfase en segundos.
 - **Ubicación por referencias:** 24 cuadros de cada video se comparan (SIFT + RANSAC) con las referencias del en vivo de su cámara (A = cam01, B = cam02, E = cam06, F = cam07); la homografía final es la mediana. Sirve aunque el teléfono se mueva.
 - **IDs lejanos:** con cajas de menos de ~50 px el Re-ID no reconoce a nadie. Quien desaparece y reaparece donde debía (velocidad, altura, color de ropa) sigue con su ID; si la otra cámara la ve en el mismo punto y de cerca, toma ese ID.
 - En el video, sobre cada persona va solo su ID global (G133) en una etiqueta de su color, sin caja.
@@ -409,10 +409,8 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 7. Planificación (Scrum y riesgos)
 8. Algoritmos
 9. Arquitectura
-10. Prueba en ESAN, Edificios A y B
-11. Prueba en ESAN, comedor
-12. Prueba en ESAN, pasillo del Edificio D
-13. Prueba con más gente (patio y pasillo, 9 de noviembre)
-14. Validación y estrés
-15. Plan de negocio
-16. Referencias
+10. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
+11. Validación y estrés
+12. Plan de negocio
+13. Referencias
+14. Anexo
