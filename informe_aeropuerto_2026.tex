@@ -5641,6 +5641,42 @@ Extra & Valor de locales & Índice de valor por local y renta sugerida & S/~15\,
 \end{tabular}
 \end{table}
 
+Para que el cliente elija cómo pagar, los mismos precios se ofrecen en tres
+modalidades: \textit{semanal}, para quien solo necesita una medición corta;
+\textit{mensual}, para quien quiere seguimiento continuo; y \textit{por uso},
+para quien prefiere pagar solo las horas de video que se procesan. El
+Cuadro~\ref{tab:planes} muestra la equivalencia de cada precio de lista en las
+tres modalidades. Los planes semanal y por uso son equivalencias calculadas a
+partir de los precios del Cuadro~\ref{tab:precios}, no precios nuevos, y deben
+validarse con clientes durante el plan de validación comercial.
+
+\begin{table}[H]
+\caption{Planes de servicio y su equivalencia semanal, mensual y por uso (sin IGV)}
+\label{tab:planes}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.20\textwidth}|L{0.22\textwidth}|L{0.20\textwidth}|L{0.24\textwidth}|}
+\hline
+\textbf{Plan} & \textbf{Semanal} & \textbf{Mensual} & \textbf{Por uso} \\
+\hline
+Diagnóstico de captación (tienda) & S/~450 por semana (S/~900 por 2 semanas) & Pago único de entrada & -- \\
+\hline
+Monitoreo de captación (tienda) & $\approx$ S/~35 por semana & S/~149 por tienda (2 cámaras) y S/~75 por cámara adicional & $\approx$ S/~0.28 por cámara y por hora de video procesada (12 horas al día) \\
+\hline
+Estudio de audiencia (lugar) & S/~2\,000 por semana (S/~4\,000 por 2 semanas) & Pago único de entrada & -- \\
+\hline
+Certificación de audiencia (pantalla) & $\approx$ S/~42 por semana & S/~180 por pantalla & $\approx$ S/~2.00 por cámara y por hora de video procesada (3 horas pico al día) \\
+\hline
+\end{tabular}
+\end{table}
+
+La equivalencia semanal divide el precio mensual entre 4.3 semanas; la de uso
+divide el precio mensual entre las horas procesadas al mes (360 en una tienda y
+90 en una pantalla, según el Cuadro~\ref{tab:costo-camara}). Con la plantilla
+de costos de ese cuadro, el plan por uso mantiene el mismo margen bruto que el
+plan mensual, porque cobra lo mismo por el mismo trabajo.
+
 \subsection{Costo por cámara y capacidad medida}
 
 Este análisis calcula cuánto cuesta atender a un cliente y cuánto queda
@@ -5804,6 +5840,106 @@ Nadie compra en 2027 & -- & -- & La reserva sigue intacta \\
 \hline
 \end{tabular}
 \end{table}
+
+\subsection{Evaluación financiera: VAN, TIR y COK}
+
+Para saber si el negocio crea valor se compara lo que se invierte hoy con lo que
+se espera recibir en los años siguientes, llevado a valor presente. El
+\textbf{COK} (costo de oportunidad del capital) es la rentabilidad anual mínima
+que los fundadores exigen a su dinero, porque podrían obtenerla en otra
+alternativa de riesgo parecido; se usa como tasa de descuento. El \textbf{VAN}
+(valor actual neto) es la suma de los flujos futuros descontados al COK menos la
+inversión inicial,
+\[
+\mathrm{VAN} = -I_0 + \sum_{t=1}^{n} \frac{F_t}{(1+\mathrm{COK})^{t}},
+\]
+y el proyecto crea valor si es mayor que cero. La \textbf{TIR} (tasa interna de
+retorno) es la tasa que hace el VAN igual a cero; el proyecto es atractivo si
+supera al COK.
+
+\textbf{Datos usados.} La inversión inicial $I_0$ es la línea base de costos del
+proyecto, S/~19\,525 (Cuadro~\ref{tab:presupuesto}); la reserva de S/~5\,000 no
+se gasta y no se incluye. Los flujos $F_t$ son la caja para el equipo de cada
+año del escenario base (Cuadro~\ref{tab:crecimiento}): S/~30\,800 (2027),
+S/~79\,000 (2028), S/~222\,000 (2029), S/~490\,000 (2030) y S/~927\,000 (2031),
+sin valor de rescate al final del horizonte de cinco años. El \textbf{COK} es un
+supuesto de trabajo de 20\,\% anual, propio de un negocio de tecnología en etapa
+inicial, y debe confirmarse con el docente; por eso se muestra también con otros
+valores.
+
+\begin{table}[H]
+\caption{VAN y TIR del escenario base, con COK de 20\,\%}
+\label{tab:van-base}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.14\textwidth}|R{0.20\textwidth}|R{0.20\textwidth}|R{0.22\textwidth}|}
+\hline
+\textbf{Año} & \textbf{Flujo (S/)} & \textbf{Factor $1/(1.20)^t$} & \textbf{Valor presente (S/)} \\
+\hline
+0 (inversión) & $-$19\,525 & 1.0000 & $-$19\,525 \\
+\hline
+2027 & 30\,800 & 0.8333 & 25\,667 \\
+\hline
+2028 & 79\,000 & 0.6944 & 54\,861 \\
+\hline
+2029 & 222\,000 & 0.5787 & 128\,472 \\
+\hline
+2030 & 490\,000 & 0.4823 & 236\,304 \\
+\hline
+2031 & 927\,000 & 0.4019 & 372\,541 \\
+\hline
+\textbf{VAN} & & & \textbf{S/~798\,320} \\
+\hline
+\textbf{TIR} & & & \textbf{$\approx$ 294\,\%} \\
+\hline
+Relación beneficio--costo & & & $\approx$ 41.9 \\
+\hline
+\end{tabular}
+\end{table}
+
+El VAN es positivo y la TIR (294\,\%) supera con holgura al COK (20\,\%), por lo
+que el negocio crea valor en el escenario base. La inversión se recupera dentro
+del primer año de ventas (2027), cuando entran S/~30\,800 frente a S/~19\,525
+invertidos. La TIR es muy alta porque la inversión es pequeña: el software ya se
+desarrolló en el curso y la caja inicial no se compromete hasta la primera
+venta. Por eso conviene leerla junto con el VAN y con los escenarios adversos
+del Cuadro~\ref{tab:van-sens}, que reducen todos los flujos por igual (un
+recorte simple, no una proyección por año).
+
+\begin{table}[H]
+\caption{Sensibilidad del VAN y la TIR}
+\label{tab:van-sens}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.38\textwidth}|R{0.16\textwidth}|R{0.16\textwidth}|R{0.14\textwidth}|}
+\hline
+\textbf{Escenario} & \textbf{COK} & \textbf{VAN (S/)} & \textbf{TIR} \\
+\hline
+Base & 15\,\% & 954\,003 & 294\,\% \\
+\hline
+Base & 20\,\% & 798\,320 & 294\,\% \\
+\hline
+Base & 25\,\% & 673\,802 & 294\,\% \\
+\hline
+Base & 30\,\% & 573\,190 & 294\,\% \\
+\hline
+Base & 40\,\% & 423\,597 & 294\,\% \\
+\hline
+Flujos al 50\,\% & 20\,\% & 389\,397 & 194\,\% \\
+\hline
+Flujos al 25\,\% & 20\,\% & 184\,936 & 130\,\% \\
+\hline
+\end{tabular}
+\end{table}
+
+El VAN sigue siendo positivo con cualquier COK probado (15 a 40\,\%) y aun si los
+flujos se reducen a la cuarta parte, lo que coincide con la prueba de estrés del
+Cuadro~\ref{tab:estres-financiero}. Las limitaciones son que el COK es un
+supuesto, que los flujos son proyecciones sin ventas reales todavía y que la
+inversión excluye el costo de oportunidad de los fundadores más allá de las
+640~horas valoradas a S/~25.
 
 \subsection{Plan de validación comercial y cronograma}
 
@@ -6110,6 +6246,27 @@ prueba (Figura~\ref{fig:comedor-participantes}).
 \caption{Participantes de la prueba en el comedor de ESAN, todos con
 autorización para ser grabados.}
 \label{fig:comedor-participantes}
+\end{figure}
+
+Además, la Figura~\ref{fig:pruebas-participantes} muestra al grupo de
+personas que participó en las pruebas del proyecto.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.75\linewidth]{figuras/validacion/pruebas-participantes.png}
+\caption{Personas participantes en las pruebas del proyecto.}
+\label{fig:pruebas-participantes}
+\end{figure}
+
+La Figura~\ref{fig:pruebas-area-mapeada} muestra una vista desde lo alto del
+proceso de prueba: los participantes se desplazan por el área mapeada, mientras
+el sistema ubica a cada persona sobre el plano.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.45\linewidth]{figuras/validacion/pruebas-area-mapeada.png}
+\caption{Proceso de prueba y ubicación de las personas en el área mapeada.}
+\label{fig:pruebas-area-mapeada}
 \end{figure}
 
 \clearpage
