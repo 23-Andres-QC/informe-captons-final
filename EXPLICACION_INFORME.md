@@ -389,7 +389,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - **Crecimiento sin capital externo:**
   - para fines de 2027: 10 tiendas y 10 pantallas;
   - en 2027 entran unos S/ 51 mil;
-  - a fin de año, el ingreso recurrente de unos S/ 3 300 al mes cubre el 73 % del pago a los fundadores.
+  - a fin de año, el ingreso recurrente de unos S/ 3 300 al mes cubre el 75 % del pago a los cuatro fundadores (S/ 1 100 al mes cada uno desde junio de 2027).
 
 ---
 
