@@ -87,10 +87,12 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 }
 
 % Imagen dentro de un cuadro de lado #1, centrada y sin deformarla
+\newlength{\ladocuadro}
 \newcommand{\cuadro}[2]{%
-    {\setlength{\fboxsep}{0pt}\fcolorbox{gray!40}{white}{%
-        \parbox[c][#1][c]{#1}{\centering
-            \safeincludegraphics[width=#1,height=#1,keepaspectratio]{#2}}}}%
+    {\setlength{\ladocuadro}{#1}%
+     \setlength{\fboxsep}{0pt}\fcolorbox{gray!40}{white}{%
+        \parbox[c][\ladocuadro][c]{\ladocuadro}{\centering
+            \safeincludegraphics[width=\ladocuadro,height=\ladocuadro,keepaspectratio]{#2}}}}%
 }
 
 \newcommand{\confirmar}[1]{\colorbox{yellow}{\footnotesize [CONFIRMAR: #1]}}
@@ -6243,7 +6245,7 @@ prueba (Figura~\ref{fig:comedor-participantes}).
 
 \begin{figure}[H]
 \centering
-\cuadro{0.44\linewidth}{figuras/validacion/comedor-participantes.png}
+\safeincludegraphics[width=0.6\linewidth]{figuras/validacion/comedor-participantes-recorte.png}
 \caption{Participantes de la prueba en el comedor de ESAN, todos con
 autorización para ser grabados.}
 \label{fig:comedor-participantes}
