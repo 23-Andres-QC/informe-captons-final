@@ -24,7 +24,7 @@
 \usepackage{needspace}
 \usepackage{colortbl}
 \usetikzlibrary{shapes,arrows,positioning}
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 
 \usepackage{algorithm}
 \floatname{algorithm}{Algoritmo}
@@ -145,11 +145,31 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \end{titlepage}
 
 {\small
+\setlength{\parskip}{1pt}
+\makeatletter
+\renewcommand*\l@section[2]{%
+  \addpenalty\@secpenalty
+  \addvspace{0.6em \@plus\p@}%
+  \setlength\@tempdima{1.8em}%
+  \begingroup
+    \parindent \z@ \rightskip \@pnumwidth
+    \parfillskip -\@pnumwidth
+    \leavevmode \bfseries
+    \advance\leftskip\@tempdima
+    \hskip -\leftskip
+    #1\nobreak\hfil
+    \nobreak\hb@xt@\@pnumwidth{\hss #2}%
+    \kern-\p@\kern\p@
+    \par
+  \endgroup}
+\renewcommand*\l@subsection{\@dottedtocline{2}{1.8em}{2.6em}}
+\makeatother
 \tableofcontents
 }
 \newpage
 
-\section{Resumen Ejecutivo}
+\section*{Resumen ejecutivo}
+\addcontentsline{toc}{section}{Resumen ejecutivo}
 
 El proyecto AeroVision desarrolla un sistema de visión computacional
 multicámara orientado a asistir la gestión operativa y comercial del
@@ -243,7 +263,7 @@ algorítmico y uso del sistema.
 
 \section{Introducción}
 
-\subsection{Contextualización del Problema}
+\subsection{Contextualización del problema}
 
 La congestión comercial mal gestionada es uno de los problemas operativos
 más recurrentes en los aeropuertos internacionales de alto tránsito. Las
@@ -267,7 +287,7 @@ locales cercanos? Esta desconexión entre la gestión del espacio comercial
 y la analítica del comportamiento del pasajero es el vacío que AeroVision
 busca cerrar.
 
-\subsection{Importancia e Impacto}
+\subsection{Importancia e impacto}
 
 Resolver esta desconexión tiene consecuencias directas tanto para la
 operación aeroportuaria como para el negocio comercial de la terminal.
@@ -292,7 +312,7 @@ comparación entre locales, mejoraría la planificación de recursos de LAP
 y sentaría un precedente para la analítica de video responsable en la
 región, en cumplimiento de la Ley N.\textdegree~29733.
 
-\subsection{Motivación desde la Ingeniería}
+\subsection{Motivación desde la ingeniería}
 
 Desde la perspectiva de la ingeniería, re-identificar pasajeros entre
 cámaras sin biometría facial plantea retos técnicos concretos. Las
@@ -332,7 +352,7 @@ integrando detección, seguimiento multicámara, re-identificación sin
 biometría, mapeo espacial y minería de patrones históricos en un solo
 pipeline desplegable, bajo un marco ético explícito.
 
-\subsection{Objetivos General y Específicos}
+\subsection{Objetivos general y específicos}
 
 \begin{itemize}
     \item \textbf{Objetivo general:}
@@ -375,9 +395,9 @@ pipeline desplegable, bajo un marco ético explícito.
     \end{enumerate}
 \end{itemize}
 
-\section{Planteamiento del Problema y Análisis del Contexto}
+\section{Planteamiento del problema y análisis del contexto}
 
-\subsection{Descripción del Caso}
+\subsection{Descripción del caso}
 
 El Aeropuerto Internacional Jorge Chávez recibe diariamente un volumen
 alto de pasajeros que la infraestructura comercial de la terminal no
@@ -396,7 +416,7 @@ terminal. Esta complejidad, sumada a la falta de herramientas
 automáticas, afecta tanto la gestión operativa de la congestión como las
 decisiones comerciales de los locales.
 
-\subsection{Identificación de Variables}
+\subsection{Identificación de variables}
 
 El proyecto distingue tres grupos de variables: operativas y de datos,
 técnicas del pipeline, y de desempeño. Además, se identifican
@@ -456,7 +476,7 @@ y Law~\cite{wonglaw2023}.
     escenas aeroportuarias no vistas~\cite{zhou2026}.
 \end{itemize}
 
-\subsection{Restricciones del Proyecto}
+\subsection{Restricciones del proyecto}
 
 \subsubsection{Restricciones técnicas}
 \begin{itemize}
@@ -510,7 +530,7 @@ una se detallan en el análisis ético.
     comerciales no aprobados.
 \end{itemize}
 
-\subsection{Análisis Técnico, Legal, Ético, Social y Ambiental}
+\subsection{Análisis técnico, legal, ético, social y ambiental}
 
 Todo proyecto opera bajo restricciones internas y externas que
 condicionan su éxito. De acuerdo con el Project Management Institute~\cite{pmbok6}, las
@@ -977,11 +997,11 @@ cámaras a la vez, y el plan de negocio prevé procesar por lotes solo las horas
 necesarias, a 5 cuadros por segundo, en lugar de mantener el modelo encendido
 todo el día.
 
-\section{Marco Teórico}
+\section{Marco teórico}
 \label{sec:related}
 
-A continuación se presentan los antecedentes utilizados como referencia
-para el proyecto. La gestión de la congestión aeroportuaria y la
+Esta sección reúne los conceptos en que se apoya el sistema y los antecedentes
+utilizados como referencia para el proyecto. La gestión de la congestión aeroportuaria y la
 comprensión del comportamiento comercial del pasajero han sido abordadas
 de forma parcial por distintas líneas de investigación en visión
 computacional aplicada a espacios públicos de alto tránsito. Una línea se
@@ -1007,6 +1027,56 @@ estandarización de métricas para eventos en video, el tracking multivista
 unificado y tres despliegues evaluados sobre CCTV de aeropuertos o
 entornos comerciales reales, que constituyen el precedente más cercano al
 dominio de este trabajo.
+
+\subsection{Bases conceptuales}
+\label{sec:bases}
+
+El sistema combina técnicas conocidas de visión por computadora y de análisis
+de datos espaciales:
+
+\begin{itemize}
+    \item \textbf{Detección de personas.} Un detector de objetos marca a cada
+    persona del cuadro con una caja y una confianza. YOLO26~\cite{yolo26} es un
+    detector de una sola etapa: predice las cajas y sus clases en una sola
+    pasada de la red, lo que permite procesar video en tiempo real.
+    \item \textbf{Seguimiento de varias personas.} Une las detecciones de
+    cuadros sucesivos en trayectorias con un identificador local: predice
+    dónde estará cada persona, compara posición, superposición y apariencia, y
+    resuelve la asignación entre trayectorias y detecciones con el algoritmo
+    húngaro~\cite{kuhn1955}. ByteTrack~\cite{zhang2022bytetrack} añade una
+    segunda asociación con las detecciones de baja confianza para no perder a
+    quien queda tapado.
+    \item \textbf{Re-identificación de personas (Re-ID).} Una red convierte la
+    imagen del cuerpo en un vector de apariencia, de modo que dos vistas de la
+    misma persona queden cerca y las de personas distintas, lejos; así se la
+    reconoce en otra cámara sin usar el rostro. Se construyen sobre redes como
+    ResNet~\cite{he2016}, preentrenadas en ImageNet~\cite{deng2009}, o diseñadas
+    para Re-ID como OSNet-AIN~\cite{zhou2022osnet} y
+    PersonViT~\cite{hu2024personvit}, y se evalúan con conjuntos como
+    MSMT17~\cite{wei2018}.
+    \item \textbf{Homografía.} Es la transformación proyectiva que lleva los
+    puntos de un plano a otro; con al menos cuatro correspondencias entre la
+    imagen y el plano del piso, convierte la posición de los pies de una
+    persona en coordenadas en metros~\cite{hartley2004}. Cuando las
+    correspondencias se buscan de forma automática, los puntos
+    SIFT~\cite{lowe2004} las proponen y RANSAC~\cite{fischler1981} descarta
+    las erróneas.
+    \item \textbf{Mapas de calor por densidad de kernel (KDE).} Estiman una
+    densidad continua sumando un kernel centrado en cada observación, con un
+    ancho de banda que controla el suavizado~\cite{parzen1962}; aplicados a
+    las posiciones en el plano, muestran dónde se concentra la gente.
+    \item \textbf{Rutas frecuentes.} PrefixSpan~\cite{pei2001} encuentra las
+    secuencias que se repiten en al menos un número mínimo de casos; sobre la
+    secuencia de zonas que recorre cada persona, da las rutas más comunes.
+    \item \textbf{Sincronía por audio.} GCC-PHAT~\cite{knapp1976} estima el
+    desfase entre dos señales con la correlación cruzada generalizada; la
+    ponderación PHAT deja un pico nítido en el retardo, lo que permite alinear
+    dos videos que grabaron el mismo sonido.
+    \item \textbf{Seudonimización.} Reemplazar la identidad por un código no
+    vuelve anónimos los datos: un identificador seudónimo que sigue a una
+    persona sigue siendo un dato personal~\cite{gdpr}, por lo que se trata con
+    las mismas garantías.
+\end{itemize}
 
 \subsection{\texorpdfstring{Antecedente 1: AI-Powered Service Robots for Smart Airport Operations~\cite{giannopoulou2026}}{Antecedente 1: AI-Powered Service Robots for Smart Airport Operations}}
 
@@ -1482,7 +1552,7 @@ de suficientes datos propios.
 \label{fig:ant9}
 \end{figure}
 
-\subsection{Cuadro Comparativo de Antecedentes}
+\subsection{Cuadro comparativo de antecedentes}
 
 El Cuadro~\ref{tab:antecedentes} resume las métricas principales, el
 dominio de evaluación y el aporte de cada antecedente al sistema
@@ -1520,7 +1590,7 @@ Zhou et al.~\cite{zhou2026} & Aeropuerto (AirportPassenger) & MOTA 79.6\,\% (Air
 
 \FloatBarrier
 
-\subsection{Síntesis y Vacío de Investigación}
+\subsection{Síntesis y vacío de investigación}
 
 Tomados en conjunto, los nueve antecedentes muestran que cada pieza
 técnica del problema (detección, seguimiento, re-identificación sin
@@ -1537,14 +1607,14 @@ congestión, la especialización del seguimiento con arquitecturas tipo
 AirMOTR y el clasificador de edad para la exclusión de menores no se
 presentan como componentes implementados, sino como trabajo futuro.
 
-\section{Especificación de Requerimientos}
-\label{sec:requerimientos}
+\section{Especificación de requisitos}
+\label{sec:requisitos}
 
-\subsection{Casos de Uso del Sistema}
+\subsection{Casos de uso del sistema}
 
 Esta sección presenta los casos de uso del sistema, que describen cómo cada
-actor interactúa con las funciones definidas en los requerimientos
-funcionales. Cada caso de uso indica su actor principal, el requerimiento
+actor interactúa con las funciones definidas en los requisitos
+funcionales. Cada caso de uso indica su actor principal, el requisito
 que cubre, su historia de usuario, precondiciones, flujo principal, flujos
 alternativos y postcondiciones. El sistema tiene dos actores: el
 \textbf{Usuario comercial}, que consulta el análisis y los insights, y el
@@ -1556,7 +1626,7 @@ negocio y el administrador a los roles superadmin y seguridad
 \textbf{CU-01: Iniciar y cerrar sesión}
 
 \textbf{Actor principal:} Usuario comercial, Usuario administrador \\
-\textbf{Requerimiento:} RF-01
+\textbf{Requisito:} RF-01
 
 \textbf{Historia de usuario:} Como usuario del sistema, quiero iniciar sesión con mis credenciales y cerrarla al terminar, para acceder de forma segura solo a las funciones permitidas por mi rol.
 
@@ -1586,7 +1656,7 @@ temporalmente.
 \textbf{CU-02: Monitorear personas y trayectorias en vivo}
 
 \textbf{Actor principal:} Usuario administrador \\
-\textbf{Requerimiento:} RF-02
+\textbf{Requisito:} RF-02
 
 \textbf{Historia de usuario:} Como usuario administrador, quiero visualizar en tiempo real a las personas y sus trayectorias sobre el plano del aeropuerto, para conocer el estado de la operación y actuar ante aglomeraciones o incidencias.
 
@@ -1618,7 +1688,7 @@ identificadores seudónimos (Figura~\ref{fig:cu02}).
 \textbf{CU-03: Reproducir histórico de movimiento}
 
 \textbf{Actor principal:} Usuario comercial, Usuario administrador \\
-\textbf{Requerimiento:} RF-04
+\textbf{Requisito:} RF-04
 
 \textbf{Historia de usuario:} Como usuario del sistema, quiero reproducir el movimiento histórico de las personas en un periodo específico, para entender cómo se comportó el flujo en un momento pasado.
 
@@ -1647,7 +1717,7 @@ rechaza con un mensaje.
 \textbf{CU-04: Configurar zonas del mapa}
 
 \textbf{Actor principal:} Usuario administrador \\
-\textbf{Requerimiento:} RF-03
+\textbf{Requisito:} RF-03
 
 \textbf{Historia de usuario:} Como usuario administrador, quiero crear, modificar y eliminar zonas sobre el plano, para reflejar en el sistema la distribución real de puestos y áreas del aeropuerto.
 
@@ -1677,7 +1747,7 @@ el usuario pulsa ``Eliminar zona''.
 \textbf{CU-05: Configurar cámaras y cobertura}
 
 \textbf{Actor principal:} Usuario administrador \\
-\textbf{Requerimiento:} RF-03
+\textbf{Requisito:} RF-03
 
 \textbf{Historia de usuario:} Como usuario administrador, quiero ubicar y orientar las cámaras en el plano, para que el sistema sepa qué zona física observa cada una.
 
@@ -1707,7 +1777,7 @@ dirección (Figura~\ref{fig:cu05}).
 \textbf{CU-06: Ver cámara en vivo}
 
 \textbf{Actor principal:} Usuario administrador \\
-\textbf{Requerimiento:} RF-02
+\textbf{Requisito:} RF-02
 
 \textbf{Historia de usuario:} Como usuario administrador, quiero ver en vivo lo que capta cada teléfono conectado como cámara, con las detecciones del modelo, para verificar directamente lo que ocurre en una zona.
 
@@ -1735,7 +1805,7 @@ video directo del teléfono.
 \textbf{CU-07: Consultar mapa de calor}
 
 \textbf{Actor principal:} Usuario comercial \\
-\textbf{Requerimiento:} RF-04
+\textbf{Requisito:} RF-04
 
 \textbf{Historia de usuario:} Como usuario comercial, quiero visualizar un mapa de calor de las zonas con mayor aglomeración en un periodo, para identificar los puntos de mayor tránsito y tomar decisiones comerciales informadas.
 
@@ -1763,7 +1833,7 @@ muestra el mapa vacío con un aviso.
 \textbf{CU-08: Consultar insights por zona}
 
 \textbf{Actor principal:} Usuario comercial \\
-\textbf{Requerimiento:} RF-05
+\textbf{Requisito:} RF-05
 
 \textbf{Historia de usuario:} Como usuario comercial, quiero consultar las visitas, la permanencia y la captación por zona y periodo, para evaluar el desempeño de cada punto comercial y comparar su evolución.
 
@@ -1792,7 +1862,7 @@ compara sus indicadores con la sesión completa.
 \textbf{CU-09: Analizar flujos entre zonas}
 
 \textbf{Actor principal:} Usuario comercial \\
-\textbf{Requerimiento:} RF-04
+\textbf{Requisito:} RF-04
 
 \textbf{Historia de usuario:} Como usuario comercial, quiero visualizar los flujos de personas entre zonas y su volumen, para entender las rutas más frecuentes y optimizar la ubicación de los puntos comerciales.
 
@@ -1819,7 +1889,7 @@ sistema muestra un aviso.
 \textbf{CU-10: Exportar reporte}
 
 \textbf{Actor principal:} Usuario comercial \\
-\textbf{Requerimiento:} RF-05
+\textbf{Requisito:} RF-05
 
 \textbf{Historia de usuario:} Como usuario comercial, quiero exportar los insights de un periodo en CSV o PDF, para compartir los resultados con mi equipo o usarlos fuera del sistema.
 
@@ -1848,7 +1918,7 @@ muestra el progreso.
 \textbf{CU-11: Procesar videos multicámara}
 
 \textbf{Actor principal:} Usuario administrador \\
-\textbf{Requerimiento:} RF-06
+\textbf{Requisito:} RF-06
 
 \textbf{Historia de usuario:} Como usuario administrador, quiero que el sistema procese los videos de varias cámaras y siga a las personas de forma seudónima entre ellas, para obtener trayectorias completas sin identificar a nadie.
 
@@ -1882,7 +1952,7 @@ ese momento.
 \label{fig:cu11}
 \end{figure}
 
-\subsection{Requerimientos Funcionales y No Funcionales}
+\subsection{Requisitos funcionales y no funcionales}
 
 {\footnotesize
 \setlength{\tabcolsep}{5pt}
@@ -3237,7 +3307,1879 @@ histórico de las trayectorias.
     \label{fig:flujo}
 \end{figure}
 
-\section{Planificación y Gestión del Proyecto}
+\section{Algoritmos}
+\label{sec:algoritmos}
+
+Esta sección resume los algoritmos que ejecuta el sistema en cada parte. Los
+umbrales corresponden a la configuración vigente (\texttt{config\_lap01.json},
+versión~2.0, y \texttt{config\_insights.json}) y su fundamento se expone en la
+Metodología. El Cuadro~\ref{tab:algoritmos} relaciona cada algoritmo con lo que
+produce.
+
+\begin{table}[H]
+\caption{Algoritmos del sistema por parte}
+\label{tab:algoritmos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.17\textwidth}|L{0.38\textwidth}|L{0.37\textwidth}|}
+\hline
+\textbf{Parte} & \textbf{Algoritmo} & \textbf{Resultado} \\
+\hline
+I. Seguimiento local & YOLO26m~\cite{yolo26} y seguidor híbrido con asociación en cascada (algoritmo húngaro~\cite{kuhn1955}) & \textit{local\_id} estable por persona y cámara \\
+\hline
+II. Multicámara & YOLO26s-ReID y galería global con reglas físicas & \textit{global\_id} seudónimo por persona \\
+\hline
+II. Mapa & Homografía~\cite{hartley2004} imagen--plano & Posición en metros, velocidad y dirección \\
+\hline
+III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE~\cite{parzen1962}, PrefixSpan~\cite{pei2001} y grafo origen-destino & Eventos, métricas e insights por zona y local \\
+\hline
+En vivo & Modelo de dos carriles con memoria de identidades & Cajas e ID en tiempo real desde teléfonos \\
+\hline
+En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
+\hline
+Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN~\cite{zhou2022osnet} + PersonViT~\cite{hu2024personvit}; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Seguimiento local por cámara (Parte I)}
+
+Mantiene un identificador local estable mientras la persona permanece frente a
+una cámara. En cada instante detecta a las personas de todas las cámaras en un
+solo lote y asocia cada detección con un track mediante una cascada de etapas
+resuelta con el algoritmo húngaro (Algoritmo~\ref{alg:local}).
+
+\begin{algorithm}[H]
+\caption{Seguimiento local por cámara}
+\label{alg:local}
+\begin{algorithmic}[1]
+\REQUIRE cuadros sincronizados de cada cámara
+\ENSURE observaciones (cámara, instante, \textit{local\_id}, caja, confianza)
+\FORALL{instante $t$ del lector sincronizado}
+  \STATE $D \leftarrow$ YOLO26m(un cuadro por cámara), clase persona, $c \geq 0.30$
+  \FORALL{cámara $k$}
+    \STATE descartar cajas de menos de 40~px de alto o contenidas en otra en un 92\,\% o más
+    \STATE predecir la caja de cada track con su velocidad amortiguada
+    \STATE asociar las detecciones con $c \geq 0.35$ a los tracks activos (movimiento, IoU, escala y apariencia)
+    \STATE prolongar los tracks libres con detecciones débiles coherentes (movimiento $\geq 0.55$, IoU $\geq 0.12$)
+    \STATE recuperar tracks perdidos con su galería (color $\geq 0.72$, distancia $\leq 0.95$)
+    \STATE actualizar caja, velocidad y galería (hasta 24 vistas fiables)
+    \STATE crear un track tras 3 detecciones con $c \geq 0.60$ en 5 cuadros
+    \STATE eliminar los tracks perdidos durante más de 120 cuadros
+  \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Re-identificación multicámara (Parte II)}
+
+Agrupa los tracklets de todas las cámaras en identidades. Cada tracklet se
+resume en un prototipo de apariencia corporal y se compara con una galería
+global que solo admite candidatas físicamente compatibles
+(Algoritmo~\ref{alg:reid}).
+
+\begin{algorithm}[!ht]
+\caption{Asociación multicámara con galería global}
+\label{alg:reid}
+\begin{algorithmic}[1]
+\REQUIRE observaciones de todas las cámaras y registro de cámaras (solapes y transiciones)
+\ENSURE tracklets agrupados en identidades con \textit{global\_id}
+\FORALL{vista fiable ($c \geq 0.55$, alto $\geq 40$~px, oclusión $< 20\,\%$), cada 0.4~s}
+  \STATE $e \leftarrow$ YOLO26s-ReID(recorte a $448 \times 448$), vector de 512 valores normalizado
+  \STATE actualizar el prototipo $\bar{e}_T$ del tracklet
+  \IF{dos vistas seguidas tienen similitud $< 0.40$ con $\bar{e}_T$}
+    \STATE cortar el tracklet; el tramo siguiente se evalúa como persona nueva
+  \ENDIF
+\ENDFOR
+\FORALL{identidad provisional $a$ (cada 2~s o de inmediato si está en riesgo)}
+  \STATE $B \leftarrow$ identidades vistas en los últimos 90~s que cumplen las reglas físicas
+  \STATE $b^{*} \leftarrow \arg\max_{b \in B} \cos(\bar{e}_a, \bar{e}_b)$
+  \IF{$s(a,b^{*}) \geq 0.60$ (0.70 con una sola cámara), enlace promedio $\geq 0.55$, margen $\geq 0.05$ y preferencia mutua}
+    \STATE fusionar $a$ en $b^{*}$, que conserva su identificador
+  \ELSIF{$a$ lleva al menos 2~s visible y 5 vistas}
+    \STATE asignar un \textit{global\_id} nuevo
+  \ENDIF
+\ENDFOR
+\STATE cerrar las identidades no vistas durante 120~s y borrar sus vistas
+\STATE al terminar, reconciliar y numerar por orden de aparición (UUID versión~5)
+\end{algorithmic}
+\end{algorithm}
+
+\FloatBarrier
+\subsection{Proyección al plano (Parte II)}
+
+Cada observación con los pies visibles se lleva al plano en metros con la homografía de su cámara (Algoritmo~\ref{alg:mapa}).
+
+\begin{algorithm}[H]
+\caption{Proyección al plano}
+\label{alg:mapa}
+\begin{algorithmic}[1]
+\REQUIRE caja $(x_1,y_1,x_2,y_2)$ y homografía $H$ de la cámara
+\ENSURE posición $(X,Y)$ en metros, velocidad y dirección
+\IF{la caja no está cortada por el borde inferior}
+  \STATE $(u,v) \leftarrow \big((x_1+x_2)/2,\ y_2\big)$, punto de los pies
+  \STATE $[X',Y',W']^{\top} \leftarrow H\,[u,v,1]^{\top}$; \ $(X,Y) \leftarrow (X'/W',\ Y'/W')$
+  \STATE calcular velocidad y dirección sobre 1~s del tracklet
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Procesamiento histórico (Parte III)}
+
+Transforma los puntos de una sesión en eventos y métricas sin volver a procesar
+video. Primero corrige las posiciones con el plano del sitio y después aplica
+las reglas de eventos y los algoritmos de minería (Algoritmo~\ref{alg:historico}).
+
+\begin{algorithm}[H]
+\caption{Procesamiento histórico}
+\label{alg:historico}
+\begin{algorithmic}[1]
+\REQUIRE puntos de la sesión, plano del sitio (piso y obstáculos), locales y zonas
+\ENSURE zona de cada punto, eventos espaciales y análisis de la sesión
+\STATE llevar al punto libre más cercano cada posición fuera del piso o a menos de 0.2~m de un obstáculo
+\STATE consolidar una posición por persona cada 0.2~s (ponderada por confianza) y quitar saltos de más de 4~m/s
+\STATE asignar la zona de cada posición, con borde incluido; si hay varias, INTERIOR y luego la de menor área
+\STATE agrupar en estancias y unir las salidas y los roces de INTERIOR de menos de 1~s
+\FORALL{persona y estancia}
+  \STATE emitir EXPOSURE, ENTER, DWELL ($\geq 5$~s), EXIT, RETURN ($\geq 10$~s) y QUEUE ($\geq 8$~s a $\leq 0.35$~m/s)
+\ENDFOR
+\STATE calcular KDE (celda de 0.5~m, $h = 1$~m), rutas con PrefixSpan (soporte $\geq 2$ personas y $\geq 10\,\%$) y grafo origen-destino
+\STATE calcular visitas, exposición, captación, permanencia, densidad y congestión ($\geq 3$ personas, $\geq 0.25$~personas/m$^2$ y $\leq 0.5$~m/s durante 5~s)
+\STATE guardar los resultados en la base de datos
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Modelo en vivo sobre teléfonos}
+
+Procesa a la vez todos los teléfonos conectados. Separa el trabajo en dos carriles para que las cajas no esperen al modelo más pesado: el rápido detecta y sigue, y el de IDs corre en un hilo aparte y en paralelo.
+Una memoria de identidades hace que cada persona conserve su ID aunque salga
+y vuelva, pase a otro teléfono o el modelo se reinicie
+(Algoritmo~\ref{alg:vivo}). Sobre el video, cada persona se marca con un
+punto de su color sobre la cabeza, y su ID global, en lugar de una caja que la tape.
+
+\begin{algorithm}[H]
+\caption{Modelo en vivo de dos carriles}
+\label{alg:vivo}
+\begin{algorithmic}[1]
+\REQUIRE flujos de video de los teléfonos y memoria de identidades
+\ENSURE cajas e ID de cada persona, publicados en tiempo real
+\STATE \textbf{Carril rápido}, por cada cuadro de cada teléfono:
+\STATE \hspace{1.2em} detectar personas (YOLO26s a 640~px en CPU; YOLO26m a 960~px y $c \geq 0.15$ en GPU)
+\STATE \hspace{1.2em} armar la caja con YOLO26s-pose (cabeza, hombros, caderas, rodillas y tobillos)
+\STATE \hspace{1.2em} seguir con el seguidor local (tracks desde $c \geq 0.25$) y publicar las cajas con la hora de captura
+\STATE \hspace{1.2em} ocultar a quien no se movió en 3~s
+\STATE \textbf{Carril de IDs}, en paralelo:
+\STATE \hspace{1.2em} muestrear vistas del cuerpo entero para Re-ID ($c \geq 0.50$)
+\STATE \hspace{1.2em} comparar cada identidad nueva con la memoria tras 1~s a la vista (3~s si hay duda)
+\STATE \hspace{1.2em} si coincide sin ambigüedad, recuperar su ID y su color
+\STATE \hspace{1.2em} durante 60~s, fusionar un ID nuevo con uno ya visto si es la misma persona
+\STATE \hspace{1.2em} guardar la memoria cada 2~s y olvidar a quien no se ve en 24~horas
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Ubicación en el plano desde un teléfono}
+
+Un teléfono no ocupa la posición de las cámaras fijas, por lo que cada persona
+se ubica con la calibración del teléfono o, si no la tiene, con la posición y
+el rumbo asignados al teléfono en el plano y el tamaño aparente de la persona
+(Algoritmo~\ref{alg:ubicacion}).
+
+La calibración se obtiene de una grabación de una persona caminando frente al
+teléfono: su altura aparente, supuesta de 1.70~m, fija el horizonte y la
+altura de la cámara; la focal se ajusta para que la distancia entre dos
+referencias del plano coincida con la real; un giro y una traslación llevan
+esas referencias a sus coordenadas manteniendo el recorrido dentro del piso; y
+el resultado es una homografía de píxeles a metros para ese teléfono.
+
+\begin{algorithm}[H]
+\caption{Ubicación en el plano desde un teléfono}
+\label{alg:ubicacion}
+\begin{algorithmic}[1]
+\REQUIRE caja de la persona, ancho del cuadro $w$, posición $P$ y rumbo $\theta$ del teléfono, homografía $H$ si existe
+\ENSURE posición $(X,Y)$ en metros sobre el piso del sitio
+\IF{el teléfono tiene homografía $H$}
+  \STATE $(X,Y) \leftarrow H(u,v)$ con el punto de los pies
+\ELSE
+  \STATE $f \leftarrow 0.78\,w$; \ $d \leftarrow f \cdot 1.70 / h_{px}$; descartar si $d > 30$~m o la caja ocupa casi todo el cuadro
+  \STATE $\alpha \leftarrow \arctan\big((u - w/2)/f\big)$
+  \STATE $(X,Y) \leftarrow P + d\,\big(\cos(\theta-\alpha),\ \sin(\theta-\alpha)\big)$
+\ENDIF
+\STATE sumar el ajuste fino $(\Delta x, \Delta y)$ y llevar al borde del piso lo que cae fuera
+\STATE acumular cada 0.25~s el rastro, el mapa de calor, el tiempo por zona y la secuencia de zonas
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Videos subidos: varias cámaras grabadas a la vez}
+\label{sec:videos}
+
+La sección Videos procesa grabaciones de cualquier origen, como si fueran
+cámaras en vivo: si el modelo no alcanza al video, salta cuadros. El Build se
+calibró con las cámaras de ESAN, de personas cercanas y grandes; un video
+cualquiera puede ser lejano, nocturno o con mucha gente, por lo que Videos usa
+ajustes más sensibles sobre la misma lógica de las Partes I y II:
+
+\begin{itemize}
+    \item \textbf{Detector:} YOLO26 a 1280~px en la GPU, en media precisión y
+    con confianza 0.10 en vez de 0.30. En un video de un centro comercial pasa
+    de unas 12 a unas 40 personas por cuadro.
+    \item \textbf{Seguidor:} abre tracks desde 0.15 de confianza y personas de
+    12~px de alto; en los cruces, la apariencia pesa 0.8 en la asignación (no
+    0.22), dentro de ella el vector de la ResNet18~\cite{he2016} pesa 0.8 frente al color
+    (no 0.20) y un track sigue a una caja sin comparar apariencias solo si se
+    solapa con ella al menos 0.25.
+    \item \textbf{Re-identificación:} en vez de YOLO26s-ReID, que estira cada
+    recorte a un cuadrado, se promedian OSNet-AIN y PersonViT (ViT-S), ambos
+    entrenados en MSMT17~\cite{wei2018}. Una identidad solo se une a otra si cada tramo se
+    parece a cada uno de la otra, para que una fusión equivocada no termine
+    absorbiendo a cualquiera.
+    \item \textbf{Velocidad:} los cuadros se decodifican en la GPU, cada video
+    en su hilo; las redes de Re-ID van grabadas en \textit{CUDA graphs} y el
+    asociador compara todas las identidades vigentes de una vez.
+\end{itemize}
+
+Los videos que se suben juntos forman una \textit{tanda}: empiezan a la vez y
+comparten un asociador multicámara, así la misma persona lleva el mismo ID
+global en todos ellos. Es el mismo asociador de la Parte~II (galería global,
+identidades provisionales, detección de cambio de persona, enlace promedio,
+margen de ambigüedad y preferencia mutua), en modo visual-temporal porque los
+videos no traen calibración: cada video es una cámara, todas se consideran
+solapadas y una persona puede pasar de una a otra en hasta 60~s. Cambian solo
+el codificador de apariencia y sus umbrales, llevados a la escala de
+OSNet-AIN y PersonViT. El procesamiento se resume en el Algoritmo~\ref{alg:videos}. El video se guarda en disco temporal solo
+mientras se procesa y queda únicamente un resumen.
+
+\begin{algorithm}[H]
+\caption{Procesamiento de una tanda de videos}
+\label{alg:videos}
+\begin{algorithmic}[1]
+\REQUIRE videos $V_1,\dots,V_n$ ($n \leq 10$)
+\ENSURE cajas e ID global por cuadro, y resumen de cada video
+\STATE crear un asociador común para la tanda
+\STATE esperar a que todos los videos estén listos y arrancar un reloj común
+\WHILE{quede algún video sin terminar}
+  \STATE tomar de cada video el cuadro que corresponde al reloj (saltar los atrasados)
+  \STATE detectar en una sola pasada de YOLO26 a 1280~px los cuadros de todos los videos
+  \STATE seguir cada video con su seguidor local
+  \STATE muestrear cada 0.4~s vistas Re-ID (OSNet-AIN + PersonViT) y asociarlas en el asociador de la tanda
+  \STATE publicar cajas, \textit{global\_id}, FPS y ms por cuadro de cada video
+\ENDWHILE
+\STATE guardar el resumen (personas y segundos en que aparece cada ID) y borrar el video
+\end{algorithmic}
+\end{algorithm}
+
+El mismo procesamiento se usa para las grabaciones de las zonas de ESAN: el
+patio, el comedor (zona~2) y el pasillo del Edificio D (zona~3). Las cámaras
+de una zona se pasan juntas como una tanda y cada una puede llevar un desfase en segundos para que el modelo compare los
+cuadros del mismo instante real. Sobre las cajas y los IDs compartidos que
+devuelve, cada persona se ubica en el plano con el modelo de cámara de cada
+teléfono (altura, focal, horizonte, posición y rumbo) o, si la cámara no lo
+tiene o se movió, con las referencias de ubicación del modelo en vivo
+(Sección~\ref{sec:grabaciones-zonas}).
+
+\subsection{Grabaciones de las zonas: ubicación por referencias e IDs lejanos}
+\label{sec:grabaciones-zonas}
+
+Los teléfonos que graban una zona se sostienen a mano o se apoyan en una
+baranda, así que su encuadre cambia de una grabación a otra y aun dentro de
+la misma. En lugar de calibrar cada video, se reutilizan las
+\textit{referencias de ubicación} del modelo en vivo: imágenes de cada cámara
+con su homografía al plano, tres por cámara (A0--A2 para cam01, B0--B2 para
+cam02, E0--E2 para cam06 y F0--F2 para cam07). Cada video se compara con las
+de su cámara mediante puntos SIFT~\cite{lowe2004} y RANSAC~\cite{fischler1981}
+(Algoritmo~\ref{alg:referencias}) y queda una sola homografía,
+que se aplica sobre los cuadros ya corregidos por el movimiento del teléfono.
+
+\begin{algorithm}[H]
+\caption{Ubicación de una grabación con las referencias del en vivo}
+\label{alg:referencias}
+\begin{algorithmic}[1]
+\REQUIRE video $V$ de la cámara $c$, referencias $\{(I_r, H_r)\}$ de $c$, movimiento estimado del teléfono $M_k$ en cada cuadro
+\ENSURE homografía $H$ de los cuadros estabilizados al plano, en metros
+\FOR{24 cuadros $k$ repartidos en el video}
+  \STATE reducir el cuadro a 640~px y extraer puntos SIFT (hasta 4\,000)
+  \STATE emparejar con cada $I_r$ (prueba de razón 0.75) y estimar $G$ con RANSAC (3~px)
+  \STATE si hay al menos 40 puntos coincidentes, $H_k \leftarrow H_r\, G\, S\, M_k^{-1}$ con la referencia de más coincidencias ($S$: escala a 640~px)
+\ENDFOR
+\STATE proyectar con cada $H_k$ una grilla de $9 \times 9$ puntos del piso de la imagen
+\STATE tomar la mediana de cada punto en metros y ajustar $H$ a esas medianas
+\STATE informar cuántos cuadros se reconocieron y cuánto se aparta cada uno de la mediana
+\end{algorithmic}
+\end{algorithm}
+
+Lejos de la cámara, con cajas de menos de unos 50~px de alto, el Re-ID ya no
+reconoce a nadie y el seguidor pierde a la persona y la vuelve a abrir con
+otro número. Para esos tramos se agrega un paso después del seguimiento
+multicámara (Algoritmo~\ref{alg:lejanos}); de cerca manda el seguimiento
+multicámara de Videos tal cual. Sobre el video, cada persona lleva solo su ID global (por ejemplo,
+G133) en una etiqueta de su color sobre la cabeza, sin la caja.
+
+\begin{algorithm}[H]
+\caption{IDs de la gente lejana en las grabaciones de una zona}
+\label{alg:lejanos}
+\begin{algorithmic}[1]
+\REQUIRE tramos del seguidor de cada cámara, IDs del seguimiento multicámara de Videos, movimiento del teléfono y homografía de cada cámara
+\ENSURE ID de cada tramo lejano, sin repetir un número a la vez en una cámara
+\FOR{cada tramo que termina o empieza lejos (caja $< \sim$50~px)}
+  \STATE predecir dónde debía reaparecer con su velocidad, descontando el movimiento del teléfono
+  \STATE unirlo al tramo que aparece ahí, a una altura parecida y con ropa del mismo color
+\ENDFOR
+\STATE cada cadena toma el ID de Videos de alguno de sus tramos o, si no tiene, uno nuevo si se vio al menos 1.5~s
+\STATE si la otra cámara la ve a la vez en el mismo punto del piso, de cerca y con un ID estable por 2~s, tomar ese ID
+\end{algorithmic}
+\end{algorithm}
+
+En la primera grabación del pasillo del Edificio D, de los 285 cortes del
+seguidor en cam06, 140 conservaron su número (antes, 7), las cajas sin
+número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
+con el mismo número a la vez (antes, 53).
+
+\section{Arquitectura del sistema}
+\label{sec:arquitectura}
+
+El sistema se compone de servicios en contenedores Docker que se ejecutan en
+una computadora local con GPU; el modelo en vivo corre directamente en Windows
+(\texttt{camara\_telefono.py}) o en Docker con la GPU (servicio
+\texttt{modelo-gpu}, perfil \texttt{gpu}). El análisis de sesiones grabadas y el
+monitoreo en vivo usan backends y bases de datos separados, y la aplicación
+web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
+El código fuente de todos los componentes, las migraciones de la base de datos
+y los notebooks del modelo están en
+\url{https://github.com/23-Andres-QC/Aeropuerto}.
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
+\caption{Arquitectura de AeroVision.}
+\label{fig:arquitectura}
+\end{figure}
+
+\begin{table}[H]
+\caption{Componentes del sistema}
+\label{tab:componentes}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.17\textwidth}|L{0.27\textwidth}|L{0.48\textwidth}|}
+\hline
+\textbf{Componente} & \textbf{Tecnología} & \textbf{Función} \\
+\hline
+\texttt{web} & Vue~3, TypeScript, nginx & Interfaz y proxy hacia los backends y la cámara \\
+\hline
+\texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones, insights, tráfico, ventas, cuentas y solicitudes \\
+\hline
+\texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias, analítica, ventas y cuentas \\
+\hline
+\texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
+\hline
+\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
+\hline
+\texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
+\hline
+\texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
+\hline
+Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+\subsection{Usuarios y acceso}
+
+El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
+hace en él.
+
+\begin{table}[H]
+\caption{Usuarios del sistema}
+\label{tab:usuarios}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.16\textwidth}|L{0.19\textwidth}|L{0.33\textwidth}|L{0.22\textwidth}|}
+\hline
+\textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
+\hline
+Superadmin & Web, con cuenta & Configura sitios, cámaras, locales y zonas; crea cuentas; aprueba solicitudes; aplica la retención & Todas las secciones \\
+\hline
+Seguridad & Web, con cuenta & Activa el modo en vivo, une teléfonos y procesa videos & En vivo, Videos y Teléfonos \\
+\hline
+Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permiso aprobado & Insights y Ventas \\
+\hline
+Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
+\hline
+Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/}\allowbreak\texttt{\{sitio\}/...} \\
+\hline
+Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
+\hline
+\end{tabular}
+\end{table}
+
+No hay registro público: el superadmin crea cada cuenta en la sección Cuentas
+(Figura~\ref{fig:cuentas}), que entrega una contraseña temporal una sola vez y
+obliga a elegir una propia en el primer ingreso (Figura~\ref{fig:login}). Las
+contraseñas se guardan como hash argon2id; la sesión es una cookie
+\textit{HttpOnly} cuyo secreto la base guarda solo como SHA-256, por lo que
+revocarla sobrevive a un reinicio; ocho contraseñas equivocadas bloquean la
+cuenta 15 minutos, y una bitácora registra ingresos, cambios de cuentas y de
+retención, sin contraseñas ni llaves. Desde Solicitudes
+(Figura~\ref{fig:solicitudes}) el superadmin aprueba los cambios de correo y
+los permisos de exportación, que dejan a una cuenta descargar y enviar por
+correo los reportes de Insights solo durante el tiempo elegido. La página de
+cámara se une con un código que el superadmin crea en Teléfonos y que viaja en
+el primer mensaje del WebSocket, nunca en la URL.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
+\caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
+se taparon en la figura).}
+\label{fig:cuentas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/login.png}
+\caption{Ingreso a la aplicación.}
+\label{fig:login}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/solicitudes.png}
+\caption{Solicitudes de cambio de correo y de permisos de exportación.}
+\label{fig:solicitudes}
+\end{figure}
+
+\subsection{Infraestructura de despliegue}
+
+El sistema corre en una computadora local con GPU (Cuadro~\ref{tab:infra}).
+Los servicios web, los backends y las bases van en Docker Compose; el modelo
+en vivo, que también procesa los videos subidos, usa la GPU de dos formas:
+directamente en Windows (\texttt{camara\_telefono.py}) o, si el Control
+inteligente de aplicaciones de Windows bloquea las DLL de PyTorch, dentro de
+Docker (servicio \texttt{modelo-gpu}, perfil \texttt{gpu}). Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
+Docker con YOLO26s a 640~px.
+
+\begin{table}[H]
+\caption{Configuración del equipo de despliegue}
+\label{tab:infra}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.22\textwidth}|L{0.70\textwidth}|}
+\hline
+\textbf{Elemento} & \textbf{Configuración} \\
+\hline
+Procesador & Intel Core i7-13620H: 10 núcleos y 16 hilos \\
+\hline
+GPU & NVIDIA GeForce RTX~4060 Laptop, 8~GB \\
+\hline
+Memoria & 16~GB de RAM \\
+\hline
+Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
+\hline
+Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, en Windows o en Docker (\texttt{modelo-gpu}), para teléfonos y videos subidos \\
+\hline
+Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
+\hline
+Configuración & \texttt{.env} con las contraseñas de las bases, la cuenta semilla y la llave de los scripts \\
+\hline
+\end{tabular}
+\end{table}
+
+La primera versión se desplegó en una máquina virtual de Google Cloud sin GPU
+(\texttt{c4a-highcpu-8}, 8 vCPU Arm y 16~GB de RAM, en Santiago de Chile),
+donde el modelo en vivo corría en CPU a unos 4 a 6 cuadros por segundo con
+pocas personas. El sistema pasó a la computadora local porque el modelo de
+Videos, la re-identificación con OSNet-AIN y PersonViT y el procesamiento de
+varias cámaras a la vez necesitan una GPU. Cada imagen ejecuta sus pruebas al
+construirse; si una falla, los servicios en marcha no se reemplazan. La web y
+la página de cámara se sirven por HTTPS, requisito de los navegadores para usar
+la cámara del teléfono.
+
+\subsection{Costos de la infraestructura}
+
+El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
+computadora propia con el de la nube. El servidor de Google Cloud se calculó
+con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
+impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
+(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
+Para la computadora propia se supone un equipo con GPU de 8 a 16~GB de
+S/~4\,500 (US\$~1\,200), un supuesto de trabajo aún por cotizar, que
+amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
+de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
+propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
+horario de uso y menos que cualquier nube con GPU a demanda; el video no
+sale de la red y el costo es fijo. Este cálculo sostiene el costo por cámara
+del plan de negocio (Sección~\ref{sec:negocio}).
+
+\begin{table}[H]
+\caption{Costo mensual del procesamiento: computadora propia y nube}
+\label{tab:costos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.30\textwidth}|L{0.44\textwidth}|R{0.16\textwidth}|}
+\hline
+\textbf{Opción} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
+\hline
+Computadora propia con GPU & US\$~1\,200 en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
+\hline
+\multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
+\hline
+Máquina virtual & Bajo demanda: US\$0.4333 por hora & 316.34 \\
+\hline
+Disco, IP y tráfico & 77~GB, IP externa y 20~GB de salida & 18.46 \\
+\hline
+\textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
+\hline
+Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
+\hline
+Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
+\hline
+Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
+\hline
+Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
+\hline
+\multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
+\hline
+A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
+\hline
+Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
+\hline
+\end{tabular}
+\end{table}
+
+Los valores anteriores del servidor y de la computadora propia son de un equipo
+sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
+estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
+de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
+dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
+horas encendida (720 horas equivale a tenerla prendida todo el mes). El
+Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
+Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
+Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
+cada calculadora están en el Anexo.
+
+\begin{table}[H]
+\caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
+\label{tab:nube-resumen}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.24\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|}
+\hline
+\textbf{Horas al mes} & \textbf{Google Cloud} & \textbf{AWS} & \textbf{Azure} \\
+\hline
+240 & 130.60 & 129.35 & 137.04 \\
+\hline
+360 & 195.40 & 192.07 & 200.76 \\
+\hline
+720 & 389.80 & 386.52 & 391.92 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Configuración usada en cada calculadora}
+\label{tab:nube-config}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.14\textwidth}|L{0.20\textwidth}|L{0.58\textwidth}|}
+\hline
+\textbf{Proveedor} & \textbf{Región} & \textbf{Configuración} \\
+\hline
+Google Cloud (Compute Engine) & Iowa (\texttt{us-central1}) & \texttt{n1-standard-4} (4 vCPU, 15~GB de RAM) con 1 GPU NVIDIA T4, sistema libre (Debian o Ubuntu), modelo regular (a demanda), disco \textit{balanced} de 10~GiB, 1 instancia, sin descuentos por uso sostenido ni comprometido \\
+\hline
+AWS (Amazon EC2) & Este de EE.\,UU. (Ohio) & Instancia con GPU T4 llamada ``AeroVision GPU T4'', a demanda, con tenencia compartida y sin costo inicial \\
+\hline
+Azure & East US & Máquina virtual con GPU T4, 1 dirección IP estática estándar (ARM), soporte Basic incluido y contrato de cliente de Microsoft (MCA) \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Desglose del cálculo de Google Cloud (US\$ al mes)}
+\label{tab:nube-gcp}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.40\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|}
+\hline
+\textbf{Componente} & \textbf{240 h} & \textbf{360 h} & \textbf{720 h} \\
+\hline
+Máquina \texttt{n1-standard-4} (US\$0.19 por hora) & 45.60 & 68.40 & 136.80 \\
+\hline
+GPU NVIDIA T4 (US\$0.35 por hora) & 84.00 & 126.00 & 252.00 \\
+\hline
+Disco \textit{balanced} de 10~GiB & 1.00 & 1.00 & 1.00 \\
+\hline
+\textbf{Total} & \textbf{130.60} & \textbf{195.40} & \textbf{389.80} \\
+\hline
+\end{tabular}
+\end{table}
+
+En Azure, la calculadora sumó además una dirección IP estática (1.20, 1.80 y
+3.60 al mes en los tres escenarios). Frente a los $\approx$ US\$~70 al mes de la
+computadora propia, la nube con GPU cuesta casi el doble con 240 horas
+encendida y unas cinco veces y media con 720 horas, y los tres proveedores
+quedan a menos de 6\,\% entre sí en cada escenario, por lo que la decisión
+depende más de las horas de uso, la ubicación de los datos y el costo de
+transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
+fija ni la salida de datos, que se suman aparte.
+
+Fuera de las tres grandes nubes hay opciones más baratas para correr el
+modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
+Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
+las que se pudieron verificar en noviembre de 2026, con el precio por hora
+publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
+tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
+nube comunitaria cambian cada día y la máquina puede detenerse o no estar
+disponible; Hetzner cobra por hora hasta un tope mensual y una tarifa de
+instalación de 209~euros, y sus euros se pasaron a dólares con la referencia
+del BCE del 10 de noviembre de 2026 (1.1214)~\cite{ecb-eurusd}.
+
+\begin{table}[!ht]
+\caption{Nubes con GPU para correr el modelo, de la más económica a la más cara (US\$, noviembre de 2026)}
+\label{tab:nube-proveedores}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{|L{0.45\textwidth}|L{0.13\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|}
+\hline
+\textbf{Proveedor y máquina} & \textbf{GPU} & \textbf{US\$/h} & \textbf{240~h} & \textbf{360~h} & \textbf{720~h} \\
+\hline
+Vast.ai, mercado de GPU~\cite{vast-3060} & RTX 3060 & 0.076 & 18.24 & 27.36 & 54.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, \textit{spot}, East US~\cite{sparecores-t4} & T4 & 0.1641 & 39.38 & 59.08 & 118.15 \\
+\hline
+AWS \texttt{g4dn.xlarge}, \textit{spot}, us-east-1~\cite{doit-g4dn} & T4 & 0.2137 & 51.29 & 76.93 & 153.86 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & RTX 4090 & 0.34 & 81.60 & 122.40 & 244.80 \\
+\hline
+Hetzner GEX45, servidor dedicado~\cite{hetzner-gex} & RTX PRO 4000 & 0.3845 & 92.29 & 138.43 & 239.98 \\
+\hline
+AWS \texttt{g6.xlarge}, \textit{spot}, us-east-1~\cite{doit-g6} & L4 & 0.3941 & 94.58 & 141.88 & 283.75 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & L4 & 0.44 & 105.60 & 158.40 & 316.80 \\
+\hline
+AWS \texttt{g4dn.xlarge}, a demanda, us-east-1~\cite{doit-g4dn} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, a demanda, East US~\cite{azurespeed-t4} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Google Cloud \texttt{n1-standard-4} + T4~\cite{gcp-vm,gcp-gpu} & T4 & 0.54 & 129.60 & 194.40 & 388.80 \\
+\hline
+Paperspace~\cite{paperspace} & RTX 4000 & 0.56 & 134.40 & 201.60 & 403.20 \\
+\hline
+RunPod, nube segura~\cite{runpod} & L4 & 0.59 & 141.60 & 212.40 & 424.80 \\
+\hline
+Google Cloud \texttt{g2-standard-4}~\cite{gcp-g2} & L4 & 0.7068 & 169.64 & 254.46 & 508.92 \\
+\hline
+DigitalOcean, GPU Droplet~\cite{do-gpu} & RTX 4000 Ada & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+Paperspace~\cite{paperspace} & A4000 & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+AWS \texttt{g6.xlarge}, a demanda, us-east-1~\cite{doit-g6} & L4 & 0.8048 & 193.15 & 289.73 & 579.46 \\
+\hline
+RunPod, nube segura~\cite{runpod} & RTX 4090 & 0.89 & 213.60 & 320.40 & 640.80 \\
+\hline
+\hline
+\textit{Referencia: computadora propia} (Cuadro~\ref{tab:costos}) & RTX 4060 & -- & 70 & 70 & 70 \\
+\hline
+\end{tabular}
+\end{table}
+
+Con 240 horas al mes, Vast.ai y las máquinas \textit{spot} con T4 cuestan
+menos que la computadora propia; encendidas todo el mes, solo Vast.ai
+queda por debajo. Sin contar las \textit{spot}, la opción más barata todo
+el mes después de Vast.ai es el servidor dedicado de Hetzner (US\$~240 con
+el tope mensual, más la instalación), y las T4 a demanda de AWS, Azure y
+Google Cloud quedan entre US\$~379 y 389.
+
+\FloatBarrier
+\subsection{Base de datos}
+
+Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
+todo lo que se analiza en ellos; \texttt{vivo-db} (PostgreSQL~17 con pgvector)
+guarda solo la memoria de identidades del modo en vivo
+(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
+backends aplican al iniciar.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.65\linewidth]{figuras/arquitectura/base-de-datos.png}
+\caption{Modelo entidad-relación de las bases de datos.}
+\label{fig:bd}
+\end{figure}
+
+\begin{itemize}\sloppy
+    \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
+    y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
+    INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
+    válida.
+    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD, LIVE o VIDEO),
+    \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
+    geometría de cada punto se calcula en la base y se conserva la posición
+    original del modelo junto a la ajustada al piso.
+    \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
+    calculada en la base, y \texttt{session\_analytics}, con los parámetros y
+    los resultados de la Parte~III.
+    \item \textbf{Tráfico:} \texttt{traffic\_buckets} (personas, visitas,
+    quienes se detienen e interesados por zona en ventanas de 5, 15 y 60
+    minutos), \texttt{heat\_cells} (segundos-persona por celda de 1~m y hora),
+    \texttt{traffic\_runs} y \texttt{traffic\_params} (umbrales por sitio).
+    \item \textbf{Ventas:} \texttt{sales\_tickets} y \texttt{sales\_items}
+    (compras reales o simuladas, en centavos), \texttt{sales\_matches} y
+    \texttt{sales\_match\_runs} (cada compra con la visita que la hizo y su
+    confianza) y \texttt{visit\_counts}.
+    \item \textbf{Cuentas:} \texttt{users} (con hash argon2id y rol),
+    \texttt{auth\_sessions}, \texttt{password\_reset\_tokens},
+    \texttt{account\_requests} (solicitudes), \texttt{store\_api\_keys} y
+    \texttt{audit\_log} (bitácora).
+    \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
+    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes, borrados a las 24 horas.
+\end{itemize}
+
+Una pasada diaria aplica la retención: borra los puntos de trayectoria de las
+sesiones de más de 90 días cuyo tráfico ya se agregó, y conserva sin límite los
+eventos espaciales, los análisis y los agregados.
+
+\subsection{Backend}
+
+El backend se divide en dos servicios en Go (Figura~\ref{fig:backend} y
+Cuadro~\ref{tab:api}):
+
+\begin{itemize}
+    \item \textbf{\texttt{backend}:} arquitectura hexagonal. El núcleo
+    (\texttt{domain}, \texttt{ports} y \texttt{services}) contiene las
+    entidades, las validaciones y los casos de uso, sin depender de HTTP ni de
+    SQL. Los adaptadores de entrada (\texttt{httpapi} y \texttt{relay})
+    exponen la API REST y el relevo por WebSocket, y los de salida
+    (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
+    PostGIS y en memoria.
+    \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
+    lista de videos subidos en disco temporal, el relevo de video y
+    detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
+    todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
+    guardado anterior.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
+\caption{Arquitectura de los servicios del backend.}
+\label{fig:backend}
+\end{figure}
+
+{\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|L{0.42\textwidth}|L{0.50\textwidth}|}
+\caption{Recursos de las API}
+\label{tab:api} \\
+\hline
+\textbf{Ruta} & \textbf{Uso} \\
+\hline
+\endfirsthead
+\hline
+\multicolumn{2}{|l|}{\textit{Recursos de las API (continuación)}} \\
+\hline
+\textbf{Ruta} & \textbf{Uso} \\
+\hline
+\endhead
+\multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
+\hline
+\texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
+\hline
+\texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
+\hline
+\texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
+\hline
+\texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
+\hline
+\texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
+\hline
+\texttt{/media/\{archivo\}} & Videos procesados del Build \\
+\hline
+\texttt{/trafico/...} & Resumen, serie, calor, permanencia y embudo por período y franja; umbrales \\
+\hline
+\texttt{/ventas/...} & Tickets, resumen, patrones, pronóstico, simulados y emparejamiento \\
+\hline
+\multicolumn{2}{|l|}{\textit{backend}: cuentas y privacidad, \texttt{/api/v1}} \\
+\hline
+\texttt{/auth/...} & Ingreso, salida, cambio y recuperación de contraseña \\
+\hline
+\texttt{/usuarios} · \texttt{/usuarios/solicitudes} & Cuentas, roles y solicitudes \\
+\hline
+\texttt{/mi/...} & Perfil, cambio de correo y exportación con permiso \\
+\hline
+\texttt{/auditoria} · \texttt{/privacidad} & Bitácora, retención y depuración \\
+\hline
+\multicolumn{2}{|l|}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
+\hline
+\texttt{/telefonos} & Teléfonos conectados como cámaras \\
+\hline
+\texttt{/videos} & Videos subidos por tandas y resumen de cada uno \\
+\hline
+\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
+\hline
+\texttt{/personas} & Memoria de identidades \\
+\hline
+\end{longtable}
+}
+
+\FloatBarrier
+\subsection{Frontend}
+
+Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
+servida por nginx, que además redirige \texttt{/api/}, \texttt{/vivo/} y
+\texttt{/camara/} a sus servicios, verifica la sesión antes de dejar pasar a
+cada servicio según el rol, añade cabeceras de seguridad y limita las
+peticiones por IP. El código se organiza por funcionalidades sobre un núcleo
+común (Figura~\ref{fig:frontend}). Tras el ingreso, cada sitio tiene las mismas
+nueve secciones, y cada rol ve solo las suyas:
+
+\begin{enumerate}
+    \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
+    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio,
+    comedor o pasillo del Edificio D), o, en modo en vivo, muestra lo que ven
+    los teléfonos y permite iniciar y guardar una captura. Lo grabado se ve
+    zona por zona: al elegir Patio, Comedor o Pasillo del Edificio D (en la
+    fila ``Ir a'' o con un clic en el campus) el plano queda fijo en esa zona
+    y dibuja solo su plano, sus zonas y sus cámaras; ``Todo el campus'' lo
+    suelta. Al activar el en vivo se elige la zona que se graba: la captura
+    se guarda solo en ella, el plano no sale de su marco y los teléfonos
+    toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
+    \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
+    procesados todos a la vez sin guardarse, con un resumen de cada uno
+    (Figura~\ref{fig:web-videos}).
+    \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
+    calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
+    franja y fecha, y una línea de tiempo de la sesión en la que se marcan
+    hasta cinco rangos (arrastrando, escribiendo el inicio y el fin o
+    haciendo clic en la línea): todo el tablero muestra solo esos rangos, los
+    mapas distinguen cada uno por color y una tabla compara sus indicadores
+    con la sesión completa. Es exportable a PDF y CSV, con los rangos y los
+    mapas de cada uno, y enviable por correo
+    (Figuras~\ref{fig:web-insights} y~\ref{fig:web-insights-pdf}).
+    \item \textbf{Ventas:} tickets reales o simulados, conversión por local
+    elegido en el plano, cuándo se vende, emparejamiento de cada compra con la
+    visita que la hizo y pronóstico con simulador de escenarios
+    (Figura~\ref{fig:web-ventas}).
+    \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
+    con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
+    \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
+    umbrales de tráfico (Figura~\ref{fig:web-config}).
+    \item \textbf{Teléfonos:} código de unión en QR, cámaras de teléfono con el
+    proceso del modelo y memoria de personas (Figura~\ref{fig:web-telefonos}).
+    \item \textbf{Cuentas:} cuentas, accesos, bitácora y privacidad.
+    \item \textbf{Solicitudes:} cambios de correo y permisos de exportación.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/frontend.png}
+\caption{Arquitectura del frontend.}
+\label{fig:frontend}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/web-configuracion.png}
+\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
+las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
+cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
+pegada al comedor), y umbrales de tráfico.}
+\label{fig:web-config}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/videos.png}
+\caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
+el resumen de cada video.}
+\label{fig:web-videos}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/insights.png}
+\caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
+Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
+de tiempo y resumen de la sesión.}
+\label{fig:web-insights}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.55\linewidth]{figuras/plataforma/insights-pdf.png}
+\caption{Reporte de Insights exportado a PDF.}
+\label{fig:web-insights-pdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
+\caption{Ventas: selección de locales en el plano y pestañas de resumen,
+pronóstico, patrones, emparejamiento, tickets y datos.}
+\label{fig:web-ventas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
+\caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
+conectadas y memoria de personas, que se olvida tras 24 horas.}
+\label{fig:web-telefonos}
+\end{minipage}
+\end{figure}
+
+\FloatBarrier
+\section{Pruebas de validación y estrés del modelo}
+\label{sec:pruebas}
+
+Esta sección mide el modelo de Videos, que es el que procesa varias cámaras a
+la vez. Primero presenta la validación de cada pieza del modelo con videos
+etiquetados (detector, Re-ID, seguidor y asociación entre cámaras), que
+explica por qué el modelo actual usa esos componentes, y luego las pruebas de
+carga: cuánto procesa el equipo de despliegue (Cuadro~\ref{tab:infra}) y qué
+consume cada parte del modelo.
+
+\subsection{Validación de los modelos con videos etiquetados}
+\label{sec:validacion-modelos}
+
+El modelo de Videos no se armó a ojo: cada componente se comparó con sus
+alternativas y cada cambio se aceptó solo si mejoraba la medición. Se usaron
+seis pares de cámaras de interiores que observan el mismo lugar (12 videos de
+unos 5~min, 1080p a 23~fps), con cada persona etiquetada cuadro por cuadro y
+con el mismo identificador en las dos cámaras del par: entre 30 y 90 personas
+por video y 308 en total. Para que las comparaciones fueran justas, cada
+variante repitió exactamente los cuadros que el modelo procesó en tiempo real.
+Se midieron tres cosas:
+
+\begin{itemize}
+    \item \textbf{Probabilidad de acierto del Re-ID:} dado un tramo de una
+    persona, la probabilidad de que, entre todas las personas presentes, la
+    más parecida sea ella misma.
+    \item \textbf{Seguimiento dentro de cada cámara:} el IDF1 (fracción del
+    tiempo en que cada persona conserva su identificador), los cambios de ID y
+    cuántos IDs recibe cada persona.
+    \item \textbf{Multicámara:} la probabilidad de que la misma persona, vista
+    a la vez en dos cámaras, lleve el mismo ID, y la fracción de IDs que
+    mezclan a más de una persona.
+\end{itemize}
+
+\subsubsection{Detector}
+
+Con la configuración del modelo en vivo (YOLO26m~\cite{yolo26} a 960~px), en una muestra de
+cuadros de 16 cámaras de interiores etiquetadas (un conjunto más amplio que
+los 12 videos de los pares), el detector encontró el
+69\,\% de las personas, y el 70\,\% de lo que marcó era una persona
+etiquetada. La cifra real es algo mayor: las etiquetas dibujan el cuerpo
+completo aunque esté tapado por estantes, y aceptando una superposición menor
+encuentra cerca del 82\,\%. El punto débil son las personas pequeñas:
+encontró el 52\,\% de las de menos de 100~px de alto y el 66\,\% de las de
+100 a 200~px. Por eso Videos detecta a 1280~px: a 960~px, en los mismos
+cuadros, se detecta un 14\,\% menos de personas (228 frente a 264), sobre todo
+las lejanas.
+
+\subsubsection{Re-ID entre cámaras}
+
+El Re-ID es la pieza que decide si dos tramos son la misma persona. El del
+Build, YOLO26s-ReID, estira cada recorte a un cuadrado y reconocía poco a la
+misma persona desde otra cámara. Se comparó primero con OSNet-AIN~\cite{zhou2022osnet}
+(\textit{omni-scale} con normalización por instancia, entrenado en MSMT17~\cite{wei2018}) y
+luego con dos modelos más recientes basados en \textit{transformers}:
+PersonViT~\cite{hu2024personvit} ViT-S/16 (MSMT17) y CLIP-ReID~\cite{li2023clipreid} ViT-B/16
+(Cuadro~\ref{tab:reid-modelos}). La segunda comparación usa 4 de los pares y
+4\,372 recortes; ahí la misma persona es la que el seguidor mantiene en el
+mismo tramo 2~s o 10~s después, y se compara con todas las demás personas de
+la misma cámara en ese momento.
+
+\begin{table}[H]
+\caption{Comparación de modelos de Re-ID}
+\label{tab:reid-modelos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.44\textwidth}|R{0.14\textwidth}|R{0.14\textwidth}|R{0.14\textwidth}|}
+\hline
+\multicolumn{4}{|l|}{\textit{Re-ID del Build frente a OSNet-AIN: 6 pares, 308 personas, tramos de $\sim$4~s}} \\
+\hline
+\textbf{Medición} & \textbf{YOLO26s-ReID} & \textbf{OSNet-AIN} & \\
+\hline
+La más parecida en la otra cámara es la misma persona & 58\,\% & 78\,\% & \\
+\hline
+Tramos de la misma persona unidos entre cámaras, con $\sim$1\,\% de uniones de personas distintas & 31\,\% & 59\,\% & \\
+\hline
+Tiempo de cómputo, relativo al del Build & 1 & 0.5 & \\
+\hline
+\multicolumn{4}{|l|}{\textit{Modelos recientes: 4 pares, 4\,372 recortes, en la misma cámara}} \\
+\hline
+\textbf{Re-ID} & \textbf{Acierto a 2~s} & \textbf{Acierto a 10~s} & \textbf{ms por recorte} \\
+\hline
+OSNet-AIN & 92.4\,\% & 80.0\,\% & 1.3 \\
+\hline
+PersonViT ViT-S & 93.4\,\% & 81.0\,\% & 1.5 \\
+\hline
+CLIP-ReID ViT-B & 93.2\,\% & 81.2\,\% & 2.7 \\
+\hline
+\textbf{OSNet-AIN + PersonViT (elegido)} & \textbf{94.3\,\%} & \textbf{82.8\,\%} & \textbf{2.6} \\
+\hline
+OSNet-AIN + PersonViT + CLIP-ReID & 94.5\,\% & 83.3\,\% & 5.7 \\
+\hline
+\end{tabular}
+\end{table}
+
+OSNet-AIN reconoce a la misma persona desde la otra cámara con 20 puntos más
+de acierto y une al doble de tramos correctos con el mismo error. Entre los
+modelos recientes, ninguno solo supera claramente a OSNet-AIN; promediar el
+parecido de OSNet-AIN y PersonViT gana de 2 a 3 puntos y acepta como iguales a
+un 20\,\% menos de pares de personas distintas, por 2.6~ms por recorte. Sumar
+CLIP-ReID apenas agrega medio punto y duplica el tiempo, así que se descartó.
+
+\subsubsection{Seguimiento dentro de cada cámara}
+
+El seguidor compara la apariencia con histogramas de color y con un vector de
+una ResNet18~\cite{he2016} entrenada en ImageNet~\cite{deng2009}, que no es un modelo de Re-ID. En los 12
+videos, casi la mitad de los errores ocurría cuando el seguidor perdía a una
+persona y, al recuperarla, le ponía el ID de otra (en una cámara, 192 de 364
+saltos); el resto, cuando dos personas se cruzaban, porque decidía casi solo
+por el movimiento. Mover umbrales sueltos casi no cambiaba nada. Lo que
+mejoró el seguimiento fue dar más peso a la apariencia en esa decisión (0.8
+en vez de 0.22) y, dentro de ella, al vector de la ResNet18 (80\,\% en vez de
+20\,\%), porque el color distingue poco a gente vestida parecida
+(Cuadro~\ref{tab:seguimiento}).
+
+\begin{table}[H]
+\caption{Seguimiento dentro de cada cámara: 12 videos con 30 a 90 personas
+etiquetadas cada uno}
+\label{tab:seguimiento}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.44\textwidth}|R{0.20\textwidth}|R{0.20\textwidth}|}
+\hline
+\textbf{Medición} & \textbf{Antes} & \textbf{Modelo actual} \\
+\hline
+IDF1 (la persona conserva su ID) & 35\,\% & 40\,\% \\
+\hline
+Cambios de ID & 4\,422 & 2\,940 ($-34$\,\%) \\
+\hline
+IDs por persona & 3.8 & 2.9 \\
+\hline
+Error total de conteo de personas & 109 & 97 \\
+\hline
+Tiempo por cuadro & 96~ms & 97~ms \\
+\hline
+\end{tabular}
+\end{table}
+
+También se probó confirmar un ID nuevo a 1~s en vez de 2~s. En 8 videos el ID
+aparecía antes (0.8~s en vez de 1.6~s en la mediana), el IDF1 subía de 41.9 a
+43.4\,\% y el error de conteo bajaba de 60 a 44, pero los cambios de ID
+subían un 17\,\% (de 1\,544 a 1\,807) y cada persona recibía más IDs (2.76 en
+vez de 2.48). Se mantuvieron los 2~s por estabilidad. En todos los videos las
+cajas coinciden con su propio cuadro, sin retraso, y el ID queda sobre la
+cabeza con un desvío de 0 a 1\,\% del alto de la persona.
+
+\subsubsection{Asociación entre cámaras}
+
+Con el Re-ID del Build, la misma persona vista a la vez en las dos cámaras
+llevaba el mismo ID solo el 14\,\% de las veces. Con OSNet-AIN y la tanda de
+videos compartiendo un solo asociador, subió al 36\,\% en el primer par; en el
+par con más gente, donde el seguidor ya partía a cada persona en unos 4 IDs,
+solo subió al 18\,\%.
+
+Al revisar las uniones recorte por recorte apareció el error principal: IDs
+que se ``comían'' a otras personas. El asociador compara a cada candidato con
+el promedio de los tramos de una identidad; cada unión equivocada ensucia ese
+promedio, que se vuelve una persona genérica parecida a cualquiera, y algunos
+IDs llegaban a juntar 10 a 18 tramos de gente distinta en 5~minutos. Las
+uniones equivocadas tenían el mismo puntaje que las correctas (0.75 a 0.77),
+así que subir el umbral también cortaba las buenas. Se probaron dos
+caminos: limitar el tiempo para unir tramos y exigir que cada tramo nuevo se
+parezca a cada tramo de la identidad, no solo al promedio
+(Cuadro~\ref{tab:multicamara}).
+
+\begin{table}[H]
+\caption{Asociación entre cámaras: par de 5~min revisado recorte por recorte}
+\label{tab:multicamara}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.42\textwidth}|L{0.20\textwidth}|L{0.28\textwidth}|}
+\hline
+\textbf{Variante} & \textbf{IDs que mezclan personas} & \textbf{Personas contadas} \\
+\hline
+Asociador anterior (promedio de la identidad) & 60\,\% & 82 y 89 por cámara \\
+\hline
+Unir solo dentro de 15~s, con la regla de cada tramo (primeros 160~s) & 5\,\% (antes 41\,\%) & 109 IDs (antes 56): parte a las personas \\
+\hline
+Unir solo dentro de 30~s / 60~s & -- & 194 y 195 / 159 y 160 por cámara \\
+\hline
+\textbf{OSNet-AIN + PersonViT con la regla de cada tramo (elegida)} & \textbf{28\,\%} & \textbf{135 y 139 por cámara} \\
+\hline
+\end{tabular}
+\end{table}
+
+Limitar el tiempo para unir tramos dejaba los IDs limpios, pero partía a la
+misma persona en demasiados IDs. Por eso el modelo actual conserva las
+ventanas de unión y combina el Re-ID promediado con la regla de que cada
+tramo se parezca a cada tramo de la otra identidad: los IDs que mezclan
+personas bajan del 60 al 28\,\%. El conteo sube porque el asociador anterior
+juntaba a varias personas en un mismo ID.
+
+\subsubsection{Resultado frente al modelo anterior}
+
+La Figura~\ref{fig:validacion-reid} resume la mejora. Con el modelo actual,
+la probabilidad de que la persona más parecida en la otra cámara sea la
+misma pasa de 58 a 78\,\%, se unen casi el doble de tramos correctos, la
+misma persona vista a la vez en dos cámaras lleva el mismo ID 2.6 veces más
+seguido y los IDs que mezclan personas bajan a menos de la mitad. Además,
+con los mismos resultados, grabar las redes en CUDA graphs subió la fracción
+de cuadros procesados en tiempo real de un par de videos de 5~min del 36 al
+54\,\% (en las pruebas de carga, los cinco pares procesan el 73\,\%,
+Cuadro~\ref{tab:pares-modos}), y decodificar el video en la GPU, entre otros
+ajustes, bajó el paso de 7 cámaras de 60~fps en tiempo real de 1.8 a 0.58~s
+(de 0.5 a 1.7 cuadros por segundo de cada video); sin el reloj del tiempo
+real, ese paso toma de 603 a 794~ms (Cuadro~\ref{tab:siete}).
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/pruebas/validacion-reid.png}
+\caption{Izquierda: mediciones del multitracking antes y después de la
+validación. Derecha: probabilidad de que la persona más parecida en la misma
+cámara, 2~s y 10~s después, sea la misma, según el modelo de Re-ID.}
+\label{fig:validacion-reid}
+\end{figure}
+
+El seguimiento sigue siendo el límite del sistema en lugares concurridos: con
+un IDF1 de 40\,\%, una persona conserva su ID menos de la mitad del tiempo
+dentro de una cámara, y todavía el 28\,\% de los IDs mezcla a más de una
+persona, sobre todo gente vestida parecido (batas blancas o ropa oscura).
+Subirlo requiere un Re-ID dentro del propio seguidor, que es más lento.
+
+\subsection{Procedimiento de las pruebas de carga}
+
+Cada caso se subió a la sección Videos como una tanda, con el modelo en la GPU
+y sin teléfonos conectados, y se midieron sus primeros 2 minutos de proceso,
+desde que todos los videos de la tanda empezaban. Cada segundo se registró el
+uso de CPU y la memoria del proceso del modelo, el uso de CPU de todo el
+equipo, y el uso, la memoria y la potencia de la GPU; del canal de estado del
+modelo se tomaron los cuadros procesados y saltados, los milisegundos por
+cuadro y las personas contadas de cada video. Los casos fueron:
+
+\begin{itemize}
+    \item \textbf{Validación:} cinco pares de videos (P1 a P5) de dos cámaras
+    que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 86
+    personas contadas por cámara (Cuadro~\ref{tab:pares-detalle}).
+    \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar,
+    con unas 25 personas a la vista en cada una.
+\end{itemize}
+
+Los casos de estrés se midieron antes de retirar del sistema el módulo
+opcional de estimación de género, que consumía CPU adicional. Por eso la carga
+de CPU de esos casos es una cota superior de la actual y conviene repetir la
+medición con la versión final.
+
+El modelo procesa como una cámara en vivo: si no alcanza al video, salta
+cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
+segundo que logra procesar y en la fracción de cuadros que salta. Las siete
+cámaras se procesaron con el mismo modelo, el mismo lector en la GPU y la misma preparación de la pasada siguiente mientras
+se procesa la anterior, pero sin el reloj del tiempo real, sobre sus primeros
+2 minutos y con tres ritmos:
+1.5 y 5 cuadros por segundo fijos, y uno adaptado en el que el video avanza 3
+veces más lento que el reloj y cada pasada toma el cuadro de ese instante,
+con un tope de 15 cuadros por segundo. En los tres se procesa cada cuadro
+elegido de las siete cámaras, sin saltar ninguno por atraso.
+
+\subsection{Resultados de la validación con pares de cámaras}
+
+El Cuadro~\ref{tab:pares-modos} promedia los cinco pares y el
+Cuadro~\ref{tab:pares-detalle} muestra cada par.
+
+\begin{table}[H]
+\caption{Pares de cámaras 1080p a 23~fps: promedio de los cinco pares}
+\label{tab:pares-modos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.55\textwidth}|R{0.20\textwidth}|}
+\hline
+\textbf{Medición} & \textbf{Resultado} \\
+\hline
+Cuadros procesados por segundo, por video & 17.0 \\
+\hline
+Milisegundos por cuadro & 46 \\
+\hline
+Cuadros saltados & 27\,\% \\
+\hline
+Núcleos de CPU del modelo, promedio (p95) & 1.7 (1.8) \\
+\hline
+CPU de todo el equipo & 28\,\% \\
+\hline
+Uso de la GPU & 68\,\% \\
+\hline
+Memoria de la GPU & 2.8~GB \\
+\hline
+Memoria RAM del modelo & 1.4~GB \\
+\hline
+Potencia de la GPU & 59~W \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Detalle por par: cuadros por segundo por video, núcleos de CPU y uso
+de la GPU}
+\label{tab:pares-detalle}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.07\textwidth}|L{0.17\textwidth}|L{0.22\textwidth}|L{0.20\textwidth}|L{0.20\textwidth}|}
+\hline
+\textbf{Par} & \textbf{Personas por cámara} & \textbf{Cuadros por segundo} & \textbf{Núcleos de CPU} & \textbf{Uso de la GPU} \\
+\hline
+P1 & 46 y 46 & 18.1 & 1.7 & 72\,\% \\
+\hline
+P2 & 86 y 81 & 13.1 & 1.7 & 58\,\% \\
+\hline
+P3 & 35 y 26 & 18.2 & 1.7 & 69\,\% \\
+\hline
+P4 & 70 y 64 & 17.7 & 1.7 & 71\,\% \\
+\hline
+P5 & 16 y 33 & 17.7 & 1.6 & 68\,\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Resultados de las pruebas de estrés}
+
+Con dos cámaras de 60~fps y mucha gente (227 y 148 personas contadas en
+2~minutos), el modelo procesó 7.7 cuadros por segundo por
+video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
+6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
+la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
+Cuadro~\ref{tab:siete} resume las siete cámaras y la
+Figura~\ref{fig:siete-ritmos} compara los tres ritmos. A 5 cuadros por
+segundo fijos, 2 minutos de video tardaron 6 minutos (3.0 veces) y se
+procesaron los 600 cuadros elegidos de cada cámara. El ritmo adaptado tardó
+lo mismo pero procesó menos, 3.9 cuadros por segundo por cámara: cuando una
+pasada se demora, salta al cuadro que marca el reloj.
+
+\begin{table}[H]
+\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (primeros 2 minutos)}
+\label{tab:siete}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.38\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|}
+\hline
+\textbf{Medición} & \textbf{1.5 c/s fijos} & \textbf{Adaptado (3 veces el video)} & \textbf{5 c/s fijos} \\
+\hline
+Cuadros procesados por segundo, por cámara & 1.5 & 3.9 & 5.0 \\
+\hline
+Cuadros procesados, en total & 1\,260 & 3\,234 & 4\,200 \\
+\hline
+Tiempo de proceso (veces el video) & 153~s (1.3) & 363~s (3.0) & 364~s (3.0) \\
+\hline
+Milisegundos por pasada de las 7 cámaras & 794 & 632 & 603 \\
+\hline
+\quad de ellos, seguimiento en la CPU & 588 & 503 & 463 \\
+\hline
+Núcleos de CPU del modelo & 7.9 & 7.6 & 11.0 \\
+\hline
+CPU de todo el equipo & 61\,\% & 61\,\% & 77\,\% \\
+\hline
+Uso de la GPU & 31\,\% & 28\,\% & 38\,\% \\
+\hline
+Memoria de la GPU & 3.8~GB & 3.8~GB & 3.8~GB \\
+\hline
+Memoria RAM del modelo & 4.3~GB & 4.0~GB & 4.7~GB \\
+\hline
+Potencia de la GPU & 41~W & 36~W & 45~W \\
+\hline
+Personas contadas por cámara & 122 a 201 & 142 a 241 & 141 a 248 \\
+\hline
+Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.31) & 0.033 (0.17) & 0.030 (0.15) \\
+\hline
+Detecciones con ID global & 76\,\% & 82\,\% & 85\,\% \\
+\hline
+IDs vistos en más de una cámara & 326 & 342 & 393 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/pruebas/siete-camaras.png}
+\caption{Siete cámaras 1080p a 60~fps según el ritmo: cuadros procesados por
+cámara, tiempo de proceso frente a la duración del video y movimiento de una
+persona entre dos cuadros procesados seguidos.}
+\label{fig:siete-ritmos}
+\end{figure}
+
+\subsection{Análisis de los resultados}
+
+\begin{itemize}
+    \item \textbf{Dos cámaras van casi al ritmo del video.} Con dos cámaras
+    1080p a 23~fps el modelo procesa unos 17 cuadros por segundo por video
+    (unos 34 en total), alrededor del 73\,\% de los cuadros.
+    \item \textbf{La cantidad de gente baja el ritmo.} El par con más personas
+    (P2, más de 80 por cámara) procesa unos 13 cuadros por segundo, frente a
+    18 del que tiene menos (P3).
+    \item \textbf{La GPU no es el cuello de botella.} En los pares la GPU
+    trabaja entre 58\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
+    que sube con la gente (1.7 núcleos en los pares y más de 6 con dos cámaras
+    de 60~fps); con siete cámaras la GPU trabaja solo entre 28 y 38\,\%.
+    \item \textbf{Siete cámaras de 60~fps se procesan completas a 5 cuadros
+    por segundo.} Sin el reloj del tiempo real, una pasada de las siete
+    cámaras toma 0.6~s, tres cuartos en el seguimiento en la CPU, y 2 minutos
+    de video se procesan en 3 veces su duración sin saltar ningún cuadro
+    elegido. Frente a 1.5 cuadros por segundo, el movimiento entre cuadros
+    seguidos baja a la mitad (p90 de 0.15 alturas de la caja frente a 0.31),
+    el 85\,\% de las detecciones lleva ID global (frente al 76\,\% a 1.5 c/s) y más IDs se
+    reconocen entre cámaras. Para siete cámaras conviene procesar por lotes a
+    una tasa fija de 5 cuadros por segundo y no en tiempo real.
+    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 4.7~GB de
+    RAM y la GPU consume entre 36 y 61~W; el equipo arranca una tanda en 2.5 a
+    9~s.
+\end{itemize}
+
+Estas pruebas miden capacidad y consumo, no precisión: la precisión del
+seguimiento corresponde a la Sección~\ref{sec:validacion-modelos}.
+Cada caso se midió durante 2 minutos en un solo equipo portátil, cuyo
+rendimiento puede variar con la temperatura y la energía disponible.
+
+\section{Pruebas de validación en ESAN}
+\label{sec:validacion-esan}
+
+Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}).
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pruebas-participantes.png}
+\caption{Estudiantes de ESAN que ayudaron en la prueba de campo, en el patio del Edificio A.}
+\label{fig:pruebas-participantes}
+\end{figure}
+
+\subsection{Primera prueba: ESAN, Edificios A y B}
+
+La primera validación se realizó en el patio en forma de L entre los
+Edificios A y B de la Universidad ESAN, registrado en la aplicación como el
+sitio \textit{ESAN}, en dos etapas: con tres cámaras fijas, para validar las
+Partes I a III, y con teléfonos usados como cámaras en vivo.
+
+\subsubsection{Escenario y plano del sitio}
+
+El plano del patio se obtuvo de un levantamiento desde las cámaras: se
+marcaron en la imagen los puntos del suelo y de los objetos y se llevaron a
+metros con las homografías del Build. El plano contiene el contorno del piso
+transitable (patio, descanso bajo el entrepiso y tramo norte de la L), los
+ascensores y los objetos que nadie atraviesa: la carpa azul, dos máquinas
+expendedoras, un tacho y los contenedores de reciclaje
+(Figura~\ref{fig:plano-esan}). El 100\,\% de los puntos de cam01 y cam02 y el
+99.6\,\% de los de cam03 caen dentro del piso. Las zonas de análisis son
+Ascensores, Tacho y Reciclaje, y los locales Carpa azul, Expendedora negra y
+Expendedora roja, cada uno con su zona INTERIOR.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.75\linewidth]{figuras/validacion/plano-patio-esan.png}
+\caption{Plano del patio entre los Edificios A y B: piso, carpa azul,
+expendedoras (derecha), tacho (verde), reciclaje (izquierda) y ascensores
+(línea roja).}
+\label{fig:plano-esan}
+\end{figure}
+
+\subsubsection{Prueba con cámaras fijas}
+
+Se procesaron tres videos de cámaras con vista al patio, de
+$1280 \times 720$ a 15~FPS y 126~s de duración común, con desfases de reloj de
++1.0~s (cam02) y +3.0~s (cam03) respecto de cam01. El sistema reconoció a 16
+personas y registró 13\,689 puntos de trayectoria
+(Figuras~\ref{fig:dataset-camara}, \ref{fig:dataset-trayectorias}, \ref{fig:dataset-en-vivo}
+y~\ref{fig:dataset-insights}); el
+Cuadro~\ref{tab:resultados-dataset} resume las mediciones. La asociación
+multicámara se midió sin y con el muestreo adaptativo de vistas del
+codificador Re-ID, que es la configuración final del Build: sin él, la
+precisión es 0.99 y el recall 0.86; con él, el codificador se llama un
+34\,\% menos y el recall sube a 0.91, con la misma precisión.
+
+\begin{table}[H]
+\caption{Resultados de la prueba con cámaras fijas}
+\label{tab:resultados-dataset}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.52\textwidth}|L{0.38\textwidth}|}
+\hline
+\textbf{Medición} & \textbf{Resultado} \\
+\hline
+Identificadores locales tras ajustar umbrales & De 88 a 80 \\
+\hline
+Tracks de personas lejanas (altura mediana $< 60$~px) & De 7 a 1 \\
+\hline
+Precisión / recall de la asociación multicámara, sin muestreo adaptativo & 0.99 / 0.86 \\
+\hline
+Llamadas al codificador Re-ID con muestreo adaptativo (configuración final) & $-34\,\%$ (precisión 0.99, recall 0.91) \\
+\hline
+Altura estimada de las cámaras & 8.3 / 9.3 / 9.5~m \\
+\hline
+Error de calibración entre cámaras (mediana) & 0.28 a 0.48~m; 98 a 100\,\% bajo 1~m \\
+\hline
+Detecciones ubicadas en el plano & 93\,\% \\
+\hline
+Velocidad mediana al caminar & 0.87~m/s \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-camara-01.jpg}
+\caption{Cámara cam01 procesada: identificador global (G) y local (L).}
+\label{fig:dataset-camara}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-trayectorias.png}
+\caption{Trayectorias de las 16 personas durante los 126~s.}
+\label{fig:dataset-trayectorias}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-en-vivo.png}
+\caption{En vivo: la sesión de las tres cámaras reproducida sobre el plano del
+patio, con el seguimiento, el mapa de calor y las personas presentes en cada
+instante.}
+\label{fig:dataset-en-vivo}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-insights.png}
+\caption{Insights de la sesión en la versión actual: personas, permanencia, captación y densidad.}
+\label{fig:dataset-insights}
+\end{figure}
+
+\subsubsection{Prueba con cámaras de teléfono}
+
+En la segunda etapa se usaron teléfonos como cámaras del mismo patio, con el
+sistema desplegado entonces en el servidor de Google Cloud, sin GPU. Hoy los
+teléfonos se unen a la computadora local con un código QR
+(Figura~\ref{fig:web-telefonos}). El procedimiento fue:
+
+\begin{enumerate}
+    \item Cada teléfono abrió la página de cámara del servidor
+    (\texttt{https://<servidor>/camara/}) y pulsó ``Unirse con la cámara'',
+    sin instalar ninguna aplicación.
+    \item El modelo en vivo procesó todos los teléfonos a la vez, y la sección
+    Teléfonos mostró sus cajas e ID, junto con la memoria de
+    personas (Figura~\ref{fig:telefonos-memoria}).
+    \item En el modo en vivo, los teléfonos tomaron el lugar de cam01, cam02 y
+    cam03 por orden de llegada, con su posición y rumbo ajustados en
+    Configuración. El iPhone se calibró con una grabación de una persona
+    caminando: cuadro de $640 \times 853$~px, focal de 575~px y como
+    referencias los contenedores de reciclaje y el tacho verde.
+    \item Lo registrado entre ``Iniciar captura'' y ``Terminar y guardar'' se
+    guardó como una sesión LIVE, visible en Registros
+    (Figura~\ref{fig:telefonos-registros}, con las capturas posteriores, del
+    13 al 26 de octubre) y analizada en Insights con el mismo
+    tablero que una sesión grabada.
+\end{enumerate}
+
+El 6 de octubre de 2026, entre las 17:21 y las 20:33, se guardaron cinco
+capturas de entre 15~s y 1~min~59~s, con 641 posiciones en el plano y 28
+personas en total. La memoria de identidades reunió a 10 personas: la que más
+se vio apareció en cuatro teléfonos distintos y conservó el mismo ID en todos.
+En el servidor, sin GPU, el modelo en vivo procesó unos 9 cuadros por segundo
+sin personas y entre 4 y 6 con una a cuatro personas, mientras cada teléfono
+enviaba 15 cuadros por segundo. 
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/registros.png}
+\caption{Registros: capturas en vivo guardadas con los teléfonos en ESAN, con
+fecha, hora, duración, personas y puntos; cada una se abre en Insights o se
+reproduce sobre el plano.}
+\label{fig:telefonos-registros}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
+\caption{Teléfonos, el 6 de octubre: memoria de personas con las cámaras donde
+se vio a cada una y cuándo.}
+\label{fig:telefonos-memoria}
+\end{figure}
+
+\subsection{Segunda prueba: ESAN, comedor}
+
+La segunda validación se hizo en el comedor de ESAN, registrado como la
+zona~2 del mismo sitio, con su propio plano (comedor, comedor de profesores,
+zona de atención, servicios higiénicos y escaleras). El 27 de octubre de 2026,
+a las 21:58, dos teléfonos grabaron a la vez el comedor desde extremos
+opuestos (cam04 y cam05, a 1.50 y 1.58~m de altura y a unos 24~m entre sí),
+mientras dos personas lo cruzaban caminando.
+
+Las dos grabaciones se procesaron con el modelo de Videos como una tanda, para
+que la misma persona lleve el mismo ID en las dos cámaras, y cada persona se
+ubicó en el plano con el modelo de cámara de cada teléfono. La distancia focal
+(970 y 935~px) y el rumbo de cada cámara se ajustaron con lo que ven ambas:
+cada teléfono ve a quien sostiene el otro y los dos caminantes aparecen en las
+dos cámaras. Con la focal de la grabación anterior cada cámara ubicaba a la
+otra a unos 14~m (no 24) y a los caminantes a unos 11~m entre sí, por lo que
+nunca se unían; con el ajuste, los caminantes quedan a alrededor de 1~m entre
+cámaras y cada una ubica a la otra a menos de 2~m de su lugar. Los videos
+coinciden en el tiempo con menos de 0.5~s de diferencia y se recortan al más
+corto (91.0~s).
+
+La sesión publicada tiene 4 personas en el plano (17 con el procesamiento
+anterior, que no compartía IDs entre cámaras), con sus recorridos, el mapa de
+calor y la última posición de quien ya salió
+(Figura~\ref{fig:comedor-en-vivo}). Quedan dos errores del modelo de Videos:
+uno de los caminantes recibe por unos segundos un segundo ID en cam04, y en
+cam05 los dos caminantes comparten un ID en parte del recorrido.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-en-vivo.png}
+\caption{Comedor de ESAN: la sesión de dos teléfonos reproducida sobre el
+plano, con el seguimiento y el mapa de calor de la misma zona.}
+\label{fig:comedor-en-vivo}
+\end{figure}
+
+Las capturas de la grabación en vivo, de la sesión guardada y de la vista en los
+teléfonos se presentan en el Anexo.
+
+\subsection{Tercera prueba: ESAN, pasillo del Edificio D}
+\label{sec:pasillo}
+
+La tercera validación se hizo fuera del comedor: en el pasillo exterior del
+Edificio D, por donde pasa la gente que baja de la escalera hacia la plaza y
+la que cruza el puente hacia el Edificio A. A diferencia del patio y del
+comedor, las dos cámaras de esta zona no ven el mismo lugar: cada una cubre un
+brazo del pasillo y una persona tarda unos 30~s en ir de una a la otra.
+
+\subsubsection{Escenario y plano de la zona}
+
+El pasillo se registró como la zona grabada~3 del sitio ESAN, una capa más del
+plano junto al patio y al comedor. Es una L de unos 740~m$^2$ pegada a las
+fachadas norte y este del Edificio D. Se dibujó en el mismo marco que el plano
+del comedor (mismo centro, giro y 29.7~px por metro), así que sus bordes
+interiores coinciden con las paredes del comedor; los de afuera siguen el
+terreno del mapa del campus: el borde del camino y la punta del Aula~C, el
+jardín del norte, la abertura hacia la plaza en la esquina noreste, la
+fachada del edificio del este y el puente hacia el Edificio A (los
+recorridos del 9 de noviembre están en la Figura~\ref{fig:pasillo-recorridos}).
+
+Las cámaras son dos teléfonos en el segundo piso, a 4.75~m: cam06 en el
+extremo oeste de la fachada norte, mirando al este por la escalera hacia la
+plaza, y cam07 al sur del lado este, mirando al norte por el pasillo entre el
+Edificio D y el del este. Su altura y su horizonte se ajustaron con la altura
+de las personas detectadas, y su posición y rumbo con los propios videos: la
+gente camina dentro del pasillo y a lo largo de cada brazo, y quien está en
+las dos cámaras a la vez debe caer en el mismo punto. Con ese ajuste, la
+distancia entre las dos cámaras para una misma persona bajó de 9.2 a 2.2~m y
+los puntos dentro del pasillo subieron del 73 al 85\,\%.
+
+Para el modo en vivo se agregaron tres referencias de ubicación por cámara
+(E0--E2 para cam06 y F0--F2 para cam07), tomadas de los videos con su modelo
+de cámara. En esas grabaciones reconocen entre el 98 y el 100\,\% de los
+cuadros, con 0.1~m de error, y ningún cuadro de otra zona las confunde.
+Mientras un teléfono todavía no reconoce la vista, cada persona se ubica con
+la posición y el rumbo de su cámara y la distancia por su tamaño
+(Algoritmo~\ref{alg:ubicacion}), y lo que cae fuera se lleva al borde del
+piso del pasillo, no al del patio.
+
+\subsubsection{Primera grabación}
+
+El 7 de noviembre de 2026, a las 13:43, los dos teléfonos grabaron 162~s del
+pasillo. La cam07 empezó a grabar 4.1~s antes que cam06; se le cortaron esos
+segundos, ajustados con las personas que pasan de una cámara a la otra, y
+desde ahí los dos videos empiezan a la vez. Procesada como una tanda de
+Videos, la sesión reunió a 86 personas, 56 vistas en cam06 y 39 en cam07, de las cuales 9
+pasaron por las dos cámaras, con 12\,563 puntos en el plano. Esta grabación
+mostró el problema de la gente lejana de la plaza y la escalera, de 20 a
+40~px de alto, que cambiaba de ID a cada rato; de ahí salió el paso de IDs
+lejanos (Algoritmo~\ref{alg:lejanos}). La zona se volvió a grabar con más
+gente el 9 de noviembre (Figura~\ref{fig:pasillo-camaras} y
+Sección~\ref{sec:mas-gente}).
+
+\subsection{Cuarta prueba: ESAN, grabaciones con más gente}
+\label{sec:mas-gente}
+
+Las pruebas anteriores con teléfonos tenían poca gente: en el comedor, una o
+dos personas a la vez por cámara, y en la primera grabación del pasillo, una
+mediana de 6. El 9 de noviembre de 2026, justo después de una prueba en vivo
+en el pasillo, se grabaron con dos teléfonos cada uno el pasillo del
+Edificio D (en los lugares de cam06 y cam07) y el patio del Edificio A (en
+los de cam01 y cam02). Los videos son verticales, de $464 \times 832$ a
+12~FPS y de $478 \times 850$ a 13.9~FPS, y llegaron sin la hora de grabación
+en sus metadatos, así que la hora de inicio es aproximada: 11:32 en el
+pasillo y 11:38 en el patio, entre el fin de la prueba en vivo y la llegada
+de los archivos.
+
+\subsubsection{Sincronía de las cámaras}
+
+Cada par se recortó a mano para que sus dos videos empiecen a la vez, y el
+corte se comprobó con datos:
+
+\begin{itemize}
+    \item \textbf{Patio.} La CAM1 se recortó desde el segundo 26.106 del
+    original y la CAM2 desde el 11.476, medidos con el audio de cada uno. El
+    audio de las dos cámaras, correlacionado con GCC-PHAT~\cite{knapp1976}, da un solo pico en
+    todas las bandas de frecuencia, 22 veces el ruido: a la CAM1 recortada le
+    sobran unos 0.55~s (0.57~s según los originales y 0.53~s según los
+    recortes, menos de un cuadro de diferencia), que se compensan con el
+    desfase de cam01. Como prueba independiente, para cada corrimiento de
+    cam02 se contó cuántas personas de cam02 caen a menos de 0.8~m de alguien
+    de cam01 en el mismo instante: el máximo queda a +0.1~s, con 9.1 parejas
+    por cuadro frente a una mediana de 4.3 (Figura~\ref{fig:patio-sincronia}).
+    \item \textbf{Pasillo.} El audio no sirve: los teléfonos están a unos
+    30~m entre sí, en dos fachadas del edificio, y no oyen lo mismo. La CAM1
+    se recortó desde el segundo 68.714 del original y la CAM2 va entera. Lo confirma la gente que el Re-ID reconoce
+    en las dos cámaras: 8 personas bajan la escalera de cam06, cruzan la plaza
+    y salen bajo cam07 unos 30~s después ($\pm$1~s), lo que corresponde a unos
+    45~m a 1.5~m/s (Figura~\ref{fig:pasillo-camaras}). Un primer corte de
+    14~s suponía que la gente iba en sentido contrario, por dentro del
+    comedor, y se descartó.
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pasillo-camaras.jpg}
+\caption{Pasillo del Edificio D, 9 de noviembre: G133 baja la escalera en
+cam06 (izquierda, a los 98~s) y sale bajo cam07 con la misma mochila
+(derecha, a los 124~s), con el mismo ID global. Sobre cada persona va solo su
+ID, sin caja; la cabecera dice cuántas personas se ven.}
+\label{fig:pasillo-camaras}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-sincronia.png}
+\caption{Sincronía del patio. Izquierda: correlación del audio de los dos
+videos recortados, con un solo pico a 0.53~s. Derecha: con el desfase de cam01
+aplicado, personas de cam02 a menos de 0.8~m de alguien de cam01 en el mismo
+instante según el corrimiento de cam02; el máximo queda a +0.1~s.}
+\label{fig:patio-sincronia}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{Ubicación en el plano}
+
+El patio no tenía modelo de cámara para estos teléfonos y en el pasillo cam06
+se sostuvo en la mano, con otro encuadre que en la primera grabación. Los
+cuatro videos se ubicaron con las referencias del modelo en vivo
+(Algoritmo~\ref{alg:referencias}): los 24 cuadros comparados de cada video
+se reconocieron, aun con el teléfono moviéndose hasta 11.6\textdegree{}, y cada uno se
+aparta de la mediana entre 0.05 y 0.15~m (Cuadro~\ref{tab:referencias-09nov}).
+En el patio la sesión no toca la calibración de cam01 y cam02, que sigue
+siendo la de las cámaras fijas del Build.
+
+\begin{table}[H]
+\caption{Ubicación de las grabaciones del 9 de noviembre con las referencias
+del en vivo}
+\label{tab:referencias-09nov}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.11\textwidth}|L{0.17\textwidth}|L{0.16\textwidth}|L{0.19\textwidth}|L{0.17\textwidth}|}
+\hline
+\textbf{Cámara} & \textbf{Referencias usadas} & \textbf{Cuadros reconocidos} & \textbf{Desvío de la mediana (peor)} & \textbf{Movimiento del teléfono} \\
+\hline
+cam01 & A2 & 24 de 24 & 0.06~m (0.18~m) & 101~px y 7.8\textdegree{} \\
+\hline
+cam02 & B0 (16), B1 (8) & 24 de 24 & 0.10~m (0.19~m) & 91~px y 5.3\textdegree{} \\
+\hline
+cam06 & E2 & 24 de 24 & 0.15~m (0.21~m) & 123~px y 11.6\textdegree{} \\
+\hline
+cam07 & F1 (20), F0 y F2 (2 cada una) & 24 de 24 & 0.05~m (0.15~m) & 49~px y 4.8\textdegree{} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Resultados}
+
+El Cuadro~\ref{tab:mas-gente} compara las cuatro grabaciones con teléfonos.
+El patio y el pasillo del 9 de noviembre tienen en el plano de 10 a 14 veces
+más gente a la vez que el comedor, y de 2 a 3 veces más que la primera
+grabación del pasillo; aun
+así se procesaron al ritmo del video, unas 14 pasadas por segundo de las dos
+cámaras, en la GPU de la computadora local dentro de Docker
+(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:insights-09nov-web}).
+
+\begin{table}[H]
+\caption{Grabaciones de zonas con dos teléfonos: de menos a más gente}
+\label{tab:mas-gente}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.30\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|}
+\hline
+\textbf{Medición} & \textbf{Comedor (27/10)} & \textbf{Pasillo (7/11)} & \textbf{Pasillo (9/11)} & \textbf{Patio (9/11)} \\
+\hline
+Duración común & 91~s & 162~s & 154~s & 205~s \\
+\hline
+Personas a la vez por cámara, mediana (máx.) & 1 (2) y 1 (3) & 6 (10) y 2 (7) & 15 (21) y 7 (18) & 18 (31) y 12 (21) \\
+\hline
+Personas a la vez en el plano, mediana (máx.) & 2 (4) & 9 (15) & 21 (36) & 28 (40) \\
+\hline
+Personas vistas en cada cámara & 3 y 3 & 56 y 39 & 89 y 59 & 116 y 74 \\
+\hline
+IDs del seguidor por cámara & -- & -- & 314 y 143 & 283 y 221 \\
+\hline
+Tramos lejanos reunidos & -- & -- & 272 de 457 & 150 de 504 \\
+\hline
+\textbf{Personas en la sesión} & \textbf{4} & \textbf{86} & \textbf{128} & \textbf{149} \\
+\hline
+Vistas por las dos cámaras & 2 & 9 & 20 (16\,\%) & 41 (28\,\%) \\
+\hline
+Puntos en el plano & 1\,662 & 12\,563 & 33\,815 & 64\,746 \\
+\hline
+Permanencia mediana por persona & 81.5~s & 11.0~s & 14.6~s & 14.5~s \\
+\hline
+\end{tabular}
+\end{table}
+
+Lo que muestran estas grabaciones:
+
+\begin{itemize}
+    \item \textbf{La ubicación por referencias aguanta teléfonos en la mano.}
+    Los cuatro videos se ubicaron sin calibrarlos, con 24 de 24 cuadros
+    reconocidos y 0.05 a 0.15~m de desvío, aunque cam06 se movió hasta
+    11.6\textdegree{}. Una zona nueva solo necesita sus referencias del en vivo.
+    \item \textbf{La sincronía se puede verificar con los propios datos.} El
+    audio sirve cuando las cámaras oyen lo mismo (patio); si no, la gente que
+    pasa de una a otra y su velocidad fijan el desfase (pasillo). Con el
+    corte correcto, las dos cámaras ponen a la misma gente en el mismo punto
+    del piso.
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/patio-09nov-camaras.jpg}
+\caption{Patio del Edificio A, 9 de noviembre, a los 104~s: 20 personas en
+cada cámara. G1, G7, G21 y G41 están a la vez lejos en cam01 (izquierda)
+y cerca en cam02 (derecha), con el mismo ID global.}
+\label{fig:patio-09nov-camaras}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Con cámaras que se solapan, la asociación une a más gente.}
+    En el patio, donde las dos vistas comparten el centro (Figuras~\ref{fig:patio-09nov-recorridos}
+    y~\ref{fig:patio-09nov-calor}), el 28\,\% de las
+    personas lleva el mismo ID en las dos cámaras; en el pasillo, donde no se
+    ven entre sí y el paso de una a otra toma 30~s, el 16\,\%, solo con el
+    Re-ID.
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-recorridos.png}
+\caption{Patio, 9 de noviembre: recorridos de las 149 personas sobre el piso
+del patio, con trazo marcado para las 41 vistas por las dos cámaras y la
+posición y el rumbo de cada cámara.}
+\label{fig:patio-09nov-recorridos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-plano-calor.png}
+\caption{Patio, 9 de noviembre, con el cálculo de En vivo: a la izquierda, el
+seguimiento a los 104~s, con 27 personas detectadas en ese momento, su ID global, su rastro
+de los últimos 10~s y en gris la última posición de quien ya salió; a la
+derecha, el mapa de calor de toda la sesión, con el mismo cálculo y la misma
+escala de color de la plataforma (celdas de 0.5~m, hasta 40 puntos por
+persona y celda). La mayor presencia está en el centro del patio, donde se
+cruzan las vistas de las dos cámaras.}
+\label{fig:patio-09nov-calor}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{El límite sigue siendo el seguimiento de la gente lejana.}
+    En cam06 el seguidor abrió 314 IDs para unas 90 personas, sobre todo en
+    lo alto de la escalera y en la plaza, donde miden menos de 50~px
+    (Figuras~\ref{fig:pasillo-recorridos} y~\ref{fig:pasillo-calor}). El paso
+    de IDs lejanos reunió más de la mitad de esos tramos (272 de 457), pero
+    una persona puede quedar todavía partida en dos o tres IDs, y en grupos
+    vestidos parecido el Re-ID puede unir a dos personas, como se midió en la
+    Sección~\ref{sec:validacion-modelos}. Las cifras de personas son, por
+    eso, una estimación, no un conteo exacto.
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/pasillo-recorridos.png}
+\caption{Pasillo del Edificio D, 9 de noviembre: recorridos de las 128
+personas sobre la zona grabada~3, junto al comedor, con trazo marcado para
+las 20 vistas por las dos cámaras; G133 es la persona de la
+Figura~\ref{fig:pasillo-camaras}. La gente baja por la escalera frente a
+cam06, dobla en la esquina noreste y sale por el brazo este, bajo cam07.}
+\label{fig:pasillo-recorridos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.88\linewidth]{figuras/validacion/pasillo-plano-calor.png}
+\caption{Pasillo del Edificio D, 9 de noviembre, con el cálculo de En vivo: a la
+izquierda, el seguimiento a los 124.5~s, con 17 personas detectadas en ese momento (G133
+sale bajo cam07, como en la Figura~\ref{fig:pasillo-camaras}); a la derecha,
+el mapa de calor de toda la sesión, calculado como en la plataforma. El calor
+marca el camino de la escalera por el brazo norte, la esquina noreste y el
+brazo este hasta cam07.}
+\label{fig:pasillo-calor}
+\end{figure}
+
+La plataforma reproduce las dos grabaciones en En vivo y las resume en
+Insights como cualquier sesión (Figuras~\ref{fig:patio-09nov-web},
+\ref{fig:pasillo-web} y~\ref{fig:insights-09nov-web}).
+
+\begin{figure}[!ht]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-en-vivo-web.png}
+\caption{El patio en la plataforma (En vivo, ``Ir a: Patio''), a los
+104~s: seguimiento, mapa de calor y quién está en el plano, con sus cámaras
+y su tiempo. Marca 34 porque cuenta también a quien está entre dos
+detecciones.}
+\label{fig:patio-09nov-web}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-en-vivo-web.png}
+\caption{El pasillo en la plataforma (En vivo, ``Ir a: Pasillo del
+Edificio D''), a los 124.5~s: 128 personas en la sesión y 18 en el plano;
+el calor va de la escalera de cam06 al brazo este de cam07.}
+\label{fig:pasillo-web}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/validacion/insights-09nov-web.png}
+\caption{Insights de las dos grabaciones del 9 de noviembre: arriba el pasillo
+(128 personas, 33\,815 puntos, 2~min 34~s), abajo el patio (149 personas,
+64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan ``sin
+determinar''.}
+\label{fig:insights-09nov-web}
+\end{figure}
+
+\FloatBarrier
+\section{Planificación y gestión del proyecto}
 \label{sec:gestion}
 
 Esta sección presenta el plan de dirección del proyecto (\textit{Project Management Plan}) según las áreas de
@@ -3389,7 +5331,7 @@ conveniente tener \textbf{4 puntos}:}
 \begin{enumerate}
     \item \textbf{Alcance del producto.} Funciones de los requisitos RF-01 a
     RF-09 (Cuadro~\ref{tab:requisitos}) y los casos de uso CU-01 a CU-11 de la
-    Sección~\ref{sec:requerimientos}.
+    Sección~\ref{sec:requisitos}.
 
     \item \textbf{Alcance del proyecto.} El trabajo necesario para
     entregarlas: desarrollo, validación, documentación y plan de negocio.
@@ -4092,1881 +6034,7 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
     local (IDF1 40\,\%) sigue siendo el límite técnico.
 \end{enumerate}
 
-\section{Algoritmos}
-\label{sec:algoritmos}
-
-Esta sección resume los algoritmos que ejecuta el sistema en cada parte. Los
-umbrales corresponden a la configuración vigente (\texttt{config\_lap01.json},
-versión~2.0, y \texttt{config\_insights.json}) y su fundamento se expone en la
-Metodología. El Cuadro~\ref{tab:algoritmos} relaciona cada algoritmo con lo que
-produce.
-
-\begin{table}[H]
-\caption{Algoritmos del sistema por parte}
-\label{tab:algoritmos}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.17\textwidth}|L{0.38\textwidth}|L{0.37\textwidth}|}
-\hline
-\textbf{Parte} & \textbf{Algoritmo} & \textbf{Resultado} \\
-\hline
-I. Seguimiento local & YOLO26m~\cite{yolo26} y seguidor híbrido con asociación en cascada (algoritmo húngaro~\cite{kuhn1955}) & \textit{local\_id} estable por persona y cámara \\
-\hline
-II. Multicámara & YOLO26s-ReID y galería global con reglas físicas & \textit{global\_id} seudónimo por persona \\
-\hline
-II. Mapa & Homografía~\cite{hartley2004} imagen--plano & Posición en metros, velocidad y dirección \\
-\hline
-III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE~\cite{parzen1962}, PrefixSpan~\cite{pei2001} y grafo origen-destino & Eventos, métricas e insights por zona y local \\
-\hline
-En vivo & Modelo de dos carriles con memoria de identidades & Cajas e ID en tiempo real desde teléfonos \\
-\hline
-En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
-\hline
-Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN~\cite{zhou2022osnet} + PersonViT~\cite{hu2024personvit}; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Seguimiento local por cámara (Parte I)}
-
-Mantiene un identificador local estable mientras la persona permanece frente a
-una cámara. En cada instante detecta a las personas de todas las cámaras en un
-solo lote y asocia cada detección con un track mediante una cascada de etapas
-resuelta con el algoritmo húngaro (Algoritmo~\ref{alg:local}).
-
-\begin{algorithm}[H]
-\caption{Seguimiento local por cámara}
-\label{alg:local}
-\begin{algorithmic}[1]
-\REQUIRE cuadros sincronizados de cada cámara
-\ENSURE observaciones (cámara, instante, \textit{local\_id}, caja, confianza)
-\FORALL{instante $t$ del lector sincronizado}
-  \STATE $D \leftarrow$ YOLO26m(un cuadro por cámara), clase persona, $c \geq 0.30$
-  \FORALL{cámara $k$}
-    \STATE descartar cajas de menos de 40~px de alto o contenidas en otra en un 92\,\% o más
-    \STATE predecir la caja de cada track con su velocidad amortiguada
-    \STATE asociar las detecciones con $c \geq 0.35$ a los tracks activos (movimiento, IoU, escala y apariencia)
-    \STATE prolongar los tracks libres con detecciones débiles coherentes (movimiento $\geq 0.55$, IoU $\geq 0.12$)
-    \STATE recuperar tracks perdidos con su galería (color $\geq 0.72$, distancia $\leq 0.95$)
-    \STATE actualizar caja, velocidad y galería (hasta 24 vistas fiables)
-    \STATE crear un track tras 3 detecciones con $c \geq 0.60$ en 5 cuadros
-    \STATE eliminar los tracks perdidos durante más de 120 cuadros
-  \ENDFOR
-\ENDFOR
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Re-identificación multicámara (Parte II)}
-
-Agrupa los tracklets de todas las cámaras en identidades. Cada tracklet se
-resume en un prototipo de apariencia corporal y se compara con una galería
-global que solo admite candidatas físicamente compatibles
-(Algoritmo~\ref{alg:reid}).
-
-\begin{algorithm}[!ht]
-\caption{Asociación multicámara con galería global}
-\label{alg:reid}
-\begin{algorithmic}[1]
-\REQUIRE observaciones de todas las cámaras y registro de cámaras (solapes y transiciones)
-\ENSURE tracklets agrupados en identidades con \textit{global\_id}
-\FORALL{vista fiable ($c \geq 0.55$, alto $\geq 40$~px, oclusión $< 20\,\%$), cada 0.4~s}
-  \STATE $e \leftarrow$ YOLO26s-ReID(recorte a $448 \times 448$), vector de 512 valores normalizado
-  \STATE actualizar el prototipo $\bar{e}_T$ del tracklet
-  \IF{dos vistas seguidas tienen similitud $< 0.40$ con $\bar{e}_T$}
-    \STATE cortar el tracklet; el tramo siguiente se evalúa como persona nueva
-  \ENDIF
-\ENDFOR
-\FORALL{identidad provisional $a$ (cada 2~s o de inmediato si está en riesgo)}
-  \STATE $B \leftarrow$ identidades vistas en los últimos 90~s que cumplen las reglas físicas
-  \STATE $b^{*} \leftarrow \arg\max_{b \in B} \cos(\bar{e}_a, \bar{e}_b)$
-  \IF{$s(a,b^{*}) \geq 0.60$ (0.70 con una sola cámara), enlace promedio $\geq 0.55$, margen $\geq 0.05$ y preferencia mutua}
-    \STATE fusionar $a$ en $b^{*}$, que conserva su identificador
-  \ELSIF{$a$ lleva al menos 2~s visible y 5 vistas}
-    \STATE asignar un \textit{global\_id} nuevo
-  \ENDIF
-\ENDFOR
-\STATE cerrar las identidades no vistas durante 120~s y borrar sus vistas
-\STATE al terminar, reconciliar y numerar por orden de aparición (UUID versión~5)
-\end{algorithmic}
-\end{algorithm}
-
-\FloatBarrier
-\subsection{Proyección al plano (Parte II)}
-
-Cada observación con los pies visibles se lleva al plano en metros con la homografía de su cámara (Algoritmo~\ref{alg:mapa}).
-
-\begin{algorithm}[H]
-\caption{Proyección al plano}
-\label{alg:mapa}
-\begin{algorithmic}[1]
-\REQUIRE caja $(x_1,y_1,x_2,y_2)$ y homografía $H$ de la cámara
-\ENSURE posición $(X,Y)$ en metros, velocidad y dirección
-\IF{la caja no está cortada por el borde inferior}
-  \STATE $(u,v) \leftarrow \big((x_1+x_2)/2,\ y_2\big)$, punto de los pies
-  \STATE $[X',Y',W']^{\top} \leftarrow H\,[u,v,1]^{\top}$; \ $(X,Y) \leftarrow (X'/W',\ Y'/W')$
-  \STATE calcular velocidad y dirección sobre 1~s del tracklet
-\ENDIF
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Procesamiento histórico (Parte III)}
-
-Transforma los puntos de una sesión en eventos y métricas sin volver a procesar
-video. Primero corrige las posiciones con el plano del sitio y después aplica
-las reglas de eventos y los algoritmos de minería (Algoritmo~\ref{alg:historico}).
-
-\begin{algorithm}[H]
-\caption{Procesamiento histórico}
-\label{alg:historico}
-\begin{algorithmic}[1]
-\REQUIRE puntos de la sesión, plano del sitio (piso y obstáculos), locales y zonas
-\ENSURE zona de cada punto, eventos espaciales y análisis de la sesión
-\STATE llevar al punto libre más cercano cada posición fuera del piso o a menos de 0.2~m de un obstáculo
-\STATE consolidar una posición por persona cada 0.2~s (ponderada por confianza) y quitar saltos de más de 4~m/s
-\STATE asignar la zona de cada posición, con borde incluido; si hay varias, INTERIOR y luego la de menor área
-\STATE agrupar en estancias y unir las salidas y los roces de INTERIOR de menos de 1~s
-\FORALL{persona y estancia}
-  \STATE emitir EXPOSURE, ENTER, DWELL ($\geq 5$~s), EXIT, RETURN ($\geq 10$~s) y QUEUE ($\geq 8$~s a $\leq 0.35$~m/s)
-\ENDFOR
-\STATE calcular KDE (celda de 0.5~m, $h = 1$~m), rutas con PrefixSpan (soporte $\geq 2$ personas y $\geq 10\,\%$) y grafo origen-destino
-\STATE calcular visitas, exposición, captación, permanencia, densidad y congestión ($\geq 3$ personas, $\geq 0.25$~personas/m$^2$ y $\leq 0.5$~m/s durante 5~s)
-\STATE guardar los resultados en la base de datos
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Modelo en vivo sobre teléfonos}
-
-Procesa a la vez todos los teléfonos conectados. Separa el trabajo en dos carriles para que las cajas no esperen al modelo más pesado: el rápido detecta y sigue, y el de IDs corre en un hilo aparte y en paralelo.
-Una memoria de identidades hace que cada persona conserve su ID aunque salga
-y vuelva, pase a otro teléfono o el modelo se reinicie
-(Algoritmo~\ref{alg:vivo}). Sobre el video, cada persona se marca con un
-punto de su color sobre la cabeza, y su ID global, en lugar de una caja que la tape.
-
-\begin{algorithm}[H]
-\caption{Modelo en vivo de dos carriles}
-\label{alg:vivo}
-\begin{algorithmic}[1]
-\REQUIRE flujos de video de los teléfonos y memoria de identidades
-\ENSURE cajas e ID de cada persona, publicados en tiempo real
-\STATE \textbf{Carril rápido}, por cada cuadro de cada teléfono:
-\STATE \hspace{1.2em} detectar personas (YOLO26s a 640~px en CPU; YOLO26m a 960~px y $c \geq 0.15$ en GPU)
-\STATE \hspace{1.2em} armar la caja con YOLO26s-pose (cabeza, hombros, caderas, rodillas y tobillos)
-\STATE \hspace{1.2em} seguir con el seguidor local (tracks desde $c \geq 0.25$) y publicar las cajas con la hora de captura
-\STATE \hspace{1.2em} ocultar a quien no se movió en 3~s
-\STATE \textbf{Carril de IDs}, en paralelo:
-\STATE \hspace{1.2em} muestrear vistas del cuerpo entero para Re-ID ($c \geq 0.50$)
-\STATE \hspace{1.2em} comparar cada identidad nueva con la memoria tras 1~s a la vista (3~s si hay duda)
-\STATE \hspace{1.2em} si coincide sin ambigüedad, recuperar su ID y su color
-\STATE \hspace{1.2em} durante 60~s, fusionar un ID nuevo con uno ya visto si es la misma persona
-\STATE \hspace{1.2em} guardar la memoria cada 2~s y olvidar a quien no se ve en 24~horas
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Ubicación en el plano desde un teléfono}
-
-Un teléfono no ocupa la posición de las cámaras fijas, por lo que cada persona
-se ubica con la calibración del teléfono o, si no la tiene, con la posición y
-el rumbo asignados al teléfono en el plano y el tamaño aparente de la persona
-(Algoritmo~\ref{alg:ubicacion}).
-
-La calibración se obtiene de una grabación de una persona caminando frente al
-teléfono: su altura aparente, supuesta de 1.70~m, fija el horizonte y la
-altura de la cámara; la focal se ajusta para que la distancia entre dos
-referencias del plano coincida con la real; un giro y una traslación llevan
-esas referencias a sus coordenadas manteniendo el recorrido dentro del piso; y
-el resultado es una homografía de píxeles a metros para ese teléfono.
-
-\begin{algorithm}[H]
-\caption{Ubicación en el plano desde un teléfono}
-\label{alg:ubicacion}
-\begin{algorithmic}[1]
-\REQUIRE caja de la persona, ancho del cuadro $w$, posición $P$ y rumbo $\theta$ del teléfono, homografía $H$ si existe
-\ENSURE posición $(X,Y)$ en metros sobre el piso del sitio
-\IF{el teléfono tiene homografía $H$}
-  \STATE $(X,Y) \leftarrow H(u,v)$ con el punto de los pies
-\ELSE
-  \STATE $f \leftarrow 0.78\,w$; \ $d \leftarrow f \cdot 1.70 / h_{px}$; descartar si $d > 30$~m o la caja ocupa casi todo el cuadro
-  \STATE $\alpha \leftarrow \arctan\big((u - w/2)/f\big)$
-  \STATE $(X,Y) \leftarrow P + d\,\big(\cos(\theta-\alpha),\ \sin(\theta-\alpha)\big)$
-\ENDIF
-\STATE sumar el ajuste fino $(\Delta x, \Delta y)$ y llevar al borde del piso lo que cae fuera
-\STATE acumular cada 0.25~s el rastro, el mapa de calor, el tiempo por zona y la secuencia de zonas
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Videos subidos: varias cámaras grabadas a la vez}
-\label{sec:videos}
-
-La sección Videos procesa grabaciones de cualquier origen, como si fueran
-cámaras en vivo: si el modelo no alcanza al video, salta cuadros. El Build se
-calibró con las cámaras de ESAN, de personas cercanas y grandes; un video
-cualquiera puede ser lejano, nocturno o con mucha gente, por lo que Videos usa
-ajustes más sensibles sobre la misma lógica de las Partes I y II:
-
-\begin{itemize}
-    \item \textbf{Detector:} YOLO26 a 1280~px en la GPU, en media precisión y
-    con confianza 0.10 en vez de 0.30. En un video de un centro comercial pasa
-    de unas 12 a unas 40 personas por cuadro.
-    \item \textbf{Seguidor:} abre tracks desde 0.15 de confianza y personas de
-    12~px de alto; en los cruces, la apariencia pesa 0.8 en la asignación (no
-    0.22), dentro de ella el vector de la ResNet18~\cite{he2016} pesa 0.8 frente al color
-    (no 0.20) y un track sigue a una caja sin comparar apariencias solo si se
-    solapa con ella al menos 0.25.
-    \item \textbf{Re-identificación:} en vez de YOLO26s-ReID, que estira cada
-    recorte a un cuadrado, se promedian OSNet-AIN y PersonViT (ViT-S), ambos
-    entrenados en MSMT17~\cite{wei2018}. Una identidad solo se une a otra si cada tramo se
-    parece a cada uno de la otra, para que una fusión equivocada no termine
-    absorbiendo a cualquiera.
-    \item \textbf{Velocidad:} los cuadros se decodifican en la GPU, cada video
-    en su hilo; las redes de Re-ID van grabadas en \textit{CUDA graphs} y el
-    asociador compara todas las identidades vigentes de una vez.
-\end{itemize}
-
-Los videos que se suben juntos forman una \textit{tanda}: empiezan a la vez y
-comparten un asociador multicámara, así la misma persona lleva el mismo ID
-global en todos ellos. Es el mismo asociador de la Parte~II (galería global,
-identidades provisionales, detección de cambio de persona, enlace promedio,
-margen de ambigüedad y preferencia mutua), en modo visual-temporal porque los
-videos no traen calibración: cada video es una cámara, todas se consideran
-solapadas y una persona puede pasar de una a otra en hasta 60~s. Cambian solo
-el codificador de apariencia y sus umbrales, llevados a la escala de
-OSNet-AIN y PersonViT. El procesamiento se resume en el Algoritmo~\ref{alg:videos}. El video se guarda en disco temporal solo
-mientras se procesa y queda únicamente un resumen.
-
-\begin{algorithm}[H]
-\caption{Procesamiento de una tanda de videos}
-\label{alg:videos}
-\begin{algorithmic}[1]
-\REQUIRE videos $V_1,\dots,V_n$ ($n \leq 10$)
-\ENSURE cajas e ID global por cuadro, y resumen de cada video
-\STATE crear un asociador común para la tanda
-\STATE esperar a que todos los videos estén listos y arrancar un reloj común
-\WHILE{quede algún video sin terminar}
-  \STATE tomar de cada video el cuadro que corresponde al reloj (saltar los atrasados)
-  \STATE detectar en una sola pasada de YOLO26 a 1280~px los cuadros de todos los videos
-  \STATE seguir cada video con su seguidor local
-  \STATE muestrear cada 0.4~s vistas Re-ID (OSNet-AIN + PersonViT) y asociarlas en el asociador de la tanda
-  \STATE publicar cajas, \textit{global\_id}, FPS y ms por cuadro de cada video
-\ENDWHILE
-\STATE guardar el resumen (personas y segundos en que aparece cada ID) y borrar el video
-\end{algorithmic}
-\end{algorithm}
-
-El mismo procesamiento se usa para las grabaciones de las zonas de ESAN: el
-patio, el comedor (zona~2) y el pasillo del Edificio D (zona~3). Las cámaras
-de una zona se pasan juntas como una tanda y cada una puede llevar un desfase en segundos para que el modelo compare los
-cuadros del mismo instante real. Sobre las cajas y los IDs compartidos que
-devuelve, cada persona se ubica en el plano con el modelo de cámara de cada
-teléfono (altura, focal, horizonte, posición y rumbo) o, si la cámara no lo
-tiene o se movió, con las referencias de ubicación del modelo en vivo
-(Sección~\ref{sec:grabaciones-zonas}).
-
-\subsection{Grabaciones de las zonas: ubicación por referencias e IDs lejanos}
-\label{sec:grabaciones-zonas}
-
-Los teléfonos que graban una zona se sostienen a mano o se apoyan en una
-baranda, así que su encuadre cambia de una grabación a otra y aun dentro de
-la misma. En lugar de calibrar cada video, se reutilizan las
-\textit{referencias de ubicación} del modelo en vivo: imágenes de cada cámara
-con su homografía al plano, tres por cámara (A0--A2 para cam01, B0--B2 para
-cam02, E0--E2 para cam06 y F0--F2 para cam07). Cada video se compara con las
-de su cámara mediante puntos SIFT~\cite{lowe2004} y RANSAC~\cite{fischler1981}
-(Algoritmo~\ref{alg:referencias}) y queda una sola homografía,
-que se aplica sobre los cuadros ya corregidos por el movimiento del teléfono.
-
-\begin{algorithm}[H]
-\caption{Ubicación de una grabación con las referencias del en vivo}
-\label{alg:referencias}
-\begin{algorithmic}[1]
-\REQUIRE video $V$ de la cámara $c$, referencias $\{(I_r, H_r)\}$ de $c$, movimiento estimado del teléfono $M_k$ en cada cuadro
-\ENSURE homografía $H$ de los cuadros estabilizados al plano, en metros
-\FOR{24 cuadros $k$ repartidos en el video}
-  \STATE reducir el cuadro a 640~px y extraer puntos SIFT (hasta 4\,000)
-  \STATE emparejar con cada $I_r$ (prueba de razón 0.75) y estimar $G$ con RANSAC (3~px)
-  \STATE si hay al menos 40 puntos coincidentes, $H_k \leftarrow H_r\, G\, S\, M_k^{-1}$ con la referencia de más coincidencias ($S$: escala a 640~px)
-\ENDFOR
-\STATE proyectar con cada $H_k$ una grilla de $9 \times 9$ puntos del piso de la imagen
-\STATE tomar la mediana de cada punto en metros y ajustar $H$ a esas medianas
-\STATE informar cuántos cuadros se reconocieron y cuánto se aparta cada uno de la mediana
-\end{algorithmic}
-\end{algorithm}
-
-Lejos de la cámara, con cajas de menos de unos 50~px de alto, el Re-ID ya no
-reconoce a nadie y el seguidor pierde a la persona y la vuelve a abrir con
-otro número. Para esos tramos se agrega un paso después del seguimiento
-multicámara (Algoritmo~\ref{alg:lejanos}); de cerca manda el seguimiento
-multicámara de Videos tal cual. Sobre el video, cada persona lleva solo su ID global (por ejemplo,
-G133) en una etiqueta de su color sobre la cabeza, sin la caja.
-
-\begin{algorithm}[H]
-\caption{IDs de la gente lejana en las grabaciones de una zona}
-\label{alg:lejanos}
-\begin{algorithmic}[1]
-\REQUIRE tramos del seguidor de cada cámara, IDs del seguimiento multicámara de Videos, movimiento del teléfono y homografía de cada cámara
-\ENSURE ID de cada tramo lejano, sin repetir un número a la vez en una cámara
-\FOR{cada tramo que termina o empieza lejos (caja $< \sim$50~px)}
-  \STATE predecir dónde debía reaparecer con su velocidad, descontando el movimiento del teléfono
-  \STATE unirlo al tramo que aparece ahí, a una altura parecida y con ropa del mismo color
-\ENDFOR
-\STATE cada cadena toma el ID de Videos de alguno de sus tramos o, si no tiene, uno nuevo si se vio al menos 1.5~s
-\STATE si la otra cámara la ve a la vez en el mismo punto del piso, de cerca y con un ID estable por 2~s, tomar ese ID
-\end{algorithmic}
-\end{algorithm}
-
-En la primera grabación del pasillo del Edificio D, de los 285 cortes del
-seguidor en cam06, 140 conservaron su número (antes, 7), las cajas sin
-número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
-con el mismo número a la vez (antes, 53).
-
-\section{Arquitectura del Sistema}
-\label{sec:arquitectura}
-
-El sistema se compone de servicios en contenedores Docker que se ejecutan en
-una computadora local con GPU; el modelo en vivo corre directamente en Windows
-(\texttt{camara\_telefono.py}) o en Docker con la GPU (servicio
-\texttt{modelo-gpu}, perfil \texttt{gpu}). El análisis de sesiones grabadas y el
-monitoreo en vivo usan backends y bases de datos separados, y la aplicación
-web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
-El código fuente de todos los componentes, las migraciones de la base de datos
-y los notebooks del modelo están en
-\url{https://github.com/23-Andres-QC/Aeropuerto}.
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
-\caption{Arquitectura de AeroVision.}
-\label{fig:arquitectura}
-\end{figure}
-
-\begin{table}[H]
-\caption{Componentes del sistema}
-\label{tab:componentes}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.17\textwidth}|L{0.27\textwidth}|L{0.48\textwidth}|}
-\hline
-\textbf{Componente} & \textbf{Tecnología} & \textbf{Función} \\
-\hline
-\texttt{web} & Vue~3, TypeScript, nginx & Interfaz y proxy hacia los backends y la cámara \\
-\hline
-\texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones, insights, tráfico, ventas, cuentas y solicitudes \\
-\hline
-\texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias, analítica, ventas y cuentas \\
-\hline
-\texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
-\hline
-\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
-\hline
-\texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
-\hline
-\texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
-\hline
-Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-\subsection{Usuarios y acceso}
-
-El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
-hace en él.
-
-\begin{table}[H]
-\caption{Usuarios del sistema}
-\label{tab:usuarios}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.16\textwidth}|L{0.19\textwidth}|L{0.33\textwidth}|L{0.22\textwidth}|}
-\hline
-\textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
-\hline
-Superadmin & Web, con cuenta & Configura sitios, cámaras, locales y zonas; crea cuentas; aprueba solicitudes; aplica la retención & Todas las secciones \\
-\hline
-Seguridad & Web, con cuenta & Activa el modo en vivo, une teléfonos y procesa videos & En vivo, Videos y Teléfonos \\
-\hline
-Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permiso aprobado & Insights y Ventas \\
-\hline
-Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
-\hline
-Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/}\allowbreak\texttt{\{sitio\}/...} \\
-\hline
-Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
-\hline
-\end{tabular}
-\end{table}
-
-No hay registro público: el superadmin crea cada cuenta en la sección Cuentas
-(Figura~\ref{fig:cuentas}), que entrega una contraseña temporal una sola vez y
-obliga a elegir una propia en el primer ingreso (Figura~\ref{fig:login}). Las
-contraseñas se guardan como hash argon2id; la sesión es una cookie
-\textit{HttpOnly} cuyo secreto la base guarda solo como SHA-256, por lo que
-revocarla sobrevive a un reinicio; ocho contraseñas equivocadas bloquean la
-cuenta 15 minutos, y una bitácora registra ingresos, cambios de cuentas y de
-retención, sin contraseñas ni llaves. Desde Solicitudes
-(Figura~\ref{fig:solicitudes}) el superadmin aprueba los cambios de correo y
-los permisos de exportación, que dejan a una cuenta descargar y enviar por
-correo los reportes de Insights solo durante el tiempo elegido. La página de
-cámara se une con un código que el superadmin crea en Teléfonos y que viaja en
-el primer mensaje del WebSocket, nunca en la URL.
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
-\caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
-se taparon en la figura).}
-\label{fig:cuentas}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/login.png}
-\caption{Ingreso a la aplicación.}
-\label{fig:login}
-\end{minipage}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/solicitudes.png}
-\caption{Solicitudes de cambio de correo y de permisos de exportación.}
-\label{fig:solicitudes}
-\end{figure}
-
-\subsection{Infraestructura de despliegue}
-
-El sistema corre en una computadora local con GPU (Cuadro~\ref{tab:infra}).
-Los servicios web, los backends y las bases van en Docker Compose; el modelo
-en vivo, que también procesa los videos subidos, usa la GPU de dos formas:
-directamente en Windows (\texttt{camara\_telefono.py}) o, si el Control
-inteligente de aplicaciones de Windows bloquea las DLL de PyTorch, dentro de
-Docker (servicio \texttt{modelo-gpu}, perfil \texttt{gpu}). Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
-Docker con YOLO26s a 640~px.
-
-\begin{table}[H]
-\caption{Configuración del equipo de despliegue}
-\label{tab:infra}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.22\textwidth}|L{0.70\textwidth}|}
-\hline
-\textbf{Elemento} & \textbf{Configuración} \\
-\hline
-Procesador & Intel Core i7-13620H: 10 núcleos y 16 hilos \\
-\hline
-GPU & NVIDIA GeForce RTX~4060 Laptop, 8~GB \\
-\hline
-Memoria & 16~GB de RAM \\
-\hline
-Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
-\hline
-Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, en Windows o en Docker (\texttt{modelo-gpu}), para teléfonos y videos subidos \\
-\hline
-Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
-\hline
-Configuración & \texttt{.env} con las contraseñas de las bases, la cuenta semilla y la llave de los scripts \\
-\hline
-\end{tabular}
-\end{table}
-
-La primera versión se desplegó en una máquina virtual de Google Cloud sin GPU
-(\texttt{c4a-highcpu-8}, 8 vCPU Arm y 16~GB de RAM, en Santiago de Chile),
-donde el modelo en vivo corría en CPU a unos 4 a 6 cuadros por segundo con
-pocas personas. El sistema pasó a la computadora local porque el modelo de
-Videos, la re-identificación con OSNet-AIN y PersonViT y el procesamiento de
-varias cámaras a la vez necesitan una GPU. Cada imagen ejecuta sus pruebas al
-construirse; si una falla, los servicios en marcha no se reemplazan. La web y
-la página de cámara se sirven por HTTPS, requisito de los navegadores para usar
-la cámara del teléfono.
-
-\subsection{Costos de la infraestructura}
-
-El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
-computadora propia con el de la nube. El servidor de Google Cloud se calculó
-con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
-impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
-(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
-Para la computadora propia se supone un equipo con GPU de 8 a 16~GB de
-S/~4\,500 (US\$~1\,200), un supuesto de trabajo aún por cotizar, que
-amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
-de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
-propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
-horario de uso y menos que cualquier nube con GPU a demanda; el video no
-sale de la red y el costo es fijo. Este cálculo sostiene el costo por cámara
-del plan de negocio (Sección~\ref{sec:negocio}).
-
-\begin{table}[H]
-\caption{Costo mensual del procesamiento: computadora propia y nube}
-\label{tab:costos}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.30\textwidth}|L{0.44\textwidth}|R{0.16\textwidth}|}
-\hline
-\textbf{Opción} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
-\hline
-Computadora propia con GPU & US\$~1\,200 en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
-\hline
-\multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
-\hline
-Máquina virtual & Bajo demanda: US\$0.4333 por hora & 316.34 \\
-\hline
-Disco, IP y tráfico & 77~GB, IP externa y 20~GB de salida & 18.46 \\
-\hline
-\textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
-\hline
-Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
-\hline
-Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
-\hline
-Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
-\hline
-Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
-\hline
-\multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
-\hline
-A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
-\hline
-Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
-\hline
-\end{tabular}
-\end{table}
-
-Los valores anteriores del servidor y de la computadora propia son de un equipo
-sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
-estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
-de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
-dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
-horas encendida (720 horas equivale a tenerla prendida todo el mes). El
-Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
-Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
-Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
-cada calculadora están en el Anexo.
-
-\begin{table}[H]
-\caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
-\label{tab:nube-resumen}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.24\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|}
-\hline
-\textbf{Horas al mes} & \textbf{Google Cloud} & \textbf{AWS} & \textbf{Azure} \\
-\hline
-240 & 130.60 & 129.35 & 137.04 \\
-\hline
-360 & 195.40 & 192.07 & 200.76 \\
-\hline
-720 & 389.80 & 386.52 & 391.92 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Configuración usada en cada calculadora}
-\label{tab:nube-config}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.14\textwidth}|L{0.20\textwidth}|L{0.58\textwidth}|}
-\hline
-\textbf{Proveedor} & \textbf{Región} & \textbf{Configuración} \\
-\hline
-Google Cloud (Compute Engine) & Iowa (\texttt{us-central1}) & \texttt{n1-standard-4} (4 vCPU, 15~GB de RAM) con 1 GPU NVIDIA T4, sistema libre (Debian o Ubuntu), modelo regular (a demanda), disco \textit{balanced} de 10~GiB, 1 instancia, sin descuentos por uso sostenido ni comprometido \\
-\hline
-AWS (Amazon EC2) & Este de EE.\,UU. (Ohio) & Instancia con GPU T4 llamada ``AeroVision GPU T4'', a demanda, con tenencia compartida y sin costo inicial \\
-\hline
-Azure & East US & Máquina virtual con GPU T4, 1 dirección IP estática estándar (ARM), soporte Basic incluido y contrato de cliente de Microsoft (MCA) \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Desglose del cálculo de Google Cloud (US\$ al mes)}
-\label{tab:nube-gcp}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.40\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|}
-\hline
-\textbf{Componente} & \textbf{240 h} & \textbf{360 h} & \textbf{720 h} \\
-\hline
-Máquina \texttt{n1-standard-4} (US\$0.19 por hora) & 45.60 & 68.40 & 136.80 \\
-\hline
-GPU NVIDIA T4 (US\$0.35 por hora) & 84.00 & 126.00 & 252.00 \\
-\hline
-Disco \textit{balanced} de 10~GiB & 1.00 & 1.00 & 1.00 \\
-\hline
-\textbf{Total} & \textbf{130.60} & \textbf{195.40} & \textbf{389.80} \\
-\hline
-\end{tabular}
-\end{table}
-
-En Azure, la calculadora sumó además una dirección IP estática (1.20, 1.80 y
-3.60 al mes en los tres escenarios). Frente a los $\approx$ US\$~70 al mes de la
-computadora propia, la nube con GPU cuesta casi el doble con 240 horas
-encendida y unas cinco veces y media con 720 horas, y los tres proveedores
-quedan a menos de 6\,\% entre sí en cada escenario, por lo que la decisión
-depende más de las horas de uso, la ubicación de los datos y el costo de
-transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
-fija ni la salida de datos, que se suman aparte.
-
-Fuera de las tres grandes nubes hay opciones más baratas para correr el
-modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
-Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
-las que se pudieron verificar en noviembre de 2026, con el precio por hora
-publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
-tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
-nube comunitaria cambian cada día y la máquina puede detenerse o no estar
-disponible; Hetzner cobra por hora hasta un tope mensual y una tarifa de
-instalación de 209~euros, y sus euros se pasaron a dólares con la referencia
-del BCE del 10 de noviembre de 2026 (1.1214)~\cite{ecb-eurusd}.
-
-\begin{table}[!ht]
-\caption{Nubes con GPU para correr el modelo, de la más económica a la más cara (US\$, noviembre de 2026)}
-\label{tab:nube-proveedores}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular}{|L{0.45\textwidth}|L{0.13\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|}
-\hline
-\textbf{Proveedor y máquina} & \textbf{GPU} & \textbf{US\$/h} & \textbf{240~h} & \textbf{360~h} & \textbf{720~h} \\
-\hline
-Vast.ai, mercado de GPU~\cite{vast-3060} & RTX 3060 & 0.076 & 18.24 & 27.36 & 54.72 \\
-\hline
-Azure \texttt{NC4as\_T4\_v3}, \textit{spot}, East US~\cite{sparecores-t4} & T4 & 0.1641 & 39.38 & 59.08 & 118.15 \\
-\hline
-AWS \texttt{g4dn.xlarge}, \textit{spot}, us-east-1~\cite{doit-g4dn} & T4 & 0.2137 & 51.29 & 76.93 & 153.86 \\
-\hline
-RunPod, nube comunitaria~\cite{runpod} & RTX 4090 & 0.34 & 81.60 & 122.40 & 244.80 \\
-\hline
-Hetzner GEX45, servidor dedicado~\cite{hetzner-gex} & RTX PRO 4000 & 0.3845 & 92.29 & 138.43 & 239.98 \\
-\hline
-AWS \texttt{g6.xlarge}, \textit{spot}, us-east-1~\cite{doit-g6} & L4 & 0.3941 & 94.58 & 141.88 & 283.75 \\
-\hline
-RunPod, nube comunitaria~\cite{runpod} & L4 & 0.44 & 105.60 & 158.40 & 316.80 \\
-\hline
-AWS \texttt{g4dn.xlarge}, a demanda, us-east-1~\cite{doit-g4dn} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
-\hline
-Azure \texttt{NC4as\_T4\_v3}, a demanda, East US~\cite{azurespeed-t4} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
-\hline
-Google Cloud \texttt{n1-standard-4} + T4~\cite{gcp-vm,gcp-gpu} & T4 & 0.54 & 129.60 & 194.40 & 388.80 \\
-\hline
-Paperspace~\cite{paperspace} & RTX 4000 & 0.56 & 134.40 & 201.60 & 403.20 \\
-\hline
-RunPod, nube segura~\cite{runpod} & L4 & 0.59 & 141.60 & 212.40 & 424.80 \\
-\hline
-Google Cloud \texttt{g2-standard-4}~\cite{gcp-g2} & L4 & 0.7068 & 169.64 & 254.46 & 508.92 \\
-\hline
-DigitalOcean, GPU Droplet~\cite{do-gpu} & RTX 4000 Ada & 0.76 & 182.40 & 273.60 & 547.20 \\
-\hline
-Paperspace~\cite{paperspace} & A4000 & 0.76 & 182.40 & 273.60 & 547.20 \\
-\hline
-AWS \texttt{g6.xlarge}, a demanda, us-east-1~\cite{doit-g6} & L4 & 0.8048 & 193.15 & 289.73 & 579.46 \\
-\hline
-RunPod, nube segura~\cite{runpod} & RTX 4090 & 0.89 & 213.60 & 320.40 & 640.80 \\
-\hline
-\hline
-\textit{Referencia: computadora propia} (Cuadro~\ref{tab:costos}) & RTX 4060 & -- & 70 & 70 & 70 \\
-\hline
-\end{tabular}
-\end{table}
-
-Con 240 horas al mes, Vast.ai y las máquinas \textit{spot} con T4 cuestan
-menos que la computadora propia; encendidas todo el mes, solo Vast.ai
-queda por debajo. Sin contar las \textit{spot}, la opción más barata todo
-el mes después de Vast.ai es el servidor dedicado de Hetzner (US\$~240 con
-el tope mensual, más la instalación), y las T4 a demanda de AWS, Azure y
-Google Cloud quedan entre US\$~379 y 389.
-
-\FloatBarrier
-\subsection{Base de datos}
-
-Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
-todo lo que se analiza en ellos; \texttt{vivo-db} (PostgreSQL~17 con pgvector)
-guarda solo la memoria de identidades del modo en vivo
-(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
-backends aplican al iniciar.
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.65\linewidth]{figuras/arquitectura/base-de-datos.png}
-\caption{Modelo entidad-relación de las bases de datos.}
-\label{fig:bd}
-\end{figure}
-
-\begin{itemize}\sloppy
-    \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
-    y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
-    INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
-    válida.
-    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD, LIVE o VIDEO),
-    \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
-    geometría de cada punto se calcula en la base y se conserva la posición
-    original del modelo junto a la ajustada al piso.
-    \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
-    calculada en la base, y \texttt{session\_analytics}, con los parámetros y
-    los resultados de la Parte~III.
-    \item \textbf{Tráfico:} \texttt{traffic\_buckets} (personas, visitas,
-    quienes se detienen e interesados por zona en ventanas de 5, 15 y 60
-    minutos), \texttt{heat\_cells} (segundos-persona por celda de 1~m y hora),
-    \texttt{traffic\_runs} y \texttt{traffic\_params} (umbrales por sitio).
-    \item \textbf{Ventas:} \texttt{sales\_tickets} y \texttt{sales\_items}
-    (compras reales o simuladas, en centavos), \texttt{sales\_matches} y
-    \texttt{sales\_match\_runs} (cada compra con la visita que la hizo y su
-    confianza) y \texttt{visit\_counts}.
-    \item \textbf{Cuentas:} \texttt{users} (con hash argon2id y rol),
-    \texttt{auth\_sessions}, \texttt{password\_reset\_tokens},
-    \texttt{account\_requests} (solicitudes), \texttt{store\_api\_keys} y
-    \texttt{audit\_log} (bitácora).
-    \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
-    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes, borrados a las 24 horas.
-\end{itemize}
-
-Una pasada diaria aplica la retención: borra los puntos de trayectoria de las
-sesiones de más de 90 días cuyo tráfico ya se agregó, y conserva sin límite los
-eventos espaciales, los análisis y los agregados.
-
-\subsection{Backend}
-
-El backend se divide en dos servicios en Go (Figura~\ref{fig:backend} y
-Cuadro~\ref{tab:api}):
-
-\begin{itemize}
-    \item \textbf{\texttt{backend}:} arquitectura hexagonal. El núcleo
-    (\texttt{domain}, \texttt{ports} y \texttt{services}) contiene las
-    entidades, las validaciones y los casos de uso, sin depender de HTTP ni de
-    SQL. Los adaptadores de entrada (\texttt{httpapi} y \texttt{relay})
-    exponen la API REST y el relevo por WebSocket, y los de salida
-    (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
-    PostGIS y en memoria.
-    \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
-    lista de videos subidos en disco temporal, el relevo de video y
-    detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
-    todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
-    guardado anterior.
-\end{itemize}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
-\caption{Arquitectura de los servicios del backend.}
-\label{fig:backend}
-\end{figure}
-
-{\footnotesize
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{longtable}{|L{0.42\textwidth}|L{0.50\textwidth}|}
-\caption{Recursos de las API}
-\label{tab:api} \\
-\hline
-\textbf{Ruta} & \textbf{Uso} \\
-\hline
-\endfirsthead
-\hline
-\multicolumn{2}{|l|}{\textit{Recursos de las API (continuación)}} \\
-\hline
-\textbf{Ruta} & \textbf{Uso} \\
-\hline
-\endhead
-\multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
-\hline
-\texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
-\hline
-\texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
-\hline
-\texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
-\hline
-\texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
-\hline
-\texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
-\hline
-\texttt{/media/\{archivo\}} & Videos procesados del Build \\
-\hline
-\texttt{/trafico/...} & Resumen, serie, calor, permanencia y embudo por período y franja; umbrales \\
-\hline
-\texttt{/ventas/...} & Tickets, resumen, patrones, pronóstico, simulados y emparejamiento \\
-\hline
-\multicolumn{2}{|l|}{\textit{backend}: cuentas y privacidad, \texttt{/api/v1}} \\
-\hline
-\texttt{/auth/...} & Ingreso, salida, cambio y recuperación de contraseña \\
-\hline
-\texttt{/usuarios} · \texttt{/usuarios/solicitudes} & Cuentas, roles y solicitudes \\
-\hline
-\texttt{/mi/...} & Perfil, cambio de correo y exportación con permiso \\
-\hline
-\texttt{/auditoria} · \texttt{/privacidad} & Bitácora, retención y depuración \\
-\hline
-\multicolumn{2}{|l|}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
-\hline
-\texttt{/telefonos} & Teléfonos conectados como cámaras \\
-\hline
-\texttt{/videos} & Videos subidos por tandas y resumen de cada uno \\
-\hline
-\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
-\hline
-\texttt{/personas} & Memoria de identidades \\
-\hline
-\end{longtable}
-}
-
-\FloatBarrier
-\subsection{Frontend}
-
-Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
-servida por nginx, que además redirige \texttt{/api/}, \texttt{/vivo/} y
-\texttt{/camara/} a sus servicios, verifica la sesión antes de dejar pasar a
-cada servicio según el rol, añade cabeceras de seguridad y limita las
-peticiones por IP. El código se organiza por funcionalidades sobre un núcleo
-común (Figura~\ref{fig:frontend}). Tras el ingreso, cada sitio tiene las mismas
-nueve secciones, y cada rol ve solo las suyas:
-
-\begin{enumerate}
-    \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
-    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio,
-    comedor o pasillo del Edificio D), o, en modo en vivo, muestra lo que ven
-    los teléfonos y permite iniciar y guardar una captura. Lo grabado se ve
-    zona por zona: al elegir Patio, Comedor o Pasillo del Edificio D (en la
-    fila ``Ir a'' o con un clic en el campus) el plano queda fijo en esa zona
-    y dibuja solo su plano, sus zonas y sus cámaras; ``Todo el campus'' lo
-    suelta. Al activar el en vivo se elige la zona que se graba: la captura
-    se guarda solo en ella, el plano no sale de su marco y los teléfonos
-    toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
-    \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
-    procesados todos a la vez sin guardarse, con un resumen de cada uno
-    (Figura~\ref{fig:web-videos}).
-    \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
-    calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
-    franja y fecha, y una línea de tiempo de la sesión en la que se marcan
-    hasta cinco rangos (arrastrando, escribiendo el inicio y el fin o
-    haciendo clic en la línea): todo el tablero muestra solo esos rangos, los
-    mapas distinguen cada uno por color y una tabla compara sus indicadores
-    con la sesión completa. Es exportable a PDF y CSV, con los rangos y los
-    mapas de cada uno, y enviable por correo
-    (Figuras~\ref{fig:web-insights} y~\ref{fig:web-insights-pdf}).
-    \item \textbf{Ventas:} tickets reales o simulados, conversión por local
-    elegido en el plano, cuándo se vende, emparejamiento de cada compra con la
-    visita que la hizo y pronóstico con simulador de escenarios
-    (Figura~\ref{fig:web-ventas}).
-    \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
-    con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
-    \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
-    umbrales de tráfico (Figura~\ref{fig:web-config}).
-    \item \textbf{Teléfonos:} código de unión en QR, cámaras de teléfono con el
-    proceso del modelo y memoria de personas (Figura~\ref{fig:web-telefonos}).
-    \item \textbf{Cuentas:} cuentas, accesos, bitácora y privacidad.
-    \item \textbf{Solicitudes:} cambios de correo y permisos de exportación.
-\end{enumerate}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/frontend.png}
-\caption{Arquitectura del frontend.}
-\label{fig:frontend}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/web-configuracion.png}
-\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
-las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
-cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
-pegada al comedor), y umbrales de tráfico.}
-\label{fig:web-config}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/videos.png}
-\caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
-el resumen de cada video.}
-\label{fig:web-videos}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/insights.png}
-\caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
-Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
-de tiempo y resumen de la sesión.}
-\label{fig:web-insights}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.55\linewidth]{figuras/plataforma/insights-pdf.png}
-\caption{Reporte de Insights exportado a PDF.}
-\label{fig:web-insights-pdf}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
-\caption{Ventas: selección de locales en el plano y pestañas de resumen,
-pronóstico, patrones, emparejamiento, tickets y datos.}
-\label{fig:web-ventas}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
-\caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
-conectadas y memoria de personas, que se olvida tras 24 horas.}
-\label{fig:web-telefonos}
-\end{minipage}
-\end{figure}
-
-\FloatBarrier
-\section{Pruebas de Validación en ESAN}
-\label{sec:validacion-esan}
-
-Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}).
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pruebas-participantes.png}
-\caption{Estudiantes de ESAN que ayudaron en la prueba de campo, en el patio del Edificio A.}
-\label{fig:pruebas-participantes}
-\end{figure}
-
-\subsection{Primera prueba: ESAN, Edificios A y B}
-
-La primera validación se realizó en el patio en forma de L entre los
-Edificios A y B de la Universidad ESAN, registrado en la aplicación como el
-sitio \textit{ESAN}, en dos etapas: con tres cámaras fijas, para validar las
-Partes I a III, y con teléfonos usados como cámaras en vivo.
-
-\subsubsection{Escenario y plano del sitio}
-
-El plano del patio se obtuvo de un levantamiento desde las cámaras: se
-marcaron en la imagen los puntos del suelo y de los objetos y se llevaron a
-metros con las homografías del Build. El plano contiene el contorno del piso
-transitable (patio, descanso bajo el entrepiso y tramo norte de la L), los
-ascensores y los objetos que nadie atraviesa: la carpa azul, dos máquinas
-expendedoras, un tacho y los contenedores de reciclaje
-(Figura~\ref{fig:plano-esan}). El 100\,\% de los puntos de cam01 y cam02 y el
-99.6\,\% de los de cam03 caen dentro del piso. Las zonas de análisis son
-Ascensores, Tacho y Reciclaje, y los locales Carpa azul, Expendedora negra y
-Expendedora roja, cada uno con su zona INTERIOR.
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.75\linewidth]{figuras/validacion/plano-patio-esan.png}
-\caption{Plano del patio entre los Edificios A y B: piso, carpa azul,
-expendedoras (derecha), tacho (verde), reciclaje (izquierda) y ascensores
-(línea roja).}
-\label{fig:plano-esan}
-\end{figure}
-
-\subsubsection{Prueba con cámaras fijas}
-
-Se procesaron tres videos de cámaras con vista al patio, de
-$1280 \times 720$ a 15~FPS y 126~s de duración común, con desfases de reloj de
-+1.0~s (cam02) y +3.0~s (cam03) respecto de cam01. El sistema reconoció a 16
-personas y registró 13\,689 puntos de trayectoria
-(Figuras~\ref{fig:dataset-camara}, \ref{fig:dataset-trayectorias}, \ref{fig:dataset-en-vivo}
-y~\ref{fig:dataset-insights}); el
-Cuadro~\ref{tab:resultados-dataset} resume las mediciones. La asociación
-multicámara se midió sin y con el muestreo adaptativo de vistas del
-codificador Re-ID, que es la configuración final del Build: sin él, la
-precisión es 0.99 y el recall 0.86; con él, el codificador se llama un
-34\,\% menos y el recall sube a 0.91, con la misma precisión.
-
-\begin{table}[H]
-\caption{Resultados de la prueba con cámaras fijas}
-\label{tab:resultados-dataset}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.52\textwidth}|L{0.38\textwidth}|}
-\hline
-\textbf{Medición} & \textbf{Resultado} \\
-\hline
-Identificadores locales tras ajustar umbrales & De 88 a 80 \\
-\hline
-Tracks de personas lejanas (altura mediana $< 60$~px) & De 7 a 1 \\
-\hline
-Precisión / recall de la asociación multicámara, sin muestreo adaptativo & 0.99 / 0.86 \\
-\hline
-Llamadas al codificador Re-ID con muestreo adaptativo (configuración final) & $-34\,\%$ (precisión 0.99, recall 0.91) \\
-\hline
-Altura estimada de las cámaras & 8.3 / 9.3 / 9.5~m \\
-\hline
-Error de calibración entre cámaras (mediana) & 0.28 a 0.48~m; 98 a 100\,\% bajo 1~m \\
-\hline
-Detecciones ubicadas en el plano & 93\,\% \\
-\hline
-Velocidad mediana al caminar & 0.87~m/s \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-camara-01.jpg}
-\caption{Cámara cam01 procesada: identificador global (G) y local (L).}
-\label{fig:dataset-camara}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-trayectorias.png}
-\caption{Trayectorias de las 16 personas durante los 126~s.}
-\label{fig:dataset-trayectorias}
-\end{minipage}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-en-vivo.png}
-\caption{En vivo: la sesión de las tres cámaras reproducida sobre el plano del
-patio, con el seguimiento, el mapa de calor y las personas presentes en cada
-instante.}
-\label{fig:dataset-en-vivo}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-insights.png}
-\caption{Insights de la sesión en la versión actual: personas, permanencia, captación y densidad.}
-\label{fig:dataset-insights}
-\end{figure}
-
-\subsubsection{Prueba con cámaras de teléfono}
-
-En la segunda etapa se usaron teléfonos como cámaras del mismo patio, con el
-sistema desplegado entonces en el servidor de Google Cloud, sin GPU. Hoy los
-teléfonos se unen a la computadora local con un código QR
-(Figura~\ref{fig:web-telefonos}). El procedimiento fue:
-
-\begin{enumerate}
-    \item Cada teléfono abrió la página de cámara del servidor
-    (\texttt{https://<servidor>/camara/}) y pulsó ``Unirse con la cámara'',
-    sin instalar ninguna aplicación.
-    \item El modelo en vivo procesó todos los teléfonos a la vez, y la sección
-    Teléfonos mostró sus cajas e ID, junto con la memoria de
-    personas (Figura~\ref{fig:telefonos-memoria}).
-    \item En el modo en vivo, los teléfonos tomaron el lugar de cam01, cam02 y
-    cam03 por orden de llegada, con su posición y rumbo ajustados en
-    Configuración. El iPhone se calibró con una grabación de una persona
-    caminando: cuadro de $640 \times 853$~px, focal de 575~px y como
-    referencias los contenedores de reciclaje y el tacho verde.
-    \item Lo registrado entre ``Iniciar captura'' y ``Terminar y guardar'' se
-    guardó como una sesión LIVE, visible en Registros
-    (Figura~\ref{fig:telefonos-registros}, con las capturas posteriores, del
-    13 al 26 de octubre) y analizada en Insights con el mismo
-    tablero que una sesión grabada.
-\end{enumerate}
-
-El 6 de octubre de 2026, entre las 17:21 y las 20:33, se guardaron cinco
-capturas de entre 15~s y 1~min~59~s, con 641 posiciones en el plano y 28
-personas en total. La memoria de identidades reunió a 10 personas: la que más
-se vio apareció en cuatro teléfonos distintos y conservó el mismo ID en todos.
-En el servidor, sin GPU, el modelo en vivo procesó unos 9 cuadros por segundo
-sin personas y entre 4 y 6 con una a cuatro personas, mientras cada teléfono
-enviaba 15 cuadros por segundo. 
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/registros.png}
-\caption{Registros: capturas en vivo guardadas con los teléfonos en ESAN, con
-fecha, hora, duración, personas y puntos; cada una se abre en Insights o se
-reproduce sobre el plano.}
-\label{fig:telefonos-registros}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
-\caption{Teléfonos, el 6 de octubre: memoria de personas con las cámaras donde
-se vio a cada una y cuándo.}
-\label{fig:telefonos-memoria}
-\end{figure}
-
-\subsection{Segunda prueba: ESAN, Comedor}
-
-La segunda validación se hizo en el comedor de ESAN, registrado como la
-zona~2 del mismo sitio, con su propio plano (comedor, comedor de profesores,
-zona de atención, servicios higiénicos y escaleras). El 27 de octubre de 2026,
-a las 21:58, dos teléfonos grabaron a la vez el comedor desde extremos
-opuestos (cam04 y cam05, a 1.50 y 1.58~m de altura y a unos 24~m entre sí),
-mientras dos personas lo cruzaban caminando.
-
-Las dos grabaciones se procesaron con el modelo de Videos como una tanda, para
-que la misma persona lleve el mismo ID en las dos cámaras, y cada persona se
-ubicó en el plano con el modelo de cámara de cada teléfono. La distancia focal
-(970 y 935~px) y el rumbo de cada cámara se ajustaron con lo que ven ambas:
-cada teléfono ve a quien sostiene el otro y los dos caminantes aparecen en las
-dos cámaras. Con la focal de la grabación anterior cada cámara ubicaba a la
-otra a unos 14~m (no 24) y a los caminantes a unos 11~m entre sí, por lo que
-nunca se unían; con el ajuste, los caminantes quedan a alrededor de 1~m entre
-cámaras y cada una ubica a la otra a menos de 2~m de su lugar. Los videos
-coinciden en el tiempo con menos de 0.5~s de diferencia y se recortan al más
-corto (91.0~s).
-
-La sesión publicada tiene 4 personas en el plano (17 con el procesamiento
-anterior, que no compartía IDs entre cámaras), con sus recorridos, el mapa de
-calor y la última posición de quien ya salió
-(Figura~\ref{fig:comedor-en-vivo}). Quedan dos errores del modelo de Videos:
-uno de los caminantes recibe por unos segundos un segundo ID en cam04, y en
-cam05 los dos caminantes comparten un ID en parte del recorrido.
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-en-vivo.png}
-\caption{Comedor de ESAN: la sesión de dos teléfonos reproducida sobre el
-plano, con el seguimiento y el mapa de calor de la misma zona.}
-\label{fig:comedor-en-vivo}
-\end{figure}
-
-Las capturas de la grabación en vivo, de la sesión guardada y de la vista en los
-teléfonos se presentan en el Anexo.
-
-\subsection{Tercera prueba: ESAN, Pasillo del Edificio D}
-\label{sec:pasillo}
-
-La tercera validación se hizo fuera del comedor: en el pasillo exterior del
-Edificio D, por donde pasa la gente que baja de la escalera hacia la plaza y
-la que cruza el puente hacia el Edificio A. A diferencia del patio y del
-comedor, las dos cámaras de esta zona no ven el mismo lugar: cada una cubre un
-brazo del pasillo y una persona tarda unos 30~s en ir de una a la otra.
-
-\subsubsection{Escenario y plano de la zona}
-
-El pasillo se registró como la zona grabada~3 del sitio ESAN, una capa más del
-plano junto al patio y al comedor. Es una L de unos 740~m$^2$ pegada a las
-fachadas norte y este del Edificio D. Se dibujó en el mismo marco que el plano
-del comedor (mismo centro, giro y 29.7~px por metro), así que sus bordes
-interiores coinciden con las paredes del comedor; los de afuera siguen el
-terreno del mapa del campus: el borde del camino y la punta del Aula~C, el
-jardín del norte, la abertura hacia la plaza en la esquina noreste, la
-fachada del edificio del este y el puente hacia el Edificio A (los
-recorridos del 9 de noviembre están en la Figura~\ref{fig:pasillo-recorridos}).
-
-Las cámaras son dos teléfonos en el segundo piso, a 4.75~m: cam06 en el
-extremo oeste de la fachada norte, mirando al este por la escalera hacia la
-plaza, y cam07 al sur del lado este, mirando al norte por el pasillo entre el
-Edificio D y el del este. Su altura y su horizonte se ajustaron con la altura
-de las personas detectadas, y su posición y rumbo con los propios videos: la
-gente camina dentro del pasillo y a lo largo de cada brazo, y quien está en
-las dos cámaras a la vez debe caer en el mismo punto. Con ese ajuste, la
-distancia entre las dos cámaras para una misma persona bajó de 9.2 a 2.2~m y
-los puntos dentro del pasillo subieron del 73 al 85\,\%.
-
-Para el modo en vivo se agregaron tres referencias de ubicación por cámara
-(E0--E2 para cam06 y F0--F2 para cam07), tomadas de los videos con su modelo
-de cámara. En esas grabaciones reconocen entre el 98 y el 100\,\% de los
-cuadros, con 0.1~m de error, y ningún cuadro de otra zona las confunde.
-Mientras un teléfono todavía no reconoce la vista, cada persona se ubica con
-la posición y el rumbo de su cámara y la distancia por su tamaño
-(Algoritmo~\ref{alg:ubicacion}), y lo que cae fuera se lleva al borde del
-piso del pasillo, no al del patio.
-
-\subsubsection{Primera grabación}
-
-El 7 de noviembre de 2026, a las 13:43, los dos teléfonos grabaron 162~s del
-pasillo. La cam07 empezó a grabar 4.1~s antes que cam06; se le cortaron esos
-segundos, ajustados con las personas que pasan de una cámara a la otra, y
-desde ahí los dos videos empiezan a la vez. Procesada como una tanda de
-Videos, la sesión reunió a 86 personas, 56 vistas en cam06 y 39 en cam07, de las cuales 9
-pasaron por las dos cámaras, con 12\,563 puntos en el plano. Esta grabación
-mostró el problema de la gente lejana de la plaza y la escalera, de 20 a
-40~px de alto, que cambiaba de ID a cada rato; de ahí salió el paso de IDs
-lejanos (Algoritmo~\ref{alg:lejanos}). La zona se volvió a grabar con más
-gente el 9 de noviembre (Figura~\ref{fig:pasillo-camaras} y
-Sección~\ref{sec:mas-gente}).
-
-\subsection{Cuarta prueba: ESAN, grabaciones con más gente}
-\label{sec:mas-gente}
-
-Las pruebas anteriores con teléfonos tenían poca gente: en el comedor, una o
-dos personas a la vez por cámara, y en la primera grabación del pasillo, una
-mediana de 6. El 9 de noviembre de 2026, justo después de una prueba en vivo
-en el pasillo, se grabaron con dos teléfonos cada uno el pasillo del
-Edificio D (en los lugares de cam06 y cam07) y el patio del Edificio A (en
-los de cam01 y cam02). Los videos son verticales, de $464 \times 832$ a
-12~FPS y de $478 \times 850$ a 13.9~FPS, y llegaron sin la hora de grabación
-en sus metadatos, así que la hora de inicio es aproximada: 11:32 en el
-pasillo y 11:38 en el patio, entre el fin de la prueba en vivo y la llegada
-de los archivos.
-
-\subsubsection{Sincronía de las cámaras}
-
-Cada par se recortó a mano para que sus dos videos empiecen a la vez, y el
-corte se comprobó con datos:
-
-\begin{itemize}
-    \item \textbf{Patio.} La CAM1 se recortó desde el segundo 26.106 del
-    original y la CAM2 desde el 11.476, medidos con el audio de cada uno. El
-    audio de las dos cámaras, correlacionado con GCC-PHAT~\cite{knapp1976}, da un solo pico en
-    todas las bandas de frecuencia, 22 veces el ruido: a la CAM1 recortada le
-    sobran unos 0.55~s (0.57~s según los originales y 0.53~s según los
-    recortes, menos de un cuadro de diferencia), que se compensan con el
-    desfase de cam01. Como prueba independiente, para cada corrimiento de
-    cam02 se contó cuántas personas de cam02 caen a menos de 0.8~m de alguien
-    de cam01 en el mismo instante: el máximo queda a +0.1~s, con 9.1 parejas
-    por cuadro frente a una mediana de 4.3 (Figura~\ref{fig:patio-sincronia}).
-    \item \textbf{Pasillo.} El audio no sirve: los teléfonos están a unos
-    30~m entre sí, en dos fachadas del edificio, y no oyen lo mismo. La CAM1
-    se recortó desde el segundo 68.714 del original y la CAM2 va entera. Lo confirma la gente que el Re-ID reconoce
-    en las dos cámaras: 8 personas bajan la escalera de cam06, cruzan la plaza
-    y salen bajo cam07 unos 30~s después ($\pm$1~s), lo que corresponde a unos
-    45~m a 1.5~m/s (Figura~\ref{fig:pasillo-camaras}). Un primer corte de
-    14~s suponía que la gente iba en sentido contrario, por dentro del
-    comedor, y se descartó.
-\end{itemize}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pasillo-camaras.jpg}
-\caption{Pasillo del Edificio D, 9 de noviembre: G133 baja la escalera en
-cam06 (izquierda, a los 98~s) y sale bajo cam07 con la misma mochila
-(derecha, a los 124~s), con el mismo ID global. Sobre cada persona va solo su
-ID, sin caja; la cabecera dice cuántas personas se ven.}
-\label{fig:pasillo-camaras}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-sincronia.png}
-\caption{Sincronía del patio. Izquierda: correlación del audio de los dos
-videos recortados, con un solo pico a 0.53~s. Derecha: con el desfase de cam01
-aplicado, personas de cam02 a menos de 0.8~m de alguien de cam01 en el mismo
-instante según el corrimiento de cam02; el máximo queda a +0.1~s.}
-\label{fig:patio-sincronia}
-\end{figure}
-
-\FloatBarrier
-\subsubsection{Ubicación en el plano}
-
-El patio no tenía modelo de cámara para estos teléfonos y en el pasillo cam06
-se sostuvo en la mano, con otro encuadre que en la primera grabación. Los
-cuatro videos se ubicaron con las referencias del modelo en vivo
-(Algoritmo~\ref{alg:referencias}): los 24 cuadros comparados de cada video
-se reconocieron, aun con el teléfono moviéndose hasta 11.6\textdegree{}, y cada uno se
-aparta de la mediana entre 0.05 y 0.15~m (Cuadro~\ref{tab:referencias-09nov}).
-En el patio la sesión no toca la calibración de cam01 y cam02, que sigue
-siendo la de las cámaras fijas del Build.
-
-\begin{table}[H]
-\caption{Ubicación de las grabaciones del 9 de noviembre con las referencias
-del en vivo}
-\label{tab:referencias-09nov}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.11\textwidth}|L{0.17\textwidth}|L{0.16\textwidth}|L{0.19\textwidth}|L{0.17\textwidth}|}
-\hline
-\textbf{Cámara} & \textbf{Referencias usadas} & \textbf{Cuadros reconocidos} & \textbf{Desvío de la mediana (peor)} & \textbf{Movimiento del teléfono} \\
-\hline
-cam01 & A2 & 24 de 24 & 0.06~m (0.18~m) & 101~px y 7.8\textdegree{} \\
-\hline
-cam02 & B0 (16), B1 (8) & 24 de 24 & 0.10~m (0.19~m) & 91~px y 5.3\textdegree{} \\
-\hline
-cam06 & E2 & 24 de 24 & 0.15~m (0.21~m) & 123~px y 11.6\textdegree{} \\
-\hline
-cam07 & F1 (20), F0 y F2 (2 cada una) & 24 de 24 & 0.05~m (0.15~m) & 49~px y 4.8\textdegree{} \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsubsection{Resultados}
-
-El Cuadro~\ref{tab:mas-gente} compara las cuatro grabaciones con teléfonos.
-El patio y el pasillo del 9 de noviembre tienen en el plano de 10 a 14 veces
-más gente a la vez que el comedor, y de 2 a 3 veces más que la primera
-grabación del pasillo; aun
-así se procesaron al ritmo del video, unas 14 pasadas por segundo de las dos
-cámaras, en la GPU de la computadora local dentro de Docker
-(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:insights-09nov-web}).
-
-\begin{table}[H]
-\caption{Grabaciones de zonas con dos teléfonos: de menos a más gente}
-\label{tab:mas-gente}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.30\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|R{0.13\textwidth}|}
-\hline
-\textbf{Medición} & \textbf{Comedor (27/10)} & \textbf{Pasillo (7/11)} & \textbf{Pasillo (9/11)} & \textbf{Patio (9/11)} \\
-\hline
-Duración común & 91~s & 162~s & 154~s & 205~s \\
-\hline
-Personas a la vez por cámara, mediana (máx.) & 1 (2) y 1 (3) & 6 (10) y 2 (7) & 15 (21) y 7 (18) & 18 (31) y 12 (21) \\
-\hline
-Personas a la vez en el plano, mediana (máx.) & 2 (4) & 9 (15) & 21 (36) & 28 (40) \\
-\hline
-Personas vistas en cada cámara & 3 y 3 & 56 y 39 & 89 y 59 & 116 y 74 \\
-\hline
-IDs del seguidor por cámara & -- & -- & 314 y 143 & 283 y 221 \\
-\hline
-Tramos lejanos reunidos & -- & -- & 272 de 457 & 150 de 504 \\
-\hline
-\textbf{Personas en la sesión} & \textbf{4} & \textbf{86} & \textbf{128} & \textbf{149} \\
-\hline
-Vistas por las dos cámaras & 2 & 9 & 20 (16\,\%) & 41 (28\,\%) \\
-\hline
-Puntos en el plano & 1\,662 & 12\,563 & 33\,815 & 64\,746 \\
-\hline
-Permanencia mediana por persona & 81.5~s & 11.0~s & 14.6~s & 14.5~s \\
-\hline
-\end{tabular}
-\end{table}
-
-Lo que muestran estas grabaciones:
-
-\begin{itemize}
-    \item \textbf{La ubicación por referencias aguanta teléfonos en la mano.}
-    Los cuatro videos se ubicaron sin calibrarlos, con 24 de 24 cuadros
-    reconocidos y 0.05 a 0.15~m de desvío, aunque cam06 se movió hasta
-    11.6\textdegree{}. Una zona nueva solo necesita sus referencias del en vivo.
-    \item \textbf{La sincronía se puede verificar con los propios datos.} El
-    audio sirve cuando las cámaras oyen lo mismo (patio); si no, la gente que
-    pasa de una a otra y su velocidad fijan el desfase (pasillo). Con el
-    corte correcto, las dos cámaras ponen a la misma gente en el mismo punto
-    del piso.
-\end{itemize}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/patio-09nov-camaras.jpg}
-\caption{Patio del Edificio A, 9 de noviembre, a los 104~s: 20 personas en
-cada cámara. G1, G7, G21 y G41 están a la vez lejos en cam01 (izquierda)
-y cerca en cam02 (derecha), con el mismo ID global.}
-\label{fig:patio-09nov-camaras}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{Con cámaras que se solapan, la asociación une a más gente.}
-    En el patio, donde las dos vistas comparten el centro (Figuras~\ref{fig:patio-09nov-recorridos}
-    y~\ref{fig:patio-09nov-calor}), el 28\,\% de las
-    personas lleva el mismo ID en las dos cámaras; en el pasillo, donde no se
-    ven entre sí y el paso de una a otra toma 30~s, el 16\,\%, solo con el
-    Re-ID.
-\end{itemize}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-recorridos.png}
-\caption{Patio, 9 de noviembre: recorridos de las 149 personas sobre el piso
-del patio, con trazo marcado para las 41 vistas por las dos cámaras y la
-posición y el rumbo de cada cámara.}
-\label{fig:patio-09nov-recorridos}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-plano-calor.png}
-\caption{Patio, 9 de noviembre, con el cálculo de En vivo: a la izquierda, el
-seguimiento a los 104~s, con 27 personas detectadas en ese momento, su ID global, su rastro
-de los últimos 10~s y en gris la última posición de quien ya salió; a la
-derecha, el mapa de calor de toda la sesión, con el mismo cálculo y la misma
-escala de color de la plataforma (celdas de 0.5~m, hasta 40 puntos por
-persona y celda). La mayor presencia está en el centro del patio, donde se
-cruzan las vistas de las dos cámaras.}
-\label{fig:patio-09nov-calor}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{El límite sigue siendo el seguimiento de la gente lejana.}
-    En cam06 el seguidor abrió 314 IDs para unas 90 personas, sobre todo en
-    lo alto de la escalera y en la plaza, donde miden menos de 50~px
-    (Figuras~\ref{fig:pasillo-recorridos} y~\ref{fig:pasillo-calor}). El paso
-    de IDs lejanos reunió más de la mitad de esos tramos (272 de 457), pero
-    una persona puede quedar todavía partida en dos o tres IDs, y en grupos
-    vestidos parecido el Re-ID puede unir a dos personas, como se midió en la
-    Sección~\ref{sec:validacion-modelos}. Las cifras de personas son, por
-    eso, una estimación, no un conteo exacto.
-\end{itemize}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/pasillo-recorridos.png}
-\caption{Pasillo del Edificio D, 9 de noviembre: recorridos de las 128
-personas sobre la zona grabada~3, junto al comedor, con trazo marcado para
-las 20 vistas por las dos cámaras; G133 es la persona de la
-Figura~\ref{fig:pasillo-camaras}. La gente baja por la escalera frente a
-cam06, dobla en la esquina noreste y sale por el brazo este, bajo cam07.}
-\label{fig:pasillo-recorridos}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-plano-calor.png}
-\caption{Pasillo del Edificio D, 9 de noviembre, con el cálculo de En vivo: a la
-izquierda, el seguimiento a los 124.5~s, con 17 personas detectadas en ese momento (G133
-sale bajo cam07, como en la Figura~\ref{fig:pasillo-camaras}); a la derecha,
-el mapa de calor de toda la sesión, calculado como en la plataforma. El calor
-marca el camino de la escalera por el brazo norte, la esquina noreste y el
-brazo este hasta cam07.}
-\label{fig:pasillo-calor}
-\end{figure}
-
-La plataforma reproduce las dos grabaciones en En vivo y las resume en
-Insights como cualquier sesión (Figuras~\ref{fig:patio-09nov-web},
-\ref{fig:pasillo-web} y~\ref{fig:insights-09nov-web}).
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-en-vivo-web.png}
-\caption{La misma grabación del patio en la plataforma (En vivo, ``Ir a:
-Patio''), a los 104~s: seguimiento, mapa de calor y la lista de quién está en
-ese instante, con las cámaras que lo vieron y su tiempo en el plano. La
-plataforma marca 34 en el plano porque cuenta también a quien está entre dos
-detecciones, con su posición estimada.}
-\label{fig:patio-09nov-web}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-en-vivo-web.png}
-\caption{La grabación del pasillo en la plataforma (En vivo, ``Ir a: Pasillo
-del Edificio D''), a los 124.5~s: 128 personas en la sesión y 18 en el plano,
-con el seguimiento sobre la L del pasillo, junto al comedor, y el mapa de calor
-de la escalera de cam06 al brazo este de cam07.}
-\label{fig:pasillo-web}
-\end{minipage}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/insights-09nov-web.png}
-\caption{Insights de las dos grabaciones del 9 de noviembre: arriba el pasillo
-(128 personas, 33\,815 puntos, 2~min 34~s), abajo el patio (149 personas,
-64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan ``sin
-determinar''.}
-\label{fig:insights-09nov-web}
-\end{figure}
-
-\FloatBarrier
-\section{Pruebas de Validación y Estrés del Modelo}
-\label{sec:pruebas}
-
-Esta sección mide el modelo de Videos, que es el que procesa varias cámaras a
-la vez. Primero presenta la validación de cada pieza del modelo con videos
-etiquetados (detector, Re-ID, seguidor y asociación entre cámaras), que
-explica por qué el modelo actual usa esos componentes, y luego las pruebas de
-carga: cuánto procesa el equipo de despliegue (Cuadro~\ref{tab:infra}) y qué
-consume cada parte del modelo.
-
-\subsection{Validación de los modelos con videos etiquetados}
-\label{sec:validacion-modelos}
-
-El modelo de Videos no se armó a ojo: cada componente se comparó con sus
-alternativas y cada cambio se aceptó solo si mejoraba la medición. Se usaron
-seis pares de cámaras de interiores que observan el mismo lugar (12 videos de
-unos 5~min, 1080p a 23~fps), con cada persona etiquetada cuadro por cuadro y
-con el mismo identificador en las dos cámaras del par: entre 30 y 90 personas
-por video y 308 en total. Para que las comparaciones fueran justas, cada
-variante repitió exactamente los cuadros que el modelo procesó en tiempo real.
-Se midieron tres cosas:
-
-\begin{itemize}
-    \item \textbf{Probabilidad de acierto del Re-ID:} dado un tramo de una
-    persona, la probabilidad de que, entre todas las personas presentes, la
-    más parecida sea ella misma.
-    \item \textbf{Seguimiento dentro de cada cámara:} el IDF1 (fracción del
-    tiempo en que cada persona conserva su identificador), los cambios de ID y
-    cuántos IDs recibe cada persona.
-    \item \textbf{Multicámara:} la probabilidad de que la misma persona, vista
-    a la vez en dos cámaras, lleve el mismo ID, y la fracción de IDs que
-    mezclan a más de una persona.
-\end{itemize}
-
-\subsubsection{Detector}
-
-Con la configuración del modelo en vivo (YOLO26m~\cite{yolo26} a 960~px), en una muestra de
-cuadros de 16 cámaras de interiores etiquetadas (un conjunto más amplio que
-los 12 videos de los pares), el detector encontró el
-69\,\% de las personas, y el 70\,\% de lo que marcó era una persona
-etiquetada. La cifra real es algo mayor: las etiquetas dibujan el cuerpo
-completo aunque esté tapado por estantes, y aceptando una superposición menor
-encuentra cerca del 82\,\%. El punto débil son las personas pequeñas:
-encontró el 52\,\% de las de menos de 100~px de alto y el 66\,\% de las de
-100 a 200~px. Por eso Videos detecta a 1280~px: a 960~px, en los mismos
-cuadros, se detecta un 14\,\% menos de personas (228 frente a 264), sobre todo
-las lejanas.
-
-\subsubsection{Re-ID entre cámaras}
-
-El Re-ID es la pieza que decide si dos tramos son la misma persona. El del
-Build, YOLO26s-ReID, estira cada recorte a un cuadrado y reconocía poco a la
-misma persona desde otra cámara. Se comparó primero con OSNet-AIN~\cite{zhou2022osnet}
-(\textit{omni-scale} con normalización por instancia, entrenado en MSMT17~\cite{wei2018}) y
-luego con dos modelos más recientes basados en \textit{transformers}:
-PersonViT~\cite{hu2024personvit} ViT-S/16 (MSMT17) y CLIP-ReID~\cite{li2023clipreid} ViT-B/16
-(Cuadro~\ref{tab:reid-modelos}). La segunda comparación usa 4 de los pares y
-4\,372 recortes; ahí la misma persona es la que el seguidor mantiene en el
-mismo tramo 2~s o 10~s después, y se compara con todas las demás personas de
-la misma cámara en ese momento.
-
-\begin{table}[H]
-\caption{Comparación de modelos de Re-ID}
-\label{tab:reid-modelos}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.44\textwidth}|R{0.14\textwidth}|R{0.14\textwidth}|R{0.14\textwidth}|}
-\hline
-\multicolumn{4}{|l|}{\textit{Re-ID del Build frente a OSNet-AIN: 6 pares, 308 personas, tramos de $\sim$4~s}} \\
-\hline
-\textbf{Medición} & \textbf{YOLO26s-ReID} & \textbf{OSNet-AIN} & \\
-\hline
-La más parecida en la otra cámara es la misma persona & 58\,\% & 78\,\% & \\
-\hline
-Tramos de la misma persona unidos entre cámaras, con $\sim$1\,\% de uniones de personas distintas & 31\,\% & 59\,\% & \\
-\hline
-Tiempo de cómputo, relativo al del Build & 1 & 0.5 & \\
-\hline
-\multicolumn{4}{|l|}{\textit{Modelos recientes: 4 pares, 4\,372 recortes, en la misma cámara}} \\
-\hline
-\textbf{Re-ID} & \textbf{Acierto a 2~s} & \textbf{Acierto a 10~s} & \textbf{ms por recorte} \\
-\hline
-OSNet-AIN & 92.4\,\% & 80.0\,\% & 1.3 \\
-\hline
-PersonViT ViT-S & 93.4\,\% & 81.0\,\% & 1.5 \\
-\hline
-CLIP-ReID ViT-B & 93.2\,\% & 81.2\,\% & 2.7 \\
-\hline
-\textbf{OSNet-AIN + PersonViT (elegido)} & \textbf{94.3\,\%} & \textbf{82.8\,\%} & \textbf{2.6} \\
-\hline
-OSNet-AIN + PersonViT + CLIP-ReID & 94.5\,\% & 83.3\,\% & 5.7 \\
-\hline
-\end{tabular}
-\end{table}
-
-OSNet-AIN reconoce a la misma persona desde la otra cámara con 20 puntos más
-de acierto y une al doble de tramos correctos con el mismo error. Entre los
-modelos recientes, ninguno solo supera claramente a OSNet-AIN; promediar el
-parecido de OSNet-AIN y PersonViT gana de 2 a 3 puntos y acepta como iguales a
-un 20\,\% menos de pares de personas distintas, por 2.6~ms por recorte. Sumar
-CLIP-ReID apenas agrega medio punto y duplica el tiempo, así que se descartó.
-
-\subsubsection{Seguimiento dentro de cada cámara}
-
-El seguidor compara la apariencia con histogramas de color y con un vector de
-una ResNet18~\cite{he2016} entrenada en ImageNet~\cite{deng2009}, que no es un modelo de Re-ID. En los 12
-videos, casi la mitad de los errores ocurría cuando el seguidor perdía a una
-persona y, al recuperarla, le ponía el ID de otra (en una cámara, 192 de 364
-saltos); el resto, cuando dos personas se cruzaban, porque decidía casi solo
-por el movimiento. Mover umbrales sueltos casi no cambiaba nada. Lo que
-mejoró el seguimiento fue dar más peso a la apariencia en esa decisión (0.8
-en vez de 0.22) y, dentro de ella, al vector de la ResNet18 (80\,\% en vez de
-20\,\%), porque el color distingue poco a gente vestida parecida
-(Cuadro~\ref{tab:seguimiento}).
-
-\begin{table}[H]
-\caption{Seguimiento dentro de cada cámara: 12 videos con 30 a 90 personas
-etiquetadas cada uno}
-\label{tab:seguimiento}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.44\textwidth}|R{0.20\textwidth}|R{0.20\textwidth}|}
-\hline
-\textbf{Medición} & \textbf{Antes} & \textbf{Modelo actual} \\
-\hline
-IDF1 (la persona conserva su ID) & 35\,\% & 40\,\% \\
-\hline
-Cambios de ID & 4\,422 & 2\,940 ($-34$\,\%) \\
-\hline
-IDs por persona & 3.8 & 2.9 \\
-\hline
-Error total de conteo de personas & 109 & 97 \\
-\hline
-Tiempo por cuadro & 96~ms & 97~ms \\
-\hline
-\end{tabular}
-\end{table}
-
-También se probó confirmar un ID nuevo a 1~s en vez de 2~s. En 8 videos el ID
-aparecía antes (0.8~s en vez de 1.6~s en la mediana), el IDF1 subía de 41.9 a
-43.4\,\% y el error de conteo bajaba de 60 a 44, pero los cambios de ID
-subían un 17\,\% (de 1\,544 a 1\,807) y cada persona recibía más IDs (2.76 en
-vez de 2.48). Se mantuvieron los 2~s por estabilidad. En todos los videos las
-cajas coinciden con su propio cuadro, sin retraso, y el ID queda sobre la
-cabeza con un desvío de 0 a 1\,\% del alto de la persona.
-
-\subsubsection{Asociación entre cámaras}
-
-Con el Re-ID del Build, la misma persona vista a la vez en las dos cámaras
-llevaba el mismo ID solo el 14\,\% de las veces. Con OSNet-AIN y la tanda de
-videos compartiendo un solo asociador, subió al 36\,\% en el primer par; en el
-par con más gente, donde el seguidor ya partía a cada persona en unos 4 IDs,
-solo subió al 18\,\%.
-
-Al revisar las uniones recorte por recorte apareció el error principal: IDs
-que se ``comían'' a otras personas. El asociador compara a cada candidato con
-el promedio de los tramos de una identidad; cada unión equivocada ensucia ese
-promedio, que se vuelve una persona genérica parecida a cualquiera, y algunos
-IDs llegaban a juntar 10 a 18 tramos de gente distinta en 5~minutos. Las
-uniones equivocadas tenían el mismo puntaje que las correctas (0.75 a 0.77),
-así que subir el umbral también cortaba las buenas. Se probaron dos
-caminos: limitar el tiempo para unir tramos y exigir que cada tramo nuevo se
-parezca a cada tramo de la identidad, no solo al promedio
-(Cuadro~\ref{tab:multicamara}).
-
-\begin{table}[H]
-\caption{Asociación entre cámaras: par de 5~min revisado recorte por recorte}
-\label{tab:multicamara}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.42\textwidth}|L{0.20\textwidth}|L{0.28\textwidth}|}
-\hline
-\textbf{Variante} & \textbf{IDs que mezclan personas} & \textbf{Personas contadas} \\
-\hline
-Asociador anterior (promedio de la identidad) & 60\,\% & 82 y 89 por cámara \\
-\hline
-Unir solo dentro de 15~s, con la regla de cada tramo (primeros 160~s) & 5\,\% (antes 41\,\%) & 109 IDs (antes 56): parte a las personas \\
-\hline
-Unir solo dentro de 30~s / 60~s & -- & 194 y 195 / 159 y 160 por cámara \\
-\hline
-\textbf{OSNet-AIN + PersonViT con la regla de cada tramo (elegida)} & \textbf{28\,\%} & \textbf{135 y 139 por cámara} \\
-\hline
-\end{tabular}
-\end{table}
-
-Limitar el tiempo para unir tramos dejaba los IDs limpios, pero partía a la
-misma persona en demasiados IDs. Por eso el modelo actual conserva las
-ventanas de unión y combina el Re-ID promediado con la regla de que cada
-tramo se parezca a cada tramo de la otra identidad: los IDs que mezclan
-personas bajan del 60 al 28\,\%. El conteo sube porque el asociador anterior
-juntaba a varias personas en un mismo ID.
-
-\subsubsection{Resultado frente al modelo anterior}
-
-La Figura~\ref{fig:validacion-reid} resume la mejora. Con el modelo actual,
-la probabilidad de que la persona más parecida en la otra cámara sea la
-misma pasa de 58 a 78\,\%, se unen casi el doble de tramos correctos, la
-misma persona vista a la vez en dos cámaras lleva el mismo ID 2.6 veces más
-seguido y los IDs que mezclan personas bajan a menos de la mitad. Además,
-con los mismos resultados, grabar las redes en CUDA graphs subió la fracción
-de cuadros procesados en tiempo real de un par de videos de 5~min del 36 al
-54\,\% (en las pruebas de carga, los cinco pares procesan el 73\,\%,
-Cuadro~\ref{tab:pares-modos}), y decodificar el video en la GPU, entre otros
-ajustes, bajó el paso de 7 cámaras de 60~fps en tiempo real de 1.8 a 0.58~s
-(de 0.5 a 1.7 cuadros por segundo de cada video); sin el reloj del tiempo
-real, ese paso toma de 603 a 794~ms (Cuadro~\ref{tab:siete}).
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/pruebas/validacion-reid.png}
-\caption{Izquierda: mediciones del multitracking antes y después de la
-validación. Derecha: probabilidad de que la persona más parecida en la misma
-cámara, 2~s y 10~s después, sea la misma, según el modelo de Re-ID.}
-\label{fig:validacion-reid}
-\end{figure}
-
-El seguimiento sigue siendo el límite del sistema en lugares concurridos: con
-un IDF1 de 40\,\%, una persona conserva su ID menos de la mitad del tiempo
-dentro de una cámara, y todavía el 28\,\% de los IDs mezcla a más de una
-persona, sobre todo gente vestida parecido (batas blancas o ropa oscura).
-Subirlo requiere un Re-ID dentro del propio seguidor, que es más lento.
-
-\subsection{Procedimiento de las pruebas de carga}
-
-Cada caso se subió a la sección Videos como una tanda, con el modelo en la GPU
-y sin teléfonos conectados, y se midieron sus primeros 2 minutos de proceso,
-desde que todos los videos de la tanda empezaban. Cada segundo se registró el
-uso de CPU y la memoria del proceso del modelo, el uso de CPU de todo el
-equipo, y el uso, la memoria y la potencia de la GPU; del canal de estado del
-modelo se tomaron los cuadros procesados y saltados, los milisegundos por
-cuadro y las personas contadas de cada video. Los casos fueron:
-
-\begin{itemize}
-    \item \textbf{Validación:} cinco pares de videos (P1 a P5) de dos cámaras
-    que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 86
-    personas contadas por cámara (Cuadro~\ref{tab:pares-detalle}).
-    \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar,
-    con unas 25 personas a la vista en cada una.
-\end{itemize}
-
-Los casos de estrés se midieron antes de retirar del sistema el módulo
-opcional de estimación de género, que consumía CPU adicional. Por eso la carga
-de CPU de esos casos es una cota superior de la actual y conviene repetir la
-medición con la versión final.
-
-El modelo procesa como una cámara en vivo: si no alcanza al video, salta
-cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
-segundo que logra procesar y en la fracción de cuadros que salta. Las siete
-cámaras se procesaron con el mismo modelo, el mismo lector en la GPU y la misma preparación de la pasada siguiente mientras
-se procesa la anterior, pero sin el reloj del tiempo real, sobre sus primeros
-2 minutos y con tres ritmos:
-1.5 y 5 cuadros por segundo fijos, y uno adaptado en el que el video avanza 3
-veces más lento que el reloj y cada pasada toma el cuadro de ese instante,
-con un tope de 15 cuadros por segundo. En los tres se procesa cada cuadro
-elegido de las siete cámaras, sin saltar ninguno por atraso.
-
-\subsection{Resultados de la validación con pares de cámaras}
-
-El Cuadro~\ref{tab:pares-modos} promedia los cinco pares y el
-Cuadro~\ref{tab:pares-detalle} muestra cada par.
-
-\begin{table}[H]
-\caption{Pares de cámaras 1080p a 23~fps: promedio de los cinco pares}
-\label{tab:pares-modos}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.55\textwidth}|R{0.20\textwidth}|}
-\hline
-\textbf{Medición} & \textbf{Resultado} \\
-\hline
-Cuadros procesados por segundo, por video & 17.0 \\
-\hline
-Milisegundos por cuadro & 46 \\
-\hline
-Cuadros saltados & 27\,\% \\
-\hline
-Núcleos de CPU del modelo, promedio (p95) & 1.7 (1.8) \\
-\hline
-CPU de todo el equipo & 28\,\% \\
-\hline
-Uso de la GPU & 68\,\% \\
-\hline
-Memoria de la GPU & 2.8~GB \\
-\hline
-Memoria RAM del modelo & 1.4~GB \\
-\hline
-Potencia de la GPU & 59~W \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Detalle por par: cuadros por segundo por video, núcleos de CPU y uso
-de la GPU}
-\label{tab:pares-detalle}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.07\textwidth}|L{0.17\textwidth}|L{0.22\textwidth}|L{0.20\textwidth}|L{0.20\textwidth}|}
-\hline
-\textbf{Par} & \textbf{Personas por cámara} & \textbf{Cuadros por segundo} & \textbf{Núcleos de CPU} & \textbf{Uso de la GPU} \\
-\hline
-P1 & 46 y 46 & 18.1 & 1.7 & 72\,\% \\
-\hline
-P2 & 86 y 81 & 13.1 & 1.7 & 58\,\% \\
-\hline
-P3 & 35 y 26 & 18.2 & 1.7 & 69\,\% \\
-\hline
-P4 & 70 y 64 & 17.7 & 1.7 & 71\,\% \\
-\hline
-P5 & 16 y 33 & 17.7 & 1.6 & 68\,\% \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Resultados de las pruebas de estrés}
-
-Con dos cámaras de 60~fps y mucha gente (227 y 148 personas contadas en
-2~minutos), el modelo procesó 7.7 cuadros por segundo por
-video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
-6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
-la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
-Cuadro~\ref{tab:siete} resume las siete cámaras y la
-Figura~\ref{fig:siete-ritmos} compara los tres ritmos. A 5 cuadros por
-segundo fijos, 2 minutos de video tardaron 6 minutos (3.0 veces) y se
-procesaron los 600 cuadros elegidos de cada cámara. El ritmo adaptado tardó
-lo mismo pero procesó menos, 3.9 cuadros por segundo por cámara: cuando una
-pasada se demora, salta al cuadro que marca el reloj.
-
-\begin{table}[H]
-\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (primeros 2 minutos)}
-\label{tab:siete}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.38\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|}
-\hline
-\textbf{Medición} & \textbf{1.5 c/s fijos} & \textbf{Adaptado (3 veces el video)} & \textbf{5 c/s fijos} \\
-\hline
-Cuadros procesados por segundo, por cámara & 1.5 & 3.9 & 5.0 \\
-\hline
-Cuadros procesados, en total & 1\,260 & 3\,234 & 4\,200 \\
-\hline
-Tiempo de proceso (veces el video) & 153~s (1.3) & 363~s (3.0) & 364~s (3.0) \\
-\hline
-Milisegundos por pasada de las 7 cámaras & 794 & 632 & 603 \\
-\hline
-\quad de ellos, seguimiento en la CPU & 588 & 503 & 463 \\
-\hline
-Núcleos de CPU del modelo & 7.9 & 7.6 & 11.0 \\
-\hline
-CPU de todo el equipo & 61\,\% & 61\,\% & 77\,\% \\
-\hline
-Uso de la GPU & 31\,\% & 28\,\% & 38\,\% \\
-\hline
-Memoria de la GPU & 3.8~GB & 3.8~GB & 3.8~GB \\
-\hline
-Memoria RAM del modelo & 4.3~GB & 4.0~GB & 4.7~GB \\
-\hline
-Potencia de la GPU & 41~W & 36~W & 45~W \\
-\hline
-Personas contadas por cámara & 122 a 201 & 142 a 241 & 141 a 248 \\
-\hline
-Movimiento entre cuadros seguidos, mediana (p90), en alturas de la caja & 0.055 (0.31) & 0.033 (0.17) & 0.030 (0.15) \\
-\hline
-Detecciones con ID global & 76\,\% & 82\,\% & 85\,\% \\
-\hline
-IDs vistos en más de una cámara & 326 & 342 & 393 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/pruebas/siete-camaras.png}
-\caption{Siete cámaras 1080p a 60~fps según el ritmo: cuadros procesados por
-cámara, tiempo de proceso frente a la duración del video y movimiento de una
-persona entre dos cuadros procesados seguidos.}
-\label{fig:siete-ritmos}
-\end{figure}
-
-\subsection{Análisis de los resultados}
-
-\begin{itemize}
-    \item \textbf{Dos cámaras van casi al ritmo del video.} Con dos cámaras
-    1080p a 23~fps el modelo procesa unos 17 cuadros por segundo por video
-    (unos 34 en total), alrededor del 73\,\% de los cuadros.
-    \item \textbf{La cantidad de gente baja el ritmo.} El par con más personas
-    (P2, más de 80 por cámara) procesa unos 13 cuadros por segundo, frente a
-    18 del que tiene menos (P3).
-    \item \textbf{La GPU no es el cuello de botella.} En los pares la GPU
-    trabaja entre 58\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
-    que sube con la gente (1.7 núcleos en los pares y más de 6 con dos cámaras
-    de 60~fps); con siete cámaras la GPU trabaja solo entre 28 y 38\,\%.
-    \item \textbf{Siete cámaras de 60~fps se procesan completas a 5 cuadros
-    por segundo.} Sin el reloj del tiempo real, una pasada de las siete
-    cámaras toma 0.6~s, tres cuartos en el seguimiento en la CPU, y 2 minutos
-    de video se procesan en 3 veces su duración sin saltar ningún cuadro
-    elegido. Frente a 1.5 cuadros por segundo, el movimiento entre cuadros
-    seguidos baja a la mitad (p90 de 0.15 alturas de la caja frente a 0.31),
-    el 85\,\% de las detecciones lleva ID global (frente al 76\,\% a 1.5 c/s) y más IDs se
-    reconocen entre cámaras. Para siete cámaras conviene procesar por lotes a
-    una tasa fija de 5 cuadros por segundo y no en tiempo real.
-    \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 4.7~GB de
-    RAM y la GPU consume entre 36 y 61~W; el equipo arranca una tanda en 2.5 a
-    9~s.
-\end{itemize}
-
-Estas pruebas miden capacidad y consumo, no precisión: la precisión del
-seguimiento corresponde a la Sección~\ref{sec:validacion-modelos}.
-Cada caso se midió durante 2 minutos en un solo equipo portátil, cuyo
-rendimiento puede variar con la temperatura y la energía disponible.
-
-\section{Plan de Negocio}
+\section{Plan de negocio}
 \label{sec:negocio}
 
 El plan de negocio lleva la tecnología de AeroVision fuera del aeropuerto, a
@@ -6760,7 +6828,7 @@ actúa como encargado del tratamiento del cliente: procesa las grabaciones
 dentro de su red o en su propia computadora, no guarda imágenes ni rostros,
 borra el video al terminar y entrega solo conteos y tasas.
 
-\section{Conclusiones y Recomendaciones}
+\section{Conclusiones y recomendaciones}
 \label{sec:conclusiones}
 
 \subsection{Conclusiones}
@@ -6772,7 +6840,7 @@ borra el video al terminar y entrega solo conteos y tasas.
     de personas lejanas de 7 a 1, de modo que una persona aún puede
     partirse en varios tramos dentro de una cámara. El modelo procesa unos
     17 cuadros por segundo por video con dos cámaras 1080p en la RTX~4060
-    Laptop (Secciones~\ref{sec:validacion-esan} y~\ref{sec:pruebas}).
+    Laptop (Secciones~\ref{sec:pruebas} y~\ref{sec:validacion-esan}).
     \item \textbf{Re-identificación sin rostro.} La apariencia corporal
     bastó para asociar personas entre cámaras con una precisión de 0.99 y
     un \textit{recall} de 0.86 en la primera prueba; en el comedor cada
@@ -6825,7 +6893,8 @@ borra el video al terminar y entrega solo conteos y tasas.
     uso al mes (Cuadro~\ref{tab:nube-proveedores}).
 \end{itemize}
 
-\section{Referencias Bibliográficas}
+\section*{Referencias bibliográficas}
+\addcontentsline{toc}{section}{Referencias bibliográficas}
 
 \begingroup
 \renewcommand{\section}[2]{}

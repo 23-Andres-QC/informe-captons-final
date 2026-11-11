@@ -394,18 +394,22 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 ---
 
 ## 12. Estructura del informe
-1. Resumen ejecutivo
-2. Introducción y objetivos
-3. Problema y contexto (variables, restricciones, análisis técnico, legal, ético, social y ambiental)
-4. Marco teórico (9 antecedentes)
-5. Requerimientos y casos de uso
-6. Metodología (Partes I, II y III)
-7. Planificación (Scrum y riesgos)
-8. Algoritmos
-9. Arquitectura
-10. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
-11. Validación y estrés
-12. Plan de negocio
-13. Conclusiones y recomendaciones
-14. Referencias
-15. Anexo
+Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra secciones y subsecciones.
+
+- Resumen ejecutivo
+1. Introducción y objetivos
+2. Planteamiento del problema y análisis del contexto (variables, restricciones, análisis técnico, legal, ético, social y ambiental)
+3. Marco teórico: bases conceptuales (detección, seguimiento, Re-ID, homografía, KDE, rutas frecuentes, sincronía por audio, seudonimización) y 9 antecedentes
+4. Especificación de requisitos (casos de uso, requisitos funcionales y no funcionales)
+5. Metodología (Partes I, II y III)
+6. Algoritmos
+7. Arquitectura del sistema
+8. Pruebas de validación y estrés del modelo (va antes porque las pruebas en ESAN la citan)
+9. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
+10. Planificación y gestión del proyecto (PMBOK, Scrum y riesgos)
+11. Plan de negocio
+12. Conclusiones y recomendaciones
+- Referencias bibliográficas
+- Anexo
+
+Orden: qué se construye (1 a 7), cómo se probó (8 y 9), cómo se gestiona y se vende (10 y 11) y qué queda (12).
