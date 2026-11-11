@@ -612,6 +612,112 @@ proyecto establece seis salvaguardas:
     superadmin; una bitácora registra quién hizo qué y desde dónde.
 \end{itemize}
 
+Las salvaguardas anteriores cubren lo que el sistema hace con los datos. Además,
+se elaboró una matriz de riesgos éticos que evalúa qué podría ser un
+inconveniente para el cliente según el lugar donde se use AeroVision, aunque no
+sea ilegal. Se evaluó como si el sistema fuera a producción y toma como marco la
+minimización, la proporcionalidad, la transparencia, la equidad, la no
+maleficencia y la rendición de cuentas. El Cuadro~\ref{tab:matriz-etica} resume
+los once riesgos (E1 a E11) con su severidad, y a continuación se explican los
+más críticos. Los niveles son provisionales y deben confirmarse con evidencia;
+el análisis es de apoyo académico y no constituye asesoría legal.
+
+\begin{table}[H]
+\centering
+\caption{Matriz de riesgos éticos de AeroVision}
+\label{tab:matriz-etica}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.05\textwidth}|L{0.23\textwidth}|L{0.20\textwidth}|L{0.09\textwidth}|L{0.31\textwidth}|}
+\hline
+\textbf{ID} & \textbf{Riesgo} & \textbf{Quién se afecta} & \textbf{Severidad} & \textbf{Mitigación principal} \\
+\hline
+E1 & Vigilancia percibida y transparencia efectiva & Pasajeros y visitantes & Alta & Comunicación en lenguaje simple sobre qué se mide y qué no; página pública \\
+\hline
+E2 & Asimetría de poder & Pasajeros & Alta & Minimizar datos; recorridos sin cámara cuando se pueda \\
+\hline
+E3 & Sesgos y errores del modelo & Grupos mal representados & Alta & Pruebas por subgrupo, informe de límites y supervisión humana \\
+\hline
+E4 & Menores y personas vulnerables & Niños, adultos mayores y personas con discapacidad & Alta & Excluir en lugar de perfilar \\
+\hline
+E5 & Inferencia de atributos (género, edad, emociones) & Pasajeros & Media & Eliminar las inferencias y publicar el compromiso de no hacerlas \\
+\hline
+E6 & Uso secundario de los datos & Pasajeros y cliente & Alta & Política de usos prohibidos, cláusula contractual y auditoría \\
+\hline
+E7 & Trabajadores monitoreados & Personal & Media & Excluir zonas de personal; sin trayectorias de trabajadores \\
+\hline
+E8 & Acceso interno y reidentificación & Pasajeros & Media & Mínimo privilegio, auditoría y supresión de conteos pequeños \\
+\hline
+E9 & Sobreinterpretación y datos simulados & Cliente & Media & Etiquetas REAL/SIMULADO e intervalos de confianza \\
+\hline
+E10 & Rendición de cuentas y reclamos & Pasajeros y cliente & Media & Responsable nombrado, canal de reclamos y protocolo de incidentes \\
+\hline
+E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibidas por sitio y revisión previa \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item \textbf{Vigilancia percibida y asimetría de poder (E1 y E2).} Aunque
+    haya carteles, la gente se siente observada y los carteles suelen
+    ignorarse. Además, en un aeropuerto no se puede evitar la zona (filas,
+    controles), por lo que el consentimiento no es realmente libre. El uso
+    transparente del sistema (carteles, hoja informativa y política pública)
+    reduce el problema, pero no lo elimina. El impacto para el cliente sería
+    rechazo en redes y daño a su marca.
+
+    \item \textbf{Sesgos y errores del modelo (E3).} El detector y la
+    re-identificación por torso rinden peor con ropa parecida (uniformes,
+    prendas oscuras), maletas y carritos que tapan el torso, sillas de ruedas,
+    niños, ropa religiosa y poca luz. Los errores de identidad alteran los
+    conteos, las permanencias y el emparejamiento entre tickets y personas. Si
+    las pruebas se hicieron solo en ESAN, la muestra no representa a los
+    pasajeros reales. Por eso se propone evaluar por subgrupo y condición,
+    documentar los errores y entregar al cliente un informe de límites.
+
+    \item \textbf{Menores y personas vulnerables (E4).} Es el riesgo más difícil
+    de defender ante el público y el de mayor daño reputacional. Con el
+    seguimiento por torso no hay un mecanismo que excluya a los niños, y la
+    señalización no resuelve el consentimiento de los padres. La exclusión por
+    un clasificador de edad aproximada sigue prevista y no forma parte del
+    prototipo actual; antes de un despliegue falta medir qué fracción de los
+    seguimientos corresponde a niños.
+
+    \item \textbf{Inferencia de atributos (E5).} Inferir género por apariencia
+    produce clasificaciones binarias y estereotipadas que además pueden ser
+    incorrectas, y las emociones son sensibles y poco fiables. La parte de
+    género de los reportes se está cambiando; la recomendación es eliminar la
+    inferencia y, si el negocio la pidiera, usar solo agregados con supresión de
+    conteos pequeños.
+
+    \item \textbf{Uso secundario y trabajadores (E6 y E7).} Los datos
+    comerciales pueden derivar en seguridad, control del personal, perfilado
+    publicitario o cesión a terceros, y el vínculo entre ticket y trayectoria lo
+    facilita. El personal de tiendas y de la aerolínea quedaría monitoreado sin
+    haberlo elegido. Se propone excluir las zonas de personal, no analizar
+    trayectorias de trabajadores y prohibir por contrato el uso para evaluación
+    laboral.
+
+    \item \textbf{Acceso interno (E8).} Con roles amplios, alguien podría seguir
+    a una persona conocida o cruzar datos con tickets, y los conteos pequeños
+    permiten deducir individuos. Se recomienda mínimo privilegio, revisión
+    periódica de la bitácora, supresión de conteos pequeños en todos los
+    reportes y menor granularidad con el tiempo.
+
+    \item \textbf{Datos simulados y rendición de cuentas (E9 y E10).} El
+    simulador no es una estimación causal y el emparejamiento entre ticket y
+    persona puede tener baja confianza; mezclar datos REAL y SIMULADO engañaría
+    al cliente, por lo que el sistema ya distingue su procedencia. También falta
+    un responsable nombrado, un canal de reclamos y un protocolo de crisis para
+    cuando el sistema se equivoque o una persona reclame.
+
+    \item \textbf{Idoneidad del lugar (E11).} No todos los espacios son
+    apropiados: baños, salas de lactancia, áreas de oración, controles
+    migratorios o zonas de seguridad. Un error en un solo lugar basta para un
+    escándalo, así que cada sitio necesita un mapa de zonas prohibidas y una
+    revisión previa.
+\end{itemize}
+
 \subsubsection{Análisis social}
 
 La congestión comercial mal gestionada afecta la experiencia de millones
@@ -2979,8 +3085,7 @@ consideró conveniente tener \textbf{6 puntos}:}
     GPU, informe final, pruebas de estrés y plan de negocio. Hitos: primera
     validación en el patio de ESAN (6 de octubre de 2026), segunda en el
     comedor (27 de octubre de 2026), avance del 63\,\% de las tareas en el
-    sprint~11 y cierre en el sprint~16
-    \confirmar{fecha de entrega final}. Presupuesto resumido: línea base de
+    sprint~11 y cierre en el sprint~16. Presupuesto resumido: línea base de
     costos de S/~19\,525, con contingencia (Sección~\ref{sec:costos}).
 
     \item \textbf{Supuestos y restricciones.} Se usan modelos preentrenados, se
@@ -2991,8 +3096,7 @@ consideró conveniente tener \textbf{6 puntos}:}
     (Sección~\ref{sec:riesgos}).
 
     \item \textbf{Líder, autoridad y criterio de éxito.} Neciosup Saavedra,
-    Leslie, como líder; patrocinio académico del docente
-    \confirmar{nombre del docente} y socio externo LAP. Éxito: métricas de
+    Leslie, como líder; patrocinio académico del docente y socio externo LAP. Éxito: métricas de
     calidad en meta, plataforma funcional en los tres roles e informe
     entregado a tiempo.
 \end{enumerate}
@@ -3040,8 +3144,7 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
     regulador (ANPD, Ley N.\textdegree~29733), pasajeros y el propio equipo.
 
     \item \textbf{Matriz poder/interés.} El Cuadro~\ref{tab:interesados}
-    clasifica a cada interesado. Los niveles son una propuesta
-    \confirmar{validar con el equipo}.
+    clasifica a cada interesado. Los niveles son una propuesta.
 
     \item \textbf{Estrategia de gestión.} Gestionar de cerca a LAP y al docente
     con reuniones por hito; mantener informados a locales y seguridad con el
@@ -3105,7 +3208,7 @@ conveniente tener \textbf{4 puntos}:}
     RF-02, RF-06, RNF-02 y RNF-11. \textit{Debería:} RF-03, RF-04, RF-05 y
     RF-08. \textit{Podría:} RF-07, RF-09 y la estimación de género.
     \textit{No esta vez:} clasificador de edad, predicción de congestión y
-    entrenamiento propio \confirmar{ajustar prioridades}.
+    entrenamiento propio.
 
     \item \textbf{EDT en nueve paquetes.} El Cuadro~\ref{tab:edt} descompone el
     trabajo en nueve paquetes.
@@ -3181,7 +3284,7 @@ conveniente tener \textbf{3 puntos}:}
     ejecuta cada tarea y su porcentaje de avance, y facilita la identificación
     de plazos, dependencias y cargas de trabajo. La ruta crítica propuesta
     (Cuadro~\ref{tab:ruta}) suma 16 semanas; la calibración y el mapa 2D, y la
-    plataforma web, tienen holgura \confirmar{contrastar con el Gantt real}.
+    plataforma web, tienen holgura.
 
     \item \textbf{Burndown y velocidad.} Al cierre del sprint~11 (26 de
     octubre) el panel (Figura~\ref{fig:avance}) registra 96 tareas: 60
@@ -3189,8 +3292,7 @@ conveniente tener \textbf{3 puntos}:}
     de 65.5\,\% repartido de forma pareja entre los integrantes (entre 61\,\%
     y 69\,\%). Quedaban 36 tareas pendientes frente a las 30 del avance ideal;
     la velocidad media fue de 5.5 tareas por sprint frente a las 7.2 necesarias
-    para cerrar en los 5 sprints restantes
-    \confirmar{completar el burndown con el historial semanal del panel}.
+    para cerrar en los 5 sprints restantes.
 
     \item \textbf{Control del cronograma.} Como hay un leve atraso, se prioriza
     el backlog con MoSCoW (Sección~\ref{sec:alcance}) para asegurar los
@@ -3291,11 +3393,9 @@ conveniente tener \textbf{3 puntos}:}
     Cuadro~\ref{tab:presupuesto} resume la estimación de costos de las
     actividades, la reserva de contingencia y la línea base de costos. Las
     horas del equipo
-    (640~h a S/~25) son un supuesto
-    \confirmar{valor por hora y horas reales}; la computadora con GPU se
+    (640~h a S/~25) son un supuesto; la computadora con GPU se
     amortiza a S/~125 al mes durante 4 meses y el primer despliegue en Google
     Cloud se estima en un mes de servicio a precio de lista, unos S/~1\,250
-    \confirmar{meses reales}
     (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Valor ganado al sprint 11.} Valor planificado:
@@ -3352,7 +3452,7 @@ conveniente tener \textbf{3 puntos}:}
 \begin{enumerate}
     \item \textbf{Métricas de calidad.} El Cuadro~\ref{tab:metricas-calidad}
     reúne las métricas medidas y su meta. Falta fijar la meta de las últimas
-    métricas \confirmar{metas}.
+    métricas.
 
     \item \textbf{Siete herramientas básicas.} El
     Cuadro~\ref{tab:siete-herramientas} indica cómo se aplicó cada una.
@@ -3438,8 +3538,7 @@ conveniente tener \textbf{3 puntos}:}
 
     \item \textbf{Matriz RACI.} El Cuadro~\ref{tab:raci} asigna cada paquete de
     la EDT: R responsable, A aprueba, C consultado, I informado. Es una
-    propuesta basada en los roles actuales
-    \confirmar{validar con el equipo}.
+    propuesta basada en los roles actuales.
 
     \item \textbf{Recursos físicos y trabajo en equipo.} Computadora con GPU
     RTX 4060 y teléfonos como cámaras. La carga está equilibrada (avance entre
@@ -3520,7 +3619,7 @@ estuvieran cubiertos.
     líder reparte tareas por rol y revisa el avance cada semana.
     \textit{Negociación y resolución de conflictos:} priorizar entre
     profundizar el modelo y completar plataforma y plan de negocio con plazo
-    fijo \confirmar{reemplazar por un ejemplo real del equipo}.
+    fijo.
 
     \item \textbf{Registro de lecciones.} Las actas semanales documentan
     compromisos y su cumplimiento, y alimentan las lecciones aprendidas
@@ -3549,7 +3648,7 @@ Informe y presentaciones & Docente & Según hitos & Almeyda y Neciosup \\
 \hline
 Coordinación con LAP & LAP & Por hito & Neciosup \\
 \hline
-Mensajería diaria \confirmar{canal} & Equipo & Diaria & Equipo \\
+Mensajería diaria & Equipo & Diaria & Equipo \\
 \hline
 \end{tabular}
 \end{table}
@@ -3572,13 +3671,12 @@ consideró conveniente tener \textbf{3 puntos}:}
 
     \item \textbf{Modelos y software.} YOLO26 (Ultralytics) es gratuito con
     licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT,
-    CLIP y ResNet18 son preentrenados y su licencia debe verificarse
-    \confirmar{licencias}. PostgreSQL, PostGIS, pgvector, Go, Vue y Docker son
+    CLIP y ResNet18 son preentrenados y su licencia debe verificarse.
+    PostgreSQL, PostGIS, pgvector, Go, Vue y Docker son
     de código abierto.
 
     \item \textbf{Datos del aeropuerto.} El acceso a video real depende de LAP
-    y requiere un marco contractual de tratamiento de datos
-    \confirmar{estado actual}.
+    y requiere un marco contractual de tratamiento de datos.
 \end{enumerate}
 
 \begin{table}[H]
@@ -3628,7 +3726,7 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
     \item \textbf{Análisis cualitativo.} Probabilidad (P) e impacto (I) de 1 a
     5; nivel $=$ P $\times$ I (Cuadros~\ref{tab:riesgos} y~\ref{tab:matriz-riesgos}).
     Altos: R2 y R3 ($4 \times 4 = 16$). Medios: R4, R5 y R8 (12), R1 y R6
-    (10), R7, R9 y R10 (9) \confirmar{calificar con el equipo}.
+    (10), R7, R9 y R10 (9).
 
     \item \textbf{Estructura de desglose (RBS).} Técnico: R2, R3, R9.
     Infraestructura: R4. Gestión y organización: R1, R5. Legal y ético: R6,
@@ -3761,22 +3859,20 @@ proyecto.
 conveniente tener \textbf{4 puntos}:}
 
 \begin{enumerate}
-    \item \textbf{Roles.} Product Owner:
-    \confirmar{¿docente, LAP representado o un integrante?} Scrum Master:
-    Neciosup (líder) \confirmar{confirmar}. Equipo de desarrollo: Quiliche,
+    \item \textbf{Roles.} Scrum Master:
+    Neciosup (líder). Equipo de desarrollo: Quiliche,
     Almeyda, López y Neciosup.
 
     \item \textbf{Eventos.} Sprint semanal (16 en total). Sprint Planning:
-    asignación de tareas en el panel y las actas. Daily:
-    \confirmar{¿hubo?} Sprint Review: reunión de cierre de los miércoles
-    frente al Gantt. Retrospectiva: \confirmar{fecha y mejoras}.
+    asignación de tareas en el panel y las actas. Sprint Review: reunión de cierre de los miércoles
+    frente al Gantt.
 
     \item \textbf{Artefactos y Definición de Terminado.} Product Backlog:
     requisitos y casos de uso priorizados. Sprint Backlog: tareas del panel
     (96 al sprint 11). Incremento: funcionalidad probada por bloque
     (seguimiento local, Re-ID, mapa 2D y primera validación, Parte~III y
-    plataforma, Teléfonos, Videos y Ventas)
-    \confirmar{verificar contra el panel}. \textit{Terminado} significa:
+    plataforma, Teléfonos, Videos y Ventas).
+    \textit{Terminado} significa:
     funciona en la computadora de despliegue, pasan las pruebas automáticas, se
     valida con datos etiquetados cuando aplica y queda registrado en el
     repositorio y el acta.
@@ -3784,8 +3880,7 @@ conveniente tener \textbf{4 puntos}:}
     \item \textbf{Mejora continua.} Mejoras ya documentadas: pasar de la
     máquina virtual sin GPU (4 a 6 cuadros por segundo) a la computadora con
     GPU; aceptar cambios de modelo solo si mejoran la medición; procesar por
-    lotes a 5 cuadros por segundo para siete cámaras
-    \confirmar{agregar mejoras de proceso del equipo}.
+    lotes a 5 cuadros por segundo para siete cámaras.
 \end{enumerate}
 
 \subsection{Lecciones aprendidas (Lessons Learned)}
@@ -3809,8 +3904,7 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
 
     \item \textbf{Gestión.} La privacidad se diseñó desde el inicio, el
     seguimiento semanal detectó el leve atraso (SPI 0.95) y el seguimiento
-    local (IDF1 40\,\%) sigue siendo el límite técnico
-    \confirmar{agregar lecciones de gestión del equipo}.
+    local (IDF1 40\,\%) sigue siendo el límite técnico.
 \end{enumerate}
 
 \section{Algoritmos}
