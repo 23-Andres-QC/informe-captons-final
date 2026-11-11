@@ -4328,6 +4328,85 @@ Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
 \end{tabular}
 \end{table}
 
+Los valores anteriores del servidor y de la computadora propia son de un equipo
+sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
+estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
+de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
+dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
+horas encendida (720 horas equivale a tenerla prendida todo el mes). El
+Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
+Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
+Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
+cada calculadora están en el Anexo~B.
+
+\begin{table}[H]
+\caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
+\label{tab:nube-resumen}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.24\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|}
+\hline
+\textbf{Horas al mes} & \textbf{Google Cloud} & \textbf{AWS} & \textbf{Azure} \\
+\hline
+240 & 130.60 & 129.35 & 137.04 \\
+\hline
+360 & 195.40 & 192.07 & 200.76 \\
+\hline
+720 & 389.80 & 386.52 & 391.92 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Configuración usada en cada calculadora}
+\label{tab:nube-config}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.14\textwidth}|L{0.20\textwidth}|L{0.58\textwidth}|}
+\hline
+\textbf{Proveedor} & \textbf{Región} & \textbf{Configuración} \\
+\hline
+Google Cloud (Compute Engine) & Iowa (\texttt{us-central1}) & \texttt{n1-standard-4} (4 vCPU, 15~GB de RAM) con 1 GPU NVIDIA T4, sistema libre (Debian o Ubuntu), modelo regular (a demanda), disco \textit{balanced} de 10~GiB, 1 instancia, sin descuentos por uso sostenido ni comprometido \\
+\hline
+AWS (Amazon EC2) & Este de EE.\,UU. (Ohio) & Instancia con GPU T4 llamada ``AeroVision GPU T4'', a demanda, con tenencia compartida y sin costo inicial \\
+\hline
+Azure & East US & Máquina virtual con GPU T4, 1 dirección IP estática estándar (ARM), soporte Basic incluido y contrato de cliente de Microsoft (MCA) \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Desglose del cálculo de Google Cloud (US\$ al mes)}
+\label{tab:nube-gcp}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.40\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|}
+\hline
+\textbf{Componente} & \textbf{240 h} & \textbf{360 h} & \textbf{720 h} \\
+\hline
+Máquina \texttt{n1-standard-4} (US\$0.19 por hora) & 45.60 & 68.40 & 136.80 \\
+\hline
+GPU NVIDIA T4 (US\$0.35 por hora) & 84.00 & 126.00 & 252.00 \\
+\hline
+Disco \textit{balanced} de 10~GiB & 1.00 & 1.00 & 1.00 \\
+\hline
+\textbf{Total} & \textbf{130.60} & \textbf{195.40} & \textbf{389.80} \\
+\hline
+\end{tabular}
+\end{table}
+
+En Azure, la calculadora sumó además una dirección IP estática (1.20, 1.80 y
+3.60 al mes en los tres escenarios). Frente a los $\approx$ US\$~70 al mes de la
+computadora propia, la nube con GPU cuesta casi el doble con 240 horas
+encendida y unas cinco veces y media con 720 horas, y los tres proveedores
+quedan a menos de 6\,\% entre sí en cada escenario, por lo que la decisión
+depende más de las horas de uso, la ubicación de los datos y el costo de
+transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
+fija ni la salida de datos, que se suman aparte.
+
 \subsection{Base de datos}
 
 Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
@@ -6032,4 +6111,111 @@ prueba (Figura~\ref{fig:comedor-participantes}).
 autorización para ser grabados.}
 \label{fig:comedor-participantes}
 \end{figure}
+
+\clearpage
+\section*{Anexo B. Capturas de las calculadoras de costos en la nube}
+\label{anexo:nube}
+\addcontentsline{toc}{section}{Anexo B. Capturas de las calculadoras de costos en la nube}
+
+Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres escenarios de uso (240, 360 y 720 horas al mes) del Cuadro~\ref{tab:nube-resumen}.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-240-resumen.png}\\
+{\footnotesize 240 horas: 130,60 US\$ al mes}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-360-resumen.png}\\
+{\footnotesize 360 horas: 195,40 US\$ al mes}
+\end{minipage}
+\vspace{0.4cm}
+
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-720-resumen.png}\\
+{\footnotesize 720 horas: 389,80 US\$ al mes}
+\end{minipage}\hfill
+\caption{Google Cloud, Compute Engine: horas de uso y costo mensual estimado de cada escenario.}
+\label{fig:nube-gcp-resumen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-240-detalle.png}\\
+{\footnotesize Detalle de 240 horas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-360-detalle.png}\\
+{\footnotesize Detalle de 360 horas}
+\end{minipage}
+\vspace{0.4cm}
+
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-720-detalle.png}\\
+{\footnotesize Detalle de 720 horas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/gcp-region.png}\\
+{\footnotesize Región (Iowa) y opciones}
+\end{minipage}
+\vspace{0.4cm}
+
+\caption{Google Cloud, detalle de la instancia: máquina, GPU T4 y disco de cada escenario, y región elegida.}
+\label{fig:nube-gcp-detalle}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/aws-240.png}\\
+{\footnotesize 240 horas: 129,35 US\$ al mes}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/aws-360.png}\\
+{\footnotesize 360 horas: 192,07 US\$ al mes}
+\end{minipage}
+\vspace{0.4cm}
+
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/aws-720.png}\\
+{\footnotesize 720 horas: 386,52 US\$ al mes}
+\end{minipage}\hfill
+\caption{AWS, Amazon EC2 en la región Este de EE.\,UU. (Ohio): costo mensual estimado de cada escenario.}
+\label{fig:nube-aws}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/azure-240.png}\\
+{\footnotesize 240 horas: 137,04 US\$ al mes}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/azure-360.png}\\
+{\footnotesize 360 horas: 200,76 US\$ al mes}
+\end{minipage}
+\vspace{0.4cm}
+
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/costos/azure-720.png}\\
+{\footnotesize 720 horas: 391,92 US\$ al mes}
+\end{minipage}\hfill
+\caption{Azure, región East US: costo mensual estimado de cada escenario.}
+\label{fig:nube-azure}
+\end{figure}
+
 \end{document}
