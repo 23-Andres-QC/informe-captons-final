@@ -976,6 +976,69 @@ cámaras a la vez, y el plan de negocio prevé procesar por lotes solo las horas
 necesarias, a 5 cuadros por segundo, en lugar de mantener el modelo encendido
 todo el día.
 
+\subsection{Normas técnicas ISO e IEC}
+\label{sec:normas-iso}
+
+Además de las leyes, el sistema se contrasta con normas técnicas
+internacionales de ISO e IEC. El reglamento de la Ley N.\textdegree~31814 exige
+la NTP-ISO/IEC 42001:2025, adopción peruana de la ISO/IEC 42001, solo a las
+entidades de la Administración Pública que desarrollen sistemas de IA
+(art.~28.2); promueve el uso de la NTP-ISO/IEC 27002:2022, la ISO/IEC
+38507:2022, la NTP-ISO/IEC 42001:2025, la ISO/IEC 23053:2022 y la NTP-ISO/IEC
+27005:2022 (art.~33.1); pide a quien desarrolla, implementa o usa la IA aplicar
+estándares para identificar y reducir los sesgos (art.~27.1), y obliga a las
+entidades públicas a usar la NTP-ISO/IEC 27002 y la NTP-ISO 31000 (sexta
+disposición complementaria final)~\cite{ds115}. Para AeroVision y para LAP,
+que son privados, las normas son una referencia; con un cliente público
+pasarían a ser obligatorias. El Cuadro~\ref{tab:normas-iso} resume las que
+aplican al sistema y qué parte del prototipo ya se alinea con cada una.
+AeroVision no está certificado en ninguna.
+
+{\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|L{0.22\textwidth}|L{0.33\textwidth}|L{0.37\textwidth}|}
+\caption{Normas técnicas ISO e IEC aplicables a AeroVision}
+\label{tab:normas-iso} \\
+\hline
+\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con AeroVision} \\
+\hline
+\endfirsthead
+\hline
+\multicolumn{3}{|l|}{\textit{Normas técnicas ISO e IEC aplicables a AeroVision (continuación)}} \\
+\hline
+\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con AeroVision} \\
+\hline
+\endhead
+ISO/IEC 42001:2023 (NTP-ISO/IEC 42001:2025)~\cite{iso42001} & Sistema de gestión de la IA: política, roles, evaluación de impacto, ciclo de vida, datos y supervisión humana, con mejora continua & Obligatoria solo para entidades públicas (art.~28.2). El prototipo cubre parte de sus controles con las matrices legal y ética y con el registro de pesos y configuración de cada modelo (RNF-13), sin un sistema de gestión formal \\
+\hline
+ISO/IEC 23894:2023~\cite{iso23894} & Guía para gestionar los riesgos propios de la IA sobre el proceso de ISO 31000 & Las matrices legal y ética (Cuadros~\ref{tab:matriz-legal} y~\ref{tab:matriz-etica}) identifican y priorizan esos riesgos, y las sugerencias de diseño (Cuadro~\ref{tab:sugerencias-diseno}) los tratan \\
+\hline
+ISO/IEC 23053:2022~\cite{iso23053} & Marco y vocabulario para describir sistemas de IA con aprendizaje automático: datos, modelo, entrenamiento, evaluación y operación & Describe el flujo del sistema (detector, seguidor, Re-ID y plano) y su validación con videos etiquetados (Sección~\ref{sec:validacion-modelos}) \\
+\hline
+ISO/IEC 38507:2022~\cite{iso38507} & Gobierno del uso de la IA por la dirección de una organización & Corresponde al cliente que usa el sistema: quién decide con los reportes y con qué límites \\
+\hline
+ISO/IEC 27001:2022~\cite{iso27001} & Requisitos de un sistema de gestión de seguridad de la información (SGSI), certificable & El prototipo no tiene un SGSI formal; aplica controles de la ISO/IEC 27002 \\
+\hline
+ISO/IEC 27002:2022 (NTP-ISO/IEC 27002:2022)~\cite{iso27002} & Catálogo de controles de seguridad de la información & Roles verificados en el backend, permiso temporal para exportar, bitácora, protección CSRF, contraseñas con argon2id, HTTPS y video que no sale de la red local (RNF-01 y S11) \\
+\hline
+ISO/IEC 27005:2022 (NTP-ISO/IEC 27005:2022)~\cite{iso27005} & Gestión de riesgos de seguridad de la información con los principios de ISO 31000 & Los riesgos de seguridad están en la matriz legal (L8) y en la sugerencia S11 \\
+\hline
+ISO 31000:2018 (NTP-ISO 31000)~\cite{iso31000} & Principios, marco y proceso para gestionar riesgos de cualquier tipo & La matriz de riesgos del proyecto los evalúa por probabilidad e impacto (Cuadros~\ref{tab:riesgos} y~\ref{tab:matriz-riesgos}) \\
+\hline
+ISO/IEC 27701:2025~\cite{iso27701} & Sistema de gestión de la privacidad, con controles para responsables y encargados del tratamiento & AeroVision actúa como encargado del cliente (L6): sin rostros, recortes ni video almacenados, identificadores seudónimos, vectores borrados a las 24~horas y puntos a los 90 días (RNF-02) \\
+\hline
+ISO/IEC 20889:2018~\cite{iso20889} & Terminología y clasificación de las técnicas de desidentificación, como la seudonimización y la agregación & El \texttt{global\_id} es un seudónimo, no una anonimización; los reportes entregan conteos y tasas agregados \\
+\hline
+ISO/IEC TR 24027:2021~\cite{iso24027} & Fuentes de sesgo en los sistemas de IA y formas de medirlo y tratarlo & Responde al art.~27.1 del reglamento; la validación con videos etiquetados mide el desempeño global, sin desglose por grupos de personas (S9) \\
+\hline
+ISO/IEC 25010:2023~\cite{iso25010} & Modelo de calidad de producto con nueve características, entre ellas seguridad, eficiencia de desempeño, compatibilidad, fiabilidad y mantenibilidad & Los requisitos no funcionales RNF-01 a RNF-13 (Cuadro~\ref{tab:requisitos}) cubren seguridad, rendimiento, compatibilidad, usabilidad, mantenibilidad y portabilidad \\
+\hline
+IEC 62676-4:2025~\cite{iec62676} & Guía para planificar, instalar y mantener sistemas de videovigilancia; fija la densidad de píxeles por metro de cada nivel de observación: Overview, Outline y Discern (20, 40 y 80~px/m) y, con más detalle, de Perceive a Scrutinize (125 a 1\,500~px/m)~\cite{axis-pixeles} & Una persona de 1.70~m que ocupa 50~px en la imagen está a unos 29~px/m, entre los dos primeros niveles; por eso la gente lejana es el punto débil del seguimiento (Sección~\ref{sec:mas-gente}). Los niveles se definieron para un operador que mira el video, no para un modelo \\
+\hline
+\end{longtable}
+}
+
 \section{Marco teórico}
 \label{sec:related}
 
@@ -7134,6 +7197,81 @@ Observatorio Legislativo del CELE, ``Informe legislativo N.\textdegree~18: Perú
 I.~Blume, ``¿Qué establece el Reglamento de la Ley de Inteligencia
 Artificial?,'' Cuatrecasas, 10 de septiembre de 2025. [En línea]. Disponible:
 \url{https://www.cuatrecasas.com/es/latam/tecnologia-medios-digitales/art/que-establece-el-reglamento-de-la-ley-de-inteligencia-artificial}
+
+\bibitem{ds115}
+Presidencia del Consejo de Ministros, ``Decreto Supremo N.\textdegree~115-2025-PCM,
+que aprueba el Reglamento de la Ley N.\textdegree~31814,'' \textit{El Peruano},
+9 de septiembre de 2025. [En línea]. Disponible:
+\url{https://www.gob.pe/institucion/pcm/normas-legales/7133522-115-2025-pcm}
+
+\bibitem{iso42001}
+ISO/IEC, ``ISO/IEC 42001:2023. Information technology --- Artificial
+intelligence --- Management system,'' 2023. [En línea]. Disponible:
+\url{https://www.iso.org/standard/42001}
+
+\bibitem{iso23894}
+ISO/IEC, ``ISO/IEC 23894:2023. Information technology --- Artificial
+intelligence --- Guidance on risk management,'' 2023. [En línea]. Disponible:
+\url{https://www.iso.org/standard/77304.html}
+
+\bibitem{iso23053}
+ISO/IEC, ``ISO/IEC 23053:2022. Framework for Artificial Intelligence (AI)
+Systems Using Machine Learning (ML),'' 2022. [En línea]. Disponible:
+\url{https://www.iso.org/standard/74438.html}
+
+\bibitem{iso38507}
+ISO/IEC, ``ISO/IEC 38507:2022. Information technology --- Governance of IT ---
+Governance implications of the use of artificial intelligence by
+organizations,'' 2022. [En línea]. Disponible:
+\url{https://committee.iso.org/sites/jtc1sc40/home/projects/wg-1/published-wg1/content-left-area/list-of-publications/iso-iec-38507-2022.html}
+
+\bibitem{iso27001}
+ISO/IEC, ``ISO/IEC 27001:2022. Information security, cybersecurity and privacy
+protection --- Information security management systems --- Requirements,''
+2022. [En línea]. Disponible: \url{https://www.iso.org/standard/27001}
+
+\bibitem{iso27002}
+ISO/IEC, ``ISO/IEC 27002:2022. Information security, cybersecurity and privacy
+protection --- Information security controls,'' 2022. [En línea]. Disponible:
+\url{https://www.iso.org/standard/75652.html}
+
+\bibitem{iso27005}
+ISO/IEC, ``ISO/IEC 27005:2022. Information security, cybersecurity and privacy
+protection --- Guidance on managing information security risks,'' 2022. [En
+línea]. Disponible: \url{https://www.iso.org/standard/80585.html}
+
+\bibitem{iso31000}
+ISO, ``ISO 31000:2018. Risk management --- Guidelines,'' 2018. [En línea].
+Disponible: \url{https://www.iso.org/standards/popular/iso-31000-family}
+
+\bibitem{iso27701}
+ISO/IEC, ``ISO/IEC 27701:2025. Information security, cybersecurity and privacy
+protection --- Privacy information management systems --- Requirements and
+guidance,'' 2025. [En línea]. Disponible: \url{https://www.iso.org/standard/27701}
+
+\bibitem{iso20889}
+ISO/IEC, ``ISO/IEC 20889:2018. Privacy enhancing data de-identification
+terminology and classification of techniques,'' 2018. [En línea]. Disponible:
+\url{https://www.iso.org/standard/69373.html}
+
+\bibitem{iso24027}
+ISO/IEC, ``ISO/IEC TR 24027:2021. Information technology --- Artificial
+intelligence (AI) --- Bias in AI systems and AI aided decision making,'' 2021.
+[En línea]. Disponible: \url{https://www.iso.org/standard/77607.html}
+
+\bibitem{iso25010}
+ISO/IEC, ``ISO/IEC 25010:2023. Systems and software engineering --- Systems
+and software Quality Requirements and Evaluation (SQuaRE) --- Product quality
+model,'' 2023. [En línea]. Disponible: \url{https://www.iso.org/standard/78176.html}
+
+\bibitem{iec62676}
+IEC, ``IEC 62676-4:2025. Video surveillance systems for use in security
+applications --- Part 4: Application guidelines,'' 2025. [En línea].
+Disponible: \url{https://webstore.iec.ch/en/publication/83425}
+
+\bibitem{axis-pixeles}
+Axis Communications, ``Pixel density based on IEC 62676-4:2025,'' 2026. [En
+línea]. Disponible: \url{https://whitepapers.axis.com/en/pixel-density-based-on-iec-62676-4-2025}
 
 \bibitem{recordinglaw}
 Recording Law, ``Leyes de Privacidad de Datos en Perú: Ley 29733, DS
