@@ -262,7 +262,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
   - PostgreSQL/PostGIS + pgvector;
   - web en Vue.
   - Todo en Docker, en una computadora local con **RTX 4060 Laptop (8 GB)**; el modelo en vivo corre en Windows o, si Windows bloquea PyTorch, en Docker con GPU (servicio `modelo-gpu`).
-- **Por qué local y no nube:** la primera versión estuvo en Google Cloud sin GPU. La computadora propia cuesta unos US$ 70 al mes (supuesto de S/ 4 500, aún por cotizar, en 36 meses + energía), casi lo mismo que el servidor sin GPU encendido solo en horario de uso y menos que cualquier nube con GPU a demanda. Además, el video no sale de la red y el costo es fijo.
+- **Por qué local y no nube:** la primera versión estuvo en Google Cloud sin GPU. La computadora propia cuesta unos US$ 70 al mes (PC de escritorio con RTX 4060, S/ 4 579 en Promart y S/ 4 799 en Falabella, en 36 meses + energía), casi lo mismo que el servidor sin GPU encendido solo en horario de uso y menos que cualquier nube con GPU a demanda. Además, el video no sale de la red y el costo es fijo.
 - **Comparación de nubes con GPU:** 17 opciones verificadas en noviembre de 2026, de Vast.ai (US$ 0.076/h) a RunPod RTX 4090 segura (US$ 0.89/h); con 240 h al mes, Vast.ai y las T4 *spot* cuestan menos que la PC; todo el mes, solo Vast.ai. Calculadora interactiva aparte.
 - **Roles:**
   - **Superadmin:** todo; crea cuentas y aprueba solicitudes.
@@ -411,4 +411,4 @@ Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra secci
 - Referencias bibliográficas
 - Anexo
 
-Orden: qué se construye (1 a 7), cómo se probó (8 y 9) y cómo se gestiona y se vende (10 y 11). Conclusiones y recomendaciones aún no van: su borrador está en `conclusiones.tex` y entra como sección 12 quitando el `%` de `% \input{conclusiones}`, antes de las Referencias.
+Orden: qué se construye (1 a 7), cómo se probó (8 y 9) y cómo se gestiona y se vende (10 y 11).

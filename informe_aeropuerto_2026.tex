@@ -138,7 +138,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
     \vspace{0.5cm}
 
-    {\Large 07/10/2026 \par}
+    {\Large 11/11/2026 \par}
 
     \vfill
 
@@ -3806,9 +3806,11 @@ computadora propia con el de la nube. El servidor de Google Cloud se calculó
 con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
 impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
 (\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
-Para la computadora propia se supone un equipo con GPU de 8 a 16~GB de
-S/~4\,500 (US\$~1\,200), un supuesto de trabajo aún por cotizar, que
-amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
+Para la computadora propia se toma una PC de escritorio con Core
+i5-12400F, 16~GB de RAM, 1~TB de SSD y una RTX~4060 de 8~GB, que Promart
+vende en S/~4\,579 y Falabella en S/~4\,799 (S/~5\,500 de lista en las
+dos; consultado el 11 de noviembre de 2026)~\cite{promart-pc,falabella-pc}.
+Los S/~4\,579 (US\$~1\,220), amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
 de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
 propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
 horario de uso y menos que cualquier nube con GPU a demanda; el video no
@@ -3825,7 +3827,7 @@ del plan de negocio (Sección~\ref{sec:negocio}).
 \hline
 \textbf{Opción} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
 \hline
-Computadora propia con GPU & US\$~1\,200 en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
+Computadora propia con GPU & US\$~1\,220 (S/~4\,579) en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
 \hline
 \multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
 \hline
@@ -5222,7 +5224,7 @@ consideró conveniente tener \textbf{6 puntos}:}
     (7 de noviembre de 2026), grabaciones con más personas en el patio y el
     pasillo (9 de noviembre de 2026), avance del 63\,\% de las tareas en el
     sprint~11 y cierre en el sprint~16. Presupuesto resumido: línea base de
-    costos de S/~19\,525, con contingencia (Sección~\ref{sec:costos}).
+    costos de S/~19\,534, con contingencia (Sección~\ref{sec:costos}).
 
     \item \textbf{Supuestos y restricciones.} Se usan modelos preentrenados, se
     valida con video grabado en ESAN y LAP apoya el proyecto. Restricciones:
@@ -5526,15 +5528,15 @@ conveniente tener \textbf{3 puntos}:}
     actividades, la reserva de contingencia y la línea base de costos. Las
     horas del equipo
     (640~h a S/~25) son un supuesto; la computadora con GPU se
-    amortiza a S/~125 al mes durante 4 meses y el primer despliegue en Google
+    amortiza a S/~127 al mes durante 4 meses y el primer despliegue en Google
     Cloud se estima en un mes de servicio a precio de lista, unos S/~1\,250
     (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Valor ganado al sprint 11.} Valor planificado:
-    (sobre los S/~17\,750 de las actividades, sin la reserva)
-    68.75\,\% $\times$ S/~17\,750 $=$ S/~12\,203. Valor ganado:
-    65.5\,\% $\times$ S/~17\,750 $=$ S/~11\,626. Variación del cronograma:
-    $-$S/~577. SPI $=$ 0.95 (0.91 si se mide solo por tareas completadas). El
+    (sobre los S/~17\,758 de las actividades, sin la reserva)
+    68.75\,\% $\times$ S/~17\,758 $=$ S/~12\,209. Valor ganado:
+    65.5\,\% $\times$ S/~17\,758 $=$ S/~11\,631. Variación del cronograma:
+    $-$S/~578. SPI $=$ 0.95 (0.91 si se mide solo por tareas completadas). El
     costo real y el CPI requieren las horas efectivamente trabajadas.
 
     \item \textbf{Pronóstico.} Si el ritmo se mantiene, el cierre tomaría
@@ -5553,21 +5555,21 @@ conveniente tener \textbf{3 puntos}:}
 \hline
 Horas del equipo (640~h $\times$ S/~25) & 16\,000 \\
 \hline
-Computadora con GPU (S/~125 $\times$ 4 meses) & 500 \\
+Computadora con GPU (S/~127 $\times$ 4 meses) & 508 \\
 \hline
 Primer despliegue en Google Cloud & $\approx$ 1\,250 \\
 \hline
-\textbf{Estimación de costos de las actividades} & \textbf{17\,750} \\
+\textbf{Estimación de costos de las actividades} & \textbf{17\,758} \\
 \hline
-Reserva de contingencia (10\,\%) & 1\,775 \\
+Reserva de contingencia (10\,\%) & 1\,776 \\
 \hline
-\textbf{Línea base de costos} & \textbf{19\,525} \\
+\textbf{Línea base de costos} & \textbf{19\,534} \\
 \hline
-Valor planificado (68.75\,\%) & 12\,203 \\
+Valor planificado (68.75\,\%) & 12\,209 \\
 \hline
-Valor ganado (65.5\,\%) & 11\,626 \\
+Valor ganado (65.5\,\%) & 11\,631 \\
 \hline
-Variación del cronograma (SV) & $-$577 \\
+Variación del cronograma (SV) & $-$578 \\
 \hline
 SPI & 0.95 \\
 \hline
@@ -5792,7 +5794,7 @@ consideró conveniente tener \textbf{3 puntos}:}
 
 \begin{enumerate}
     \item \textbf{Hardware y nube.} Computadora con GPU RTX 4060 propia
-    (un estimado de S/~4\,500, aún por cotizar), teléfonos de los integrantes sin costo
+    (S/~4\,579 en Promart~\cite{promart-pc}), teléfonos de los integrantes sin costo
     y, en el primer despliegue, una máquina virtual de Google Cloud
     ($\approx$ US\$~334.80 al mes a precio de lista) reemplazada por la
     computadora local (Cuadro~\ref{tab:adquisiciones}). La decisión fue un análisis de comprar o arrendar: la
@@ -5818,7 +5820,7 @@ consideró conveniente tener \textbf{3 puntos}:}
 \hline
 \textbf{Ítem} & \textbf{Tipo} & \textbf{Fuente} & \textbf{Costo o condición} \\
 \hline
-Computadora con GPU RTX 4060 & Hardware & Propia & $\approx$ S/~4\,500 (estimado, por cotizar) \\
+Computadora con GPU RTX 4060 & Hardware & Propia & S/~4\,579~\cite{promart-pc} \\
 \hline
 Teléfonos como cámaras & Hardware & Integrantes & Sin costo \\
 \hline
@@ -6408,7 +6410,7 @@ Actividades clave & Exportar grabaciones del NVR y procesarlas de noche; calibra
 \hline
 Socios clave & LAP; integradores de CCTV; ESAN (prueba de precisión e incubadora); contador y asesoría legal en la Ley N.\textdegree~29733; tiendas de cómputo en Lima \\
 \hline
-Estructura de costos & Por cámara al mes: S/~43 en tiendas y S/~46 en pantallas; por estudio, $\sim$10\,\% de su precio; contador S/~150 al mes; una computadora de S/~4\,500 por cada 10 cámaras; constitución, contratos, marca y web $\sim$S/~3\,535 una vez; S/~1\,500 por fundador al mes desde junio de 2027, solo si hay caja \\
+Estructura de costos & Por cámara al mes: S/~43 en tiendas y S/~46 en pantallas; por estudio, $\sim$10\,\% de su precio; contador S/~150 al mes; una computadora de S/~4\,579 por cada 10 cámaras; constitución, contratos, marca y web $\sim$S/~3\,535 una vez; S/~1\,100 por fundador al mes desde junio de 2027, solo si hay caja \\
 \hline
 \end{tabular}
 \end{table}
@@ -6518,7 +6520,7 @@ por eso el tope de 10 cámaras por computadora supone el modo liviano, sin Re-ID
 \hline
 \textbf{Concepto} & \textbf{Tienda 2027} & \textbf{Tienda 2031} & \textbf{Pantalla 2027} & \textbf{Pantalla 2031} \\
 \hline
-Computadora: S/~125 de amortización y S/~130 de energía entre 10 cámaras & S/~26 & S/~26 & S/~26 & S/~26 \\
+Computadora: S/~127 de amortización y S/~130 de energía entre 10 cámaras & S/~26 & S/~26 & S/~26 & S/~26 \\
 \hline
 Traslado del video & S/~3 & S/~2 & S/~3 & S/~2 \\
 \hline
@@ -6667,7 +6669,7 @@ retorno) es la tasa que hace el VAN igual a cero; el proyecto es atractivo si
 supera al COK.
 
 \textbf{Datos usados.} La inversión inicial $I_0$ es la línea base de costos del
-proyecto, S/~19\,525 (Cuadro~\ref{tab:presupuesto}); la reserva de S/~5\,000 no
+proyecto, S/~19\,534 (Cuadro~\ref{tab:presupuesto}); la reserva de S/~5\,000 no
 se gasta y no se incluye. Los flujos $F_t$ son la caja para el equipo de cada
 año del escenario base (Cuadro~\ref{tab:crecimiento}): S/~30\,800 (2027),
 S/~79\,000 (2028), S/~222\,000 (2029), S/~490\,000 (2030) y S/~927\,000 (2031),
@@ -6686,7 +6688,7 @@ valores. El Cuadro~\ref{tab:van-base} muestra el cálculo del escenario base.
 \hline
 \textbf{Año} & \textbf{Flujo (S/)} & \textbf{Factor $1/(1.20)^t$} & \textbf{Valor presente (S/)} \\
 \hline
-0 (inversión) & $-$19\,525 & 1.0000 & $-$19\,525 \\
+0 (inversión) & $-$19\,534 & 1.0000 & $-$19\,534 \\
 \hline
 2027 & 30\,800 & 0.8333 & 25\,667 \\
 \hline
@@ -6698,7 +6700,7 @@ valores. El Cuadro~\ref{tab:van-base} muestra el cálculo del escenario base.
 \hline
 2031 & 927\,000 & 0.4019 & 372\,541 \\
 \hline
-\textbf{VAN} & & & \textbf{S/~798\,320} \\
+\textbf{VAN} & & & \textbf{S/~798\,311} \\
 \hline
 \textbf{TIR} & & & \textbf{$\approx$ 294\,\%} \\
 \hline
@@ -6709,7 +6711,7 @@ Relación beneficio--costo & & & $\approx$ 41.9 \\
 
 El VAN es positivo y la TIR (294\,\%) supera con holgura al COK (20\,\%), por lo
 que el negocio crea valor en el escenario base. La inversión se recupera dentro
-del primer año de ventas (2027), cuando entran S/~30\,800 frente a S/~19\,525
+del primer año de ventas (2027), cuando entran S/~30\,800 frente a S/~19\,534
 invertidos. La TIR es muy alta porque la inversión es pequeña: el software ya se
 desarrolló en el curso y la caja inicial no se compromete hasta la primera
 venta. Por eso conviene leerla junto con el VAN y con los escenarios adversos
@@ -6726,19 +6728,19 @@ recorte simple, no una proyección por año).
 \hline
 \textbf{Escenario} & \textbf{COK} & \textbf{VAN (S/)} & \textbf{TIR} \\
 \hline
-Base & 15\,\% & 954\,003 & 294\,\% \\
+Base & 15\,\% & 953\,994 & 294\,\% \\
 \hline
-Base & 20\,\% & 798\,320 & 294\,\% \\
+Base & 20\,\% & 798\,311 & 294\,\% \\
 \hline
-Base & 25\,\% & 673\,802 & 294\,\% \\
+Base & 25\,\% & 673\,793 & 294\,\% \\
 \hline
-Base & 30\,\% & 573\,190 & 294\,\% \\
+Base & 30\,\% & 573\,181 & 294\,\% \\
 \hline
-Base & 40\,\% & 423\,597 & 294\,\% \\
+Base & 40\,\% & 423\,588 & 294\,\% \\
 \hline
-Flujos al 50\,\% & 20\,\% & 389\,397 & 194\,\% \\
+Flujos al 50\,\% & 20\,\% & 389\,388 & 194\,\% \\
 \hline
-Flujos al 25\,\% & 20\,\% & 184\,936 & 130\,\% \\
+Flujos al 25\,\% & 20\,\% & 184\,927 & 130\,\% \\
 \hline
 \end{tabular}
 \end{table}
@@ -6827,9 +6829,6 @@ aprobado por el D.S. N.\textdegree~016-2024-JUS~\cite{reglamento29733}. AeroVisi
 actúa como encargado del tratamiento del cliente: procesa las grabaciones
 dentro de su red o en su propia computadora, no guarda imágenes ni rostros,
 borra el video al terminar y entrega solo conteos y tasas.
-
-% Conclusiones y recomendaciones: pendientes; para incluirlas, quitar el % de la línea siguiente.
-% \input{conclusiones}
 
 \section*{Referencias bibliográficas}
 \addcontentsline{toc}{section}{Referencias bibliográficas}
@@ -7053,6 +7052,16 @@ Axis Communications, ``AXIS People Counter: product support information,''
 DoiT, ``g4dn.xlarge spot pricing in us-east-2,'' 2026. [En línea].
 Disponible: \url{https://www.doit.com/compute/spot/us-east-2/g4dn.xlarge}
 
+\bibitem{promart-pc}
+Promart, ``Computadora PC Gamer PRO Intel Core i5 12400F RAM 16GB SSD 1TB RTX
+4060 8GB,'' 2026. [En línea]. Disponible:
+\url{https://www.promart.pe/computadora-pc-gamer-pro-intel-core-i5-12400f-ram-16gb-ssd-1tb-rtx-4060-8gb-1001638660/p}
+
+\bibitem{falabella-pc}
+Falabella, ``PC Gamer Intel Core i5 12400F 16GB RAM SSD 1TB RTX 4060 8GB,''
+2026. [En línea]. Disponible:
+\url{https://www.falabella.com.pe/falabella-pe/product/133704948/Computadora-PC-Gamer-Intel-Core-i5-12400F-RAM-16GB-SSD-1TB-RTX-4060-8GB}
+
 \bibitem{osinergmin}
 Hace Cuentas, ``Calculadora del recibo de luz con el pliego de Osinergmin,''
 2026. [En línea]. Disponible:
@@ -7226,7 +7235,7 @@ Es una captura del modo en vivo, distinta de la sesión procesada como tanda de
 Videos del Cuadro~\ref{tab:mas-gente} (4 personas): la plataforma registró 57 IDs
 y 9\,907 puntos.
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-grabacion-en-vivo.png}
 \caption{Comedor de ESAN, grabación en vivo: seguimiento de las personas sobre
@@ -7234,7 +7243,7 @@ el plano (izquierda) y mapa de calor en construcción (derecha).}
 \label{fig:comedor-grabacion}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-sesion-guardada.png}
 \caption{Comedor de ESAN, sesión guardada: recorridos de cada persona
@@ -7248,7 +7257,7 @@ de cada teléfono durante la prueba: un Android (cámara~1) y un iPhone
 (cámara~2), ambos con el aviso ``En vivo'' y las cajas de las personas
 detectadas, con su ID global (G) y su ID local (L).
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \cuadro{0.44\linewidth}{figuras/validacion/comedor-telefono-android.png}\hfill
 \cuadro{0.44\linewidth}{figuras/validacion/comedor-telefono-iphone.png}
@@ -7260,7 +7269,7 @@ cámara~1 (izquierda) e iPhone, cámara~2 (derecha).}
 Participaron voluntarios que dieron su autorización para ser grabados durante la
 prueba (Figura~\ref{fig:comedor-participantes}).
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=0.6\linewidth]{figuras/validacion/comedor-participantes-recorte.png}
 \caption{Participantes de la prueba en el comedor de ESAN, todos con
@@ -7272,7 +7281,7 @@ La Figura~\ref{fig:pruebas-area-mapeada} muestra una vista desde lo alto del
 proceso de prueba: los participantes se desplazan por el área mapeada, mientras
 el sistema ubica a cada persona sobre el plano.
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=0.45\linewidth]{figuras/validacion/pruebas-area-mapeada.png}
 \caption{Proceso de prueba y ubicación de las personas en el área mapeada.}
@@ -7383,6 +7392,7 @@ Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres
 \label{fig:nube-azure}
 \end{figure}
 
+\FloatBarrier
 \subsection*{Repositorio del proyecto}
 \label{anexo:repositorio}
 
