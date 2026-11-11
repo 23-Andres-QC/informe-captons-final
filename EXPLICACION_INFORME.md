@@ -128,7 +128,6 @@ Detectar a cada persona en cada cámara, seguirla dentro de la cámara, reconoce
 
 **4.9 Género (retirado).**
 - El sistema ya no estima el género ni otros atributos: se quitó del procesamiento y de los reportes.
-- El panel «Hombres y mujeres» de Insights muestra todo como «sin determinar»; el tamaño mínimo de grupo (5) de Configuración solo rige para esas categorías.
 
 **4.10 Zonas.**
 - **INTERIOR:** dentro de la tienda (entrada real).

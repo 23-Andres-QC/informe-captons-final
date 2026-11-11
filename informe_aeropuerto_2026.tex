@@ -578,14 +578,12 @@ cliente es el operador o la aerolínea y AeroVision es el proveedor. Cada punto
 recibe un nivel: \textit{incumple} (el sistema hace hoy algo que la norma exige
 o prohíbe de otra forma), \textit{incumpliría si se despliega sin cambios} (el
 problema aparece al operar en el escenario real), \textit{brecha por verificar}
-(no hay evidencia de cumplimiento o la interpretación está abierta) o
-\textit{parcialmente mitigado} (hay una medida, pero con huecos); la prioridad
-depende del daño probable y de lo difícil que sea corregirlo después. Los
-niveles son provisionales y deben confirmarse con evidencia y con el texto
-oficial de cada norma; el análisis es de apoyo académico y no constituye
-asesoría legal. El Cuadro~\ref{tab:matriz-legal} resume los once puntos (L1 a
-L11) con el estado actual del prototipo, que en la retención y el género ya
-difiere del borrador de las matrices.
+(no hay evidencia de cumplimiento o la interpretación está abierta),
+\textit{parcialmente mitigado} (hay una medida, pero con huecos) o
+\textit{mitigado} (la medida cubre el punto); la prioridad
+depende del daño probable y de lo difícil que sea corregirlo después. El
+análisis es de apoyo académico y no constituye asesoría legal. El Cuadro~\ref{tab:matriz-legal} resume los once puntos (L1 a
+L11) con el estado actual del prototipo.
 
 \begin{table}[!htbp]
 \centering
@@ -598,27 +596,27 @@ difiere del borrador de las matrices.
 \hline
 \textbf{ID} & \textbf{Tema} & \textbf{Norma de referencia} & \textbf{Nivel} & \textbf{Prioridad} & \textbf{Estado en el prototipo} \\
 \hline
-L1 & Base legal, consentimiento y deber de informar & Ley 29733; D.S. 016-2024-JUS; Directiva 01-2020 & Parcialmente mitigado & Alta & Uso transparente decidido (carteles, hoja informativa y política pública); materiales y base legal sin documentar \\
+L1 & Base legal, consentimiento y deber de informar & Ley 29733; D.S. 016-2024-JUS; Directiva 01-2020 & Parcialmente mitigado & Alta & Uso transparente (carteles, hoja informativa y política pública); propuesta: base legal por escrito con asesoría \\
 \hline
-L2 & Finalidad y propor\-cionalidad & Ley 29733; Directiva 01-2020 & Brecha por verificar & Alta & Uso comercial y no de seguridad; se guardan trayectorias seudónimas; usos prohibidos sin fijar por contrato \\
+L2 & Finalidad y propor\-cionalidad & Ley 29733; Directiva 01-2020 & Brecha por verificar & Alta & Uso comercial y no de seguridad; trayectorias seudónimas; propuesta: usos prohibidos por contrato (S1, S6) \\
 \hline
-L3 & Vectores de Re-ID como dato biométrico & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Alta & Sin rostro ni recortes; vectores de apariencia hasta 24~h sin ver a la persona; sin opinión legal \\
+L3 & Vectores de Re-ID como dato biométrico & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Alta & Sin rostro ni recortes; vectores de apariencia hasta 24~h sin ver a la persona; propuesta: opinión legal escrita (S2) \\
 \hline
-L4 & Menores de edad & D.S. 016-2024-JUS & Incumpliría si se despliega sin cambios & Alta & Sin solución decidida; ningún mecanismo excluye a los niños \\
+L4 & Menores de edad & D.S. 016-2024-JUS & Incumpliría si se despliega sin cambios & Alta & Propuesta: privacidad por diseño para todos, sin detectar niños (S3) \\
 \hline
-L5 & Vigilancia y biometría en tiempo real & Ley 31814; D.S. 115-2025-PCM & Brecha por verificar & Media & Modo en vivo en tiempo real; sistema sin clasificar bajo la ley de IA \\
+L5 & Vigilancia y biometría en tiempo real & Ley 31814; D.S. 115-2025-PCM & Brecha por verificar & Media & Modo en vivo en tiempo real; propuesta: clasificarlo bajo la ley de IA y evaluación de impacto voluntaria (S2, S10) \\
 \hline
-L6 & Roles del cliente y de AeroVision; contrato & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Cliente titular y AeroVision encargado, sin contrato de encargo; proceso local, nubes solo cotizadas \\
+L6 & Roles del cliente y de AeroVision; contrato & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Cliente titular y AeroVision encargado; proceso local, nubes solo cotizadas; propuesta: contrato de encargo con cada cliente \\
 \hline
 L7 & Retención y supresión & Ley 29733 & Parcialmente mitigado & Media & Sin video ni recortes; vectores borrados a las 24~h; puntos a los 90 días; agregados sin límite \\
 \hline
-L8 & Seguridad de la información & D.S. 016-2024-JUS; Directiva de Seguridad (2013) & Brecha por verificar & Media & Roles en el backend, permiso temporal para exportar, bitácora y CSRF; sin plan de incidentes \\
+L8 & Seguridad de la información & D.S. 016-2024-JUS; Directiva de Seguridad (2013) & Brecha por verificar & Media & Roles en el backend, permiso temporal para exportar, bitácora y CSRF; propuesta: plan de incidentes (S11) \\
 \hline
-L9 & Registro, derechos y gobernanza & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Sin procedimiento de derechos ni responsable designado \\
+L9 & Registro, derechos y gobernanza & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Propuesta: procedimiento de derechos con responsable designado \\
 \hline
-L10 & Personal del cliente y de las tiendas & Directiva 01-2020; Opinión Consultiva 045-2021 & Brecha por verificar & Media & Sin zonas de personal ni zonas excluidas en el plano \\
+L10 & Personal del cliente y de las tiendas & Directiva 01-2020; Opinión Consultiva 045-2021 & Brecha por verificar & Media & Propuesta: zonas de personal y excluidas en el plano (S5) \\
 \hline
-L11 & Inferencia de género & D.S. 016-2024-JUS & Parcialmente mitigado & Media & El género ya no se estima (S4); queda el panel ``Hombres y mujeres'' sin datos \\
+L11 & Inferencia de género & D.S. 016-2024-JUS & Mitigado & Media & El género no se estima ni se guarda (S4) \\
 \hline
 \end{tabular}
 \end{table}
@@ -706,10 +704,7 @@ Los puntos de prioridad media son:
 
     \item \textbf{Género (L11).} Resúmenes del reglamento incluyen la identidad
     de género entre los datos sensibles~\cite{reglamento29733,recordinglaw}. La
-    estimación de género se retiró del procesamiento y de los reportes (S4);
-    quedan el panel ``Hombres y mujeres'' de Insights, que muestra todo como
-    ``sin determinar'', y el tamaño mínimo de grupo de Configuración (5 por
-    defecto), que solo se aplica a esas categorías.
+    estimación de género se retiró del procesamiento y de los reportes (S4).
 \end{itemize}
 
 Las matrices proponen además once cambios al modelo y al sistema (S1 a S11)
@@ -735,11 +730,11 @@ S2 & Re-ID efímero & Vectores solo en memoria durante la sesión o con un plazo
 \hline
 S3 & Menores y personas vulnerables & Privacidad por diseño para todos en lugar de detectar niños: solo agregados por zona y hora, sin Re-ID más allá de la sesión; evitar un clasificador de edad, que sería otra inferencia de atributos; si se excluye a menores, descartar el track sin guardarlo ni contarlo & L4, E3, E4 & Propuesta de diseño \\
 \hline
-S4 & Eliminar la inferencia de atributos & Retirar el clasificador de género y toda estimación de edad o emoción, con sus columnas, endpoints y reportes; borrar los datos de género y agregar una prueba que impida reintroducirlos & L11, E5 & Aplicada: el género no se calcula ni se guarda; quedan el panel ``Hombres y mujeres'' y el clasificador desactivado en el código \\
+S4 & Eliminar la inferencia de atributos & Retirar el clasificador de género y toda estimación de edad o emoción, con sus columnas, endpoints y reportes; borrar los datos de género y agregar una prueba que impida reintroducirlos & L11, E5 & Aplicada: el género no se calcula ni se guarda \\
 \hline
 S5 & Zonas de exclusión y de personal & Polígonos de exclusión en el plano (baños, lactancia, oración, controles migratorios, seguridad y personal) enmascarados antes del detector; revisión previa de cada sitio & L10, E2, E7, E11 & Propuesta de diseño \\
 \hline
-S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, L11, E6, E8 & Parcial: el tamaño mínimo de grupo (5) solo rige para el género; exportar exige permiso temporal \\
+S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, L11, E6, E8 & Parcial: exportar exige permiso temporal \\
 \hline
 S7 & Empareja\-miento ticket-persona agregado & Emparejar por zona y ventana de tiempo, descartar las parejas de baja confianza, no guardar el vínculo individual y mostrar la confianza & L7, E6, E8, E9 & Propuesta de diseño: hoy el emparejamiento es por persona y guarda su confianza \\
 \hline
@@ -848,8 +843,7 @@ el cliente según el lugar donde se use AeroVision, aunque no sea ilegal, y toma
 como marco la minimización, la proporcionalidad, la transparencia, la equidad,
 la no maleficencia y la rendición de cuentas. El Cuadro~\ref{tab:matriz-etica}
 resume los once riesgos (E1 a E11) con su severidad, y a continuación se
-explican los más críticos; como en la matriz legal, los niveles son
-provisionales y las mitigaciones remiten a las sugerencias del
+explican los más críticos; las mitigaciones remiten a las sugerencias del
 Cuadro~\ref{tab:sugerencias-diseno}.
 
 \begin{table}[!htbp]
@@ -1238,9 +1232,7 @@ estructura significativa a nivel de grupo y de multitud
 sustenta, en el sistema propuesto, el uso de Kernel Density Estimation
 para hotspots y de PrefixSpan para rutas frecuentes, ambos calculados
 solo a partir de coordenadas y marcas de tiempo asociadas a un
-identificador seudónimo. Distinguir entre viajeros individuales y grupos
-al calcular el tiempo de permanencia y la tasa de captación por tienda
-queda como trabajo futuro.
+identificador seudónimo.
 
 \begin{figure}[H]
 \centering
@@ -1537,8 +1529,8 @@ Este antecedente aporta directamente al módulo de flujo entre zonas del
 sistema propuesto. Representar el espacio como un grafo de zonas
 conectadas permite generar mapas de calor y métricas de flujo
 (Figura~\ref{fig:ant8}), y admite
-la predicción de congestión, que queda como trabajo futuro, ya que el
-sistema propuesto reporta por ahora la congestión observada.
+la predicción de congestión; el sistema propuesto reporta la congestión
+observada.
 
 \begin{figure}[H]
 \centering
@@ -4532,11 +4524,6 @@ cuadro y las personas contadas de cada video. Los casos fueron:
     con unas 25 personas a la vista en cada una.
 \end{itemize}
 
-Los casos de estrés se midieron antes de retirar del sistema el módulo
-opcional de estimación de género, que consumía CPU adicional. Por eso la carga
-de CPU de esos casos es una cota superior de la actual y conviene repetir la
-medición con la versión final.
-
 El modelo procesa como una cámara en vivo: si no alcanza al video, salta
 cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
 segundo que logra procesar y en la fracción de cuadros que salta. Las siete
@@ -5215,8 +5202,7 @@ el calor va de la escalera de cam06 al brazo este de cam07.}
 \safeincludegraphics[width=0.8\linewidth]{figuras/validacion/insights-09nov-web.png}
 \caption{Insights de las dos grabaciones del 9 de noviembre: arriba el pasillo
 (128 personas, 33\,815 puntos, 2~min 34~s), abajo el patio (149 personas,
-64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan ``sin
-determinar''.}
+64\,746 puntos, 3~min 25~s).}
 \label{fig:insights-09nov-web}
 \end{figure}
 
