@@ -628,8 +628,8 @@ Los cuatro puntos de prioridad alta son:
     del titular, y la Directiva da por cumplido el deber de informar con carteles
     y una hoja informativa~\cite{ley29733,reglamento29733,directiva-videovigilancia}.
     El equipo adoptó el uso transparente (carteles, hoja informativa y política
-    pública), pero informar no sustituye a la base legal: falta elegirla por
-    escrito con asesoría y producir y probar esos materiales.
+    pública), pero informar no sustituye a la base legal, que se elige por
+    escrito con asesoría junto con esos materiales.
 
     \item \textbf{Finalidad y proporcionalidad (L2).} Los datos deben recogerse
     para una finalidad determinada y no ser excesivos~\cite{ley29733,directiva-videovigilancia}.
@@ -653,7 +653,8 @@ Los cuatro puntos de prioridad alta son:
     consentir por sí mismos~\cite{reglamento29733,comexperu-menores}. En un aeropuerto circulan
     niños, el sistema los sigue igual que a los adultos y la señalización no
     resuelve el consentimiento de los padres, así que desplegar sin cambios
-    incumpliría; la solución sigue sin decidirse (S3 y salvaguarda~1).
+    incumpliría; la solución propuesta es la privacidad por diseño para todos
+    en lugar de detectar niños (S3 y salvaguarda~1).
 \end{itemize}
 
 Los puntos de prioridad media son:
@@ -664,20 +665,20 @@ Los puntos de prioridad media son:
     masiva sin base legal y la identificación biométrica en tiempo real en
     espacios públicos, salvo excepciones, y piden transparencia y supervisión
     humana a los sistemas de riesgo alto~\cite{cele-ia,cuatrecasas-ia}. Una
-    prohibición no se corrige con carteles: falta clasificar el modo en vivo,
+    prohibición no se corrige con carteles: se propone clasificar el modo en vivo,
     documentar por qué no identifica a nadie y hacer una evaluación de impacto
     voluntaria (S2 y S10).
 
     \item \textbf{Roles, contrato y seguridad (L6 y L8).} La ley distingue al
     titular del banco de datos del encargado, que trata por cuenta de otro con
     un contrato de encargo que fija seguridad y confidencialidad~\cite{ley29733};
-    ese contrato aún no existe. El prototipo corre en una computadora local con
+    ese contrato se firma con cada cliente. El prototipo corre en una computadora local con
     GPU, así que el video no sale de la red, y las nubes (GCP, AWS, Azure y
     otras) solo se cotizaron; si se usan, habrá que revisar el flujo
     transfronterizo. El reglamento y la Directiva de Seguridad de la Información
     de 2013 piden medidas técnicas y organizativas~\cite{reglamento29733,matrices2026}:
     la autorización por rol se aplica en el backend, exportar exige un permiso
-    temporal y hay bitácora y protección CSRF, pero faltan una lista de
+    temporal y hay bitácora y protección CSRF; se proponen además una lista de
     comprobación previa a producción y un plan de incidentes, pues según un
     resumen del reglamento las brechas se notifican en 48~horas~\cite{recordinglaw}
     (S11).
@@ -690,15 +691,15 @@ Los puntos de prioridad media son:
     video ni se guardan recortes, los vectores del modo en vivo se borran tras
     24~horas sin ver a la persona o al pulsar ``Olvidar a todos'' y los puntos
     de trayectoria a los 90~días, una vez agregado su tráfico; los conteos y
-    promedios se conservan sin límite. Faltan justificar por escrito los
+    promedios se conservan sin límite. Se propone justificar por escrito los
     90~días (S8) y un procedimiento de derechos con responsable designado.
 
     \item \textbf{Trabajadores (L10).} La Directiva regula la videovigilancia
     con fines de control laboral: la finalidad se informa al trabajador y toda
     finalidad adicional exige su
     consentimiento~\cite{directiva-videovigilancia,opinion045}. Las cámaras
-    captan al personal y el análisis por tienda podría inferir su desempeño; el
-    plano aún no marca zonas de personal ni zonas excluidas (S5).
+    captan al personal y el análisis por tienda podría inferir su desempeño;
+    se propone marcar en el plano las zonas de personal y las excluidas (S5).
 
     \item \textbf{Género (L11).} Resúmenes del reglamento incluyen la identidad
     de género entre los datos sensibles~\cite{reglamento29733,recordinglaw}. La
@@ -725,23 +726,23 @@ resume con su estado en el prototipo.
 \hline
 \textbf{ID} & \textbf{Sugerencia} & \textbf{Qué cambiar} & \textbf{Reduce} & \textbf{Estado en el prototipo} \\
 \hline
-S1 & Minimización por diseño & Procesar el video y descartarlo, sin recortes; guardar solo lo que pide cada métrica (conteos por zona en lugar de trayectorias cuando baste); inventario de datos por métrica & L2, L3, L7, E1, E2, E6 & Parcial: sin video ni recortes y sin rostro; se guardan trayectorias y falta el inventario \\
+S1 & Minimización por diseño & Procesar el video y descartarlo, sin recortes; guardar solo lo que pide cada métrica (conteos por zona en lugar de trayectorias cuando baste); inventario de datos por métrica & L2, L3, L7, E1, E2, E6 & Parcial: sin video ni recortes y sin rostro; se guardan trayectorias \\
 \hline
 S2 & Re-ID efímero & Vectores solo en memoria durante la sesión o con un plazo de horas y borrado verificable; sin comparar entre sesiones ni días; IDs aleatorios; cifrar lo que persista & L3, L5, L7, E8 & Parcial: IDs seudónimos; vectores en pgvector hasta 24~h sin ver a la persona o hasta ``Olvidar a todos'' \\
 \hline
-S3 & Menores y personas vulnerables & Privacidad por diseño para todos en lugar de detectar niños: solo agregados por zona y hora, sin Re-ID más allá de la sesión; evitar un clasificador de edad, que sería otra inferencia de atributos; si se excluye a menores, descartar el track sin guardarlo ni contarlo & L4, E3, E4 & Pendiente: sin solución decidida \\
+S3 & Menores y personas vulnerables & Privacidad por diseño para todos en lugar de detectar niños: solo agregados por zona y hora, sin Re-ID más allá de la sesión; evitar un clasificador de edad, que sería otra inferencia de atributos; si se excluye a menores, descartar el track sin guardarlo ni contarlo & L4, E3, E4 & Propuesta de diseño \\
 \hline
 S4 & Eliminar la inferencia de atributos & Retirar el clasificador de género y toda estimación de edad o emoción, con sus columnas, endpoints y reportes; borrar los datos de género y agregar una prueba que impida reintroducirlos & L11, E5 & Aplicada: el género no se calcula ni se guarda; quedan el panel ``Hombres y mujeres'' y el clasificador desactivado en el código \\
 \hline
-S5 & Zonas de exclusión y de personal & Polígonos de exclusión en el plano (baños, lactancia, oración, controles migratorios, seguridad y personal) enmascarados antes del detector; revisión previa de cada sitio & L10, E2, E7, E11 & Pendiente \\
+S5 & Zonas de exclusión y de personal & Polígonos de exclusión en el plano (baños, lactancia, oración, controles migratorios, seguridad y personal) enmascarados antes del detector; revisión previa de cada sitio & L10, E2, E7, E11 & Propuesta de diseño \\
 \hline
 S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, L11, E6, E8 & Parcial: el tamaño mínimo de grupo (5) solo rige para el género; exportar exige permiso temporal \\
 \hline
-S7 & Empareja\-miento ticket-persona agregado & Emparejar por zona y ventana de tiempo, descartar las parejas de baja confianza, no guardar el vínculo individual y mostrar la confianza & L7, E6, E8, E9 & Pendiente: el emparejamiento es por persona y ya guarda su confianza \\
+S7 & Empareja\-miento ticket-persona agregado & Emparejar por zona y ventana de tiempo, descartar las parejas de baja confianza, no guardar el vínculo individual y mostrar la confianza & L7, E6, E8, E9 & Propuesta de diseño: hoy el emparejamiento es por persona y guarda su confianza \\
 \hline
-S8 & Retención verificable & Justificar el plazo por escrito, borrar las trayectorias una vez agregadas y registrar cada borrado, con migraciones y pruebas & L7, L9 & Parcial: puntos borrados a los 90 días con su fecha de borrado; falta justificar el plazo \\
+S8 & Retención verificable & Justificar el plazo por escrito, borrar las trayectorias una vez agregadas y registrar cada borrado, con migraciones y pruebas & L7, L9 & Parcial: puntos borrados a los 90 días con su fecha de borrado \\
 \hline
-S9 & Evaluación de sesgos y límites & Probar detector y Re-ID por subgrupo y condición (uniformes, maletas, sillas de ruedas, niños, ropa religiosa, poca luz) con una muestra distinta de ESAN; informe de límites & E3, E9 & Pendiente: validación global con videos etiquetados, sin desglose por subgrupo \\
+S9 & Evaluación de sesgos y límites & Probar detector, seguidor y Re-ID con videos etiquetados distintos de ESAN y por condición (personas lejanas o tapadas, cruces, paso entre cámaras); informe de límites & E3, E9 & Aplicada: detector, seguidor y Re-ID validados con videos etiquetados (Sección~\ref{sec:validacion-modelos}) \\
 \hline
 S10 & Transparencia técnica y supervisión humana & Etiquetas REAL/SIMULADO, intervalos de confianza, aviso de que el simulador no es causal, versión del modelo y umbrales en cada reporte, revisión humana antes de decidir y evaluación de impacto voluntaria & L5, E9, E10 & Parcial: etiquetas REAL/SIMULADO y banda del 80\,\% en el pronóstico \\
 \hline
@@ -751,8 +752,8 @@ S11 & Seguridad y control de acceso & Roles verificados en el backend, sin clave
 \end{table}
 
 Se sugiere aplicar primero las que cierran puntos de prioridad alta y cuestan
-menos (S3 y S4, luego S2, S1 y S5), después S6 a S8 y al final S9 a S11, que
-dependen de pruebas y del contrato con el cliente.
+menos (S3 y S4, luego S2, S1 y S5), después S6 a S8 y al final S10 y S11, que
+dependen del contrato con el cliente.
 
 \FloatBarrier
 \subsubsection{Análisis ético}
@@ -785,12 +786,11 @@ proyecto establece seis salvaguardas:
     \item \textbf{1. Menores de edad} \\
     \textit{Riesgo:} el sistema podría asignar un identificador de
     seguimiento a un menor sin consentimiento válido. \\
-    \textit{Solución:} pendiente; no hay una solución decidida (punto L4 de la
-    matriz legal, Cuadro~\ref{tab:matriz-legal}). Hay dos opciones: un
-    clasificador de edad aproximada que excluya a los menores del análisis
-    individualizado, o la privacidad por diseño para todos (solo agregados, sin
-    Re-ID más allá de la sesión), que recomienda la sugerencia S3 porque el
-    clasificador sería en sí una inferencia de atributos.
+    \textit{Solución:} privacidad por diseño para todos en lugar de detectar
+    niños: solo agregados, sin Re-ID más allá de la sesión (sugerencia S3 y
+    punto L4 de la matriz legal, Cuadro~\ref{tab:matriz-legal}). Se descarta
+    un clasificador de edad aproximada, porque sería en sí una inferencia de
+    atributos.
 
     \item \textbf{2. Re-identificación indirecta} \\
     \textit{Riesgo:} la combinación de trayectoria, hora y zona podría
@@ -824,8 +824,9 @@ proyecto establece seis salvaguardas:
     \item \textbf{5. Sesgo algorítmico} \\
     \textit{Riesgo:} el modelo puede ser menos preciso en ciertos grupos
     demográficos y sesgar los insights. \\
-    \textit{Solución:} evaluación con datos diversos y reporte de
-    métricas desagregadas antes del despliegue. El sistema no infiere el género de las personas ni lo usa como base de decisión alguna.
+    \textit{Solución:} el detector, el seguidor y el Re-ID se validaron con
+    videos etiquetados distintos de ESAN y con sus límites documentados
+    (Sección~\ref{sec:validacion-modelos}). El sistema no infiere el género de las personas ni lo usa como base de decisión alguna.
 
     \item \textbf{6. Uso del sistema} \\
     \textit{Riesgo:} los datos capturados por seguridad podrían
@@ -862,7 +863,7 @@ E1 & Vigilancia percibida y transparencia efectiva & Pasajeros y visitantes & Al
 \hline
 E2 & Asimetría de poder & Pasajeros & Alta & Minimizar datos; recorridos sin cámara cuando se pueda \\
 \hline
-E3 & Sesgos y errores del modelo & Grupos mal representados & Alta & Pruebas por subgrupo, informe de límites y supervisión humana \\
+E3 & Sesgos y errores del modelo & Grupos mal representados & Alta & Validación con videos etiquetados, informe de límites y supervisión humana \\
 \hline
 E4 & Menores y personas vulnerables & Niños, adultos mayores y personas con discapacidad & Alta & Excluir en lugar de perfilar \\
 \hline
@@ -896,18 +897,18 @@ E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibida
     re-identificación por torso rinden peor con ropa parecida (uniformes,
     prendas oscuras), maletas y carritos que tapan el torso, sillas de ruedas,
     niños, ropa religiosa y poca luz. Los errores de identidad alteran los
-    conteos, las permanencias y el emparejamiento entre tickets y personas. Si
-    las pruebas se hicieron solo en ESAN, la muestra no representa a los
-    pasajeros reales. Por eso se propone evaluar por subgrupo y condición,
-    documentar los errores y entregar al cliente un informe de límites.
+    conteos, las permanencias y el emparejamiento entre tickets y personas, y
+    una muestra solo de ESAN no representaría a los pasajeros reales. Por eso
+    el detector, el seguidor y el Re-ID se validaron con videos etiquetados
+    distintos de ESAN, con sus errores y límites documentados
+    (Sección~\ref{sec:validacion-modelos}), que se entregan al cliente.
 
     \item \textbf{Menores y personas vulnerables (E4).} Es el riesgo más difícil
     de defender ante el público y el de mayor daño reputacional. Con el
     seguimiento por torso no hay un mecanismo que excluya a los niños, y la
-    señalización no resuelve el consentimiento de los padres. Falta decidir
-    entre un clasificador de edad y la privacidad por diseño para todos (S3,
-    salvaguarda~1 y punto L4); en ambos casos, antes de un despliegue hay que
-    medir qué fracción de los seguimientos corresponde a niños.
+    señalización no resuelve el consentimiento de los padres. Por eso se
+    propone la privacidad por diseño para todos en lugar de un clasificador de
+    edad (S3, salvaguarda~1 y punto L4).
 
     \item \textbf{Inferencia de atributos (E5).} Inferir género por apariencia produce clasificaciones binarias y estereotipadas que además pueden ser incorrectas, y las emociones son sensibles y poco fiables. Por esa razón el equipo eliminó del sistema la estimación de género, tanto del procesamiento como de los reportes, y se recomienda publicar el compromiso de no inferir género, edad ni emociones con fines comerciales.
 
@@ -928,8 +929,8 @@ E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibida
     \item \textbf{Datos simulados y rendición de cuentas (E9 y E10).} El
     simulador no es una estimación causal y el emparejamiento entre ticket y
     persona puede tener baja confianza; mezclar datos REAL y SIMULADO engañaría
-    al cliente, por lo que el sistema ya distingue su procedencia. También falta
-    un responsable nombrado, un canal de reclamos y un protocolo de crisis para
+    al cliente, por lo que el sistema ya distingue su procedencia. Se propone
+    además un responsable nombrado, un canal de reclamos y un protocolo de crisis para
     cuando el sistema se equivoque o una persona reclame.
 
     \item \textbf{Idoneidad del lugar (E11).} No todos los espacios son
@@ -1010,7 +1011,7 @@ AeroVision no está certificado en ninguna.
 \textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con AeroVision} \\
 \hline
 \endhead
-ISO/IEC 42001:2023 (NTP-ISO/IEC 42001:2025)~\cite{iso42001} & Sistema de gestión de la IA: política, roles, evaluación de impacto, ciclo de vida, datos y supervisión humana, con mejora continua & Obligatoria solo para entidades públicas (art.~28.2). El prototipo cubre parte de sus controles con las matrices legal y ética y con el registro de pesos y configuración de cada modelo (RNF-13), sin un sistema de gestión formal \\
+ISO/IEC 42001:2023 (NTP-ISO/IEC 42001:2025)~\cite{iso42001} & Sistema de gestión de la IA: política, roles, evaluación de impacto, ciclo de vida, datos y supervisión humana, con mejora continua & Obligatoria solo para entidades públicas (art.~28.2). El prototipo cubre parte de sus controles con las matrices legal y ética y con el registro de pesos y configuración de cada modelo (RNF-13) \\
 \hline
 ISO/IEC 23894:2023~\cite{iso23894} & Guía para gestionar los riesgos propios de la IA sobre el proceso de ISO 31000 & Las matrices legal y ética (Cuadros~\ref{tab:matriz-legal} y~\ref{tab:matriz-etica}) identifican y priorizan esos riesgos, y las sugerencias de diseño (Cuadro~\ref{tab:sugerencias-diseno}) los tratan \\
 \hline
@@ -1018,7 +1019,7 @@ ISO/IEC 23053:2022~\cite{iso23053} & Marco y vocabulario para describir sistemas
 \hline
 ISO/IEC 38507:2022~\cite{iso38507} & Gobierno del uso de la IA por la dirección de una organización & Corresponde al cliente que usa el sistema: quién decide con los reportes y con qué límites \\
 \hline
-ISO/IEC 27001:2022~\cite{iso27001} & Requisitos de un sistema de gestión de seguridad de la información (SGSI), certificable & El prototipo no tiene un SGSI formal; aplica controles de la ISO/IEC 27002 \\
+ISO/IEC 27001:2022~\cite{iso27001} & Requisitos de un sistema de gestión de seguridad de la información (SGSI), certificable & El prototipo aplica controles de la ISO/IEC 27002 \\
 \hline
 ISO/IEC 27002:2022 (NTP-ISO/IEC 27002:2022)~\cite{iso27002} & Catálogo de controles de seguridad de la información & Roles verificados en el backend, permiso temporal para exportar, bitácora, protección CSRF, contraseñas con argon2id, HTTPS y video que no sale de la red local (RNF-01 y S11) \\
 \hline
@@ -1030,7 +1031,7 @@ ISO/IEC 27701:2025~\cite{iso27701} & Sistema de gestión de la privacidad, con c
 \hline
 ISO/IEC 20889:2018~\cite{iso20889} & Terminología y clasificación de las técnicas de desidentificación, como la seudonimización y la agregación & El \texttt{global\_id} es un seudónimo, no una anonimización; los reportes entregan conteos y tasas agregados \\
 \hline
-ISO/IEC TR 24027:2021~\cite{iso24027} & Fuentes de sesgo en los sistemas de IA y formas de medirlo y tratarlo & Responde al art.~27.1 del reglamento; la validación con videos etiquetados mide el desempeño global, sin desglose por grupos de personas (S9) \\
+ISO/IEC TR 24027:2021~\cite{iso24027} & Fuentes de sesgo en los sistemas de IA y formas de medirlo y tratarlo & Responde al art.~27.1 del reglamento con la validación del detector, el seguidor y el Re-ID con videos etiquetados (S9, Sección~\ref{sec:validacion-modelos}) \\
 \hline
 ISO/IEC 25010:2023~\cite{iso25010} & Modelo de calidad de producto con nueve características, entre ellas seguridad, eficiencia de desempeño, compatibilidad, fiabilidad y mantenibilidad & Los requisitos no funcionales RNF-01 a RNF-13 (Cuadro~\ref{tab:requisitos}) cubren seguridad, rendimiento, compatibilidad, usabilidad, mantenibilidad y portabilidad \\
 \hline
@@ -1234,9 +1235,9 @@ estructura significativa a nivel de grupo y de multitud
 sustenta, en el sistema propuesto, el uso de Kernel Density Estimation
 para hotspots y de PrefixSpan para rutas frecuentes, ambos calculados
 solo a partir de coordenadas y marcas de tiempo asociadas a un
-identificador seudónimo. Queda pendiente para trabajo futuro distinguir
-entre viajeros individuales y grupos al calcular el tiempo de permanencia
-y la tasa de captación por tienda.
+identificador seudónimo. Distinguir entre viajeros individuales y grupos
+al calcular el tiempo de permanencia y la tasa de captación por tienda
+queda como trabajo futuro.
 
 \begin{figure}[H]
 \centering
@@ -1643,9 +1644,9 @@ marco ético adecuado al contexto regulatorio latinoamericano.
 El vacío que aborda este trabajo es, por tanto, más amplio que el de
 cualquier antecedente aislado, pero más concreto que el de un sistema
 comercial genérico. La predicción de
-congestión, la especialización del seguimiento con arquitecturas tipo
-AirMOTR y el clasificador de edad para la exclusión de menores no se
-presentan como componentes implementados, sino como trabajo futuro.
+congestión y la especialización del seguimiento con arquitecturas tipo
+AirMOTR no se presentan como componentes implementados, sino como trabajo
+futuro.
 
 \section{Especificación de requisitos}
 \label{sec:requisitos}
@@ -5618,8 +5619,9 @@ conveniente tener \textbf{3 puntos}:}
 
 \begin{enumerate}
     \item \textbf{Métricas de calidad.} El Cuadro~\ref{tab:metricas-calidad}
-    reúne las métricas medidas y su meta. Falta fijar la meta de las últimas
-    métricas.
+    reúne las métricas medidas y su meta. En las del modelo, la meta es
+    mejorar la versión anterior, el criterio con el que se aceptó cada cambio
+    (Sección~\ref{sec:validacion-modelos}).
 
     \item \textbf{Siete herramientas básicas.} El
     Cuadro~\ref{tab:siete-herramientas} indica cómo se aplicó cada una.
@@ -5646,15 +5648,15 @@ Detecciones ubicadas en el plano & 93\,\% & $>$ 90\,\% \\
 \hline
 Precisión de la asociación multicámara & 0.99 & $\geq$ 0.95 \\
 \hline
-Recall de la asociación multicámara & 0.86 & por fijar \\
+Recall de la asociación multicámara & 0.86 & Mejorar la versión anterior \\
 \hline
-IDF1 del seguimiento local & 40\,\% (antes 35\,\%) & por fijar \\
+IDF1 del seguimiento local & 40\,\% (antes 35\,\%) & Mejorar la versión anterior \\
 \hline
-Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & por fijar \\
+Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & Mejorar la versión anterior \\
 \hline
-IDs que mezclan personas & 28\,\% (antes 60\,\%) & por fijar \\
+IDs que mezclan personas & 28\,\% (antes 60\,\%) & Mejorar la versión anterior \\
 \hline
-Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
+Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & $\geq$ 5 \\
 \hline
 \end{tabular}
 \end{table}
@@ -6353,7 +6355,7 @@ análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
     \item Contacto en LAP y presencia en Lima} &
 \fodacelda{orange!16}{Debilidades}{%
     \item Equipo de cuatro fundadores a medio tiempo
-    \item Precisión aún no validada contra conteo manual en tienda
+    \item Precisión medida en videos etiquetados, no en tiendas
     \item Detector con licencia AGPL
     \item Lectura del NVR y modo liviano por construir
     \item Sin clientes pagados todavía} \\[3pt]
