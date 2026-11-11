@@ -5042,7 +5042,7 @@ más gente a la vez que el comedor, y de 2 a 3 veces más que la primera
 grabación del pasillo; aun
 así se procesaron al ritmo del video, unas 14 pasadas por segundo de las dos
 cámaras, en la GPU de la computadora local dentro de Docker
-(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:pasillo-recorridos}).
+(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:pasillo-calor}).
 
 \begin{table}[H]
 \caption{Grabaciones de zonas con dos teléfonos: de menos a más gente}
@@ -5097,6 +5097,19 @@ posición y el rumbo de cada cámara.}
 
 \begin{figure}[H]
 \centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-plano-calor.png}
+\caption{Patio, 9 de noviembre, como se ve en En vivo: a la izquierda, el
+seguimiento a los 104~s, con 27 personas en el plano, su ID global, su rastro
+de los últimos 10~s y en gris la última posición de quien ya salió; a la
+derecha, el mapa de calor de toda la sesión, con el mismo cálculo y la misma
+escala de color de la plataforma (celdas de 0.5~m, hasta 40 puntos por
+persona y celda). La mayor presencia está en el centro del patio, donde se
+cruzan las vistas de las dos cámaras.}
+\label{fig:patio-09nov-calor}
+\end{figure}
+
+\begin{figure}[H]
+\centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-recorridos.png}
 \caption{Pasillo del Edificio D, 9 de noviembre: recorridos de las 128
 personas sobre la zona grabada~3, junto al comedor, con trazo marcado para
@@ -5104,6 +5117,18 @@ las 20 vistas por las dos cámaras; G133 es la persona de la
 Figura~\ref{fig:pasillo-camaras}. La gente baja por la escalera frente a
 cam06, dobla en la esquina noreste y sale por el brazo este, bajo cam07.}
 \label{fig:pasillo-recorridos}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-plano-calor.png}
+\caption{Pasillo del Edificio D, 9 de noviembre, como se ve en En vivo: a la
+izquierda, el seguimiento a los 124.5~s, con 17 personas en el plano (G133
+sale bajo cam07, como en la Figura~\ref{fig:pasillo-camaras}); a la derecha,
+el mapa de calor de toda la sesión, calculado como en la plataforma. El calor
+marca el camino de la escalera por el brazo norte, la esquina noreste y el
+brazo este hasta cam07.}
+\label{fig:pasillo-calor}
 \end{figure}
 
 Lo que muestran estas grabaciones:
