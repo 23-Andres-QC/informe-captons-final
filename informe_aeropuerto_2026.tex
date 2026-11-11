@@ -752,28 +752,7 @@ S11 & Seguridad y control de acceso & Roles verificados en el backend, sin clave
 
 Se sugiere aplicar primero las que cierran puntos de prioridad alta y cuestan
 menos (S3 y S4, luego S2, S1 y S5), después S6 a S8 y al final S9 a S11, que
-dependen de pruebas y del contrato con el cliente. Quedan pendientes estas
-decisiones y evidencias:
-
-\begin{itemize}
-    \item Entregar al cliente el inventario de lo que guarda cada circuito
-    (video, trayectorias, vectores y agregados), ya conocido en lo técnico (L7).
-    \item Decidir la solución para menores (S3).
-    \item Cerrar el retiro del género (panel, clasificador desactivado y
-    tabla de conteos por género) y confirmar que nada estima edad (S4).
-    \item Definir el alcance del despliegue: campus de ESAN o espacio abierto al
-    público.
-    \item Definir los roles del cliente y de AeroVision y redactar el contrato
-    de encargo (L6).
-    \item Pedir una opinión legal escrita sobre los vectores de Re-ID (L3) y la
-    clasificación bajo la Ley N.\textdegree~31814 (L5).
-    \item Si se usa la nube, confirmar dónde se alojan los datos; hoy todo corre
-    en local.
-    \item Producir y probar los carteles, la hoja informativa, la política
-    pública y el canal de reclamos (L1).
-    \item Documentar la base legal elegida (L1) y el procedimiento de ejercicio
-    de derechos (L9).
-\end{itemize}
+dependen de pruebas y del contrato con el cliente.
 
 \FloatBarrier
 \subsubsection{Análisis ético}
@@ -869,7 +848,7 @@ explican los más críticos; como en la matriz legal, los niveles son
 provisionales y las mitigaciones remiten a las sugerencias del
 Cuadro~\ref{tab:sugerencias-diseno}.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \centering
 \caption{Matriz de riesgos éticos de AeroVision}
 \label{tab:matriz-etica}
@@ -1587,8 +1566,6 @@ Zhou et al.~\cite{zhou2026} & Aeropuerto (AirportPassenger) & MOTA 79.6\,\% (Air
 \hline
 \end{tabular}
 \end{table}
-
-\FloatBarrier
 
 \subsection{Síntesis y vacío de investigación}
 
@@ -4662,14 +4639,7 @@ rendimiento puede variar con la temperatura y la energía disponible.
 \section{Pruebas de validación en ESAN}
 \label{sec:validacion-esan}
 
-Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}).
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pruebas-participantes.png}
-\caption{Estudiantes de ESAN que ayudaron en la prueba de campo, en el patio del Edificio A.}
-\label{fig:pruebas-participantes}
-\end{figure}
+Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}, en el Anexo).
 
 \subsection{Primera prueba: ESAN, Edificios A y B}
 
@@ -7221,6 +7191,16 @@ ProInnóvate, ``Programa Nacional de Desarrollo Tecnológico e Innovación,'' 20
 \section*{Anexo}
 \label{anexo}
 \addcontentsline{toc}{section}{Anexo}
+
+\subsection*{Participantes de la prueba de campo}
+\label{anexo:participantes}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pruebas-participantes.png}
+\caption{Estudiantes de ESAN que ayudaron en la prueba de campo, en el patio del Edificio A.}
+\label{fig:pruebas-participantes}
+\end{figure}
 
 \subsection*{Evidencia de la prueba en el comedor}
 \label{anexo:comedor}
