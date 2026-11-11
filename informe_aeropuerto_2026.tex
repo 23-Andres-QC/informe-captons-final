@@ -4337,7 +4337,7 @@ horas encendida (720 horas equivale a tenerla prendida todo el mes). El
 Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
 Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
 Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
-cada calculadora están en el Anexo~B.
+cada calculadora están en el Anexo.
 
 \begin{table}[H]
 \caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
@@ -4625,14 +4625,18 @@ personas, que se olvida tras 24 horas.}
 \label{fig:web-telefonos}
 \end{figure}
 
-\section{Primera Prueba de Validación: ESAN, Edificios A y B}
+\section{Pruebas de Validación en ESAN}
+
+Las pruebas de validación se realizaron en la Universidad ESAN en dos escenarios: la primera en el patio en forma de L entre los Edificios A y B, y la segunda en el comedor.
+
+\subsection{Primera prueba: ESAN, Edificios A y B}
 
 La primera validación se realizó en el patio en forma de L entre los
 Edificios A y B de la Universidad ESAN, registrado en la aplicación como el
 sitio \textit{ESAN}, en dos etapas: con tres cámaras fijas, para validar las
 Partes I a III, y con teléfonos usados como cámaras en vivo.
 
-\subsection{Escenario y plano del sitio}
+\subsubsection{Escenario y plano del sitio}
 
 El plano del patio se obtuvo de un levantamiento desde las cámaras: se
 marcaron en la imagen los puntos del suelo y de los objetos y se llevaron a
@@ -4654,7 +4658,7 @@ expendedoras (derecha), tacho (verde), reciclaje (izquierda) y ascensores
 \label{fig:plano-esan}
 \end{figure}
 
-\subsection{Prueba con cámaras fijas}
+\subsubsection{Prueba con cámaras fijas}
 
 Se procesaron tres videos de cámaras con vista al patio, de
 $1280 \times 720$ a 15~FPS y 126~s de duración común, con desfases de reloj de
@@ -4724,7 +4728,7 @@ instante.}
 \label{fig:dataset-insights}
 \end{figure}
 
-\subsection{Prueba con cámaras de teléfono}
+\subsubsection{Prueba con cámaras de teléfono}
 
 En la segunda etapa se usaron teléfonos como cámaras del mismo patio, con el
 sistema desplegado entonces en el servidor de Google Cloud, sin GPU. Hoy los
@@ -4775,7 +4779,7 @@ se vio a cada una y cuándo. }
 \label{fig:telefonos-memoria}
 \end{figure}
 
-\section{Segunda Prueba de Validación: ESAN, Comedor}
+\subsection{Segunda prueba: ESAN, Comedor}
 
 La segunda validación se hizo en el comedor de ESAN, registrado como la
 zona~2 del mismo sitio, con su propio plano (comedor, comedor de profesores,
@@ -4812,7 +4816,7 @@ plano, con el seguimiento y el mapa de calor de la misma zona.}
 \end{figure}
 
 Las capturas de la grabación en vivo, de la sesión guardada y de la vista en los
-teléfonos se presentan en el Anexo~A.
+teléfonos se presentan en el Anexo.
 
 \section{Pruebas de Validación y Estrés del Modelo}
 \label{sec:pruebas}
@@ -6194,9 +6198,12 @@ Disponible: \url{https://www.scrumguides.org}
 \end{thebibliography}
 \endgroup
 
-\section*{Anexo A. Evidencia de la prueba en el comedor}
+\section*{Anexo}
+\label{anexo}
+\addcontentsline{toc}{section}{Anexo}
+
+\subsection*{Evidencia de la prueba en el comedor}
 \label{anexo:comedor}
-\addcontentsline{toc}{section}{Anexo A. Evidencia de la prueba en el comedor}
 
 Evidencia de la prueba en el comedor de ESAN, grabada en vivo desde la
 plataforma. En la Figura~\ref{fig:comedor-grabacion} se ve, a la izquierda, la
@@ -6270,9 +6277,8 @@ el sistema ubica a cada persona sobre el plano.
 \end{figure}
 
 \clearpage
-\section*{Anexo B. Capturas de las calculadoras de costos en la nube}
+\subsection*{Capturas de las calculadoras de costos en la nube}
 \label{anexo:nube}
-\addcontentsline{toc}{section}{Anexo B. Capturas de las calculadoras de costos en la nube}
 
 Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres escenarios de uso (240, 360 y 720 horas al mes) del Cuadro~\ref{tab:nube-resumen}.
 
