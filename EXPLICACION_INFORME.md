@@ -126,13 +126,9 @@ Detectar a cada persona en cada cámara, seguirla dentro de la cámara, reconoce
   - si vuelve, es otra persona para el sistema.
 - No se guardan video, recortes, rostros ni datos civiles.
 
-**4.9 Género (opcional, solo agregado).**
-- **Cómo vota:** CLIP *zero-shot* compara el cuerpo completo con dos frases de referencia. En el modelo base vota cada 0.6 s, con un máximo de 12 votos por tracklet.
-- **Cuándo se fija:** con ≥ 2 votos, una confianza ≥ 0.55 y un margen ≥ 0.10. Si no se cumple, queda «sin determinar».
-- **Cómo se publica:**
-  - el backend cuenta por género y borra el de cada persona;
-  - una categoría con menos de 5 personas se oculta;
-  - si ocultarla permitiría deducirla a partir del total, se oculta también la siguiente.
+**4.9 Género (retirado).**
+- El sistema ya no estima el género ni otros atributos: se quitó del procesamiento y de los reportes.
+- El panel «Hombres y mujeres» de Insights muestra todo como «sin determinar»; el tamaño mínimo de grupo (5) de Configuración solo rige para esas categorías.
 
 **4.10 Zonas.**
 - **INTERIOR:** dentro de la tienda (entrada real).
@@ -190,13 +186,12 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 
 **6.1 Build (video grabado):** corre las Partes I, II y III completas sobre las cámaras fijas y publica la sesión.
 
-**6.2 En vivo con teléfonos** (tres carriles, para que las cajas no esperen a los modelos lentos):
+**6.2 En vivo con teléfonos** (dos carriles, para que las cajas no esperen al modelo más pesado):
 - **Rápido:** detecta, arma la caja con YOLO26s-pose, sigue y publica. Oculta a quien no se mueve en 3 s (maniquíes, afiches).
 - **IDs:** muestrea el cuerpo y compara con una **memoria de identidades** (tras 1 s, o 3 s si hay duda).
   - Si coincide, recupera su ID y su color.
   - Durante 60 s puede fusionar un ID nuevo con uno ya visto.
   - La memoria se guarda cada 2 s y olvida a las 24 h.
-- **Género:** CLIP cada 0.3 s; se fija con 2 votos de certeza ≥ 0.80.
 - **Ubicación desde un teléfono:**
   - **Con calibración:** homografía. Se calibra con una grabación de alguien caminando: la altura de 1.70 m fija el horizonte y la focal se ajusta con dos referencias del plano.
   - **Sin calibración:** distancia `d = f · 1.70 / alto_en_px` (con `f = 0.78 · ancho`), ángulo `α = atan((u − ancho/2)/f)`, y posición = teléfono + `d·(cos(θ−α), sin(θ−α))`.
@@ -208,9 +203,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
   - detector a 1280 px en la GPU, con confianza 0.10;
   - tracks desde 0.15 de confianza y 12 px de alto;
   - apariencia con peso 0.8;
-  - Re-ID OSNet-AIN + PersonViT;
-  - género desde el primer voto, cada 1 s.
-- **Análisis a elegir:** *solo multitracking*, *solo género* o *ambos*.
+  - Re-ID OSNet-AIN + PersonViT.
 - Decodifica en la GPU (NVDEC) y prepara la pasada siguiente mientras procesa la actual.
 - El video se borra al terminar; queda solo el resumen.
 
@@ -268,8 +261,9 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
   - `backend-vivo` en Go: video de los teléfonos y Videos;
   - PostgreSQL/PostGIS + pgvector;
   - web en Vue.
-  - Todo en Docker, en una computadora local con **RTX 4060 (8 GB)**.
-- **Por qué local y no nube:** la primera versión estuvo en Google Cloud sin GPU. La computadora propia cuesta unos US$ 70 al mes (S/ 4 500 en 36 meses + energía), lo mismo que la nube interrumpible y mucho menos que la nube a demanda. Además, el video no sale de la red y el costo es fijo.
+  - Todo en Docker, en una computadora local con **RTX 4060 Laptop (8 GB)**; el modelo en vivo corre en Windows o, si Windows bloquea PyTorch, en Docker con GPU (servicio `modelo-gpu`).
+- **Por qué local y no nube:** la primera versión estuvo en Google Cloud sin GPU. La computadora propia cuesta unos US$ 70 al mes (supuesto de S/ 4 500, aún por cotizar, en 36 meses + energía), casi lo mismo que el servidor sin GPU encendido solo en horario de uso y menos que cualquier nube con GPU a demanda. Además, el video no sale de la red y el costo es fijo.
+- **Comparación de nubes con GPU:** 17 opciones verificadas en noviembre de 2026, de Vast.ai (US$ 0.076/h) a RunPod RTX 4090 segura (US$ 0.89/h); con 240 h al mes, Vast.ai y las T4 *spot* cuestan menos que la PC; todo el mes, solo Vast.ai. Calculadora interactiva aparte.
 - **Roles:**
   - **Superadmin:** todo; crea cuentas y aprueba solicitudes.
   - **Seguridad:** En vivo, Videos y Teléfonos.
@@ -304,7 +298,6 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 **9.2 ESAN, teléfonos en vivo (6 de octubre).**
 - 5 capturas, 28 personas.
 - La que más se vio conservó su ID en 4 teléfonos.
-- Género con 91 % de acierto sobre 169 recortes.
 - **Demuestra:** los teléfonos sirven como cámaras y la memoria mantiene la identidad.
 
 **9.3 ESAN, comedor, dos teléfonos.**
@@ -313,7 +306,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - **Demuestra:** dos cámaras dan el mismo ID a la misma persona.
 
 **9.4 ESAN, pasillo del Edificio D (zona grabada 3).**
-- Nueva capa del plano: una L de ~740 m² pegada a las fachadas norte y este del comedor.
+- Nueva capa del plano: una L de ~740 m² pegada a las fachadas norte y este del Edificio D.
 - cam06 mira la escalera hacia la plaza y cam07 el brazo este; no se solapan: de una a otra hay ~30 s caminando.
 - Pose ajustada con los videos: la misma persona en las dos cámaras pasa de 9.2 a 2.2 m de distancia; puntos dentro del pasillo del 73 al 85 %.
 - En vivo: referencias E0–E2 y F0–F2 reconocen el 98–100 % de los cuadros con 0.1 m de error.
@@ -340,7 +333,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 
 | Pieza | Antes | Ahora |
 |---|---|---|
-| Detector | 960 px | 1280 px en Videos (+14 % de personas, sobre todo las lejanas) |
+| Detector | 960 px | 1280 px en Videos (+16 % de personas, 264 frente a 228, sobre todo las lejanas) |
 | Re-ID: la más parecida en la otra cámara es la misma | 58 % (YOLO26s-ReID) | 78 % (OSNet-AIN) |
 | Tramos bien unidos entre cámaras | 31 % | 59 % |
 | Re-ID a 2 s / 10 s (misma cámara) | OSNet 92.4 / 80.0 % | OSNet + PersonViT 94.3 / 82.8 % (CLIP-ReID descartado: +0.5 punto y el doble de tiempo) |
@@ -352,8 +345,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - **Limitación honesta:** con un IDF1 de 40 %, el seguimiento dentro de la cámara sigue siendo el límite en lugares llenos.
 
 **9.7 Carga y estrés.**
-- **2 cámaras 1080p a 23 fps:** unos 16 cuadros/s por video (32 en total), alrededor del 70 % de los cuadros.
-- **El género es lo que más pesa:** 1.7 núcleos de CPU sin CLIP y 4.4 con él.
+- **2 cámaras 1080p a 23 fps:** unos 17 cuadros/s por video (34 en total), alrededor del 73 % de los cuadros.
 - **2 cámaras de 60 fps con mucha gente:** 7.7 cuadros/s por video.
 - **7 cámaras de 60 fps, sin el reloj del tiempo real:**
 
@@ -368,7 +360,9 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 ---
 
 ## 10. Ética y gestión
-- **Privacidad por diseño:** sin rostro, sin video guardado, seudónimos por sesión, vectores borrados al cerrar una identidad y género solo agregado con umbral de 5.
+- **Privacidad por diseño:** sin rostro ni género, sin video guardado, seudónimos por sesión, vectores del en vivo borrados a las 24 h sin ver a la persona y puntos crudos a los 90 días.
+- **Matriz legal (L1–L11, normas del Perú):** Ley 29733, D.S. 016-2024-JUS, Directiva 01-2020-JUS/DGTAIPD y Ley 31814. Prioridad alta: base legal y deber de informar, finalidad, vectores de Re-ID como posible dato biométrico y menores de edad (incumpliría si se despliega sin cambios).
+- **Sugerencias S1–S11:** aplicada S4 (sin inferencia de atributos); parciales S1, S2, S6, S8, S10 y S11; pendientes S3, S5, S7 y S9. Faltan opinión legal, contrato de encargo y solución para menores.
 - **Riesgos cubiertos:** menores de edad, re-identificación indirecta, retención de datos, transparencia, sesgo algorítmico y mal uso del sistema.
 - **Gestión:** Scrum por sprints con Gantt, actas, roles y matriz de riesgos.
 
@@ -391,7 +385,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 | Extra | Valor de locales | S/ 15 000 |
 
 - **Costo:** S/ 43 por cámara de tienda y S/ 46 por cámara de pantalla al mes, con margen del 57–77 %. Una computadora (S/ 255 al mes) atiende 10 cámaras.
-- **Capacidad:** se procesa de dos en dos cámaras (32 cuadros/s), así que diez pantallas se procesan en unas 5 horas de noche.
+- **Capacidad:** se procesa de dos en dos cámaras (34 cuadros/s), así que diez pantallas se procesan en unas 5 horas de noche.
 - **Crecimiento sin capital externo:**
   - para fines de 2027: 10 tiendas y 10 pantallas;
   - en 2027 entran unos S/ 51 mil;
@@ -402,7 +396,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 ## 12. Estructura del informe
 1. Resumen ejecutivo
 2. Introducción y objetivos
-3. Problema y contexto (variables, restricciones, análisis ético, social y ambiental)
+3. Problema y contexto (variables, restricciones, análisis técnico, legal, ético, social y ambiental)
 4. Marco teórico (9 antecedentes)
 5. Requerimientos y casos de uso
 6. Metodología (Partes I, II y III)
@@ -412,5 +406,6 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 10. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
 11. Validación y estrés
 12. Plan de negocio
-13. Referencias
-14. Anexo
+13. Conclusiones y recomendaciones
+14. Referencias
+15. Anexo

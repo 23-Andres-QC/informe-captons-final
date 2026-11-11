@@ -13,7 +13,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{url}
+\usepackage[hyphens]{url}
 \usepackage{tikz}
 \usepackage{float}
 \usepackage{booktabs}
@@ -35,13 +35,14 @@
 \setlist{itemsep=2pt,parsep=0pt,topsep=4pt}
 
 \usepackage{titlesec}
-\titleformat{\subsection}[hang]{\normalfont\normalsize\bfseries}{\rule[0.12em]{0.42em}{0.42em}}{0.7em}{}
+\titleformat{\subsection}[hang]{\normalfont\normalsize\bfseries}{\thesubsection}{0.7em}{}
 \titlespacing*{\subsection}{1em}{1.6ex plus .5ex minus .2ex}{0.6ex}
 \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
 \titleformat{\subsubsection}[hang]{\normalfont\normalsize\bfseries}{\thesubsubsection.}{0.5em}{}
 \titlespacing*{\subsubsection}{2.2em}{1.2ex plus .4ex}{0.4ex}
 
 \setlength{\parskip}{\baselineskip}
+\setlength{\emergencystretch}{3em}
 
 \usepackage[margin=2.5cm,headheight=15pt]{geometry}
 
@@ -170,7 +171,7 @@ visita el pasajero, cuánto tiempo permanece en cada una, qué rutas sigue
 entre el check-in y su puerta de embarque, y qué tan bien convierte cada
 local el flujo de personas que pasa frente a él en visitas reales. Esta
 situación se origina en que la infraestructura de videovigilancia del
-aeropuerto está compuesta por decenas de cámaras CCTV independientes,
+aeropuerto está compuesta por cámaras CCTV independientes,
 instaladas con fines de seguridad y no de analítica, lo que impide seguir
 a un mismo pasajero a través de varias cámaras sin recurrir a
 reconocimiento facial ni a ningún identificador biométrico. Esta
@@ -193,12 +194,12 @@ mapas de calor de aglomeración, rutas frecuentes y tasas de captación
 La solución propuesta se organiza en tres partes encadenadas: seguimiento
 local por cámara; procesamiento multicámara y mapeo 2D; y procesamiento
 histórico con generación de insights. El núcleo de visión utiliza
-YOLO26m para detectar personas, un seguidor local híbrido que combina
+YOLO26m~\cite{yolo26} para detectar personas, un seguidor local híbrido que combina
 movimiento, superposición, escala y apariencia corporal sin rostro, y el
 codificador de re-identificación YOLO26s-ReID con una galería global
 compartida entre cámaras. Para videos de cualquier origen, la sección
 Videos usa una variante más sensible del mismo modelo: detector a 1280
-píxeles en la GPU y re-identificación con OSNet-AIN y PersonViT, que
+píxeles en la GPU y re-identificación con OSNet-AIN~\cite{zhou2022osnet} y PersonViT~\cite{hu2024personvit}, que
 siguen a una persona entre varias cámaras grabadas a la vez. El sistema no estima el género ni otros atributos demográficos de las personas. Todo se despliega con un
 servicio de visión en Python, dos backends en Go, PostgreSQL/PostGIS y
 pgvector como bases de datos y un frontend en Vue.js, en contenedores
@@ -213,7 +214,7 @@ aeropuertos reales. Ninguno integra todas estas piezas en un solo pipeline
 desplegable bajo un marco ético adecuado al contexto regulatorio
 latinoamericano, y ese es el vacío que este trabajo busca cerrar.
 
-El sistema está desplegado en una computadora local con una GPU RTX~4060 y su
+El sistema está desplegado en una computadora local con una GPU RTX~4060 Laptop y su
 primera prueba de validación se realizó en el patio entre los Edificios A y B
 de la Universidad ESAN. Con tres cámaras fijas siguió a 16 personas, ubicó en el plano el
 93\,\% de las detecciones con un error de calibración mediano de 0.28 a
@@ -223,14 +224,16 @@ plano y guardó cada captura para analizarla en el tablero. Una segunda prueba
 en el comedor de ESAN, con dos teléfonos grabando el mismo espacio, dio el
 mismo identificador a cada persona en las dos cámaras. Una tercera zona, el
 pasillo exterior del Edificio D, se sumó al plano con su propio dibujo y sus
-cámaras, y la plataforma muestra ahora lo grabado zona por zona. En las
+cámaras; en su primera grabación, del 7 de noviembre, el sistema siguió a 86
+personas, 9 de ellas vistas por las dos cámaras, y la plataforma muestra ahora
+lo grabado zona por zona. En las
 grabaciones del 9 de noviembre, con mucha más gente, el sistema siguió a 149
 personas en el patio (41 vistas por las dos cámaras) y a 128 en el pasillo
 (20 en las dos), con cada video ubicado en el plano por las referencias del
-modelo en vivo (24 de 24 cuadros reconocidos, a 0.05--0.15~m entre sí) y las
-dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las pruebas de estrés
+modelo en vivo (24 de 24 cuadros reconocidos, a 0.05--0.15~m de la mediana) y las
+dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las pruebas de carga
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
-16 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
+17 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
 completas a 5 cuadros por segundo por cámara en 3 veces la duración del
 video. El informe cierra con el plan de negocio de AeroVision, que
 lleva la misma tecnología a la medición de captación de tiendas y de audiencia
@@ -250,9 +253,9 @@ mientras que la falta de visibilidad sobre el comportamiento real del
 pasajero impide responder preguntas comerciales elementales sobre su
 recorrido. El Aeropuerto
 Internacional Jorge Chávez, operado por Lima Airport Partners (LAP), no es
-la excepción: decenas de cámaras CCTV cubren la terminal, pero fueron
-instaladas con fines exclusivamente de vigilancia y no de analítica, y en
-su mayoría no comparten campos de visión entre sí.
+la excepción: la terminal cuenta con varias cámaras CCTV instaladas con
+fines de seguridad y no de analítica, muchas de ellas sin campos de visión
+compartidos.
 
 En consecuencia, la analítica tradicional permite saber, cámara por
 cámara, cuántas personas hay frente a cada lente, pero no responder
@@ -279,8 +282,8 @@ por franja horaria.
 
 Según la literatura revisada en la Sección~\ref{sec:related}, los
 sistemas de tracking multicámara sin biometría facial han alcanzado tasas
-de re-identificación correcta cercanas al 82\,\% y valores de MOTA
-superiores al 90\,\% en escenas de alta densidad peatonal. Esto sugiere
+de re-identificación correcta cercanas al 82\,\%~\cite{mendes2023} y valores de MOTA
+superiores al 90\,\%~\cite{yang2023} en escenas de alta densidad peatonal. Esto sugiere
 que este tipo de analítica puede ofrecer una precisión operativa útil sin
 recurrir a reconocimiento facial. Su adopción en el aeropuerto Jorge
 Chávez tendría además implicancias para la industria: una medición más
@@ -380,8 +383,8 @@ El Aeropuerto Internacional Jorge Chávez recibe diariamente un volumen
 alto de pasajeros que la infraestructura comercial de la terminal no
 siempre logra absorber de forma ordenada. El flujo operativo actual
 depende en gran medida de la observación manual del personal de
-seguridad y operaciones a través de un sistema CCTV compuesto por decenas
-de cámaras independientes. Este proceso exige la inspección visual
+seguridad y operaciones a través de un sistema CCTV compuesto por
+cámaras independientes. Este proceso exige la inspección visual
 continua de pantallas divididas para detectar aglomeraciones, sin ninguna
 agregación automática de la información a nivel de todo el aeropuerto.
 
@@ -421,9 +424,11 @@ y Law~\cite{wonglaw2023}.
 \begin{itemize}
     \item \textbf{Características del video:} resolución y tasa de
     cuadros variables según la cámara (en la literatura, entre 10 y
-    20~FPS~\cite{mendes2023,zhao2023}); el piloto utiliza tres cámaras
+    20~FPS~\cite{mendes2023,zhao2023}); la primera prueba usa tres cámaras
     con vistas solapadas de un mismo recinto, de $1280\times720$ a
-    15~FPS y aproximadamente dos minutos de duración cada una.
+    15~FPS y aproximadamente dos minutos de duración cada una, y las
+    siguientes usan teléfonos como cámaras (en la cuarta, video vertical
+    de 12 a 13.9~FPS).
     \item \textbf{Variables de detección y seguimiento local:} umbrales
     de confianza del detector, criterios de confirmación de nuevas
     identidades, tiempo máximo de pérdida de un track y condiciones para
@@ -456,7 +461,7 @@ y Law~\cite{wonglaw2023}.
 \subsubsection{Restricciones técnicas}
 \begin{itemize}
     \item \textbf{Cámaras sin campos de visión compartidos:} la ausencia
-    de solape entre la mayoría de cámaras impide asociar identidades por
+    de solape entre muchas de las cámaras impide asociar identidades por
     continuidad geométrica, por lo que se requiere re-identificación por
     apariencia con restricciones espacio-temporales~\cite{yang2023}.
     \item \textbf{Hardware:} el procesamiento simultáneo de varios
@@ -484,15 +489,15 @@ El sistema debe proteger la confidencialidad de las imágenes de los
 pasajeros, no procesar rasgos faciales~\cite{mendes2023,ryan2023}, excluir a
 los menores de edad del análisis individualizado, controlar el sesgo
 algorítmico~\cite{jin2024} e informar a los pasajeros mediante señalización
-visible, conforme a la Ley N.\textdegree~29733. El riesgo y la medida de cada
+visible, conforme a la Ley N.\textdegree~29733~\cite{ley29733}. El riesgo y la medida de cada
 una se detallan en el análisis ético.
 
 \subsubsection{Restricciones legales}
 \begin{itemize}
     \item \textbf{Protección de datos personales:} la Ley
-    N.\textdegree~29733 regula el uso y tratamiento de los datos
+    N.\textdegree~29733~\cite{ley29733} regula el uso y tratamiento de los datos
     derivados del video de vigilancia.
-    \item \textbf{Normativas internacionales:} el GDPR, aunque no es
+    \item \textbf{Normativas internacionales:} el GDPR~\cite{gdpr}, aunque no es
     obligatorio en el Perú, es un estándar recomendado para gestionar
     video en espacios públicos regulados.
     \item \textbf{Licencias de software:} los modelos, datasets y
@@ -505,10 +510,10 @@ una se detallan en el análisis ético.
     comerciales no aprobados.
 \end{itemize}
 
-\subsection{Análisis Técnico, Ético, Social y Ambiental}
+\subsection{Análisis Técnico, Legal, Ético, Social y Ambiental}
 
 Todo proyecto opera bajo restricciones internas y externas que
-condicionan su éxito. De acuerdo con el Project Management Institute, las
+condicionan su éxito. De acuerdo con el Project Management Institute~\cite{pmbok6}, las
 restricciones clásicas son alcance, tiempo, costo, calidad, recursos y
 riesgo, pero también deben considerarse las dimensiones éticas, legales,
 sociales y ambientales, especialmente al trabajar con video de espacios
@@ -534,13 +539,230 @@ datos propios, aunque los estudios revisados en la
 Sección~\ref{sec:related} reportan desempeños moderados a altos en
 escenas aeroportuarias comparables~\cite{zhou2026,ryan2023}.
 
+\subsubsection{Análisis legal: matriz de cumplimiento}
+\label{sec:analisis-legal}
+
+El equipo elaboró dos matrices de cumplimiento, una legal y una ética, que
+evalúan el sistema como si fuera a producción~\cite{matrices2026}. La legal lo
+contrasta solo con normas del Perú: la Ley N.\textdegree~29733~\cite{ley29733};
+su reglamento, aprobado por el D.S. N.\textdegree~016-2024-JUS y vigente desde
+el 30 de marzo de 2025~\cite{reglamento29733,recordinglaw}; la Directiva
+N.\textdegree~01-2020-JUS/DGTAIPD sobre videovigilancia~\cite{directiva-videovigilancia},
+y la Ley N.\textdegree~31814 de inteligencia artificial con su reglamento, el
+D.S. N.\textdegree~115-2025-PCM~\cite{cele-ia,cuatrecasas-ia}. Supone un
+despliegue hipotético en un aeropuerto con zonas de acceso público, donde el
+cliente es el operador o la aerolínea y AeroVision es el proveedor. Cada punto
+recibe un nivel: \textit{incumple} (el sistema hace hoy algo que la norma exige
+o prohíbe de otra forma), \textit{incumpliría si se despliega sin cambios} (el
+problema aparece al operar en el escenario real), \textit{brecha por verificar}
+(no hay evidencia de cumplimiento o la interpretación está abierta) o
+\textit{parcialmente mitigado} (hay una medida, pero con huecos); la prioridad
+depende del daño probable y de lo difícil que sea corregirlo después. Los
+niveles son provisionales y deben confirmarse con evidencia y con el texto
+oficial de cada norma; el análisis es de apoyo académico y no constituye
+asesoría legal. El Cuadro~\ref{tab:matriz-legal} resume los once puntos (L1 a
+L11) con el estado actual del prototipo, que en la retención y el género ya
+difiere del borrador de las matrices.
+
+\begin{table}[!htbp]
+\centering
+\caption{Matriz de cumplimiento legal de AeroVision (normas del Perú)}
+\label{tab:matriz-legal}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|L{0.04\textwidth}|L{0.16\textwidth}|L{0.15\textwidth}|L{0.13\textwidth}|L{0.11\textwidth}|L{0.24\textwidth}|}
+\hline
+\textbf{ID} & \textbf{Tema} & \textbf{Norma de referencia} & \textbf{Nivel} & \textbf{Prioridad} & \textbf{Estado en el prototipo} \\
+\hline
+L1 & Base legal, consentimiento y deber de informar & Ley 29733; D.S. 016-2024-JUS; Directiva 01-2020 & Parcialmente mitigado & Alta & Uso transparente decidido (carteles, hoja informativa y política pública); materiales y base legal sin documentar \\
+\hline
+L2 & Finalidad y propor\-cionalidad & Ley 29733; Directiva 01-2020 & Brecha por verificar & Alta & Uso comercial y no de seguridad; se guardan trayectorias seudónimas; usos prohibidos sin fijar por contrato \\
+\hline
+L3 & Vectores de Re-ID como dato biométrico & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Alta & Sin rostro ni recortes; vectores de apariencia hasta 24~h sin ver a la persona; sin opinión legal \\
+\hline
+L4 & Menores de edad & D.S. 016-2024-JUS & Incumpliría si se despliega sin cambios & Alta & Sin solución decidida; ningún mecanismo excluye a los niños \\
+\hline
+L5 & Vigilancia y biometría en tiempo real & Ley 31814; D.S. 115-2025-PCM & Brecha por verificar & Media & Modo en vivo en tiempo real; sistema sin clasificar bajo la ley de IA \\
+\hline
+L6 & Roles del cliente y de AeroVision; contrato & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Cliente titular y AeroVision encargado, sin contrato de encargo; proceso local, nubes solo cotizadas \\
+\hline
+L7 & Retención y supresión & Ley 29733 & Parcialmente mitigado & Media & Sin video ni recortes; vectores borrados a las 24~h; puntos a los 90 días; agregados sin límite \\
+\hline
+L8 & Seguridad de la información & D.S. 016-2024-JUS; Directiva de Seguridad (2013) & Brecha por verificar & Media & Roles en el backend, permiso temporal para exportar, bitácora y CSRF; sin plan de incidentes \\
+\hline
+L9 & Registro, derechos y gobernanza & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Sin procedimiento de derechos ni responsable designado \\
+\hline
+L10 & Personal del cliente y de las tiendas & Directiva 01-2020; Opinión Consultiva 045-2021 & Brecha por verificar & Media & Sin zonas de personal ni zonas excluidas en el plano \\
+\hline
+L11 & Inferencia de género & D.S. 016-2024-JUS & Parcialmente mitigado & Media & El género ya no se estima (S4); queda el panel ``Hombres y mujeres'' sin datos \\
+\hline
+\end{tabular}
+\end{table}
+
+Los cuatro puntos de prioridad alta son:
+
+\begin{itemize}
+    \item \textbf{Base legal y deber de informar (L1).} La ley y su reglamento
+    piden una base legal o el consentimiento libre, previo, expreso e informado
+    del titular, y la Directiva da por cumplido el deber de informar con carteles
+    y una hoja informativa~\cite{ley29733,reglamento29733,directiva-videovigilancia}.
+    El equipo adoptó el uso transparente (carteles, hoja informativa y política
+    pública), pero informar no sustituye a la base legal: falta elegirla por
+    escrito con asesoría y producir y probar esos materiales.
+
+    \item \textbf{Finalidad y proporcionalidad (L2).} Los datos deben recogerse
+    para una finalidad determinada y no ser excesivos~\cite{ley29733,directiva-videovigilancia}.
+    Reutilizar para analítica comercial las cámaras que el cliente instaló por
+    seguridad es un cambio de finalidad que debe declararse aparte; se propone
+    guardar solo lo que pide cada métrica y prohibir por contrato el uso para
+    seguridad o control laboral (S1 y S6).
+
+    \item \textbf{Vectores de Re-ID como dato biométrico (L3).} El reglamento
+    cuenta como sensibles los datos biométricos que identifican a una persona de
+    forma única, que exigen consentimiento expreso y medidas
+    reforzadas~\cite{reglamento29733,modelo-biometricos}. El sistema no usa el
+    rostro ni guarda recortes, pero sus vectores de apariencia reconocen a la
+    misma persona entre cámaras y, en el modo en vivo, se guardan en pgvector
+    hasta 24~horas después de verla; no debe darse por ``no aplica'' sin una
+    opinión legal escrita (S2).
+
+    \item \textbf{Menores de edad (L4).} Según fuentes que citan el reglamento,
+    tratar datos de menores de 14 años exige el consentimiento de quien ejerce la
+    patria potestad o tutela, y los adolescentes de 14 a 18 años pueden
+    consentir por sí mismos~\cite{reglamento29733,comexperu-menores}. En un aeropuerto circulan
+    niños, el sistema los sigue igual que a los adultos y la señalización no
+    resuelve el consentimiento de los padres, así que desplegar sin cambios
+    incumpliría; la solución sigue sin decidirse (S3 y salvaguarda~1).
+\end{itemize}
+
+Los puntos de prioridad media son:
+
+\begin{itemize}
+    \item \textbf{Ley de inteligencia artificial (L5).} Según el análisis del
+    CELE, la Ley N.\textdegree~31814 y su reglamento prohíben la vigilancia
+    masiva sin base legal y la identificación biométrica en tiempo real en
+    espacios públicos, salvo excepciones, y piden transparencia y supervisión
+    humana a los sistemas de riesgo alto~\cite{cele-ia,cuatrecasas-ia}. Una
+    prohibición no se corrige con carteles: falta clasificar el modo en vivo,
+    documentar por qué no identifica a nadie y hacer una evaluación de impacto
+    voluntaria (S2 y S10).
+
+    \item \textbf{Roles, contrato y seguridad (L6 y L8).} La ley distingue al
+    titular del banco de datos del encargado, que trata por cuenta de otro con
+    un contrato de encargo que fija seguridad y confidencialidad~\cite{ley29733};
+    ese contrato aún no existe. El prototipo corre en una computadora local con
+    GPU, así que el video no sale de la red, y las nubes (GCP, AWS, Azure y
+    otras) solo se cotizaron; si se usan, habrá que revisar el flujo
+    transfronterizo. El reglamento y la Directiva de Seguridad de la Información
+    de 2013 piden medidas técnicas y organizativas~\cite{reglamento29733,matrices2026}:
+    la autorización por rol se aplica en el backend, exportar exige un permiso
+    temporal y hay bitácora y protección CSRF, pero faltan una lista de
+    comprobación previa a producción y un plan de incidentes, pues según un
+    resumen del reglamento las brechas se notifican en 48~horas~\cite{recordinglaw}
+    (S11).
+
+    \item \textbf{Retención y derechos (L7 y L9).} Los datos se conservan solo
+    mientras sean necesarios, el banco de datos de videovigilancia se inscribe
+    en el Registro Nacional de Protección de Datos Personales y deben atenderse
+    los derechos de acceso, rectificación, cancelación y
+    oposición~\cite{ley29733,reglamento29733,recordinglaw}. Hoy no se graba
+    video ni se guardan recortes, los vectores del modo en vivo se borran tras
+    24~horas sin ver a la persona o al pulsar ``Olvidar a todos'' y los puntos
+    de trayectoria a los 90~días, una vez agregado su tráfico; los conteos y
+    promedios se conservan sin límite. Faltan justificar por escrito los
+    90~días (S8) y un procedimiento de derechos con responsable designado.
+
+    \item \textbf{Trabajadores (L10).} La Directiva regula la videovigilancia
+    con fines de control laboral: la finalidad se informa al trabajador y toda
+    finalidad adicional exige su
+    consentimiento~\cite{directiva-videovigilancia,opinion045}. Las cámaras
+    captan al personal y el análisis por tienda podría inferir su desempeño; el
+    plano aún no marca zonas de personal ni zonas excluidas (S5).
+
+    \item \textbf{Género (L11).} Resúmenes del reglamento incluyen la identidad
+    de género entre los datos sensibles~\cite{reglamento29733,recordinglaw}. La
+    estimación de género se retiró del procesamiento y de los reportes (S4);
+    quedan el panel ``Hombres y mujeres'' de Insights, que muestra todo como
+    ``sin determinar'', y el tamaño mínimo de grupo de Configuración (5 por
+    defecto), que solo se aplica a esas categorías.
+\end{itemize}
+
+Las matrices proponen además once cambios al modelo y al sistema (S1 a S11)
+que reducen los puntos legales y los riesgos éticos (E1 a E11, descritos en el
+análisis ético); son recomendaciones de ingeniería, no sustituyen la opinión
+legal ni garantizan el cumplimiento. El Cuadro~\ref{tab:sugerencias-diseno} los
+resume con su estado en el prototipo.
+
+\begin{table}[!htbp]
+\centering
+\caption{Sugerencias de diseño para reducir los riesgos legales y éticos}
+\label{tab:sugerencias-diseno}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|L{0.04\textwidth}|L{0.15\textwidth}|L{0.32\textwidth}|L{0.09\textwidth}|L{0.24\textwidth}|}
+\hline
+\textbf{ID} & \textbf{Sugerencia} & \textbf{Qué cambiar} & \textbf{Reduce} & \textbf{Estado en el prototipo} \\
+\hline
+S1 & Minimización por diseño & Procesar el video y descartarlo, sin recortes; guardar solo lo que pide cada métrica (conteos por zona en lugar de trayectorias cuando baste); inventario de datos por métrica & L2, L3, L7, E1, E2, E6 & Parcial: sin video ni recortes y sin rostro; se guardan trayectorias y falta el inventario \\
+\hline
+S2 & Re-ID efímero & Vectores solo en memoria durante la sesión o con un plazo de horas y borrado verificable; sin comparar entre sesiones ni días; IDs aleatorios; cifrar lo que persista & L3, L5, L7, E8 & Parcial: IDs seudónimos; vectores en pgvector hasta 24~h sin ver a la persona o hasta ``Olvidar a todos'' \\
+\hline
+S3 & Menores y personas vulnerables & Privacidad por diseño para todos en lugar de detectar niños: solo agregados por zona y hora, sin Re-ID más allá de la sesión; evitar un clasificador de edad, que sería otra inferencia de atributos; si se excluye a menores, descartar el track sin guardarlo ni contarlo & L4, E3, E4 & Pendiente: sin solución decidida \\
+\hline
+S4 & Eliminar la inferencia de atributos & Retirar el clasificador de género y toda estimación de edad o emoción, con sus columnas, endpoints y reportes; borrar los datos de género y agregar una prueba que impida reintroducirlos & L11, E5 & Aplicada: el género no se calcula ni se guarda; quedan el panel ``Hombres y mujeres'' y el clasificador desactivado en el código \\
+\hline
+S5 & Zonas de exclusión y de personal & Polígonos de exclusión en el plano (baños, lactancia, oración, controles migratorios, seguridad y personal) enmascarados antes del detector; revisión previa de cada sitio & L10, E2, E7, E11 & Pendiente \\
+\hline
+S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, L11, E6, E8 & Parcial: el tamaño mínimo de grupo (5) solo rige para el género; exportar exige permiso temporal \\
+\hline
+S7 & Empareja\-miento ticket-persona agregado & Emparejar por zona y ventana de tiempo, descartar las parejas de baja confianza, no guardar el vínculo individual y mostrar la confianza & L7, E6, E8, E9 & Pendiente: el emparejamiento es por persona y ya guarda su confianza \\
+\hline
+S8 & Retención verificable & Justificar el plazo por escrito, borrar las trayectorias una vez agregadas y registrar cada borrado, con migraciones y pruebas & L7, L9 & Parcial: puntos borrados a los 90 días con su fecha de borrado; falta justificar el plazo \\
+\hline
+S9 & Evaluación de sesgos y límites & Probar detector y Re-ID por subgrupo y condición (uniformes, maletas, sillas de ruedas, niños, ropa religiosa, poca luz) con una muestra distinta de ESAN; informe de límites & E3, E9 & Pendiente: validación global con videos etiquetados, sin desglose por subgrupo \\
+\hline
+S10 & Transparencia técnica y supervisión humana & Etiquetas REAL/SIMULADO, intervalos de confianza, aviso de que el simulador no es causal, versión del modelo y umbrales en cada reporte, revisión humana antes de decidir y evaluación de impacto voluntaria & L5, E9, E10 & Parcial: etiquetas REAL/SIMULADO y banda del 80\,\% en el pronóstico \\
+\hline
+S11 & Seguridad y control de acceso & Roles verificados en el backend, sin claves de demostración, sin exponer vectores ni video por API, cifrado en reposo y en tránsito, y alertas si alguien intenta seguir a una persona o cruzar datos con tickets & L8, E6, E8 & Parcial: roles en el backend, permiso temporal para exportar, bitácora y CSRF; el video no sale de la red local \\
+\hline
+\end{tabular}
+\end{table}
+
+Se sugiere aplicar primero las que cierran puntos de prioridad alta y cuestan
+menos (S3 y S4, luego S2, S1 y S5), después S6 a S8 y al final S9 a S11, que
+dependen de pruebas y del contrato con el cliente. Quedan pendientes estas
+decisiones y evidencias:
+
+\begin{itemize}
+    \item Entregar al cliente el inventario de lo que guarda cada circuito
+    (video, trayectorias, vectores y agregados), ya conocido en lo técnico (L7).
+    \item Decidir la solución para menores (S3).
+    \item Cerrar el retiro del género (panel, clasificador desactivado y
+    tabla de conteos por género) y confirmar que nada estima edad (S4).
+    \item Definir el alcance del despliegue: campus de ESAN o espacio abierto al
+    público.
+    \item Definir los roles del cliente y de AeroVision y redactar el contrato
+    de encargo (L6).
+    \item Pedir una opinión legal escrita sobre los vectores de Re-ID (L3) y la
+    clasificación bajo la Ley N.\textdegree~31814 (L5).
+    \item Si se usa la nube, confirmar dónde se alojan los datos; hoy todo corre
+    en local.
+    \item Producir y probar los carteles, la hoja informativa, la política
+    pública y el canal de reclamos (L1).
+    \item Documentar la base legal elegida (L1) y el procedimiento de ejercicio
+    de derechos (L9).
+\end{itemize}
+
+\FloatBarrier
 \subsubsection{Análisis ético}
 
 El uso de video CCTV para analítica con inteligencia artificial implica
 consideraciones éticas esenciales. Las imágenes de pasajeros son datos
 personales y requieren anonimización, control de acceso y retención
-limitada (en la operación no se graba el video; solo los videos procesados del piloto se conservan como evidencia de la validación), conforme a la Ley N.\textdegree~29733 y a lineamientos
-internacionales como el GDPR. Cabe precisar que el \texttt{global\_id} es
+limitada (en la operación no se graba el video; solo los videos procesados del piloto se conservan como evidencia de la validación), conforme a la Ley N.\textdegree~29733~\cite{ley29733} y a lineamientos
+internacionales como el GDPR~\cite{gdpr}. Cabe precisar que el \texttt{global\_id} es
 un seudónimo técnico y no un dato anónimo en sentido estricto: una
 trayectoria seudónima sigue siendo información sobre una persona y debe
 tratarse con las mismas garantías.
@@ -564,10 +786,12 @@ proyecto establece seis salvaguardas:
     \item \textbf{1. Menores de edad} \\
     \textit{Riesgo:} el sistema podría asignar un identificador de
     seguimiento a un menor sin consentimiento válido. \\
-    \textit{Solución:} un clasificador de edad aproximada excluirá a los
-    menores del análisis comercial individualizado; sus datos solo se
-    conservarán en conteos agregados sin identificador. Este componente
-    está previsto y no forma parte del prototipo actual.
+    \textit{Solución:} pendiente; no hay una solución decidida (punto L4 de la
+    matriz legal, Cuadro~\ref{tab:matriz-legal}). Hay dos opciones: un
+    clasificador de edad aproximada que excluya a los menores del análisis
+    individualizado, o la privacidad por diseño para todos (solo agregados, sin
+    Re-ID más allá de la sesión), que recomienda la sugerencia S3 porque el
+    clasificador sería en sí una inferencia de atributos.
 
     \item \textbf{2. Re-identificación indirecta} \\
     \textit{Riesgo:} la combinación de trayectoria, hora y zona podría
@@ -595,7 +819,8 @@ proyecto establece seis salvaguardas:
     \textit{Riesgo:} el pasajero transita sin saber que la terminal
     cuenta con analítica de video. \\
     \textit{Solución:} señalización visible sobre el uso de analítica de
-    video, conforme a la Ley N.\textdegree~29733.
+    video, conforme a la Ley N.\textdegree~29733~\cite{ley29733} y a la Directiva
+    de videovigilancia~\cite{directiva-videovigilancia} (punto L1 de la matriz legal).
 
     \item \textbf{5. Sesgo algorítmico} \\
     \textit{Riesgo:} el modelo puede ser menos preciso en ciertos grupos
@@ -615,14 +840,14 @@ proyecto establece seis salvaguardas:
 \end{itemize}
 
 Las salvaguardas anteriores cubren lo que el sistema hace con los datos. Además,
-se elaboró una matriz de riesgos éticos que evalúa qué podría ser un
-inconveniente para el cliente según el lugar donde se use AeroVision, aunque no
-sea ilegal. Se evaluó como si el sistema fuera a producción y toma como marco la
-minimización, la proporcionalidad, la transparencia, la equidad, la no
-maleficencia y la rendición de cuentas. El Cuadro~\ref{tab:matriz-etica} resume
-los once riesgos (E1 a E11) con su severidad, y a continuación se explican los
-más críticos. Los niveles son provisionales y deben confirmarse con evidencia;
-el análisis es de apoyo académico y no constituye asesoría legal.
+la matriz ética~\cite{matrices2026} evalúa qué podría ser un inconveniente para
+el cliente según el lugar donde se use AeroVision, aunque no sea ilegal, y toma
+como marco la minimización, la proporcionalidad, la transparencia, la equidad,
+la no maleficencia y la rendición de cuentas. El Cuadro~\ref{tab:matriz-etica}
+resume los once riesgos (E1 a E11) con su severidad, y a continuación se
+explican los más críticos; como en la matriz legal, los niveles son
+provisionales y las mitigaciones remiten a las sugerencias del
+Cuadro~\ref{tab:sugerencias-diseno}.
 
 \begin{table}[H]
 \centering
@@ -630,7 +855,7 @@ el análisis es de apoyo académico y no constituye asesoría legal.
 \label{tab:matriz-etica}
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.05\textwidth}|L{0.23\textwidth}|L{0.20\textwidth}|L{0.09\textwidth}|L{0.31\textwidth}|}
+\begin{tabular}{|L{0.05\textwidth}|L{0.23\textwidth}|L{0.20\textwidth}|L{0.09\textwidth}|L{0.28\textwidth}|}
 \hline
 \textbf{ID} & \textbf{Riesgo} & \textbf{Quién se afecta} & \textbf{Severidad} & \textbf{Mitigación principal} \\
 \hline
@@ -648,7 +873,7 @@ E6 & Uso secundario de los datos & Pasajeros y cliente & Alta & Política de uso
 \hline
 E7 & Trabajadores monitoreados & Personal & Media & Excluir zonas de personal; sin trayectorias de trabajadores \\
 \hline
-E8 & Acceso interno y reidentificación & Pasajeros & Media & Mínimo privilegio, auditoría y supresión de conteos pequeños \\
+E8 & Acceso interno y re-identificación & Pasajeros & Media & Mínimo privilegio, auditoría y supresión de conteos pequeños \\
 \hline
 E9 & Sobreinterpretación y datos simulados & Cliente & Media & Etiquetas REAL/SIMULADO e intervalos de confianza \\
 \hline
@@ -680,10 +905,10 @@ E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibida
     \item \textbf{Menores y personas vulnerables (E4).} Es el riesgo más difícil
     de defender ante el público y el de mayor daño reputacional. Con el
     seguimiento por torso no hay un mecanismo que excluya a los niños, y la
-    señalización no resuelve el consentimiento de los padres. La exclusión por
-    un clasificador de edad aproximada sigue prevista y no forma parte del
-    prototipo actual; antes de un despliegue falta medir qué fracción de los
-    seguimientos corresponde a niños.
+    señalización no resuelve el consentimiento de los padres. Falta decidir
+    entre un clasificador de edad y la privacidad por diseño para todos (S3,
+    salvaguarda~1 y punto L4); en ambos casos, antes de un despliegue hay que
+    medir qué fracción de los seguimientos corresponde a niños.
 
     \item \textbf{Inferencia de atributos (E5).} Inferir género por apariencia produce clasificaciones binarias y estereotipadas que además pueden ser incorrectas, y las emociones son sensibles y poco fiables. Por esa razón el equipo eliminó del sistema la estimación de género, tanto del procesamiento como de los reportes, y se recomienda publicar el compromiso de no inferir género, edad ni emociones con fines comerciales.
 
@@ -717,9 +942,9 @@ E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibida
 
 \subsubsection{Análisis social}
 
-La congestión comercial mal gestionada afecta la experiencia de millones
-de pasajeros que transitan cada año por el aeropuerto Jorge Chávez,
-principal puerta de entrada aérea del Perú. Las herramientas de
+La congestión comercial mal gestionada afecta la experiencia de los
+pasajeros que transitan por el aeropuerto Jorge Chávez, principal puerta
+de entrada aérea del Perú. Las herramientas de
 analítica basadas en visión computacional pueden reducir los tiempos de
 espera percibidos, mejorar la distribución del flujo comercial y, en
 consecuencia, mejorar la experiencia del viaje.
@@ -729,8 +954,8 @@ de seguridad y operaciones de LAP, especialmente en horas pico, y
 permitir redistribuir recursos hacia tareas de mayor valor, en beneficio
 tanto de la operación como de los locales comerciales. Su disponibilidad
 también puede sentar un precedente para otros aeropuertos
-latinoamericanos, cuyas infraestructuras de videovigilancia permanecen
-hoy subutilizadas para fines analíticos.
+latinoamericanos que cuenten con videovigilancia instalada solo con fines
+de seguridad.
 
 \subsubsection{Análisis ambiental}
 
@@ -747,7 +972,7 @@ ejecución del codificador de re-identificación en GPU solo sobre vistas
 muestreadas y una arquitectura en contenedores que permite escalar el
 cómputo según la demanda real, evitando el sobreaprovisionamiento
 constante. En las pruebas de estrés (Sección~\ref{sec:pruebas}), la GPU del
-equipo de despliegue consumió entre 47 y 61~W procesando de dos a siete
+equipo de despliegue consumió entre 36 y 61~W procesando de dos a siete
 cámaras a la vez, y el plan de negocio prevé procesar por lotes solo las horas
 necesarias, a 5 cuadros por segundo, en lugar de mantener el modelo encendido
 todo el día.
@@ -783,7 +1008,7 @@ unificado y tres despliegues evaluados sobre CCTV de aeropuertos o
 entornos comerciales reales, que constituyen el precedente más cercano al
 dominio de este trabajo.
 
-\subsection{Antecedente 1: AI-Powered Service Robots for Smart Airport Operations~\cite{giannopoulou2026}}
+\subsection{\texorpdfstring{Antecedente 1: AI-Powered Service Robots for Smart Airport Operations~\cite{giannopoulou2026}}{Antecedente 1: AI-Powered Service Robots for Smart Airport Operations}}
 
 Giannopoulou, Demestichas, Katrakazas, Saliverou y Papagiannopoulos
 publicaron en enero de 2026, en \textit{Sensors}, un ecosistema
@@ -830,8 +1055,8 @@ Agreement No. 101095871) y desplegado sobre una red 5G privada.
 \end{itemize}
 
 Este antecedente es fundacional para la elección del detector. Confirma
-que un pipeline de detección y seguimiento relativamente ligero basta
-para sostener monitoreo continuo a escala de terminal, lo que respalda el
+que un pipeline de detección y seguimiento relativamente ligero
+(Figura~\ref{fig:ant1}) basta para sostener monitoreo continuo a escala de terminal, lo que respalda el
 uso de un detector de la familia YOLO (YOLO26m) y de un seguidor local
 liviano, dejando la carga computacional más pesada para la
 re-identificación multicámara. Su fiabilidad y baja latencia se derivan
@@ -848,7 +1073,7 @@ anonimización física que ofrece el sensor térmico.
 \label{fig:ant1}
 \end{figure}
 
-\subsection{Antecedente 2: Video-Based Pedestrian Grouping Model Considering Long-Span Space~\cite{zhao2023}}
+\subsection{\texorpdfstring{Antecedente 2: Video-Based Pedestrian Grouping Model Considering Long-Span Space~\cite{zhao2023}}{Antecedente 2: Video-Based Pedestrian Grouping Model Considering Long-Span Space}}
 
 Zhao, Wang, Jia, Li, Dong y Ma publicaron en 2023, en el \textit{Journal
 of Management Science and Engineering}, un modelo de agrupamiento de
@@ -892,7 +1117,8 @@ Hongqiao.
 
 De este antecedente se desprende que la similitud espacial y temporal
 entre trayectorias, sin señales biométricas, basta para reconstruir
-estructura significativa a nivel de grupo y de multitud. Esta idea
+estructura significativa a nivel de grupo y de multitud
+(Figura~\ref{fig:ant2}). Esta idea
 sustenta, en el sistema propuesto, el uso de Kernel Density Estimation
 para hotspots y de PrefixSpan para rutas frecuentes, ambos calculados
 solo a partir de coordenadas y marcas de tiempo asociadas a un
@@ -907,7 +1133,7 @@ y la tasa de captación por tienda.
 \label{fig:ant2}
 \end{figure}
 
-\subsection{Antecedente 3: Multi-Camera Person Re-Identification Based on Trajectory Data~\cite{mendes2023}}
+\subsection{\texorpdfstring{Antecedente 3: Multi-Camera Person Re-Identification Based on Trajectory Data~\cite{mendes2023}}{Antecedente 3: Multi-Camera Person Re-Identification Based on Trajectory Data}}
 
 Mendes, Correia, Jorge, Brandão, Arriaga y Nunes publicaron en 2023, en
 \textit{Applied Sciences}, un sistema de re-identificación multicámara
@@ -949,7 +1175,7 @@ evaluado en un entorno comercial real durante siete días consecutivos.
 Este es el precedente técnico más cercano al sistema propuesto, ya que
 valida la combinación de un detector YOLO, un seguimiento local por
 cámara y una re-identificación basada en apariencia y restricciones
-espacio-temporales, que AeroVision implementa con el codificador
+espacio-temporales (Figura~\ref{fig:ant3}), que AeroVision implementa con el codificador
 YOLO26s-ReID y una galería global compartida. Confirma además que el
 enfoque es viable en un despliegue comercial real y respalda la decisión
 de no procesar rasgos faciales. Su margen de error cercano al 18\,\%
@@ -966,7 +1192,7 @@ fusión deja de ser coherente. La escala del experimento (cuatro cámaras,
 \label{fig:ant3}
 \end{figure}
 
-\subsection{Antecedente 4: Pedestrian Attribute Recognition: MSP60K + LLM-PAR~\cite{jin2024}}
+\subsection{\texorpdfstring{Antecedente 4: Pedestrian Attribute Recognition: MSP60K + LLM-PAR~\cite{jin2024}}{Antecedente 4: Pedestrian Attribute Recognition: MSP60K + LLM-PAR}}
 
 Jin, Wang, Zhu, Wang y Li publicaron en agosto de 2024, en la conferencia
 AAAI, un dataset y un framework para el reconocimiento de atributos
@@ -1001,7 +1227,7 @@ peatonales en múltiples dominios.
     puntos que los autores documentan explícitamente.
 \end{itemize}
 
-Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial. AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: cualquier módulo basado en apariencia deberá validarse con imágenes del aeropuerto de Lima antes de asumir un desempeño equivalente.
+Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial (Figura~\ref{fig:ant4}). AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: cualquier módulo basado en apariencia deberá validarse con imágenes del aeropuerto de Lima antes de asumir un desempeño equivalente.
 
 \begin{figure}[H]
 \centering
@@ -1010,7 +1236,7 @@ Para el sistema propuesto, este antecedente muestra que atributos generales pued
 \label{fig:ant4}
 \end{figure}
 
-\subsection{Antecedente 5: A Unified Multi-view Multi-person Tracking Framework~\cite{yang2023}}
+\subsection{\texorpdfstring{Antecedente 5: A Unified Multi-view Multi-person Tracking Framework~\cite{yang2023}}{Antecedente 5: A Unified Multi-view Multi-person Tracking Framework}}
 
 Yang et al., de Fujitsu Research (Japón), publicaron en 2023 un framework
 unificado de tracking multivista y multipersona para generar trayectorias
@@ -1046,7 +1272,8 @@ globales en 3D o en vista superior a partir de varias cámaras.
 Este antecedente valida la etapa de mapeo sobre un plano común: la
 verificación geométrica entre vistas complementa la asociación por
 apariencia al unificar detecciones de varias cámaras. Sus altos valores
-de MOTA e IDF1 en escenas con más de 300 personas respaldan la
+de MOTA e IDF1 en escenas con más de 300 personas
+(Figura~\ref{fig:ant5}) respaldan la
 factibilidad de un seguimiento multicámara de calidad en horas pico. No
 obstante, WILDTRACK y MMPTRACK son espacios relativamente controlados,
 distintos de una terminal con mobiliario, equipaje y señalética, por lo
@@ -1061,7 +1288,7 @@ calibrado, cuando las homografías de las cámaras están validadas.
 \label{fig:ant5}
 \end{figure}
 
-\subsection{Antecedente 6: Event Detection in Videos: A Framework for the Development of New Methods~\cite{zakharova2026}}
+\subsection{\texorpdfstring{Antecedente 6: Event Detection in Videos: A Framework for the Development of New Methods~\cite{zakharova2026}}{Antecedente 6: Event Detection in Videos: A Framework for the Development of New Methods}}
 
 Zakharova, Bouwmans, Cioppa y colaboradores, de La Rochelle University y
 otras instituciones, publicaron en arXiv, en julio de 2026, un framework
@@ -1096,7 +1323,7 @@ general para definir y evaluar eventos detectados en video.
 \end{itemize}
 
 El motor de eventos del sistema propuesto (EXPOSURE, ENTER, DWELL, EXIT,
-RETURN y QUEUE) se beneficia de este criterio: conviene evaluar cada tipo
+RETURN y QUEUE) se beneficia de este criterio (Figura~\ref{fig:ant6}): conviene evaluar cada tipo
 de evento en distintas granularidades temporales en lugar de reportar una
 sola métrica agregada, especialmente ante la iluminación variable y los
 objetos pequeños propios de una terminal. Por su publicación reciente,
@@ -1110,7 +1337,7 @@ trabajo es una decisión metodológica temprana.
 \label{fig:ant6}
 \end{figure}
 
-\subsection{Antecedente 7: Beyond Social Distancing: Application of Real-World Coordinates in a Multi-Camera System with Privacy Protection~\cite{ryan2023}}
+\subsection{\texorpdfstring{Antecedente 7: Beyond Social Distancing: Application of Real-World Coordinates in a Multi-Camera System with Privacy Protection~\cite{ryan2023}}{Antecedente 7: Beyond Social Distancing: Application of Real-World Coordinates in a Multi-Camera System with Privacy Protection}}
 
 Ryan y su equipo, de Stanford University, publicaron en 2023 un sistema
 multicámara evaluado en un aeropuerto operativo de Dublín.
@@ -1141,7 +1368,8 @@ multicámara evaluado en un aeropuerto operativo de Dublín.
     validación cualitativa, sin métricas cuantitativas de MOTA o IDF1.
 \end{itemize}
 
-Este antecedente fue evaluado en un aeropuerto real, por lo que confirma
+Este antecedente fue evaluado en un aeropuerto real
+(Figura~\ref{fig:ant7}), por lo que confirma
 que la combinación de detección, seguimiento local, proyección y
 re-identificación sin biometría es viable en este dominio. Respalda la
 proyección de las posiciones sobre un plano 2D común del aeropuerto Jorge
@@ -1156,7 +1384,7 @@ reportando precisión, recall e IDF1 con datos etiquetados.
 \label{fig:ant7}
 \end{figure}
 
-\subsection{Antecedente 8: Fusion of CCTV Video and Spatial Information for Automated Crowd Congestion Monitoring in Public Urban Spaces~\cite{wonglaw2023}}
+\subsection{\texorpdfstring{Antecedente 8: Fusion of CCTV Video and Spatial Information for Automated Crowd Congestion Monitoring in Public Urban Spaces~\cite{wonglaw2023}}{Antecedente 8: Fusion of CCTV Video and Spatial Information for Automated Crowd Congestion Monitoring in Public Urban Spaces}}
 
 Wong y Law, también de Stanford University, publicaron en 2023 un sistema
 que fusiona video CCTV con información espacial del entorno.
@@ -1189,7 +1417,8 @@ que fusiona video CCTV con información espacial del entorno.
 
 Este antecedente aporta directamente al módulo de flujo entre zonas del
 sistema propuesto. Representar el espacio como un grafo de zonas
-conectadas permite generar mapas de calor y métricas de flujo, y admite
+conectadas permite generar mapas de calor y métricas de flujo
+(Figura~\ref{fig:ant8}), y admite
 la predicción de congestión, que queda como trabajo futuro, ya que el
 sistema propuesto reporta por ahora la congestión observada.
 
@@ -1200,7 +1429,7 @@ sistema propuesto reporta por ahora la congestión observada.
 \label{fig:ant8}
 \end{figure}
 
-\subsection{Antecedente 9: Real-Time Pedestrian Detection and Multi-Object Tracking in Complex Airport Scenes via Frequency-Aware and Mamba-Enhanced Representation~\cite{zhou2026}}
+\subsection{\texorpdfstring{Antecedente 9: Real-Time Pedestrian Detection and Multi-Object Tracking in Complex Airport Scenes via Frequency-Aware and Mamba-Enhanced Representation~\cite{zhou2026}}{Antecedente 9: Real-Time Pedestrian Detection and Multi-Object Tracking in Complex Airport Scenes via Frequency-Aware and Mamba-Enhanced Representation}}
 
 Zhou y su equipo, en colaboración entre Chongqing y Nanjing Airlines
 (China), publicaron en 2026 un tracker especializado para escenas
@@ -1235,7 +1464,8 @@ aeroportuarias.
 \end{itemize}
 
 Este es el antecedente más cercano al dominio de aplicación, pues fue
-evaluado en escenas aeroportuarias complejas. Muestra que los trackers
+evaluado en escenas aeroportuarias complejas (Figura~\ref{fig:ant9}).
+Muestra que los trackers
 genéricos, incluido ByteTrack, ofrecen un desempeño sólido pero
 mejorable en este dominio. La diferencia de 7.3 puntos de MOTA sugiere
 que migrar a una arquitectura especializada no sería decisivo a corto
@@ -1258,12 +1488,12 @@ El Cuadro~\ref{tab:antecedentes} resume las métricas principales, el
 dominio de evaluación y el aporte de cada antecedente al sistema
 propuesto.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \centering
 \caption{Resumen comparativo de los nueve antecedentes revisados.}
 \label{tab:antecedentes}
 \footnotesize
-\begin{tabular}{|L{0.18\textwidth}|L{0.17\textwidth}|L{0.17\textwidth}|L{0.38\textwidth}|}
+\begin{tabular}{|L{0.18\textwidth}|L{0.17\textwidth}|L{0.17\textwidth}|L{0.36\textwidth}|}
 \hline
 \textbf{Antecedente} & \textbf{Dominio de evaluación} & \textbf{Métrica clave} & \textbf{Aporte al sistema propuesto} \\
 \hline
@@ -1273,7 +1503,7 @@ Zhao et al.~\cite{zhao2023} & Aeropuerto real (Shanghai) & Detección de grupo e
 \hline
 Mendes et al.~\cite{mendes2023} & Entorno comercial real & 82\,\% de re-ID correcta & Precedente directo de la re-identificación multicámara sin rostro \\
 \hline
-Jin et al.~\cite{jin2024} & 8 dominios (MSP60K) & F1 86.94 / 72.05 entre dominios & Habilita inferencia demográfica sin biometría \\
+Jin et al.~\cite{jin2024} & 8 dominios (MSP60K) & F1 86.94 / 72.05 entre dominios & Muestra la caída entre dominios; AeroVision no infiere atributos \\
 \hline
 Yang et al.~\cite{yang2023} & WILDTRACK / MMPTRACK & MOTA 95.2\,\% & Valida la verificación geométrica sobre un plano común \\
 \hline
@@ -1344,7 +1574,7 @@ negocio y el administrador a los roles superadmin y seguridad
 muestra un error; tras varios intentos fallidos, bloquea el acceso
 temporalmente.
 
-\textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada.
+\textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada (Figura~\ref{fig:cu01}).
 
 \begin{figure}[H]
 \centering
@@ -1376,7 +1606,7 @@ trayectorias disponibles.
 muestra el aviso ``sin observaciones''.
 
 \textbf{Postcondiciones:} Estado actual del aeropuerto visible con
-identificadores seudónimos.
+identificadores seudónimos (Figura~\ref{fig:cu02}).
 
 \begin{figure}[H]
 \centering
@@ -1405,7 +1635,7 @@ identificadores seudónimos.
 \textbf{Flujos alternativos:} Si el filtro es inválido, el sistema lo
 rechaza con un mensaje.
 
-\textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas.
+\textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas (Figura~\ref{fig:cu03}).
 
 \begin{figure}[H]
 \centering
@@ -1435,7 +1665,7 @@ rechaza con un mensaje.
 geometría es inválida, el sistema rechaza el cambio. Para quitar una zona,
 el usuario pulsa ``Eliminar zona''.
 
-\textbf{Postcondiciones:} Zona disponible en el mapa y en los insights.
+\textbf{Postcondiciones:} Zona disponible en el mapa y en los insights (Figura~\ref{fig:cu04}).
 
 \begin{figure}[H]
 \centering
@@ -1443,6 +1673,7 @@ el usuario pulsa ``Eliminar zona''.
 \caption{CU-04: Configurar zonas del mapa}
 \label{fig:cu04}
 \end{figure}
+
 \textbf{CU-05: Configurar cámaras y cobertura}
 
 \textbf{Actor principal:} Usuario administrador \\
@@ -1464,7 +1695,7 @@ el usuario pulsa ``Eliminar zona''.
 eliminar. Volver a publicar el Build no reemplaza una pose ajustada a mano.
 
 \textbf{Postcondiciones:} Cámara registrada en el plano con su posición y
-dirección.
+dirección (Figura~\ref{fig:cu05}).
 
 \begin{figure}[H]
 \centering
@@ -1492,7 +1723,7 @@ dirección.
 \textbf{Flujos alternativos:} Si el modelo no está procesando, se ve el
 video directo del teléfono.
 
-\textbf{Postcondiciones:} El teléfono quitado deja de enviar video.
+\textbf{Postcondiciones:} El teléfono quitado deja de enviar video (Figura~\ref{fig:cu06}).
 
 \begin{figure}[H]
 \centering
@@ -1520,7 +1751,7 @@ video directo del teléfono.
 \textbf{Flujos alternativos:} Si el periodo no tiene datos, el sistema
 muestra el mapa vacío con un aviso.
 
-\textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas.
+\textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas (Figura~\ref{fig:cu07}).
 
 \begin{figure}[H]
 \centering
@@ -1549,7 +1780,7 @@ muestra el mapa vacío con un aviso.
 en la línea de tiempo de la sesión; el tablero muestra solo esos rangos y
 compara sus indicadores con la sesión completa.
 
-\textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales.
+\textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales (Figura~\ref{fig:cu08}).
 
 \begin{figure}[H]
 \centering
@@ -1557,6 +1788,7 @@ compara sus indicadores con la sesión completa.
 \caption{CU-08: Consultar insights por zona}
 \label{fig:cu08}
 \end{figure}
+
 \textbf{CU-09: Analizar flujos entre zonas}
 
 \textbf{Actor principal:} Usuario comercial \\
@@ -1575,7 +1807,7 @@ compara sus indicadores con la sesión completa.
 \textbf{Flujos alternativos:} Si no hay transiciones en el periodo, el
 sistema muestra un aviso.
 
-\textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles.
+\textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles (Figura~\ref{fig:cu09}).
 
 \begin{figure}[H]
 \centering
@@ -1604,7 +1836,7 @@ negocio, un permiso de exportación vigente aprobado en Solicitudes.
 \textbf{Flujos alternativos:} Si la generación es prolongada, el sistema
 muestra el progreso.
 
-\textbf{Postcondiciones:} Reporte descargado.
+\textbf{Postcondiciones:} Reporte descargado (Figura~\ref{fig:cu10}).
 
 \begin{figure}[H]
 \centering
@@ -1639,7 +1871,7 @@ trayectoria se registra sin coordenadas en el plano. Si el usuario
 interrumpe el procesamiento, se conserva y reconcilia lo procesado hasta
 ese momento.
 
-\textbf{Postcondiciones:} Trayectorias disponibles para el mapa y los insights.
+\textbf{Postcondiciones:} Trayectorias disponibles para el mapa y los insights (Figura~\ref{fig:cu11}).
 
 \FloatBarrier
 
@@ -1649,6 +1881,7 @@ ese momento.
 \caption{CU-11: Procesar videos multicámara}
 \label{fig:cu11}
 \end{figure}
+
 \subsection{Requerimientos Funcionales y No Funcionales}
 
 {\footnotesize
@@ -1730,7 +1963,7 @@ comerciales. En la primera parte se construye y estabiliza el seguimiento
 local de personas dentro de cada cámara. En la segunda, los tracklets de
 todas las cámaras se asocian mediante una galería global compartida,
 reciben un identificador seudónimo y se proyectan sobre un plano 2D común
-mediante homografía. En la tercera, las trayectorias históricas se
+mediante homografía~\cite{hartley2004}. En la tercera, las trayectorias históricas se
 procesan para detectar zonas de concentración, rutas frecuentes, flujos
 entre zonas y métricas de comportamiento.
 
@@ -1747,15 +1980,15 @@ El flujo metodológico general es:
 \end{aligned}
 \end{equation}
 
-El núcleo metodológico está compuesto por YOLO26m para la detección de
+El núcleo metodológico está compuesto por YOLO26m~\cite{yolo26} para la detección de
 personas; un seguidor local híbrido basado en movimiento, IoU, escala,
-apariencia corporal (histogramas de color y ResNet18) y memoria visual;
+apariencia corporal (histogramas de color y ResNet18~\cite{he2016}) y memoria visual;
 el codificador YOLO26s-ReID con una galería global compartida para la
 asociación entre cámaras; homografía para la proyección espacial; PostGIS para el almacenamiento espacial; y Vue.js para la visualización.
 La misma metodología se aplica, con ajustes más sensibles, a los videos de
 cualquier origen que se suben a la sección Videos: detector a 1280~px y
-codificador de re-identificación que promedia OSNet-AIN y PersonViT, ambos
-preentrenados en MSMT17 (Sección~\ref{sec:algoritmos}).
+codificador de re-identificación que promedia OSNet-AIN~\cite{zhou2022osnet} y PersonViT~\cite{hu2024personvit}, ambos
+preentrenados en MSMT17~\cite{wei2018} (Sección~\ref{sec:algoritmos}).
 
 Ningún modelo se entrena dentro del proyecto: todos los pesos son
 preentrenados, se cargan desde disco sin descargas ni telemetría, y cada
@@ -1872,7 +2105,7 @@ Las partes de una región cubiertas por la caja de otra persona se
 enmascaran antes de calcular los histogramas, para no mezclar la
 apariencia de dos identidades durante un cruce.
 
-Además, una ResNet18 preentrenada en ImageNet, sin su capa de
+Además, una ResNet18 preentrenada en ImageNet~\cite{deng2009}, sin su capa de
 clasificación, se utiliza únicamente como extractor de características
 profundas. El recorte se redimensiona a $64\times128$ píxeles, el mapa
 de características se promedia en cuatro franjas horizontales y el
@@ -1980,7 +2213,7 @@ cinco etapas ordenadas:
     \end{equation}
     donde $w_m$, $w_o$, $w_s$ y $w_a$ son los pesos de cada componente.
 
-    \item \textbf{Segunda etapa.} Siguiendo la lógica de ByteTrack, una
+    \item \textbf{Segunda etapa.} Siguiendo la lógica de ByteTrack~\cite{zhang2022bytetrack}, una
     detección de confianza baja solo puede prolongar un track activo que
     haya quedado libre y con el que muestre un movimiento, una
     superposición y una escala muy coherentes (umbrales de movimiento e
@@ -2000,7 +2233,7 @@ cinco etapas ordenadas:
 \end{enumerate}
 
 En cada etapa, la asignación uno a uno se resuelve con el algoritmo
-Hungarian sobre una matriz de costos ampliada con columnas ficticias. Si
+húngaro~\cite{kuhn1955} sobre una matriz de costos ampliada con columnas ficticias. Si
 $C\in\mathbb{R}^{n\times m}$ es la matriz de costos y $\tau$ el costo
 máximo aceptado, se construye:
 
@@ -2069,7 +2302,7 @@ sensibles para videos de cualquier origen (Sección~\ref{sec:videos}).
 \label{tab:tracker_params}
 \centering
 \footnotesize
-\begin{tabular}{|p{0.30\columnwidth}|p{0.14\columnwidth}|p{0.48\columnwidth}|}
+\begin{tabular}{|p{0.30\columnwidth}|p{0.14\columnwidth}|p{0.46\columnwidth}|}
 \hline
 \textbf{Parámetro} & \textbf{Valor} & \textbf{Función} \\
 \hline
@@ -2476,7 +2709,7 @@ manualmente sobre los videos del piloto (Cuadro~\ref{tab:assoc_params}).
 \label{tab:assoc_params}
 \centering
 \footnotesize
-\begin{tabular}{|p{0.36\columnwidth}|p{0.12\columnwidth}|p{0.44\columnwidth}|}
+\begin{tabular}{|p{0.36\columnwidth}|p{0.12\columnwidth}|p{0.42\columnwidth}|}
 \hline
 \textbf{Parámetro} & \textbf{Valor} & \textbf{Función} \\
 \hline
@@ -2734,7 +2967,7 @@ Un recorrido puede representarse, por ejemplo, como:
 \subsubsection{Hotspots mediante KDE}
 
 Para representar la concentración espacial histórica de pasajeros se
-utiliza Kernel Density Estimation (KDE):
+utiliza Kernel Density Estimation (KDE)~\cite{parzen1962}:
 
 \begin{equation}
 \hat{f}(x,y)
@@ -2759,7 +2992,7 @@ durante muchos cuadros en una posición.
 \subsubsection{Rutas frecuentes mediante PrefixSpan}
 
 La trayectoria semántica de cada \textit{global\_id} es una secuencia
-ordenada de zonas. Antes de aplicar PrefixSpan, las repeticiones
+ordenada de zonas. Antes de aplicar PrefixSpan~\cite{pei2001}, las repeticiones
 consecutivas de una misma zona se comprimen para que la tasa de cuadros
 no modifique artificialmente los patrones.
 
@@ -3007,7 +3240,7 @@ histórico de las trayectorias.
 \section{Planificación y Gestión del Proyecto}
 \label{sec:gestion}
 
-Esta sección presenta el plan de dirección del proyecto (	extit{Project Management Plan}) según las áreas de
+Esta sección presenta el plan de dirección del proyecto (\textit{Project Management Plan}) según las áreas de
 conocimiento de la guía PMBOK, 6.\textordfeminine{} edición~\cite{pmbok6}, y los dominios de
 desempeño de la 7.\textordfeminine{} edición~\cite{pmbok7}. Se agregan los
 lineamientos de PRINCE2~\cite{axelos2017} y el marco Scrum~\cite{scrumguide}, que
@@ -3017,7 +3250,7 @@ comunicaciones y adquisiciones son las matrices del plan.
 \subsection{Acta de constitución del proyecto (Project Charter)}
 \label{sec:acta}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 4, Gestión de la Integración), y para fines del proyecto, se
 consideró conveniente tener \textbf{6 puntos}:}
 
@@ -3043,7 +3276,9 @@ consideró conveniente tener \textbf{6 puntos}:}
     \item \textbf{Entregables e hitos.} Sistema desplegado en computadora con
     GPU, informe final, pruebas de estrés y plan de negocio. Hitos: primera
     validación en el patio de ESAN (6 de octubre de 2026), segunda en el
-    comedor (27 de octubre de 2026), avance del 63\,\% de las tareas en el
+    comedor (27 de octubre de 2026), prueba en el pasillo del Edificio D
+    (7 de noviembre de 2026), grabaciones con más personas en el patio y el
+    pasillo (9 de noviembre de 2026), avance del 63\,\% de las tareas en el
     sprint~11 y cierre en el sprint~16. Presupuesto resumido: línea base de
     costos de S/~19\,525, con contingencia (Sección~\ref{sec:costos}).
 
@@ -3063,8 +3298,8 @@ consideró conveniente tener \textbf{6 puntos}:}
 \subsection{Project Canvas y creación de valor}
 \label{sec:canvas}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
-(capítulo 4) y PMBOK 7.\textordfeminine{} edición (Estándar, capítulo 2, entrega
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
+(capítulo 4) y PMBOK 7.\textordfeminine{} edición~\cite{pmbok7} (Estándar, capítulo 2, entrega
 de valor), y para fines del proyecto, se consideró conveniente tener
 \textbf{4 puntos}:}
 
@@ -3092,8 +3327,8 @@ de valor), y para fines del proyecto, se consideró conveniente tener
 \subsection{Análisis de interesados (Stakeholder Analysis)}
 \label{sec:interesados}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
-(capítulo 13, Gestión de los Interesados) y PMBOK 7.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
+(capítulo 13, Gestión de los Interesados) y PMBOK 7.\textordfeminine{} edición~\cite{pmbok7}
 (Dominio de desempeño de los interesados, sección 2.1), y para fines del
 proyecto, se consideró conveniente tener \textbf{4 puntos}:}
 
@@ -3147,13 +3382,13 @@ Pasajeros & Bajo & Bajo & Monitorear; señalización y datos seudónimos \\
 \subsection{Alcance, requisitos y EDT (Requirements y WBS)}
 \label{sec:alcance}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 5, Gestión del Alcance), y para fines del proyecto, se consideró
 conveniente tener \textbf{4 puntos}:}
 
 \begin{enumerate}
     \item \textbf{Alcance del producto.} Funciones de los requisitos RF-01 a
-    RF-09 y los casos de uso CU-01 a CU-11 de la
+    RF-09 (Cuadro~\ref{tab:requisitos}) y los casos de uso CU-01 a CU-11 de la
     Sección~\ref{sec:requerimientos}.
 
     \item \textbf{Alcance del proyecto.} El trabajo necesario para
@@ -3206,7 +3441,7 @@ conveniente tener \textbf{4 puntos}:}
 \subsection{Enfoque de desarrollo (Development Approach)}
 \label{sec:enfoque}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 7.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 7.\textordfeminine{} edición~\cite{pmbok7}
 (Dominio de desempeño del enfoque de desarrollo y ciclo de vida, sección 2.3),
 y para fines del proyecto, se consideró conveniente tener \textbf{3 puntos}:}
 
@@ -3228,7 +3463,7 @@ y para fines del proyecto, se consideró conveniente tener \textbf{3 puntos}:}
 \subsection{Cronograma y tareas (Schedule y ruta crítica)}
 \label{sec:cronograma}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 6, Gestión del Cronograma), y para fines del proyecto, se consideró
 conveniente tener \textbf{3 puntos}:}
 
@@ -3244,8 +3479,11 @@ conveniente tener \textbf{3 puntos}:}
     (Cuadro~\ref{tab:ruta}) suma 16 semanas; la calibración y el mapa 2D, y la
     plataforma web, tienen holgura.
 
-    \item \textbf{Burndown y velocidad.} Al cierre del sprint~11 (26 de
-    octubre) el panel (Figura~\ref{fig:avance}) registra 96 tareas: 60
+    \item \textbf{Burndown y velocidad.} Los datos de gestión (cronograma,
+    avance y valor ganado) tienen corte el 26 de octubre, en el sprint~11,
+    que cierra el miércoles 28; las pruebas del 7 y el 9 de noviembre son
+    posteriores a ese corte. A esa fecha el panel (Figura~\ref{fig:avance})
+    registra 96 tareas: 60
     completadas (63\,\%), 5 en curso y 31 por iniciar, con un avance promedio
     de 65.5\,\% repartido de forma pareja entre los integrantes (entre 61\,\%
     y 69\,\%). Quedaban 36 tareas pendientes frente a las 30 del avance ideal;
@@ -3336,7 +3574,7 @@ autores entre el 30 de septiembre y el 28 de octubre de 2026.
 \subsection{Costos y valor ganado (Budget y Earned Value)}
 \label{sec:costos}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 7, Gestión de los Costos), y para fines del proyecto, se consideró
 conveniente tener \textbf{3 puntos}:}
 
@@ -3397,7 +3635,7 @@ SPI & 0.95 \\
 \subsection{Calidad: métricas y siete herramientas (Quality Metrics)}
 \label{sec:calidad}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 8, Gestión de la Calidad), y para fines del proyecto, se consideró
 conveniente tener \textbf{3 puntos}:}
 
@@ -3439,7 +3677,6 @@ Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & por fijar \\
 \hline
 IDs que mezclan personas & 28\,\% (antes 60\,\%) & por fijar \\
 \hline
-
 Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
 \hline
 \end{tabular}
@@ -3475,8 +3712,8 @@ Diagrama de flujo & Flujo de la metodología (Figura~\ref{fig:flujo}) \\
 \subsection{Roles, organigrama y matriz RACI (Organization Chart y RACI Matrix)}
 \label{sec:roles}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
-(capítulo 9, Gestión de los Recursos) y PMBOK 7.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
+(capítulo 9, Gestión de los Recursos) y PMBOK 7.\textordfeminine{} edición~\cite{pmbok7}
 (Dominio del equipo, sección 2.2), y para fines del proyecto, se consideró
 conveniente tener \textbf{3 puntos}:}
 
@@ -3556,8 +3793,8 @@ estuvieran cubiertos.
 \subsection{Comunicaciones y habilidades blandas (Communication Matrix y Soft Skills)}
 \label{sec:comunicaciones}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
-(capítulo 10, Gestión de las Comunicaciones) y PMBOK 7.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
+(capítulo 10, Gestión de las Comunicaciones) y PMBOK 7.\textordfeminine{} edición~\cite{pmbok7}
 (sección 2.5.4), y para fines del proyecto, se consideró conveniente tener
 \textbf{3 puntos}:}
 
@@ -3593,7 +3830,7 @@ Actas con tareas y estado & Equipo y docente & Semanal & Líder \\
 \hline
 Panel Scrum y Gantt & Equipo & Continua & Equipo \\
 \hline
-Repositorio Git (247 commits) & Equipo técnico & Continua & López \\
+Repositorio Git & Equipo técnico & Continua & López \\
 \hline
 Informe y presentaciones & Docente & Según hitos & Almeyda y Neciosup \\
 \hline
@@ -3607,21 +3844,21 @@ Mensajería diaria & Equipo & Diaria & Equipo \\
 \subsection{Adquisiciones (Procurement Matrix)}
 \label{sec:adquisiciones}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (capítulo 12, Gestión de las Adquisiciones), y para fines del proyecto, se
 consideró conveniente tener \textbf{3 puntos}:}
 
 \begin{enumerate}
     \item \textbf{Hardware y nube.} Computadora con GPU RTX 4060 propia
-    ($\approx$ S/~4\,500 de referencia), teléfonos de los integrantes sin costo
+    (un estimado de S/~4\,500, aún por cotizar), teléfonos de los integrantes sin costo
     y, en el primer despliegue, una máquina virtual de Google Cloud
     ($\approx$ US\$~334.80 al mes a precio de lista) reemplazada por la
-    computadora local. La decisión fue un análisis de comprar o arrendar: la
+    computadora local (Cuadro~\ref{tab:adquisiciones}). La decisión fue un análisis de comprar o arrendar: la
     computadora propia cuesta unos US\$~70 al mes frente a US\$~334.80 de la
     nube (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Modelos y software.} YOLO26 (Ultralytics) es gratuito con
-    licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT y ResNet18 son preentrenados y su licencia debe verificarse.
+    licencia AGPL~\cite{ultralytics-licencia}, a resolver antes de un uso comercial. OSNet-AIN, PersonViT y ResNet18 son preentrenados y su licencia debe verificarse.
     PostgreSQL, PostGIS, pgvector, Go, Vue y Docker son
     de código abierto.
 
@@ -3639,13 +3876,13 @@ consideró conveniente tener \textbf{3 puntos}:}
 \hline
 \textbf{Ítem} & \textbf{Tipo} & \textbf{Fuente} & \textbf{Costo o condición} \\
 \hline
-Computadora con GPU RTX 4060 & Hardware & Propia & $\approx$ S/~4\,500 de referencia \\
+Computadora con GPU RTX 4060 & Hardware & Propia & $\approx$ S/~4\,500 (estimado, por cotizar) \\
 \hline
 Teléfonos como cámaras & Hardware & Integrantes & Sin costo \\
 \hline
 Máquina virtual de Google Cloud & Servicio & Google Cloud & $\approx$ US\$~334.80 al mes; reemplazada por la computadora local \\
 \hline
-YOLO26 (detector) & Modelo & Ultralytics & Gratuito, licencia AGPL; resolver antes de uso comercial \\
+YOLO26 (detector) & Modelo & Ultralytics & Gratuito, licencia AGPL~\cite{ultralytics-licencia}; resolver antes de uso comercial \\
 \hline
 OSNet-AIN, PersonViT, ResNet18 & Modelos & Preentrenados & Verificar licencia \\
 \hline
@@ -3659,8 +3896,8 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
 \subsection{Gestión de riesgos (Risk Matrix)}
 \label{sec:riesgos}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
-(capítulo 11, Gestión de los Riesgos) y PMBOK 7.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
+(capítulo 11, Gestión de los Riesgos) y PMBOK 7.\textordfeminine{} edición~\cite{pmbok7}
 (Dominio de desempeño de la incertidumbre, sección 2.8), y para fines del proyecto, se consideró conveniente tener
 \textbf{4 puntos}:}
 
@@ -3684,7 +3921,9 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
     Git (R1); modelos preentrenados y validación en ESAN (R2); galería global
     y reglas físicas (R3); respaldo y contenedores (R4); priorización MoSCoW
     (R5); sin rostros, retención limitada y señalización (R6); evaluar un
-    detector libre (R7); marco contractual (R8). Los riesgos se revisan en la
+    detector libre (R7); marco contractual (R8); ajustes más sensibles de
+    Videos, referencias de ubicación por cámara y ajuste por sitio (R9). Los
+    riesgos se revisan en la
     reunión semanal.
 \end{enumerate}
 
@@ -3716,7 +3955,6 @@ R8 & Acceso a datos con LAP & Externo & 3 & 4 & 12 \\
 \hline
 R9 & Cámaras de calidad variable & Técnico & 3 & 3 & 9 \\
 \hline
-
 \end{tabular}
 \end{table}
 
@@ -3833,7 +4071,7 @@ conveniente tener \textbf{4 puntos}:}
 \subsection{Lecciones aprendidas (Lessons Learned)}
 \label{sec:lecciones}
 
-\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición
+\textit{Teniendo en cuenta la metodología de PMBOK 6.\textordfeminine{} edición~\cite{pmbok6}
 (registro de lecciones aprendidas, capítulos 4 y 10), y para fines del
 proyecto, se consideró conveniente tener \textbf{4 puntos}:}
 
@@ -3873,19 +4111,19 @@ produce.
 \hline
 \textbf{Parte} & \textbf{Algoritmo} & \textbf{Resultado} \\
 \hline
-I. Seguimiento local & YOLO26m y seguidor híbrido con asociación en cascada (Hungarian) & \textit{local\_id} estable por persona y cámara \\
+I. Seguimiento local & YOLO26m~\cite{yolo26} y seguidor híbrido con asociación en cascada (algoritmo húngaro~\cite{kuhn1955}) & \textit{local\_id} estable por persona y cámara \\
 \hline
 II. Multicámara & YOLO26s-ReID y galería global con reglas físicas & \textit{global\_id} seudónimo por persona \\
 \hline
-II. Mapa & Homografía imagen--plano & Posición en metros, velocidad y dirección \\
+II. Mapa & Homografía~\cite{hartley2004} imagen--plano & Posición en metros, velocidad y dirección \\
 \hline
-III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE, PrefixSpan y grafo origen-destino & Eventos, métricas e insights por zona y local \\
+III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE~\cite{parzen1962}, PrefixSpan~\cite{pei2001} y grafo origen-destino & Eventos, métricas e insights por zona y local \\
 \hline
 En vivo & Modelo de dos carriles con memoria de identidades & Cajas e ID en tiempo real desde teléfonos \\
 \hline
 En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
 \hline
-Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN + PersonViT; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
+Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN~\cite{zhou2022osnet} + PersonViT~\cite{hu2024personvit}; galería global compartida por la tanda en modo visual-temporal & \textit{global\_id} seudónimo por persona en todos los videos del mismo lugar \\
 \hline
 \end{tabular}
 \end{table}
@@ -3895,7 +4133,7 @@ Videos (multicámara) & Partes I y II con YOLO26 a 1280~px y Re-ID OSNet-AIN + P
 Mantiene un identificador local estable mientras la persona permanece frente a
 una cámara. En cada instante detecta a las personas de todas las cámaras en un
 solo lote y asocia cada detección con un track mediante una cascada de etapas
-resuelta con el algoritmo Hungarian (Algoritmo~\ref{alg:local}).
+resuelta con el algoritmo húngaro (Algoritmo~\ref{alg:local}).
 
 \begin{algorithm}[H]
 \caption{Seguimiento local por cámara}
@@ -3926,7 +4164,7 @@ resume en un prototipo de apariencia corporal y se compara con una galería
 global que solo admite candidatas físicamente compatibles
 (Algoritmo~\ref{alg:reid}).
 
-\begin{algorithm}[H]
+\begin{algorithm}[!ht]
 \caption{Asociación multicámara con galería global}
 \label{alg:reid}
 \begin{algorithmic}[1]
@@ -3953,6 +4191,7 @@ global que solo admite candidatas físicamente compatibles
 \end{algorithmic}
 \end{algorithm}
 
+\FloatBarrier
 \subsection{Proyección al plano (Parte II)}
 
 Cada observación con los pies visibles se lleva al plano en metros con la homografía de su cámara (Algoritmo~\ref{alg:mapa}).
@@ -4021,7 +4260,6 @@ punto de su color sobre la cabeza, y su ID global, en lugar de una caja que la t
 \STATE \hspace{1.2em} si coincide sin ambigüedad, recuperar su ID y su color
 \STATE \hspace{1.2em} durante 60~s, fusionar un ID nuevo con uno ya visto si es la misma persona
 \STATE \hspace{1.2em} guardar la memoria cada 2~s y olvidar a quien no se ve en 24~horas
-
 \end{algorithmic}
 \end{algorithm}
 
@@ -4072,15 +4310,14 @@ ajustes más sensibles sobre la misma lógica de las Partes I y II:
     de unas 12 a unas 40 personas por cuadro.
     \item \textbf{Seguidor:} abre tracks desde 0.15 de confianza y personas de
     12~px de alto; en los cruces, la apariencia pesa 0.8 en la asignación (no
-    0.22), dentro de ella el vector de la ResNet18 pesa 0.8 frente al color
+    0.22), dentro de ella el vector de la ResNet18~\cite{he2016} pesa 0.8 frente al color
     (no 0.20) y un track sigue a una caja sin comparar apariencias solo si se
     solapa con ella al menos 0.25.
     \item \textbf{Re-identificación:} en vez de YOLO26s-ReID, que estira cada
     recorte a un cuadrado, se promedian OSNet-AIN y PersonViT (ViT-S), ambos
-    entrenados en MSMT17. Una identidad solo se une a otra si cada tramo se
+    entrenados en MSMT17~\cite{wei2018}. Una identidad solo se une a otra si cada tramo se
     parece a cada uno de la otra, para que una fusión equivocada no termine
     absorbiendo a cualquiera.
-    
     \item \textbf{Velocidad:} los cuadros se decodifican en la GPU, cada video
     en su hilo; las redes de Re-ID van grabadas en \textit{CUDA graphs} y el
     asociador compara todas las identidades vigentes de una vez.
@@ -4110,7 +4347,6 @@ mientras se procesa y queda únicamente un resumen.
   \STATE detectar en una sola pasada de YOLO26 a 1280~px los cuadros de todos los videos
   \STATE seguir cada video con su seguidor local
   \STATE muestrear cada 0.4~s vistas Re-ID (OSNet-AIN + PersonViT) y asociarlas en el asociador de la tanda
-  
   \STATE publicar cajas, \textit{global\_id}, FPS y ms por cuadro de cada video
 \ENDWHILE
 \STATE guardar el resumen (personas y segundos en que aparece cada ID) y borrar el video
@@ -4135,7 +4371,8 @@ la misma. En lugar de calibrar cada video, se reutilizan las
 \textit{referencias de ubicación} del modelo en vivo: imágenes de cada cámara
 con su homografía al plano, tres por cámara (A0--A2 para cam01, B0--B2 para
 cam02, E0--E2 para cam06 y F0--F2 para cam07). Cada video se compara con las
-de su cámara (Algoritmo~\ref{alg:referencias}) y queda una sola homografía,
+de su cámara mediante puntos SIFT~\cite{lowe2004} y RANSAC~\cite{fischler1981}
+(Algoritmo~\ref{alg:referencias}) y queda una sola homografía,
 que se aplica sobre los cuadros ya corregidos por el movimiento del teléfono.
 
 \begin{algorithm}[H]
@@ -4157,16 +4394,16 @@ que se aplica sobre los cuadros ya corregidos por el movimiento del teléfono.
 
 Lejos de la cámara, con cajas de menos de unos 50~px de alto, el Re-ID ya no
 reconoce a nadie y el seguidor pierde a la persona y la vuelve a abrir con
-otro número. Para esos tramos se agrega un paso después del multitracking
-(Algoritmo~\ref{alg:lejanos}); de cerca manda el multitracking de Videos tal
-cual. Sobre el video, cada persona lleva solo su ID global (por ejemplo,
+otro número. Para esos tramos se agrega un paso después del seguimiento
+multicámara (Algoritmo~\ref{alg:lejanos}); de cerca manda el seguimiento
+multicámara de Videos tal cual. Sobre el video, cada persona lleva solo su ID global (por ejemplo,
 G133) en una etiqueta de su color sobre la cabeza, sin la caja.
 
 \begin{algorithm}[H]
 \caption{IDs de la gente lejana en las grabaciones de una zona}
 \label{alg:lejanos}
 \begin{algorithmic}[1]
-\REQUIRE tramos del seguidor de cada cámara, IDs del multitracking de Videos, movimiento del teléfono y homografía de cada cámara
+\REQUIRE tramos del seguidor de cada cámara, IDs del seguimiento multicámara de Videos, movimiento del teléfono y homografía de cada cámara
 \ENSURE ID de cada tramo lejano, sin repetir un número a la vez en una cámara
 \FOR{cada tramo que termina o empieza lejos (caja $< \sim$50~px)}
   \STATE predecir dónde debía reaparecer con su velocidad, descontando el movimiento del teléfono
@@ -4177,24 +4414,25 @@ G133) en una etiqueta de su color sobre la cabeza, sin la caja.
 \end{algorithmic}
 \end{algorithm}
 
-En la primera grabación del pasillo del Edificio D, de 285 cortes del
-seguidor en cam06 pasaron a conservar su número 140 (antes 7), las cajas sin
+En la primera grabación del pasillo del Edificio D, de los 285 cortes del
+seguidor en cam06, 140 conservaron su número (antes, 7), las cajas sin
 número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
-con el mismo número a la vez (antes 53).
+con el mismo número a la vez (antes, 53).
 
 \section{Arquitectura del Sistema}
 \label{sec:arquitectura}
 
 El sistema se compone de servicios en contenedores Docker que se ejecutan en
-una computadora local con GPU; el modelo en vivo corre fuera de Docker para
-usar la GPU directamente. El análisis de sesiones grabadas y el
+una computadora local con GPU; el modelo en vivo corre directamente en Windows
+(\texttt{camara\_telefono.py}) o en Docker con la GPU (servicio
+\texttt{modelo-gpu}, perfil \texttt{gpu}). El análisis de sesiones grabadas y el
 monitoreo en vivo usan backends y bases de datos separados, y la aplicación
 web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
 El código fuente de todos los componentes, las migraciones de la base de datos
 y los notebooks del modelo están en
 \url{https://github.com/23-Andres-QC/Aeropuerto}.
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
 \caption{Arquitectura de AeroVision.}
@@ -4230,6 +4468,7 @@ Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
 \end{tabular}
 \end{table}
 
+\FloatBarrier
 \subsection{Usuarios y acceso}
 
 El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
@@ -4253,7 +4492,7 @@ Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permis
 \hline
 Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
 \hline
-Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/\{sitio\}/...} \\
+Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/}\allowbreak\texttt{\{sitio\}/...} \\
 \hline
 Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
 \hline
@@ -4276,22 +4515,24 @@ el primer mensaje del WebSocket, nunca en la URL.
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=0.85\linewidth]{figuras/plataforma/login.png}
-\caption{Ingreso a la aplicación.}
-\label{fig:login}
-\end{figure}
-
-\begin{figure}[H]
+\begin{minipage}[t]{0.49\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
 \caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
 se taparon en la figura).}
 \label{fig:cuentas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/login.png}
+\caption{Ingreso a la aplicación.}
+\label{fig:login}
+\end{minipage}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/solicitudes.png}
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/solicitudes.png}
 \caption{Solicitudes de cambio de correo y de permisos de exportación.}
 \label{fig:solicitudes}
 \end{figure}
@@ -4300,8 +4541,10 @@ se taparon en la figura).}
 
 El sistema corre en una computadora local con GPU (Cuadro~\ref{tab:infra}).
 Los servicios web, los backends y las bases van en Docker Compose; el modelo
-en vivo, que también procesa los videos subidos, corre fuera de Docker para
-usar la GPU. Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
+en vivo, que también procesa los videos subidos, usa la GPU de dos formas:
+directamente en Windows (\texttt{camara\_telefono.py}) o, si el Control
+inteligente de aplicaciones de Windows bloquea las DLL de PyTorch, dentro de
+Docker (servicio \texttt{modelo-gpu}, perfil \texttt{gpu}). Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
 Docker con YOLO26s a 640~px.
 
 \begin{table}[H]
@@ -4322,7 +4565,7 @@ Memoria & 16~GB de RAM \\
 \hline
 Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
 \hline
-Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, para teléfonos y videos subidos \\
+Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, en Windows o en Docker (\texttt{modelo-gpu}), para teléfonos y videos subidos \\
 \hline
 Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
 \hline
@@ -4345,15 +4588,17 @@ la cámara del teléfono.
 
 El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
 computadora propia con el de la nube. El servidor de Google Cloud se calculó
-con sus precios de lista para \texttt{southamerica-west1} (en dólares, sin
-impuestos, octubre de 2026) sobre 730 horas al mes; una instancia con GPU T4
-(\texttt{g4dn.xlarge}) sirve de referencia para un equipo comparable al local.
-Una computadora con GPU de 8 a 16~GB cuesta unos S/~4\,500 (US\$~1\,200), que
-amortizados en 36 meses y con 250~W encendidos todo el día suman unos
-US\$~70 al mes. La computadora propia cuesta lo mismo que la nube
-interrumpible y mucho menos que la nube a demanda, el video no sale de la red y
-el costo es fijo; este cálculo sostiene el costo por cámara del plan de negocio
-(Sección~\ref{sec:negocio}).
+con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
+impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
+(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
+Para la computadora propia se supone un equipo con GPU de 8 a 16~GB de
+S/~4\,500 (US\$~1\,200), un supuesto de trabajo aún por cotizar, que
+amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
+de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
+propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
+horario de uso y menos que cualquier nube con GPU a demanda; el video no
+sale de la red y el costo es fijo. Este cálculo sostiene el costo por cámara
+del plan de negocio (Sección~\ref{sec:negocio}).
 
 \begin{table}[H]
 \caption{Costo mensual del procesamiento: computadora propia y nube}
@@ -4471,6 +4716,76 @@ depende más de las horas de uso, la ubicación de los datos y el costo de
 transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
 fija ni la salida de datos, que se suman aparte.
 
+Fuera de las tres grandes nubes hay opciones más baratas para correr el
+modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
+Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
+las que se pudieron verificar en noviembre de 2026, con el precio por hora
+publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
+tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
+nube comunitaria cambian cada día y la máquina puede detenerse o no estar
+disponible; Hetzner cobra por hora hasta un tope mensual y una tarifa de
+instalación de 209~euros, y sus euros se pasaron a dólares con la referencia
+del BCE del 10 de noviembre de 2026 (1.1214)~\cite{ecb-eurusd}.
+
+\begin{table}[!ht]
+\caption{Nubes con GPU para correr el modelo, de la más económica a la más cara (US\$, noviembre de 2026)}
+\label{tab:nube-proveedores}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{|L{0.45\textwidth}|L{0.13\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|}
+\hline
+\textbf{Proveedor y máquina} & \textbf{GPU} & \textbf{US\$/h} & \textbf{240~h} & \textbf{360~h} & \textbf{720~h} \\
+\hline
+Vast.ai, mercado de GPU~\cite{vast-3060} & RTX 3060 & 0.076 & 18.24 & 27.36 & 54.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, \textit{spot}, East US~\cite{sparecores-t4} & T4 & 0.1641 & 39.38 & 59.08 & 118.15 \\
+\hline
+AWS \texttt{g4dn.xlarge}, \textit{spot}, us-east-1~\cite{doit-g4dn} & T4 & 0.2137 & 51.29 & 76.93 & 153.86 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & RTX 4090 & 0.34 & 81.60 & 122.40 & 244.80 \\
+\hline
+Hetzner GEX45, servidor dedicado~\cite{hetzner-gex} & RTX PRO 4000 & 0.3845 & 92.29 & 138.43 & 239.98 \\
+\hline
+AWS \texttt{g6.xlarge}, \textit{spot}, us-east-1~\cite{doit-g6} & L4 & 0.3941 & 94.58 & 141.88 & 283.75 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & L4 & 0.44 & 105.60 & 158.40 & 316.80 \\
+\hline
+AWS \texttt{g4dn.xlarge}, a demanda, us-east-1~\cite{doit-g4dn} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, a demanda, East US~\cite{azurespeed-t4} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Google Cloud \texttt{n1-standard-4} + T4~\cite{gcp-vm,gcp-gpu} & T4 & 0.54 & 129.60 & 194.40 & 388.80 \\
+\hline
+Paperspace~\cite{paperspace} & RTX 4000 & 0.56 & 134.40 & 201.60 & 403.20 \\
+\hline
+RunPod, nube segura~\cite{runpod} & L4 & 0.59 & 141.60 & 212.40 & 424.80 \\
+\hline
+Google Cloud \texttt{g2-standard-4}~\cite{gcp-g2} & L4 & 0.7068 & 169.64 & 254.46 & 508.92 \\
+\hline
+DigitalOcean, GPU Droplet~\cite{do-gpu} & RTX 4000 Ada & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+Paperspace~\cite{paperspace} & A4000 & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+AWS \texttt{g6.xlarge}, a demanda, us-east-1~\cite{doit-g6} & L4 & 0.8048 & 193.15 & 289.73 & 579.46 \\
+\hline
+RunPod, nube segura~\cite{runpod} & RTX 4090 & 0.89 & 213.60 & 320.40 & 640.80 \\
+\hline
+\hline
+\textit{Referencia: computadora propia} (Cuadro~\ref{tab:costos}) & RTX 4060 & -- & 70 & 70 & 70 \\
+\hline
+\end{tabular}
+\end{table}
+
+Con 240 horas al mes, Vast.ai y las máquinas \textit{spot} con T4 cuestan
+menos que la computadora propia; encendidas todo el mes, solo Vast.ai
+queda por debajo. Sin contar las \textit{spot}, la opción más barata todo
+el mes después de Vast.ai es el servidor dedicado de Hetzner (US\$~240 con
+el tope mensual, más la instalación), y las T4 a demanda de AWS, Azure y
+Google Cloud quedan entre US\$~379 y 389.
+
+\FloatBarrier
 \subsection{Base de datos}
 
 Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
@@ -4481,12 +4796,12 @@ backends aplican al iniciar.
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/base-de-datos.png}
+\safeincludegraphics[width=0.65\linewidth]{figuras/arquitectura/base-de-datos.png}
 \caption{Modelo entidad-relación de las bases de datos.}
 \label{fig:bd}
 \end{figure}
 
-\begin{itemize}
+\begin{itemize}\sloppy
     \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
     y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
     INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
@@ -4545,16 +4860,22 @@ Cuadro~\ref{tab:api}):
 \label{fig:backend}
 \end{figure}
 
-\begin{table}[H]
-\caption{Recursos de las API}
-\label{tab:api}
-\centering
-\footnotesize
+{\footnotesize
+\setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.42\textwidth}|L{0.50\textwidth}|}
+\begin{longtable}{|L{0.42\textwidth}|L{0.50\textwidth}|}
+\caption{Recursos de las API}
+\label{tab:api} \\
 \hline
 \textbf{Ruta} & \textbf{Uso} \\
 \hline
+\endfirsthead
+\hline
+\multicolumn{2}{|l|}{\textit{Recursos de las API (continuación)}} \\
+\hline
+\textbf{Ruta} & \textbf{Uso} \\
+\hline
+\endhead
 \multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
 \hline
 \texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
@@ -4587,13 +4908,16 @@ Cuadro~\ref{tab:api}):
 \hline
 \texttt{/telefonos} & Teléfonos conectados como cámaras \\
 \hline
-\texttt{/videos} & Videos subidos por tandas, análisis elegido y resumen de cada uno \\\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
+\texttt{/videos} & Videos subidos por tandas y resumen de cada uno \\
+\hline
+\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
 \hline
 \texttt{/personas} & Memoria de identidades \\
 \hline
-\end{tabular}
-\end{table}
+\end{longtable}
+}
 
+\FloatBarrier
 \subsection{Frontend}
 
 Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
@@ -4616,7 +4940,7 @@ nueve secciones, y cada rol ve solo las suyas:
     se guarda solo en ella, el plano no sale de su marco y los teléfonos
     toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
     \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
-    procesados todos a la vez sin guardarse, con el análisis elegido
+    procesados todos a la vez sin guardarse, con un resumen de cada uno
     (Figura~\ref{fig:web-videos}).
     \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
     calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
@@ -4643,14 +4967,14 @@ nueve secciones, y cada rol ve solo las suyas:
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/frontend.png}
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/frontend.png}
 \caption{Arquitectura del frontend.}
 \label{fig:frontend}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/web-configuracion.png}
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/web-configuracion.png}
 \caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
 las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
 cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
@@ -4660,7 +4984,7 @@ pegada al comedor), y umbrales de tráfico.}
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/videos.png}
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/videos.png}
 \caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
 el resumen de cada video.}
 \label{fig:web-videos}
@@ -4668,7 +4992,7 @@ el resumen de cada video.}
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/insights.png}
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/insights.png}
 \caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
 Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
 de tiempo y resumen de la sesión.}
@@ -4677,31 +5001,41 @@ de tiempo y resumen de la sesión.}
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=0.7\linewidth]{figuras/plataforma/insights-pdf.png}
+\safeincludegraphics[width=0.55\linewidth]{figuras/plataforma/insights-pdf.png}
 \caption{Reporte de Insights exportado a PDF.}
 \label{fig:web-insights-pdf}
 \end{figure}
 
 \begin{figure}[H]
 \centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
 \caption{Ventas: selección de locales en el plano y pestañas de resumen,
 pronóstico, patrones, emparejamiento, tickets y datos.}
 \label{fig:web-ventas}
-\end{figure}
-
-
-\begin{figure}[H]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
 \caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
 conectadas y memoria de personas, que se olvida tras 24 horas.}
 \label{fig:web-telefonos}
+\end{minipage}
 \end{figure}
 
+\FloatBarrier
 \section{Pruebas de Validación en ESAN}
+\label{sec:validacion-esan}
 
-Las pruebas de validación se realizaron en la Universidad ESAN en cuatro escenarios: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo.
+Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}).
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pruebas-participantes.png}
+\caption{Estudiantes de ESAN que ayudaron en la prueba de campo, en el patio del Edificio A.}
+\label{fig:pruebas-participantes}
+\end{figure}
 
 \subsection{Primera prueba: ESAN, Edificios A y B}
 
@@ -4738,8 +5072,13 @@ Se procesaron tres videos de cámaras con vista al patio, de
 $1280 \times 720$ a 15~FPS y 126~s de duración común, con desfases de reloj de
 +1.0~s (cam02) y +3.0~s (cam03) respecto de cam01. El sistema reconoció a 16
 personas y registró 13\,689 puntos de trayectoria
-(Figuras~\ref{fig:dataset-camara} a~\ref{fig:dataset-insights}); el
-Cuadro~\ref{tab:resultados-dataset} resume las mediciones.
+(Figuras~\ref{fig:dataset-camara}, \ref{fig:dataset-trayectorias}, \ref{fig:dataset-en-vivo}
+y~\ref{fig:dataset-insights}); el
+Cuadro~\ref{tab:resultados-dataset} resume las mediciones. La asociación
+multicámara se midió sin y con el muestreo adaptativo de vistas del
+codificador Re-ID, que es la configuración final del Build: sin él, la
+precisión es 0.99 y el recall 0.86; con él, el codificador se llama un
+34\,\% menos y el recall sube a 0.91, con la misma precisión.
 
 \begin{table}[H]
 \caption{Resultados de la prueba con cámaras fijas}
@@ -4755,9 +5094,9 @@ Identificadores locales tras ajustar umbrales & De 88 a 80 \\
 \hline
 Tracks de personas lejanas (altura mediana $< 60$~px) & De 7 a 1 \\
 \hline
-Precisión / recall de la asociación multicámara & 0.99 / 0.86 \\
+Precisión / recall de la asociación multicámara, sin muestreo adaptativo & 0.99 / 0.86 \\
 \hline
-Llamadas al codificador Re-ID con muestreo adaptativo & $-34\,\%$ (precisión 0.99, recall 0.91) \\
+Llamadas al codificador Re-ID con muestreo adaptativo (configuración final) & $-34\,\%$ (precisión 0.99, recall 0.91) \\
 \hline
 Altura estimada de las cámaras & 8.3 / 9.3 / 9.5~m \\
 \hline
@@ -4849,7 +5188,7 @@ reproduce sobre el plano.}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
 \caption{Teléfonos, el 6 de octubre: memoria de personas con las cámaras donde
-se vio a cada una y cuándo. }
+se vio a cada una y cuándo.}
 \label{fig:telefonos-memoria}
 \end{figure}
 
@@ -4910,8 +5249,8 @@ del comedor (mismo centro, giro y 29.7~px por metro), así que sus bordes
 interiores coinciden con las paredes del comedor; los de afuera siguen el
 terreno del mapa del campus: el borde del camino y la punta del Aula~C, el
 jardín del norte, la abertura hacia la plaza en la esquina noreste, la
-fachada del edificio del este y el puente hacia el Edificio A
-(Figura~\ref{fig:pasillo-recorridos}).
+fachada del edificio del este y el puente hacia el Edificio A (los
+recorridos del 9 de noviembre están en la Figura~\ref{fig:pasillo-recorridos}).
 
 Las cámaras son dos teléfonos en el segundo piso, a 4.75~m: cam06 en el
 extremo oeste de la fachada norte, mirando al este por la escalera hacia la
@@ -4935,7 +5274,7 @@ piso del pasillo, no al del patio.
 \subsubsection{Primera grabación}
 
 El 7 de noviembre de 2026, a las 13:43, los dos teléfonos grabaron 162~s del
-pasillo. cam07 empezó a grabar 4.1~s antes que cam06; se le cortaron esos
+pasillo. La cam07 empezó a grabar 4.1~s antes que cam06; se le cortaron esos
 segundos, ajustados con las personas que pasan de una cámara a la otra, y
 desde ahí los dos videos empiezan a la vez. Procesada como una tanda de
 Videos, la sesión reunió a 86 personas, 56 vistas en cam06 y 39 en cam07, de las cuales 9
@@ -4945,16 +5284,6 @@ mostró el problema de la gente lejana de la plaza y la escalera, de 20 a
 lejanos (Algoritmo~\ref{alg:lejanos}). La zona se volvió a grabar con más
 gente el 9 de noviembre (Figura~\ref{fig:pasillo-camaras} y
 Sección~\ref{sec:mas-gente}).
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.82\linewidth]{figuras/validacion/pasillo-camaras.jpg}
-\caption{Pasillo del Edificio D, 9 de noviembre: G133 baja la escalera en
-cam06 (izquierda, a los 98~s) y sale bajo cam07 con la misma mochila
-(derecha, a los 124~s), con el mismo ID global. Sobre cada persona va solo su
-ID, sin caja; la cabecera dice cuántas personas se ven.}
-\label{fig:pasillo-camaras}
-\end{figure}
 
 \subsection{Cuarta prueba: ESAN, grabaciones con más gente}
 \label{sec:mas-gente}
@@ -4978,7 +5307,7 @@ corte se comprobó con datos:
 \begin{itemize}
     \item \textbf{Patio.} La CAM1 se recortó desde el segundo 26.106 del
     original y la CAM2 desde el 11.476, medidos con el audio de cada uno. El
-    audio de las dos cámaras, correlacionado con GCC-PHAT, da un solo pico en
+    audio de las dos cámaras, correlacionado con GCC-PHAT~\cite{knapp1976}, da un solo pico en
     todas las bandas de frecuencia, 22 veces el ruido: a la CAM1 recortada le
     sobran unos 0.55~s (0.57~s según los originales y 0.53~s según los
     recortes, menos de un cuadro de diferencia), que se compensan con el
@@ -4996,6 +5325,16 @@ corte se comprobó con datos:
     comedor, y se descartó.
 \end{itemize}
 
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/pasillo-camaras.jpg}
+\caption{Pasillo del Edificio D, 9 de noviembre: G133 baja la escalera en
+cam06 (izquierda, a los 98~s) y sale bajo cam07 con la misma mochila
+(derecha, a los 124~s), con el mismo ID global. Sobre cada persona va solo su
+ID, sin caja; la cabecera dice cuántas personas se ven.}
+\label{fig:pasillo-camaras}
+\end{figure}
+
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-sincronia.png}
@@ -5006,6 +5345,7 @@ instante según el corrimiento de cam02; el máximo queda a +0.1~s.}
 \label{fig:patio-sincronia}
 \end{figure}
 
+\FloatBarrier
 \subsubsection{Ubicación en el plano}
 
 El patio no tenía modelo de cámara para estos teléfonos y en el pasillo cam06
@@ -5024,7 +5364,7 @@ del en vivo}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.12\textwidth}|L{0.20\textwidth}|L{0.18\textwidth}|L{0.20\textwidth}|L{0.20\textwidth}|}
+\begin{tabular}{|L{0.11\textwidth}|L{0.17\textwidth}|L{0.16\textwidth}|L{0.19\textwidth}|L{0.17\textwidth}|}
 \hline
 \textbf{Cámara} & \textbf{Referencias usadas} & \textbf{Cuadros reconocidos} & \textbf{Desvío de la mediana (peor)} & \textbf{Movimiento del teléfono} \\
 \hline
@@ -5082,16 +5422,39 @@ Permanencia mediana por persona & 81.5~s & 11.0~s & 14.6~s & 14.5~s \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[H]
+Lo que muestran estas grabaciones:
+
+\begin{itemize}
+    \item \textbf{La ubicación por referencias aguanta teléfonos en la mano.}
+    Los cuatro videos se ubicaron sin calibrarlos, con 24 de 24 cuadros
+    reconocidos y 0.05 a 0.15~m de desvío, aunque cam06 se movió hasta
+    11.6\textdegree{}. Una zona nueva solo necesita sus referencias del en vivo.
+    \item \textbf{La sincronía se puede verificar con los propios datos.} El
+    audio sirve cuando las cámaras oyen lo mismo (patio); si no, la gente que
+    pasa de una a otra y su velocidad fijan el desfase (pasillo). Con el
+    corte correcto, las dos cámaras ponen a la misma gente en el mismo punto
+    del piso.
+\end{itemize}
+
+\begin{figure}[!ht]
 \centering
-\safeincludegraphics[width=0.82\linewidth]{figuras/validacion/patio-09nov-camaras.jpg}
+\safeincludegraphics[width=0.62\linewidth]{figuras/validacion/patio-09nov-camaras.jpg}
 \caption{Patio del Edificio A, 9 de noviembre, a los 104~s: 20 personas en
 cada cámara. G1, G7, G21 y G41 están a la vez lejos en cam01 (izquierda)
 y cerca en cam02 (derecha), con el mismo ID global.}
 \label{fig:patio-09nov-camaras}
 \end{figure}
 
-\begin{figure}[H]
+\begin{itemize}
+    \item \textbf{Con cámaras que se solapan, la asociación une a más gente.}
+    En el patio, donde las dos vistas comparten el centro (Figuras~\ref{fig:patio-09nov-recorridos}
+    y~\ref{fig:patio-09nov-calor}), el 28\,\% de las
+    personas lleva el mismo ID en las dos cámaras; en el pasillo, donde no se
+    ven entre sí y el paso de una a otra toma 30~s, el 16\,\%, solo con el
+    Re-ID.
+\end{itemize}
+
+\begin{figure}[!ht]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-recorridos.png}
 \caption{Patio, 9 de noviembre: recorridos de las 149 personas sobre el piso
@@ -5113,20 +5476,21 @@ cruzan las vistas de las dos cámaras.}
 \label{fig:patio-09nov-calor}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-en-vivo-web.png}
-\caption{La misma grabación del patio en la plataforma (En vivo, «Ir a:
-Patio»), a los 104~s: seguimiento, mapa de calor y la lista de quién está en
-ese instante, con las cámaras que lo vieron y su tiempo en el plano. La
-plataforma marca 34 en el plano porque cuenta también a quien está entre dos
-detecciones, con su posición estimada.}
-\label{fig:patio-09nov-web}
-\end{figure}
+\begin{itemize}
+    \item \textbf{El límite sigue siendo el seguimiento de la gente lejana.}
+    En cam06 el seguidor abrió 314 IDs para unas 90 personas, sobre todo en
+    lo alto de la escalera y en la plaza, donde miden menos de 50~px
+    (Figuras~\ref{fig:pasillo-recorridos} y~\ref{fig:pasillo-calor}). El paso
+    de IDs lejanos reunió más de la mitad de esos tramos (272 de 457), pero
+    una persona puede quedar todavía partida en dos o tres IDs, y en grupos
+    vestidos parecido el Re-ID puede unir a dos personas, como se midió en la
+    Sección~\ref{sec:validacion-modelos}. Las cifras de personas son, por
+    eso, una estimación, no un conteo exacto.
+\end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-recorridos.png}
+\safeincludegraphics[width=0.85\linewidth]{figuras/validacion/pasillo-recorridos.png}
 \caption{Pasillo del Edificio D, 9 de noviembre: recorridos de las 128
 personas sobre la zona grabada~3, junto al comedor, con trazo marcado para
 las 20 vistas por las dos cámaras; G133 es la persona de la
@@ -5147,14 +5511,31 @@ brazo este hasta cam07.}
 \label{fig:pasillo-calor}
 \end{figure}
 
+La plataforma reproduce las dos grabaciones en En vivo y las resume en
+Insights como cualquier sesión (Figuras~\ref{fig:patio-09nov-web},
+\ref{fig:pasillo-web} y~\ref{fig:insights-09nov-web}).
+
 \begin{figure}[H]
 \centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-en-vivo-web.png}
+\caption{La misma grabación del patio en la plataforma (En vivo, ``Ir a:
+Patio''), a los 104~s: seguimiento, mapa de calor y la lista de quién está en
+ese instante, con las cámaras que lo vieron y su tiempo en el plano. La
+plataforma marca 34 en el plano porque cuenta también a quien está entre dos
+detecciones, con su posición estimada.}
+\label{fig:patio-09nov-web}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-en-vivo-web.png}
-\caption{La grabación del pasillo en la plataforma (En vivo, «Ir a: Pasillo
-del Edificio D»), a los 124.5~s: 128 personas en la sesión y 18 en el plano,
+\caption{La grabación del pasillo en la plataforma (En vivo, ``Ir a: Pasillo
+del Edificio D''), a los 124.5~s: 128 personas en la sesión y 18 en el plano,
 con el seguimiento sobre la L del pasillo, junto al comedor, y el mapa de calor
 de la escalera de cam06 al brazo este de cam07.}
 \label{fig:pasillo-web}
+\end{minipage}
 \end{figure}
 
 \begin{figure}[H]
@@ -5162,38 +5543,12 @@ de la escalera de cam06 al brazo este de cam07.}
 \safeincludegraphics[width=\linewidth]{figuras/validacion/insights-09nov-web.png}
 \caption{Insights de las dos grabaciones del 9 de noviembre: arriba el pasillo
 (128 personas, 33\,815 puntos, 2~min 34~s), abajo el patio (149 personas,
-64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan «sin
-determinar».}
+64\,746 puntos, 3~min 25~s). El género no se estima: todas quedan ``sin
+determinar''.}
 \label{fig:insights-09nov-web}
 \end{figure}
 
-Lo que muestran estas grabaciones:
-
-\begin{itemize}
-    \item \textbf{La ubicación por referencias aguanta teléfonos en la mano.}
-    Los cuatro videos se ubicaron sin calibrarlos, con 24 de 24 cuadros
-    reconocidos y 0.05 a 0.15~m de desvío, aunque cam06 se movió hasta
-    11.6\textdegree{}. Una zona nueva solo necesita sus referencias del en vivo.
-    \item \textbf{Con cámaras que se solapan, la asociación une a más gente.}
-    En el patio, donde las dos vistas comparten el centro, el 28\,\% de las
-    personas lleva el mismo ID en las dos cámaras; en el pasillo, donde no se
-    ven entre sí y el paso de una a otra toma 30~s, el 16\,\%, solo con el
-    Re-ID.
-    \item \textbf{La sincronía se puede verificar con los propios datos.} El
-    audio sirve cuando las cámaras oyen lo mismo (patio); si no, la gente que
-    pasa de una a otra y su velocidad fijan el desfase (pasillo). Con el
-    corte correcto, las dos cámaras ponen a la misma gente en el mismo punto
-    del piso.
-    \item \textbf{El límite sigue siendo el seguimiento de la gente lejana.}
-    En cam06 el seguidor abrió 314 IDs para unas 90 personas, sobre todo en
-    lo alto de la escalera y en la plaza, donde miden menos de 50~px. El paso
-    de IDs lejanos reunió más de la mitad de esos tramos (272 de 457), pero
-    una persona puede quedar todavía partida en dos o tres IDs, y en grupos
-    vestidos parecido el Re-ID puede unir a dos personas, como se midió en la
-    Sección~\ref{sec:validacion-modelos}. Las cifras de personas son, por
-    eso, una estimación, no un conteo exacto.
-\end{itemize}
-
+\FloatBarrier
 \section{Pruebas de Validación y Estrés del Modelo}
 \label{sec:pruebas}
 
@@ -5230,8 +5585,9 @@ Se midieron tres cosas:
 
 \subsubsection{Detector}
 
-Con la configuración del modelo en vivo (YOLO26m a 960~px), en una muestra de
-cuadros de 16 cámaras de interiores etiquetadas, el detector encontró el
+Con la configuración del modelo en vivo (YOLO26m~\cite{yolo26} a 960~px), en una muestra de
+cuadros de 16 cámaras de interiores etiquetadas (un conjunto más amplio que
+los 12 videos de los pares), el detector encontró el
 69\,\% de las personas, y el 70\,\% de lo que marcó era una persona
 etiquetada. La cifra real es algo mayor: las etiquetas dibujan el cuerpo
 completo aunque esté tapado por estantes, y aceptando una superposición menor
@@ -5245,10 +5601,10 @@ las lejanas.
 
 El Re-ID es la pieza que decide si dos tramos son la misma persona. El del
 Build, YOLO26s-ReID, estira cada recorte a un cuadrado y reconocía poco a la
-misma persona desde otra cámara. Se comparó primero con OSNet-AIN
-(\textit{omni-scale} con normalización por instancia, entrenado en MSMT17) y
+misma persona desde otra cámara. Se comparó primero con OSNet-AIN~\cite{zhou2022osnet}
+(\textit{omni-scale} con normalización por instancia, entrenado en MSMT17~\cite{wei2018}) y
 luego con dos modelos más recientes basados en \textit{transformers}:
-PersonViT ViT-S/16 (MSMT17) y CLIP-ReID ViT-B/16
+PersonViT~\cite{hu2024personvit} ViT-S/16 (MSMT17) y CLIP-ReID~\cite{li2023clipreid} ViT-B/16
 (Cuadro~\ref{tab:reid-modelos}). La segunda comparación usa 4 de los pares y
 4\,372 recortes; ahí la misma persona es la que el seguidor mantiene en el
 mismo tramo 2~s o 10~s después, y se compara con todas las demás personas de
@@ -5292,14 +5648,14 @@ OSNet-AIN + PersonViT + CLIP-ReID & 94.5\,\% & 83.3\,\% & 5.7 \\
 OSNet-AIN reconoce a la misma persona desde la otra cámara con 20 puntos más
 de acierto y une al doble de tramos correctos con el mismo error. Entre los
 modelos recientes, ninguno solo supera claramente a OSNet-AIN; promediar el
-parecido de OSNet-AIN y PersonViT gana unos 3 puntos y acepta como iguales a
+parecido de OSNet-AIN y PersonViT gana de 2 a 3 puntos y acepta como iguales a
 un 20\,\% menos de pares de personas distintas, por 2.6~ms por recorte. Sumar
 CLIP-ReID apenas agrega medio punto y duplica el tiempo, así que se descartó.
 
 \subsubsection{Seguimiento dentro de cada cámara}
 
 El seguidor compara la apariencia con histogramas de color y con un vector de
-una ResNet18 entrenada en ImageNet, que no es un modelo de Re-ID. En los 12
+una ResNet18~\cite{he2016} entrenada en ImageNet~\cite{deng2009}, que no es un modelo de Re-ID. En los 12
 videos, casi la mitad de los errores ocurría cuando el seguidor perdía a una
 persona y, al recuperarla, le ponía el ID de otra (en una cámara, 192 de 364
 saltos); el resto, cuando dos personas se cruzaban, porque decidía casi solo
@@ -5395,10 +5751,13 @@ la probabilidad de que la persona más parecida en la otra cámara sea la
 misma pasa de 58 a 78\,\%, se unen casi el doble de tramos correctos, la
 misma persona vista a la vez en dos cámaras lleva el mismo ID 2.6 veces más
 seguido y los IDs que mezclan personas bajan a menos de la mitad. Además,
-grabar las redes en CUDA graphs y decodificar el video en la GPU subió la
-fracción de cuadros procesados de dos videos de 5~min del 36 al 54\,\%, y con
-7 cámaras de 60~fps bajó el tiempo por paso de 1.8 a 0.58~s, con los mismos
-resultados.
+con los mismos resultados, grabar las redes en CUDA graphs subió la fracción
+de cuadros procesados en tiempo real de un par de videos de 5~min del 36 al
+54\,\% (en las pruebas de carga, los cinco pares procesan el 73\,\%,
+Cuadro~\ref{tab:pares-modos}), y decodificar el video en la GPU, entre otros
+ajustes, bajó el paso de 7 cámaras de 60~fps en tiempo real de 1.8 a 0.58~s
+(de 0.5 a 1.7 cuadros por segundo de cada video); sin el reloj del tiempo
+real, ese paso toma de 603 a 794~ms (Cuadro~\ref{tab:siete}).
 
 \begin{figure}[H]
 \centering
@@ -5427,8 +5786,8 @@ cuadro y las personas contadas de cada video. Los casos fueron:
 
 \begin{itemize}
     \item \textbf{Validación:} cinco pares de videos (P1 a P5) de dos cámaras
-    que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 90
-    personas por video.
+    que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 86
+    personas contadas por cámara (Cuadro~\ref{tab:pares-detalle}).
     \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar,
     con unas 25 personas a la vista en cada una.
 \end{itemize}
@@ -5579,8 +5938,8 @@ persona entre dos cuadros procesados seguidos.}
 
 \begin{itemize}
     \item \textbf{Dos cámaras van casi al ritmo del video.} Con dos cámaras
-    1080p a 23~fps el modelo procesa unos 16 a 17 cuadros por segundo por video
-    (unos 34 en total), alrededor del 70\,\% de los cuadros.
+    1080p a 23~fps el modelo procesa unos 17 cuadros por segundo por video
+    (unos 34 en total), alrededor del 73\,\% de los cuadros.
     \item \textbf{La cantidad de gente baja el ritmo.} El par con más personas
     (P2, más de 80 por cámara) procesa unos 13 cuadros por segundo, frente a
     18 del que tiene menos (P3).
@@ -5594,7 +5953,7 @@ persona entre dos cuadros procesados seguidos.}
     de video se procesan en 3 veces su duración sin saltar ningún cuadro
     elegido. Frente a 1.5 cuadros por segundo, el movimiento entre cuadros
     seguidos baja a la mitad (p90 de 0.15 alturas de la caja frente a 0.31),
-    el 85\,\% de las detecciones lleva ID global (76\,\%) y más IDs se
+    el 85\,\% de las detecciones lleva ID global (frente al 76\,\% a 1.5 c/s) y más IDs se
     reconocen entre cámaras. Para siete cámaras conviene procesar por lotes a
     una tasa fija de 5 cuadros por segundo y no en tiempo real.
     \item \textbf{Memoria y energía.} El modelo ocupa entre 1.4 y 4.7~GB de
@@ -5616,6 +5975,19 @@ supermercados, farmacias, estaciones, terminales y aeropuertos. Las cifras de
 mercado y de precios son de fuentes públicas consultadas el 27 de octubre de
 2026; los montos marcados como estimados y las tasas de conversión son
 supuestos del plan.
+
+\subsection{Resumen}
+
+\textbf{Problema.} En un lugar con público hay dos preguntas de dinero que
+nadie responde con datos: una tienda no sabe cuántas de las personas que pasan
+por su puerta entran ni cuántas compran, y quien vende o compra publicidad no
+sabe cuánta gente ve realmente cada pantalla o espacio.
+
+\textbf{Idea.} AeroVision usa las cámaras que ya existen y una computadora que
+procesa las grabaciones de noche para medir dos cosas: la \textbf{captación de
+una tienda} (pasan, se detienen frente a la vitrina, entran y compran) y la
+\textbf{audiencia de un lugar} (cuántos lo ven y cuánto tiempo). Se vende como
+estudio puntual y como informe mensual.
 
 \subsection{Relación del plan con la guía PMBOK}
 
@@ -5653,23 +6025,10 @@ Hipótesis y criterios de validación & Plan de gestión de beneficios: benefici
 \hline
 Cronograma de próximos pasos & Lista de hitos (PMBOK 6, cap.~6) & Cuadro~\ref{tab:cronograma} \\
 \hline
-Normativa y privacidad & Restricciones y riesgo legal R6 del plan de riesgos & Sección~\ref{sec:riesgos} \\
+Normativa y privacidad & Restricciones y riesgo legal R6 del plan de riesgos & Sección~\ref{sec:normativa} \\
 \hline
 \end{tabular}
 \end{table}
-
-\subsection{Resumen}
-
-\textbf{Problema.} En un lugar con público hay dos preguntas de dinero que
-nadie responde con datos: una tienda no sabe cuántas de las personas que pasan
-por su puerta entran ni cuántas compran, y quien vende o compra publicidad no
-sabe cuánta gente ve realmente cada pantalla o espacio.
-
-\textbf{Idea.} AeroVision usa las cámaras que ya existen y una computadora que
-procesa las grabaciones de noche para medir dos cosas: la \textbf{captación de
-una tienda} (pasan, se detienen frente a la vitrina, entran y compran) y la
-\textbf{audiencia de un lugar} (cuántos lo ven y cuánto tiempo). Se vende como
-estudio puntual y como informe mensual.
 
 \subsection{El problema y quién paga}
 
@@ -5681,8 +6040,8 @@ del retail~\cite{crosscan,growthfactor}, y la vitrina influye en la
 captación~\cite{ariadne}. En publicidad, JCDecaux opera los espacios del nuevo
 aeropuerto Jorge Chávez y vende sobre el flujo total de
 pasajeros~\cite{mn-jcdecaux}, que no es la audiencia de cada pantalla; en la
-vía pública ya existe medición sindicada~\cite{mn-ooh}, pero dentro de los
-recintos no hay medición con cámaras (Cuadro~\ref{tab:clientes}).
+vía pública ya existe medición sindicada~\cite{mn-ooh}, pero no se encontró
+una medición sindicada dentro de los recintos (Cuadro~\ref{tab:clientes}).
 
 \begin{table}[H]
 \caption{Clientes, su pregunta y por qué pagarían}
@@ -5690,7 +6049,7 @@ recintos no hay medición con cámaras (Cuadro~\ref{tab:clientes}).
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.22\textwidth}|L{0.11\textwidth}|L{0.19\textwidth}|L{0.17\textwidth}|L{0.20\textwidth}|}
+\begin{tabular}{|L{0.19\textwidth}|L{0.11\textwidth}|L{0.19\textwidth}|L{0.17\textwidth}|L{0.20\textwidth}|}
 \hline
 \textbf{Cliente} & \textbf{Producto} & \textbf{Su pregunta} & \textbf{Cómo lo resuelve hoy} & \textbf{Por qué pagaría} \\
 \hline
@@ -5754,7 +6113,7 @@ calcula, para el operador, el valor de cada local según su tráfico.
 
 AeroVision ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
 código está en el repositorio
-\url{https://github.com/23-Andres-QC/Aeropuerto}, que suma 282 commits entre
+\url{https://github.com/23-Andres-QC/Aeropuerto}, que suma 284 commits entre
 el 30 de septiembre y el 10 de noviembre de 2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
 personas que pasan por el frente, las que se detienen (estancia de al menos
 5~s), las que entran y las que compran (Secciones~\ref{sec:arquitectura}
@@ -5794,7 +6153,7 @@ tienda; detector con licencia libre (hoy YOLO, AGPL); consola multicliente.
 
 El mercado mundial de sistemas de conteo de personas vale unos US\$~1\,450
 millones en 2025 y crecería cerca de 13\,\% al año hasta US\$~2\,670 millones
-en 2030~\cite{mordor}. El hardware aún concentra el 63\,\% del ingreso, pero
+en 2030~\cite{mordor}. El hardware aún concentra el 63\,\% del ingreso~\cite{mordor}, pero
 los servicios gestionados son lo que más crece: el espacio de un software que
 reutiliza cámaras. El Cuadro~\ref{tab:mercado} dimensiona el mercado peruano
 por locales comerciales con tres niveles: el TAM (mercado total disponible)
@@ -5818,7 +6177,7 @@ TAM Perú & 9\,000+ comercios en los 88 malls de ACCEP~\cite{accep}, 20\,000+ ti
 \hline
 SAM & Lima, locales con cámara IP utilizable ($\sim$30\,\% del TAM) & $\sim$10\,400 locales & $\sim$S/~18.6 millones \\
 \hline
-SOM a 2031 & Meta del plan & 750 locales y 350 pantallas & $\sim$S/~2.1 millones \\
+SOM a 2031 & Meta del plan; ingreso anual al ritmo de fin de 2031 & 750 locales y 350 pantallas & $\sim$S/~2.1 millones \\
 \hline
 \end{tabular}
 \end{table}
@@ -5901,7 +6260,7 @@ análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
     \item Sin medición de audiencia dentro de los recintos
     \item JCDecaux en el nuevo Jorge Chávez y pantallas en malls y estaciones
     \item Miles de locales en malls, galerías, supermercados y boticas
-    \item Fondos de ProInnóvate e incubadoras} &
+    \item Fondos de ProInnóvate~\cite{proinnovate} e incubadoras} &
 \fodacelda{red!12}{Amenazas}{%
     \item Competidores que también usan el CCTV existente
     \item Analítica incluida en las cámaras nuevas
@@ -5934,7 +6293,7 @@ DA & Estudios cortos y pagados con métricas firmadas; resolver la licencia del 
 
 \subsection{Modelo Canvas}
 
-El Modelo Canvas de negocio, propuesto por Osterwalder y Pigneur, describe en
+El Modelo Canvas de negocio, propuesto por Osterwalder y Pigneur~\cite{osterwalder2010}, describe en
 una sola vista cómo una empresa crea, entrega y captura valor, mediante nueve
 bloques: segmentos de clientes, propuesta de valor, canales, relación con los
 clientes, fuentes de ingresos, recursos clave, actividades clave, socios clave
@@ -6070,7 +6429,7 @@ de apertura al día en modo liviano; una de pantalla, 3 horas pico al día con
 el modelo completo.
 
 La capacidad sale de las pruebas de estrés (Sección~\ref{sec:pruebas}): con
-el modelo completo, la RTX~4060 procesa unos 32 cuadros por segundo en total
+el modelo completo, la RTX~4060 procesa unos 34 cuadros por segundo en total
 con dos cámaras 1080p, y unos 12 con siete cámaras 1080p de 60~fps a la vez
 y mucha gente, porque el seguimiento de cada cámara corre en la CPU; por
 eso el lote se procesa de dos en dos cámaras. Tres horas pico a 5 cuadros por
@@ -6111,10 +6470,11 @@ Precio por cámara & $\sim$S/~99 & $\sim$S/~99 & S/~180 & S/~180 \\
 El costo crece por bloques: cada 10 cámaras se necesita otra computadora
 (S/~255 al mes), más S/~17 por cámara de tienda o S/~20 por cámara de pantalla.
 Así, 10 cámaras cuestan S/~425 al mes en tiendas y 100 cámaras, S/~4\,250. Con
-el tope de 10 cámaras, la computadora propia (S/~26 por cámara) cuesta lo
-mismo que la nube interrumpible (S/~25 a 33) y un tercio de la nube a demanda
-(S/~73 a 97); procesar en la nube en vivo las 24 horas costaría entre S/~145 y
-S/~817 por cámara~\cite{doit}. La energía se calcula a S/~0.72 por kWh, tarifa
+el tope de 10 cámaras, la computadora propia cuesta unos S/~26 por cámara al mes.
+Procesar en vivo las 24 horas en la nube, con una GPU por cada dos cámaras como
+la RTX~4060 en las pruebas de carga, cuesta de unos US\$~27 por cámara al mes
+en Vast.ai a US\$~320 en la nube segura de RunPod, y de US\$~189 a 194 con una
+T4 a demanda en AWS, Azure o Google Cloud (Cuadro~\ref{tab:nube-proveedores}). La energía se calcula a S/~0.72 por kWh, tarifa
 BT5B de Luz del Sur~\cite{osinergmin}.
 
 \subsection{Pronóstico financiero}
@@ -6128,8 +6488,8 @@ cada computadora nueva se compra con ventas ya cobradas, la caja nunca baja de
 la reserva y el paso a tiempo completo llega cuando el negocio puede pagarlo,
 hacia 2029 (Cuadros~\ref{tab:caja} y~\ref{tab:crecimiento}).
 
-\begin{table}[H]
-\caption{Caja mes a mes, noviembre de 2026 a diciembre de 2027}
+\begin{table}[!ht]
+\caption{Caja en los meses con hitos, noviembre de 2026 a diciembre de 2027 (el saldo incluye los meses intermedios)}
 \label{tab:caja}
 \centering
 \footnotesize
@@ -6221,6 +6581,7 @@ Nadie compra en 2027 & -- & -- & La reserva sigue intacta \\
 \end{tabular}
 \end{table}
 
+\FloatBarrier
 \subsection{Evaluación financiera: VAN, TIR y COK}
 
 Para saber si el negocio crea valor se compara lo que se invierte hoy con lo que
@@ -6245,7 +6606,7 @@ S/~79\,000 (2028), S/~222\,000 (2029), S/~490\,000 (2030) y S/~927\,000 (2031),
 sin valor de rescate al final del horizonte de cinco años. El \textbf{COK} es un
 supuesto de trabajo de 20\,\% anual, propio de un negocio de tecnología en etapa
 inicial, y debe confirmarse con el docente; por eso se muestra también con otros
-valores.
+valores. El Cuadro~\ref{tab:van-base} muestra el cálculo del escenario base.
 
 \begin{table}[H]
 \caption{VAN y TIR del escenario base, con COK de 20\,\%}
@@ -6331,7 +6692,7 @@ plan
 hasta diciembre de 2027. La hipótesis técnica sobre el costo (la número 7)
 parte de la capacidad medida en la Sección~\ref{sec:pruebas}.
 
-\begin{table}[H]
+\begin{table}[!ht]
 \caption{Hipótesis, prueba y criterio de validación}
 \label{tab:hipotesis}
 \centering
@@ -6389,13 +6750,80 @@ Dic 2027 & 10 tiendas y 10 pantallas (25 cámaras); tercera computadora \\
 \end{tabular}
 \end{table}
 
+\FloatBarrier
 \subsection{Normativa}
+\label{sec:normativa}
 
-El tratamiento de datos se rige por la Ley N.\textdegree~29733 y su reglamento,
+El tratamiento de datos se rige por la Ley N.\textdegree~29733~\cite{ley29733} y su reglamento,
 aprobado por el D.S. N.\textdegree~016-2024-JUS~\cite{reglamento29733}. AeroVision
 actúa como encargado del tratamiento del cliente: procesa las grabaciones
 dentro de su red o en su propia computadora, no guarda imágenes ni rostros,
 borra el video al terminar y entrega solo conteos y tasas.
+
+\section{Conclusiones y Recomendaciones}
+\label{sec:conclusiones}
+
+\subsection{Conclusiones}
+
+\begin{enumerate}
+    \item \textbf{Detección y seguimiento local.} YOLO26m con el seguidor
+    híbrido por cámara siguió a las 16 personas de la primera prueba; el
+    ajuste de umbrales bajó los identificadores locales de 88 a 80 y los
+    de personas lejanas de 7 a 1, de modo que una persona aún puede
+    partirse en varios tramos dentro de una cámara. El modelo procesa unos
+    17 cuadros por segundo por video con dos cámaras 1080p en la RTX~4060
+    Laptop (Secciones~\ref{sec:validacion-esan} y~\ref{sec:pruebas}).
+    \item \textbf{Re-identificación sin rostro.} La apariencia corporal
+    bastó para asociar personas entre cámaras con una precisión de 0.99 y
+    un \textit{recall} de 0.86 en la primera prueba; en el comedor cada
+    persona recibió el mismo identificador en los dos teléfonos, y en las
+    grabaciones del 9 de noviembre se siguió a 149 personas en el patio
+    (41 en las dos cámaras) y a 128 en el pasillo (20 en las dos)
+    (Sección~\ref{sec:mas-gente}).
+    \item \textbf{Plano 2D.} La homografía ubicó en el plano el 93\,\% de
+    las detecciones con un error de calibración mediano de 0.28 a 0.48~m,
+    y las referencias del en vivo ubicaron grabaciones sin modelo de
+    cámara (24 de 24 cuadros reconocidos).
+    \item \textbf{Patrones históricos.} KDE, PrefixSpan y el grafo
+    origen-destino generan mapas de calor, rutas frecuentes y flujos entre
+    zonas a partir de las sesiones guardadas (Sección~\ref{sec:algoritmos}).
+    \item \textbf{Métricas y tablero.} La plataforma muestra en vivo y por
+    sesión los conteos, permanencias, mapas de calor y rutas, exporta el
+    reporte en PDF y controla el acceso por roles, con permisos de
+    exportación aprobados por el superadmin (Sección~\ref{sec:arquitectura}).
+    \item \textbf{Datos.} PostgreSQL/PostGIS conserva la trazabilidad de
+    cámara, identidad seudónima, trayectoria y evento sin imágenes. La
+    memoria de identidades del en vivo sí guarda vectores de apariencia,
+    que se borran a las 24~horas sin ver a la persona; los puntos crudos se
+    borran a los 90 días y quedan solo los agregados.
+    \item \textbf{Salvaguardas.} El sistema no usa el rostro ni estima el
+    género, y la retención es corta; quedan abiertas las brechas legales
+    de la Sección~\ref{sec:analisis-legal}, en especial el tratamiento de
+    menores y la calificación de los vectores de Re-ID como dato
+    biométrico.
+    \item \textbf{Costos y negocio.} Procesar en una computadora propia
+    cuesta unos US\$~70 al mes, frente a US\$~379--389 de una T4 a demanda
+    en las grandes nubes (Cuadro~\ref{tab:nube-proveedores}); con ese costo,
+    el plan de negocio da un VAN de S/~798\,320 al 20\,\% y sigue positivo
+    con los flujos reducidos a la cuarta parte (Cuadro~\ref{tab:van-sens}).
+\end{enumerate}
+
+\subsection{Recomendaciones}
+
+\begin{itemize}
+    \item Validar el sistema con el CCTV real del aeropuerto, en un piloto
+    acordado con LAP, porque las pruebas se hicieron en ESAN con tres
+    cámaras fijas y con teléfonos.
+    \item Cerrar antes de cualquier despliegue las decisiones legales
+    pendientes: opinión legal sobre los vectores de Re-ID, tratamiento de
+    menores, contrato de encargo con el cliente y registro del banco de
+    datos (Cuadro~\ref{tab:matriz-legal}).
+    \item Medir el sesgo del detector y del Re-ID con grupos diversos de
+    personas, como propone la matriz de cumplimiento~\cite{matrices2026}.
+    \item Cotizar la computadora con GPU, que hoy es un supuesto de
+    S/~4\,500, y elegir entre computadora propia y nube según las horas de
+    uso al mes (Cuadro~\ref{tab:nube-proveedores}).
+\end{itemize}
 
 \section{Referencias Bibliográficas}
 
@@ -6454,6 +6882,82 @@ Zhou \textit{et al.}, ``Real-time pedestrian detection and multi-object
 tracking in complex airport scenes via frequency-aware and
 Mamba-enhanced representation,'' Chongqing y Nanjing Airlines, China,
 2026.
+
+\bibitem{yolo26}
+Ultralytics, ``Ultralytics YOLO26,'' documentación oficial, 2026. [En
+línea]. Disponible: \url{https://docs.ultralytics.com/models/yolo26/}
+
+\bibitem{zhou2022osnet}
+K.~Zhou, Y.~Yang, A.~Cavallaro y T.~Xiang, ``Learning Generalisable
+Omni-Scale Representations for Person Re-Identification,'' \textit{IEEE
+Trans. Pattern Analysis and Machine Intelligence}, vol.~44, no.~9,
+pp.~5056--5069, 2022.
+
+\bibitem{hu2024personvit}
+B.~Hu, X.~Wang y W.~Liu, ``PersonViT: Large-scale Self-supervised Vision
+Transformer for Person Re-Identification,'' arXiv:2408.05398, 2024. [En
+línea]. Disponible: \url{https://arxiv.org/abs/2408.05398}
+
+\bibitem{hartley2004}
+R.~Hartley y A.~Zisserman, \textit{Multiple View Geometry in Computer
+Vision}, 2.\textordfeminine{} ed. Cambridge: Cambridge University Press,
+2004.
+
+\bibitem{he2016}
+K.~He, X.~Zhang, S.~Ren y J.~Sun, ``Deep Residual Learning for Image
+Recognition,'' en \textit{Proc. IEEE Conf. Computer Vision and Pattern
+Recognition (CVPR)}, 2016, pp.~770--778.
+
+\bibitem{wei2018}
+L.~Wei, S.~Zhang, W.~Gao y Q.~Tian, ``Person Transfer GAN to Bridge Domain
+Gap for Person Re-Identification,'' en \textit{Proc. IEEE CVPR}, 2018,
+pp.~79--88.
+
+\bibitem{deng2009}
+J.~Deng, W.~Dong, R.~Socher, L.-J.~Li, K.~Li y L.~Fei-Fei, ``ImageNet: A
+Large-Scale Hierarchical Image Database,'' en \textit{Proc. IEEE CVPR},
+2009, pp.~248--255.
+
+\bibitem{zhang2022bytetrack}
+Y.~Zhang \textit{et al.}, ``ByteTrack: Multi-Object Tracking by Associating
+Every Detection Box,'' en \textit{Proc. European Conf. Computer Vision
+(ECCV)}, 2022, pp.~1--21.
+
+\bibitem{kuhn1955}
+H.~W.~Kuhn, ``The Hungarian Method for the Assignment Problem,''
+\textit{Naval Research Logistics Quarterly}, vol.~2, no.~1--2,
+pp.~83--97, 1955.
+
+\bibitem{parzen1962}
+E.~Parzen, ``On Estimation of a Probability Density Function and Mode,''
+\textit{The Annals of Mathematical Statistics}, vol.~33, no.~3,
+pp.~1065--1076, 1962.
+
+\bibitem{pei2001}
+J.~Pei, J.~Han, B.~Mortazavi-Asl, H.~Pinto, Q.~Chen, U.~Dayal y
+M.-C.~Hsu, ``PrefixSpan: Mining Sequential Patterns Efficiently by
+Prefix-Projected Pattern Growth,'' en \textit{Proc. 17th Int. Conf. Data
+Engineering (ICDE)}, 2001, pp.~215--224.
+
+\bibitem{knapp1976}
+C.~H.~Knapp y G.~C.~Carter, ``The Generalized Correlation Method for
+Estimation of Time Delay,'' \textit{IEEE Trans. Acoustics, Speech, and
+Signal Processing}, vol.~24, no.~4, pp.~320--327, 1976.
+
+\bibitem{li2023clipreid}
+S.~Li, L.~Sun y Q.~Li, ``CLIP-ReID: Exploiting Vision-Language Model for
+Image Re-Identification without Concrete Text Labels,'' en \textit{Proc.
+AAAI Conf. Artificial Intelligence}, vol.~37, no.~1, 2023,
+pp.~1405--1413.
+
+\bibitem{lowe2004}
+D.~G.~Lowe, ``Distinctive Image Features from Scale-Invariant Keypoints,''
+\textit{Int. J. Computer Vision}, vol.~60, no.~2, pp.~91--110, 2004.
+
+\bibitem{fischler1981}
+M.~A.~Fischler y R.~C.~Bolles, ``Random Sample Consensus: A Paradigm for Model
+Fitting with Applications to Image Analysis and Automated Cartography,''
+\textit{Communications of the ACM}, vol.~24, no.~6, pp.~381--395, 1981.
 
 \bibitem{crosscan}
 Crosscan, ``Site optimization through people counting,'' 2026. [En línea].
@@ -6547,12 +7051,128 @@ Hace Cuentas, ``Calculadora del recibo de luz con el pliego de Osinergmin,''
 2026. [En línea]. Disponible:
 \url{https://hacecuentas.com/pe/calculadora-recibo-luz-peru-osinergmin}
 
+\bibitem{gcp-vm}
+Google Cloud, ``VM instance pricing,'' 2026. [En línea]. Disponible:
+\url{https://cloud.google.com/compute/vm-instance-pricing}
+
+\bibitem{gcp-gpu}
+Google Cloud, ``GPU pricing,'' 2026. [En línea]. Disponible:
+\url{https://cloud.google.com/compute/gpus-pricing}
+
+\bibitem{gcp-g2}
+Google Cloud, ``Accelerator-optimized VMs pricing,'' 2026. [En línea].
+Disponible: \url{https://cloud.google.com/products/compute/pricing/accelerator-optimized}
+
+\bibitem{doit-g4dn}
+DoiT, ``g4dn.xlarge spot pricing in us-east-1,'' consultado el 10 de noviembre
+de 2026. [En línea]. Disponible:
+\url{https://www.doit.com/compute/spot/us-east-1/g4dn.xlarge}
+
+\bibitem{doit-g6}
+DoiT, ``g6.xlarge spot pricing in us-east-1,'' consultado el 10 de noviembre
+de 2026. [En línea]. Disponible:
+\url{https://www.doit.com/compute/spot/us-east-1/g6.xlarge}
+
+\bibitem{azurespeed-t4}
+AzureSpeed, ``Standard\_NC4as\_T4\_v3 pricing,'' 2026. [En línea]. Disponible:
+\url{https://www.azurespeed.com/AzureVmPricing/Standard_NC4as_T4_v3}
+
+\bibitem{sparecores-t4}
+Spare Cores, ``Azure Standard\_NC4as\_T4\_v3,'' precio \textit{spot} observado el
+11 de noviembre de 2026. [En línea]. Disponible:
+\url{https://sparecores.com/server/azure/Standard_NC4as_T4_v3}
+
+\bibitem{runpod}
+RunPod, ``Pricing,'' actualizado el 9 de noviembre de 2026. [En línea].
+Disponible: \url{https://www.runpod.io/pricing}
+
+\bibitem{do-gpu}
+DigitalOcean, ``GPU Droplets pricing,'' vigente desde el 1 de agosto de 2026.
+[En línea]. Disponible: \url{https://www.digitalocean.com/pricing/gpu-droplets}
+
+\bibitem{paperspace}
+DigitalOcean, ``Paperspace pricing,'' actualizado el 13 de julio de 2026.
+[En línea]. Disponible: \url{https://docs.digitalocean.com/products/paperspace/pricing}
+
+\bibitem{hetzner-gex}
+Hetzner Online, ``Dedicated server GEX45,'' 2026. [En línea]. Disponible:
+\url{https://www.hetzner.com/dedicated-rootserver/gex44/}
+
+\bibitem{vast-3060}
+ComputePrices, ``Vast.ai RTX 3060 pricing,'' actualizado el 10 de noviembre de
+2026. [En línea]. Disponible:
+\url{https://computeprices.com/providers/vast/gpus/rtx-3060}
+
+\bibitem{ecb-eurusd}
+Banco Central Europeo, ``Euro foreign exchange reference rates,'' 10 de
+noviembre de 2026. [En línea]. Disponible:
+\url{https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml}
+
 \bibitem{reglamento29733}
 Ministerio de Justicia y Derechos Humanos, ``Decreto Supremo N.\textdegree~016-2024-JUS,
 Reglamento de la Ley N.\textdegree~29733, Ley de Protección de Datos
 Personales,'' 2024. [En línea]. Disponible:
 \url{https://www.gob.pe/institucion/anpd/normas-legales/6554453-n-016-2024-jus}
 
+\bibitem{ley29733}
+Congreso de la República del Perú, ``Ley N.\textdegree~29733, Ley de Protección
+de Datos Personales,'' publicada en el Diario Oficial El Peruano el 3 de julio
+de 2011. [En línea]. Disponible:
+\url{https://www.gob.pe/institucion/anpd/normas-legales/2018346-29733-2011}
+
+\bibitem{gdpr}
+Parlamento Europeo y Consejo de la Unión Europea, ``Reglamento (UE) 2016/679
+(Reglamento general de protección de datos),'' \textit{Diario Oficial de la
+Unión Europea}, L~119, 4 de mayo de 2016. [En línea]. Disponible:
+\url{https://eur-lex.europa.eu/eli/reg/2016/679/oj}
+
+\bibitem{directiva-videovigilancia}
+Ministerio de Justicia y Derechos Humanos (DGTAIPD), ``Directiva
+N.\textdegree~01-2020-JUS/DGTAIPD, Directiva para el tratamiento de datos
+personales mediante sistemas de videovigilancia,'' aprobada por la R.D.
+N.\textdegree~02-2020-JUS/DGTAIPD, 2020. [En línea]. Disponible:
+\url{https://www.gob.pe/institucion/anpd/informes-publicaciones/1938476-directiva-para-el-tratamiento-de-datos-personales-mediante-sistemas-de-videovigilancia}
+
+\bibitem{opinion045}
+Autoridad Nacional de Protección de Datos Personales, ``Opinión Consultiva
+N.\textdegree~045-2021-JUS/DGTAIPD sobre videovigilancia con fines de control
+laboral,'' 2021, difundida por LP Derecho. [En línea]. Disponible:
+\url{https://lpderecho.pe/instalar-camaras-vigilancia-control-laboral-opinion-consultiva-045-2021-jus-dgtaipd/}
+
+\bibitem{cele-ia}
+Observatorio Legislativo del CELE, ``Informe legislativo N.\textdegree~18: Perú
+(Ley N.\textdegree~31814 y su reglamento),'' s.f. [En línea]. Disponible:
+\url{https://observatoriolegislativocele.com/wp-content/uploads/informe-legislativo-18-peru.pdf}
+
+\bibitem{cuatrecasas-ia}
+I.~Blume, ``¿Qué establece el Reglamento de la Ley de Inteligencia
+Artificial?,'' Cuatrecasas, 10 de septiembre de 2025. [En línea]. Disponible:
+\url{https://www.cuatrecasas.com/es/latam/tecnologia-medios-digitales/art/que-establece-el-reglamento-de-la-ley-de-inteligencia-artificial}
+
+\bibitem{recordinglaw}
+Recording Law, ``Leyes de Privacidad de Datos en Perú: Ley 29733, DS
+016-2024-JUS y Guía del Reglamento 2025,'' 8 de julio de 2026. [En línea].
+Disponible:
+\url{https://www.recordinglaw.com/es/world-laws/world-data-privacy-laws/peru-data-privacy-laws/}
+
+\bibitem{comexperu-menores}
+COMEXPERU, documento sobre proyectos de ley y el consentimiento de menores de
+edad en entornos digitales, febrero de 2025. [En línea]. Disponible:
+\url{https://comexperu.org.pe/upload/articles/proyectos-de-ley/carta-mujer_menores-de-edad-digital_feb2025-1.pdf}
+
+\bibitem{modelo-biometricos}
+Modelo.pe, ``Cláusula de Consentimiento para Tratamiento de Datos Sensibles y
+Biométricos,'' 2026. [En línea]. Disponible:
+\url{https://modelo.pe/clausula-de-consentimiento-para-tratamiento-de-datos-sensibles-y-biometricos/}
+
+\bibitem{matrices2026}
+AeroVision, ``Matrices de cumplimiento legal y ético,'' borrador v2, documento
+interno del proyecto, 7 de noviembre de 2026.
+
+
+\bibitem{ultralytics-licencia}
+Ultralytics, ``Ultralytics Licensing (AGPL-3.0 y licencia Enterprise),'' 2026.
+[En línea]. Disponible: \url{https://www.ultralytics.com/license}
 
 \bibitem{pmbok6}
 Project Management Institute, \textit{A Guide to the Project Management Body of
@@ -6571,6 +7191,14 @@ Londres: The Stationery Office (TSO), 2018.
 K.~Schwaber y J.~Sutherland, \textit{The Scrum Guide}, 2017. [En línea].
 Disponible: \url{https://www.scrumguides.org}
 
+\bibitem{osterwalder2010}
+A.~Osterwalder e Y.~Pigneur, \textit{Business Model Generation}. Hoboken, NJ:
+John Wiley \& Sons, 2010.
+
+\bibitem{proinnovate}
+ProInnóvate, ``Programa Nacional de Desarrollo Tecnológico e Innovación,'' 2026.
+[En línea]. Disponible: \url{https://www.proinnovate.gob.pe}
+
 \end{thebibliography}
 \endgroup
 
@@ -6586,8 +7214,10 @@ plataforma. En la Figura~\ref{fig:comedor-grabacion} se ve, a la izquierda, la
 sesión mientras se graba (``Grabando'', con 4 personas en el plano, cada una
 con su ID global) y, a la derecha, el mapa de calor que se va formando. Al
 pulsar ``Terminar y guardar'', la sesión queda registrada con sus recorridos
-(un color por persona) y su mapa de calor final: 57 personas y 9\,907 puntos
-(Figura~\ref{fig:comedor-guardada}).
+(un color por persona) y su mapa de calor final (Figura~\ref{fig:comedor-guardada}).
+Es una captura del modo en vivo, distinta de la sesión procesada como tanda de
+Videos del Cuadro~\ref{tab:mas-gente} (4 personas): la plataforma registró 57 IDs
+y 9\,907 puntos.
 
 \begin{figure}[H]
 \centering
@@ -6631,16 +7261,6 @@ autorización para ser grabados.}
 \label{fig:comedor-participantes}
 \end{figure}
 
-Además, la Figura~\ref{fig:pruebas-participantes} muestra al grupo de
-personas que participó en las pruebas del proyecto.
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.75\linewidth]{figuras/validacion/pruebas-participantes.png}
-\caption{Personas participantes en las pruebas del proyecto.}
-\label{fig:pruebas-participantes}
-\end{figure}
-
 La Figura~\ref{fig:pruebas-area-mapeada} muestra una vista desde lo alto del
 proceso de prueba: los participantes se desplazan por el área mapeada, mientras
 el sistema ubica a cada persona sobre el plano.
@@ -6652,36 +7272,35 @@ el sistema ubica a cada persona sobre el plano.
 \label{fig:pruebas-area-mapeada}
 \end{figure}
 
-\clearpage
 \subsection*{Capturas de las calculadoras de costos en la nube}
 \label{anexo:nube}
 
-Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres escenarios de uso (240, 360 y 720 horas al mes) del Cuadro~\ref{tab:nube-resumen}.
+Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres escenarios de uso (240, 360 y 720 horas al mes) del Cuadro~\ref{tab:nube-resumen}: Google Cloud en las Figuras~\ref{fig:nube-gcp-resumen} y~\ref{fig:nube-gcp-detalle}, AWS en la Figura~\ref{fig:nube-aws} y Azure en la Figura~\ref{fig:nube-azure}.
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/gcp-240-resumen.png}\\
-{\footnotesize 240 horas: 130,60 US\$ al mes}
+{\footnotesize 240 horas: US\$~130.60 al mes}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/gcp-360-resumen.png}\\
-{\footnotesize 360 horas: 195,40 US\$ al mes}
+{\footnotesize 360 horas: US\$~195.40 al mes}
 \end{minipage}
 \vspace{0.4cm}
 
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/gcp-720-resumen.png}\\
-{\footnotesize 720 horas: 389,80 US\$ al mes}
-\end{minipage}\hfill
+{\footnotesize 720 horas: US\$~389.80 al mes}
+\end{minipage}
 \caption{Google Cloud, Compute Engine: horas de uso y costo mensual estimado de cada escenario.}
 \label{fig:nube-gcp-resumen}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[t]{0.48\linewidth}
 \centering
@@ -6711,48 +7330,48 @@ Capturas de las calculadoras oficiales de Google Cloud, AWS y Azure con los tres
 \label{fig:nube-gcp-detalle}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/aws-240.png}\\
-{\footnotesize 240 horas: 129,35 US\$ al mes}
+{\footnotesize 240 horas: US\$~129.35 al mes}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/aws-360.png}\\
-{\footnotesize 360 horas: 192,07 US\$ al mes}
+{\footnotesize 360 horas: US\$~192.07 al mes}
 \end{minipage}
 \vspace{0.4cm}
 
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/aws-720.png}\\
-{\footnotesize 720 horas: 386,52 US\$ al mes}
-\end{minipage}\hfill
+{\footnotesize 720 horas: US\$~386.52 al mes}
+\end{minipage}
 \caption{AWS, Amazon EC2 en la región Este de EE.\,UU. (Ohio): costo mensual estimado de cada escenario.}
 \label{fig:nube-aws}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/azure-240.png}\\
-{\footnotesize 240 horas: 137,04 US\$ al mes}
+{\footnotesize 240 horas: US\$~137.04 al mes}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/azure-360.png}\\
-{\footnotesize 360 horas: 200,76 US\$ al mes}
+{\footnotesize 360 horas: US\$~200.76 al mes}
 \end{minipage}
 \vspace{0.4cm}
 
 \begin{minipage}[t]{0.48\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/costos/azure-720.png}\\
-{\footnotesize 720 horas: 391,92 US\$ al mes}
-\end{minipage}\hfill
+{\footnotesize 720 horas: US\$~391.92 al mes}
+\end{minipage}
 \caption{Azure, región East US: costo mensual estimado de cada escenario.}
 \label{fig:nube-azure}
 \end{figure}
