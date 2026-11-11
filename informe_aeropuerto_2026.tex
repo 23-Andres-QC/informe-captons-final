@@ -211,7 +211,14 @@ de la Universidad ESAN. Con tres cámaras fijas siguió a 16 personas, ubicó en
 teléfonos usados como cámaras en vivo, ubicó a las personas sobre el mismo
 plano y guardó cada captura para analizarla en el tablero. Una segunda prueba
 en el comedor de ESAN, con dos teléfonos grabando el mismo espacio, dio el
-mismo identificador a cada persona en las dos cámaras. Las pruebas de estrés
+mismo identificador a cada persona en las dos cámaras. Una tercera zona, el
+pasillo exterior del Edificio D, se sumó al plano con su propio dibujo y sus
+cámaras, y la plataforma muestra ahora lo grabado zona por zona. En las
+grabaciones del 9 de noviembre, con mucha más gente, el sistema siguió a 149
+personas en el patio (41 vistas por las dos cámaras) y a 128 en el pasillo
+(20 en las dos), con cada video ubicado en el plano por las referencias del
+modelo en vivo (24 de 24 cuadros reconocidos, a 0.05--0.15~m entre sí) y las
+dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las pruebas de estrés
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
 16 cuadros por segundo por video con dos cámaras 1080p, que la estimación de
 género es lo que más carga la CPU y que siete cámaras de 60~fps se procesan
@@ -3291,10 +3298,71 @@ mientras se procesa y queda únicamente un resumen.
 \end{algorithmic}
 \end{algorithm}
 
-El mismo procesamiento se usa para las grabaciones del comedor de ESAN
-(zona~2): las cámaras se pasan juntas como una tanda y, sobre las cajas y los
-IDs compartidos que devuelve, cada persona se ubica en el plano con el modelo
-de cámara de cada teléfono (altura, focal, horizonte, posición y rumbo).
+El mismo procesamiento se usa para las grabaciones de las zonas de ESAN: el
+patio, el comedor (zona~2) y el pasillo del Edificio D (zona~3). Las cámaras
+de una zona se pasan juntas como una tanda, en \textit{solo multitracking},
+y cada una puede llevar un desfase en segundos para que el modelo compare los
+cuadros del mismo instante real. Sobre las cajas y los IDs compartidos que
+devuelve, cada persona se ubica en el plano con el modelo de cámara de cada
+teléfono (altura, focal, horizonte, posición y rumbo) o, si la cámara no lo
+tiene o se movió, con las referencias de ubicación del modelo en vivo
+(Sección~\ref{sec:grabaciones-zonas}).
+
+\subsection{Grabaciones de las zonas: ubicación por referencias e IDs lejanos}
+\label{sec:grabaciones-zonas}
+
+Los teléfonos que graban una zona se sostienen a mano o se apoyan en una
+baranda, así que su encuadre cambia de una grabación a otra y aun dentro de
+la misma. En lugar de calibrar cada video, se reutilizan las
+\textit{referencias de ubicación} del modelo en vivo: imágenes de cada cámara
+con su homografía al plano, tres por cámara (A0--A2 para cam01, B0--B2 para
+cam02, E0--E2 para cam06 y F0--F2 para cam07). Cada video se compara con las
+de su cámara (Algoritmo~\ref{alg:referencias}) y queda una sola homografía,
+que se aplica sobre los cuadros ya corregidos por el movimiento del teléfono.
+
+\begin{algorithm}[H]
+\caption{Ubicación de una grabación con las referencias del en vivo}
+\label{alg:referencias}
+\begin{algorithmic}[1]
+\REQUIRE video $V$ de la cámara $c$, referencias $\{(I_r, H_r)\}$ de $c$, movimiento estimado del teléfono $M_k$ en cada cuadro
+\ENSURE homografía $H$ de los cuadros estabilizados al plano, en metros
+\FOR{24 cuadros $k$ repartidos en el video}
+  \STATE reducir el cuadro a 640~px y extraer puntos SIFT (hasta 4\,000)
+  \STATE emparejar con cada $I_r$ (prueba de razón 0.75) y estimar $G$ con RANSAC (3~px)
+  \STATE si hay al menos 40 puntos coincidentes, $H_k \leftarrow H_r\, G\, S\, M_k^{-1}$ con la referencia de más coincidencias ($S$: escala a 640~px)
+\ENDFOR
+\STATE proyectar con cada $H_k$ una grilla de $9 \times 9$ puntos del piso de la imagen
+\STATE tomar la mediana de cada punto en metros y ajustar $H$ a esas medianas
+\STATE informar cuántos cuadros se reconocieron y cuánto se aparta cada uno de la mediana
+\end{algorithmic}
+\end{algorithm}
+
+Lejos de la cámara, con cajas de menos de unos 50~px de alto, el Re-ID ya no
+reconoce a nadie y el seguidor pierde a la persona y la vuelve a abrir con
+otro número. Para esos tramos se agrega un paso después del multitracking
+(Algoritmo~\ref{alg:lejanos}); de cerca manda el multitracking de Videos tal
+cual. Sobre el video, cada persona lleva solo su ID global (por ejemplo,
+G133) en una etiqueta de su color sobre la cabeza, sin la caja.
+
+\begin{algorithm}[H]
+\caption{IDs de la gente lejana en las grabaciones de una zona}
+\label{alg:lejanos}
+\begin{algorithmic}[1]
+\REQUIRE tramos del seguidor de cada cámara, IDs del multitracking de Videos, movimiento del teléfono y homografía de cada cámara
+\ENSURE ID de cada tramo lejano, sin repetir un número a la vez en una cámara
+\FOR{cada tramo que termina o empieza lejos (caja $< \sim$50~px)}
+  \STATE predecir dónde debía reaparecer con su velocidad, descontando el movimiento del teléfono
+  \STATE unirlo al tramo que aparece ahí, a una altura parecida y con ropa del mismo color
+\ENDFOR
+\STATE cada cadena toma el ID de Videos de alguno de sus tramos o, si no tiene, uno nuevo si se vio al menos 1.5~s
+\STATE si la otra cámara la ve a la vez en el mismo punto del piso, de cerca y con un ID estable por 2~s, tomar ese ID
+\end{algorithmic}
+\end{algorithm}
+
+En la primera grabación del pasillo del Edificio D, de 285 cortes del
+seguidor en cam06 pasaron a conservar su número 140 (antes 7), las cajas sin
+número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
+con el mismo número a la vez (antes 53).
 
 \section{Arquitectura del Sistema}
 \label{sec:arquitectura}
@@ -3598,9 +3666,15 @@ nueve secciones, y cada rol ve solo las suyas:
 
 \begin{enumerate}
     \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
-    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio o
-    comedor), o, en modo en vivo, muestra lo que ven los teléfonos y permite
-    iniciar y guardar una captura.
+    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio,
+    comedor o pasillo del Edificio D), o, en modo en vivo, muestra lo que ven
+    los teléfonos y permite iniciar y guardar una captura. Lo grabado se ve
+    zona por zona: al elegir Patio, Comedor o Pasillo del Edificio D (en la
+    fila ``Ir a'' o con un clic en el campus) el plano queda fijo en esa zona
+    y dibuja solo su plano, sus zonas y sus cámaras; ``Todo el campus'' lo
+    suelta. Al activar el en vivo se elige la zona que se graba: la captura
+    se guarda solo en ella, el plano no sale de su marco y los teléfonos
+    toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
     \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
     procesados todos a la vez sin guardarse, con el análisis elegido
     (Figura~\ref{fig:web-videos}).
@@ -3867,6 +3941,240 @@ cam05 los dos caminantes comparten un ID en parte del recorrido.
 plano, con el seguimiento y el mapa de calor de la misma zona.}
 \label{fig:comedor-en-vivo}
 \end{figure}
+
+\section{Tercera Prueba de Validación: ESAN, Pasillo del Edificio D}
+\label{sec:pasillo}
+
+La tercera validación se hizo fuera del comedor: en el pasillo exterior del
+Edificio D, por donde pasa la gente que baja de la escalera hacia la plaza y
+la que cruza el puente hacia el Edificio A. A diferencia del patio y del
+comedor, las dos cámaras de esta zona no ven el mismo lugar: cada una cubre un
+brazo del pasillo y una persona tarda unos 30~s en ir de una a la otra.
+
+\subsection{Escenario y plano de la zona}
+
+El pasillo se registró como la zona grabada~3 del sitio ESAN, una capa más del
+plano junto al patio y al comedor. Es una L de unos 740~m$^2$ pegada a las
+fachadas norte y este del Edificio D. Se dibujó en el mismo marco que el plano
+del comedor (mismo centro, giro y 29.7~px por metro), así que sus bordes
+interiores coinciden con las paredes del comedor; los de afuera siguen el
+terreno del mapa del campus: el borde del camino y la punta del Aula~C, el
+jardín del norte, la abertura hacia la plaza en la esquina noreste, la
+fachada del edificio del este y el puente hacia el Edificio A
+(Figura~\ref{fig:pasillo-recorridos}).
+
+Las cámaras son dos teléfonos en el segundo piso, a 4.75~m: cam06 en el
+extremo oeste de la fachada norte, mirando al este por la escalera hacia la
+plaza, y cam07 al sur del lado este, mirando al norte por el pasillo entre el
+Edificio D y el del este. Su altura y su horizonte se ajustaron con la altura
+de las personas detectadas, y su posición y rumbo con los propios videos: la
+gente camina dentro del pasillo y a lo largo de cada brazo, y quien está en
+las dos cámaras a la vez debe caer en el mismo punto. Con ese ajuste, la
+distancia entre las dos cámaras para una misma persona bajó de 9.2 a 2.2~m y
+los puntos dentro del pasillo subieron del 73 al 85\,\%.
+
+Para el modo en vivo se agregaron tres referencias de ubicación por cámara
+(E0--E2 para cam06 y F0--F2 para cam07), tomadas de los videos con su modelo
+de cámara. En esas grabaciones reconocen entre el 98 y el 100\,\% de los
+cuadros, con 0.1~m de error, y ningún cuadro de otra zona las confunde.
+Mientras un teléfono todavía no reconoce la vista, cada persona se ubica con
+la posición y el rumbo de su cámara y la distancia por su tamaño
+(Algoritmo~\ref{alg:ubicacion}), y lo que cae fuera se lleva al borde del
+piso del pasillo, no al del patio.
+
+\subsection{Primera grabación}
+
+El 7 de noviembre de 2026, a las 13:43, los dos teléfonos grabaron 162~s del
+pasillo. cam07 empezó a grabar 4.1~s antes que cam06; se le cortaron esos
+segundos, ajustados con las personas que pasan de una cámara a la otra, y
+desde ahí los dos videos empiezan a la vez. Procesada como una tanda de
+Videos, la sesión reunió a 86 personas, 56 vistas en cam06 y 39 en cam07, de las cuales 9
+pasaron por las dos cámaras, con 12\,563 puntos en el plano. Esta grabación
+mostró el problema de la gente lejana de la plaza y la escalera, de 20 a
+40~px de alto, que cambiaba de ID a cada rato; de ahí salió el paso de IDs
+lejanos (Algoritmo~\ref{alg:lejanos}). La zona se volvió a grabar con más
+gente el 9 de noviembre (Figura~\ref{fig:pasillo-camaras} y
+Sección~\ref{sec:mas-gente}).
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.82\linewidth]{figuras/validacion/pasillo-camaras.jpg}
+\caption{Pasillo del Edificio D, 9 de noviembre: G133 baja la escalera en
+cam06 (izquierda, a los 98~s) y sale bajo cam07 con la misma mochila
+(derecha, a los 124~s), con el mismo ID global. Sobre cada persona va solo su
+ID, sin caja; la cabecera dice cuántas personas se ven.}
+\label{fig:pasillo-camaras}
+\end{figure}
+
+\section{Cuarta Prueba de Validación: ESAN, Grabaciones con Más Gente}
+\label{sec:mas-gente}
+
+Las pruebas anteriores con teléfonos tenían poca gente: en el comedor, una o
+dos personas a la vez por cámara, y en la primera grabación del pasillo, una
+mediana de 6. El 9 de noviembre de 2026, justo después de una prueba en vivo
+en el pasillo, se grabaron con dos teléfonos cada uno el pasillo del
+Edificio D (en los lugares de cam06 y cam07) y el patio del Edificio A (en
+los de cam01 y cam02). Los videos son verticales, de $464 \times 832$ a
+12~FPS y de $478 \times 850$ a 13.9~FPS, y llegaron sin la hora de grabación
+en sus metadatos, así que la hora de inicio es aproximada: 11:32 en el
+pasillo y 11:38 en el patio, entre el fin de la prueba en vivo y la llegada
+de los archivos.
+
+\subsection{Sincronía de las cámaras}
+
+Cada par se recortó a mano para que sus dos videos empiecen a la vez, y el
+corte se comprobó con datos:
+
+\begin{itemize}
+    \item \textbf{Patio.} La CAM1 se recortó desde el segundo 26.106 del
+    original y la CAM2 desde el 11.476, medidos con el audio de cada uno. El
+    audio de las dos cámaras, correlacionado con GCC-PHAT, da un solo pico en
+    todas las bandas de frecuencia, 22 veces el ruido: a la CAM1 recortada le
+    sobran unos 0.55~s (0.57~s según los originales y 0.53~s según los
+    recortes, menos de un cuadro de diferencia), que se compensan con el
+    desfase de cam01. Como prueba independiente, para cada corrimiento de
+    cam02 se contó cuántas personas de cam02 caen a menos de 0.8~m de alguien
+    de cam01 en el mismo instante: el máximo queda a +0.1~s, con 9.1 parejas
+    por cuadro frente a una mediana de 4.3 (Figura~\ref{fig:patio-sincronia}).
+    \item \textbf{Pasillo.} El audio no sirve: los teléfonos están a unos
+    30~m entre sí, en dos fachadas del edificio, y no oyen lo mismo. La CAM1
+    se recortó desde el segundo 68.714 del original y la CAM2 va entera. Lo confirma la gente que el Re-ID reconoce
+    en las dos cámaras: 8 personas bajan la escalera de cam06, cruzan la plaza
+    y salen bajo cam07 unos 30~s después ($\pm$1~s), lo que corresponde a unos
+    45~m a 1.5~m/s (Figura~\ref{fig:pasillo-camaras}). Un primer corte de
+    14~s suponía que la gente iba en sentido contrario, por dentro del
+    comedor, y se descartó.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-sincronia.png}
+\caption{Sincronía del patio. Izquierda: correlación del audio de los dos
+videos recortados, con un solo pico a 0.53~s. Derecha: con el desfase de cam01
+aplicado, personas de cam02 a menos de 0.8~m de alguien de cam01 en el mismo
+instante según el corrimiento de cam02; el máximo queda a +0.1~s.}
+\label{fig:patio-sincronia}
+\end{figure}
+
+\subsection{Ubicación en el plano}
+
+El patio no tenía modelo de cámara para estos teléfonos y en el pasillo cam06
+se sostuvo en la mano, con otro encuadre que en la primera grabación. Los
+cuatro videos se ubicaron con las referencias del modelo en vivo
+(Algoritmo~\ref{alg:referencias}): los 24 cuadros comparados de cada video
+se reconocieron, aun con el teléfono moviéndose hasta 11.6\textdegree{}, y cada uno se
+aparta de la mediana entre 0.05 y 0.15~m (Cuadro~\ref{tab:referencias-09nov}).
+En el patio la sesión no toca la calibración de cam01 y cam02, que sigue
+siendo la de las cámaras fijas del Build.
+
+\begin{table}[H]
+\caption{Ubicación de las grabaciones del 9 de noviembre con las referencias
+del en vivo}
+\label{tab:referencias-09nov}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.12\textwidth}L{0.20\textwidth}L{0.18\textwidth}L{0.20\textwidth}L{0.20\textwidth}}
+\toprule
+\textbf{Cámara} & \textbf{Referencias usadas} & \textbf{Cuadros reconocidos} & \textbf{Desvío de la mediana (peor)} & \textbf{Movimiento del teléfono} \\
+\midrule
+cam01 & A2 & 24 de 24 & 0.06~m (0.18~m) & 101~px y 7.8\textdegree{} \\
+cam02 & B0 (16), B1 (8) & 24 de 24 & 0.10~m (0.19~m) & 91~px y 5.3\textdegree{} \\
+cam06 & E2 & 24 de 24 & 0.15~m (0.21~m) & 123~px y 11.6\textdegree{} \\
+cam07 & F1 (20), F0 y F2 (2 cada una) & 24 de 24 & 0.05~m (0.15~m) & 49~px y 4.8\textdegree{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Resultados}
+
+El Cuadro~\ref{tab:mas-gente} compara las cuatro grabaciones con teléfonos.
+El patio y el pasillo del 9 de noviembre tienen en el plano de 10 a 14 veces
+más gente a la vez que el comedor, y de 2 a 3 veces más que la primera
+grabación del pasillo; aun
+así se procesaron al ritmo del video, unas 14 pasadas por segundo de las dos
+cámaras, en la GPU de la computadora local dentro de Docker
+(Figuras~\ref{fig:patio-09nov-camaras} a~\ref{fig:pasillo-recorridos}).
+
+\begin{table}[H]
+\caption{Grabaciones de zonas con dos teléfonos: de menos a más gente}
+\label{tab:mas-gente}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{L{0.30\textwidth}R{0.13\textwidth}R{0.13\textwidth}R{0.13\textwidth}R{0.13\textwidth}}
+\toprule
+\textbf{Medición} & \textbf{Comedor (27/10)} & \textbf{Pasillo (7/11)} & \textbf{Pasillo (9/11)} & \textbf{Patio (9/11)} \\
+\midrule
+Duración común & 91~s & 162~s & 154~s & 205~s \\
+Personas a la vez por cámara, mediana (máx.) & 1 (2) y 1 (3) & 6 (10) y 2 (7) & 15 (21) y 7 (18) & 18 (31) y 12 (21) \\
+Personas a la vez en el plano, mediana (máx.) & 2 (4) & 9 (15) & 21 (36) & 28 (40) \\
+Personas vistas en cada cámara & 3 y 3 & 56 y 39 & 89 y 59 & 116 y 74 \\
+IDs del seguidor por cámara & -- & -- & 314 y 143 & 283 y 221 \\
+Tramos lejanos reunidos & -- & -- & 272 de 457 & 150 de 504 \\
+\textbf{Personas en la sesión} & \textbf{4} & \textbf{86} & \textbf{128} & \textbf{149} \\
+Vistas por las dos cámaras & 2 & 9 & 20 (16\,\%) & 41 (28\,\%) \\
+Puntos en el plano & 1\,662 & 12\,563 & 33\,815 & 64\,746 \\
+Permanencia mediana por persona & 81.5~s & 11.0~s & 14.6~s & 14.5~s \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.82\linewidth]{figuras/validacion/patio-09nov-camaras.jpg}
+\caption{Patio del Edificio A, 9 de noviembre, a los 104~s: 20 personas en
+cada cámara. G1, G7, G21 y G41 están a la vez lejos en cam01 (izquierda)
+y cerca en cam02 (derecha), con el mismo ID global.}
+\label{fig:patio-09nov-camaras}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/patio-09nov-recorridos.png}
+\caption{Patio, 9 de noviembre: recorridos de las 149 personas sobre el piso
+del patio, con trazo marcado para las 41 vistas por las dos cámaras y la
+posición y el rumbo de cada cámara.}
+\label{fig:patio-09nov-recorridos}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/validacion/pasillo-recorridos.png}
+\caption{Pasillo del Edificio D, 9 de noviembre: recorridos de las 128
+personas sobre la zona grabada~3, junto al comedor, con trazo marcado para
+las 20 vistas por las dos cámaras; G133 es la persona de la
+Figura~\ref{fig:pasillo-camaras}. La gente baja por la escalera frente a
+cam06, dobla en la esquina noreste y sale por el brazo este, bajo cam07.}
+\label{fig:pasillo-recorridos}
+\end{figure}
+
+Lo que muestran estas grabaciones:
+
+\begin{itemize}
+    \item \textbf{La ubicación por referencias aguanta teléfonos en la mano.}
+    Los cuatro videos se ubicaron sin calibrarlos, con 24 de 24 cuadros
+    reconocidos y 0.05 a 0.15~m de desvío, aunque cam06 se movió hasta
+    11.6\textdegree{}. Una zona nueva solo necesita sus referencias del en vivo.
+    \item \textbf{Con cámaras que se solapan, la asociación une a más gente.}
+    En el patio, donde las dos vistas comparten el centro, el 28\,\% de las
+    personas lleva el mismo ID en las dos cámaras; en el pasillo, donde no se
+    ven entre sí y el paso de una a otra toma 30~s, el 16\,\%, solo con el
+    Re-ID.
+    \item \textbf{La sincronía se puede verificar con los propios datos.} El
+    audio sirve cuando las cámaras oyen lo mismo (patio); si no, la gente que
+    pasa de una a otra y su velocidad fijan el desfase (pasillo). Con el
+    corte correcto, las dos cámaras ponen a la misma gente en el mismo punto
+    del piso.
+    \item \textbf{El límite sigue siendo el seguimiento de la gente lejana.}
+    En cam06 el seguidor abrió 314 IDs para unas 90 personas, sobre todo en
+    lo alto de la escalera y en la plaza, donde miden menos de 50~px. El paso
+    de IDs lejanos reunió más de la mitad de esos tramos (272 de 457), pero
+    una persona puede quedar todavía partida en dos o tres IDs, y en grupos
+    vestidos parecido el Re-ID puede unir a dos personas, como se midió en la
+    Sección~\ref{sec:validacion-modelos}. Las cifras de personas son, por
+    eso, una estimación, no un conteo exacto.
+\end{itemize}
 
 \section{Pruebas de Validación y Estrés del Modelo}
 \label{sec:pruebas}
@@ -4345,8 +4653,8 @@ calcula, para el operador, el valor de cada local según su tráfico.
 \subsection{Lo que ya está construido}
 
 AeroVision ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
-repositorio suma 247 commits entre el 30 de septiembre y el 28 de octubre de
-2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
+repositorio suma 282 commits entre el 30 de septiembre y el 10 de noviembre
+de 2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
 personas que pasan por el frente, las que se detienen (estancia de al menos
 5~s), las que entran y las que compran (Secciones~\ref{sec:arquitectura}
 y~\ref{sec:pruebas}).
@@ -4364,7 +4672,7 @@ y~\ref{sec:pruebas}).
 Modelo de visión (Python, GPU) & Detecta y sigue personas (YOLO26 y seguidor híbrido), las re-identifica entre cámaras (YOLO26s-ReID en el Build y en vivo; OSNet-AIN y PersonViT en Videos) y las proyecta sobre un plano 2D calibrado & Mide recorridos de punta a punta, no solo cruces de puerta \\
 Insights y tráfico & Visitas, exposición, captación, permanencia, densidad, congestión, mapas de calor, rutas, origen-destino y embudo pasan--se detienen--entran--compran por período y franja & Las métricas que compran retail, malls y operaciones \\
 Ventas & Tickets de caja (CSV), emparejamiento de cada compra con una visita, conversión por local, patrones por hora, pronóstico Holt-Winters y simulador de escenarios & Une tráfico con ingresos \\
-En vivo y Videos & Teléfonos como cámaras unidos con un código QR; hasta 10 grabaciones a la vez con IDs compartidos entre cámaras y análisis elegible & Demo inmediata en cualquier local, sin instalar nada \\
+En vivo y Videos & Teléfonos como cámaras unidos con un código QR; hasta 10 grabaciones a la vez con IDs compartidos entre cámaras; tres zonas grabadas en ESAN (patio, comedor y pasillo), vistas una por una, con hasta 149 personas por grabación & Demo inmediata en cualquier local, sin instalar nada \\
 Plataforma & API en Go, PostgreSQL/PostGIS y pgvector, web Vue; roles superadmin, seguridad y negocio; argon2id; bitácora; solicitudes de permisos & Base seria para vender a empresas \\
 Privacidad & Sin reconocimiento facial ni imágenes guardadas, IDs seudónimos, vectores Re-ID borrados a las 24 horas, género solo en conteos de 5 o más, puntos borrados a los 90 días & Argumento de venta frente a la Ley N.\textdegree~29733 \\
 \bottomrule

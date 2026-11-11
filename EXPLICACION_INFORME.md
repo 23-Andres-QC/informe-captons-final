@@ -214,6 +214,13 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - Decodifica en la GPU (NVDEC) y prepara la pasada siguiente mientras procesa la actual.
 - El video se borra al terminar; queda solo el resumen.
 
+**6.4 Grabaciones de las zonas (patio, comedor y pasillo del Edificio D):**
+- Las dos cámaras de una zona van como una tanda de Videos (*solo multitracking*), cada una con su desfase en segundos.
+- **Ubicación por referencias:** 24 cuadros de cada video se comparan (SIFT + RANSAC) con las referencias del en vivo de su cámara (A = cam01, B = cam02, E = cam06, F = cam07); la homografía final es la mediana. Sirve aunque el teléfono se mueva.
+- **IDs lejanos:** con cajas de menos de ~50 px el Re-ID no reconoce a nadie. Quien desaparece y reaparece donde debía (velocidad, altura, color de ropa) sigue con su ID; si la otra cámara la ve en el mismo punto y de cerca, toma ese ID.
+- En el video, sobre cada persona va solo su ID global (G133) en una etiqueta de su color, sin caja.
+- En la web, lo grabado se ve **zona por zona** (Ir a: Patio, Comedor, Pasillo del Edificio D, Todo el campus) y el en vivo se hace **en una sola zona**.
+
 ---
 
 ## 7. Casos de uso (CU) y requisitos
@@ -305,7 +312,31 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 - Quedan dos errores: un ID duplicado por unos segundos y dos caminantes que comparten un ID.
 - **Demuestra:** dos cámaras dan el mismo ID a la misma persona.
 
-**9.4 Validación de cada pieza** (6 pares de cámaras etiquetados, 308 personas).
+**9.4 ESAN, pasillo del Edificio D (zona grabada 3).**
+- Nueva capa del plano: una L de ~740 m² pegada a las fachadas norte y este del comedor.
+- cam06 mira la escalera hacia la plaza y cam07 el brazo este; no se solapan: de una a otra hay ~30 s caminando.
+- Pose ajustada con los videos: la misma persona en las dos cámaras pasa de 9.2 a 2.2 m de distancia; puntos dentro del pasillo del 73 al 85 %.
+- En vivo: referencias E0–E2 y F0–F2 reconocen el 98–100 % de los cuadros con 0.1 m de error.
+- Primera grabación (7 nov): 86 personas, 9 en las dos cámaras.
+- **Demuestra:** una zona nueva se agrega con su dibujo, sus cámaras y sus referencias, y se ve sola en la web.
+
+**9.5 Grabaciones con más gente (9 nov).**
+
+| | Pasillo | Patio |
+|---|---|---|
+| Duración | 154 s | 205 s |
+| Personas a la vez en el plano (mediana / máx.) | 21 / 36 | 28 / 40 |
+| Personas en la sesión | 128 | 149 |
+| En las dos cámaras | 20 (16 %) | 41 (28 %) |
+| Cuadros reconocidos por las referencias | 24/24 y 24/24 | 24/24 y 24/24 |
+| Desvío entre cuadros | 0.15 y 0.05 m | 0.06 y 0.10 m |
+
+- **Sincronía:** recortes a mano de cada par. Patio: el audio (GCC-PHAT) da 0.55 s de sobra en la CAM1, compensados con su desfase; con eso la gente de las dos cámaras coincide en el piso con el máximo a +0.1 s. Pasillo: el audio no sirve; 8 personas pasan de cam06 a cam07 en ~30 s (±1 s).
+- Se procesó al ritmo del video (~14 pasadas/s) en la GPU dentro de Docker.
+- **Límite:** la gente lejana se parte en varios IDs (cam06: 314 IDs del seguidor para ~90 personas); las cifras son estimaciones.
+- **Demuestra:** con 10 a 14 veces más gente que el comedor, el sistema sigue, une entre cámaras y ubica en el plano sin calibrar los teléfonos.
+
+**9.6 Validación de cada pieza** (6 pares de cámaras etiquetados, 308 personas).
 
 | Pieza | Antes | Ahora |
 |---|---|---|
@@ -320,7 +351,7 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 
 - **Limitación honesta:** con un IDF1 de 40 %, el seguimiento dentro de la cámara sigue siendo el límite en lugares llenos.
 
-**9.5 Carga y estrés.**
+**9.7 Carga y estrés.**
 - **2 cámaras 1080p a 23 fps:** unos 16 cuadros/s por video (32 en total), alrededor del 70 % de los cuadros.
 - **El género es lo que más pesa:** 1.7 núcleos de CPU sin CLIP y 4.4 con él.
 - **2 cámaras de 60 fps con mucha gente:** 7.7 cuadros/s por video.
@@ -380,6 +411,8 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 9. Arquitectura
 10. Prueba en ESAN, Edificios A y B
 11. Prueba en ESAN, comedor
-12. Validación y estrés
-13. Plan de negocio
-14. Referencias
+12. Prueba en ESAN, pasillo del Edificio D
+13. Prueba con más gente (patio y pasillo, 9 de noviembre)
+14. Validación y estrés
+15. Plan de negocio
+16. Referencias
