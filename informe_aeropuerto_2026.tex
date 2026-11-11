@@ -713,17 +713,22 @@ análisis ético); son recomendaciones de ingeniería, no sustituyen la opinión
 legal ni garantizan el cumplimiento. El Cuadro~\ref{tab:sugerencias-diseno} los
 resume con su estado en el prototipo.
 
-\begin{table}[!htbp]
-\centering
-\caption{Sugerencias de diseño para reducir los riesgos legales y éticos}
-\label{tab:sugerencias-diseno}
-\footnotesize
+{\footnotesize
 \renewcommand{\arraystretch}{1.15}
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{|L{0.04\textwidth}|L{0.15\textwidth}|L{0.32\textwidth}|L{0.09\textwidth}|L{0.24\textwidth}|}
+\begin{longtable}{|L{0.04\textwidth}|L{0.15\textwidth}|L{0.32\textwidth}|L{0.09\textwidth}|L{0.24\textwidth}|}
+\caption{Sugerencias de diseño para reducir los riesgos legales y éticos}
+\label{tab:sugerencias-diseno} \\
 \hline
 \textbf{ID} & \textbf{Sugerencia} & \textbf{Qué cambiar} & \textbf{Reduce} & \textbf{Estado en el prototipo} \\
 \hline
+\endfirsthead
+\hline
+\multicolumn{5}{|l|}{\textit{Sugerencias de diseño para reducir los riesgos legales y éticos (continuación)}} \\
+\hline
+\textbf{ID} & \textbf{Sugerencia} & \textbf{Qué cambiar} & \textbf{Reduce} & \textbf{Estado en el prototipo} \\
+\hline
+\endhead
 S1 & Minimización por diseño & Procesar el video y descartarlo, sin recortes; guardar solo lo que pide cada métrica (conteos por zona en lugar de trayectorias cuando baste); inventario de datos por métrica & L2, L3, L7, E1, E2, E6 & Parcial: sin video ni recortes y sin rostro; se guardan trayectorias \\
 \hline
 S2 & Re-ID efímero & Vectores solo en memoria durante la sesión o con un plazo de horas y borrado verificable; sin comparar entre sesiones ni días; IDs aleatorios; cifrar lo que persista & L3, L5, L7, E8 & Parcial: IDs seudónimos; vectores en pgvector hasta 24~h sin ver a la persona o hasta ``Olvidar a todos'' \\
@@ -746,8 +751,8 @@ S10 & Transparencia técnica y supervisión humana & Etiquetas REAL/SIMULADO, in
 \hline
 S11 & Seguridad y control de acceso & Roles verificados en el backend, sin claves de demostración, sin exponer vectores ni video por API, cifrado en reposo y en tránsito, y alertas si alguien intenta seguir a una persona o cruzar datos con tickets & L8, E6, E8 & Parcial: roles en el backend, permiso temporal para exportar, bitácora y CSRF; el video no sale de la red local \\
 \hline
-\end{tabular}
-\end{table}
+\end{longtable}
+}
 
 Se sugiere aplicar primero las que cierran puntos de prioridad alta y cuestan
 menos (S3 y S4, luego S2, S1 y S5), después S6 a S8 y al final S10 y S11, que
