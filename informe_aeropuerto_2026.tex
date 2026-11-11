@@ -490,12 +490,14 @@ y Law~\cite{wonglaw2023}.
     infraestructura actual del aeropuerto.
     \item \textbf{Datos propios limitados:} el video anotado del
     aeropuerto Jorge Chávez es reducido en esta etapa, por lo que se
-    utilizan modelos preentrenados, sin entrenamiento propio, y la
-    validación se realiza con video grabado en el campus de la Universidad
-    ESAN.
+    utilizan modelos preentrenados, sin entrenamiento propio, validados con
+    videos etiquetados de interiores (Sección~\ref{sec:validacion-modelos})
+    y probados en el campus de la Universidad ESAN
+    (Sección~\ref{sec:validacion-esan}).
     \item \textbf{Anotación manual costosa:} etiquetar trayectorias
-    multicámara para validar la re-identificación es lento y exige
-    revisión manual.
+    multicámara es lento y exige revisión manual, por lo que la
+    re-identificación se validó con videos ya etiquetados cuadro por cuadro,
+    con el mismo identificador en las dos cámaras de cada par.
     \item \textbf{Densidad y oclusión:} las escenas con alta concentración
     de pasajeros y equipaje generan oclusiones frecuentes, condición
     especialmente adversa para los trackers genéricos~\cite{zhou2026}.
@@ -551,13 +553,14 @@ se acumulan por tracklet, qué umbrales de similitud se aceptan, cuándo se
 actualiza la memoria visual y qué métricas guían la validación (IDF1,
 precisión y recall de asociación, y rendimiento por cámara).
 
-Otra limitación relevante es la disponibilidad de video anotado propio.
 Los modelos preentrenados provienen de entornos distintos al aeropuerto
-limeño, por lo que su generalización a las condiciones de Jorge Chávez
-(iluminación, densidad y distribución comercial) debe confirmarse con
-datos propios, aunque los estudios revisados en la
-Sección~\ref{sec:related} reportan desempeños moderados a altos en
-escenas aeroportuarias comparables~\cite{zhou2026,ryan2023}.
+limeño (iluminación, densidad y distribución comercial). Por eso no se
+tomaron como propias las cifras de los estudios revisados en la
+Sección~\ref{sec:related}, aunque reportan desempeños moderados a altos en
+escenas aeroportuarias comparables~\cite{zhou2026,ryan2023}: el detector,
+el seguidor y el Re-ID se validaron con videos etiquetados distintos de
+ESAN (Sección~\ref{sec:validacion-modelos}) y se probaron en el campus de
+ESAN (Sección~\ref{sec:validacion-esan}).
 
 \subsubsection{Análisis legal: matriz de cumplimiento}
 \label{sec:analisis-legal}
@@ -1340,7 +1343,7 @@ peatonales en múltiples dominios.
     puntos que los autores documentan explícitamente.
 \end{itemize}
 
-Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial (Figura~\ref{fig:ant4}). AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: cualquier módulo basado en apariencia deberá validarse con imágenes del aeropuerto de Lima antes de asumir un desempeño equivalente.
+Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial (Figura~\ref{fig:ant4}). AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: por eso el Re-ID de AeroVision, también basado en apariencia, no se dio por bueno con las cifras de otros conjuntos y se validó con videos etiquetados (Sección~\ref{sec:validacion-modelos}).
 
 \begin{figure}[H]
 \centering
@@ -1390,7 +1393,8 @@ de MOTA e IDF1 en escenas con más de 300 personas
 factibilidad de un seguimiento multicámara de calidad en horas pico. No
 obstante, WILDTRACK y MMPTRACK son espacios relativamente controlados,
 distintos de una terminal con mobiliario, equipaje y señalética, por lo
-que el sistema propuesto debe validar estas métricas con datos propios.
+que AeroVision midió el seguimiento y la asociación entre cámaras con
+videos etiquetados de interiores (Sección~\ref{sec:validacion-modelos}).
 En AeroVision, este tipo de verificación geométrica se activa en el modo
 calibrado, cuando las homografías de las cámaras están validadas.
 
@@ -1487,8 +1491,9 @@ que la combinación de detección, seguimiento local, proyección y
 re-identificación sin biometría es viable en este dominio. Respalda la
 proyección de las posiciones sobre un plano 2D común del aeropuerto Jorge
 Chávez y su integración con un mapa. La ausencia de métricas
-cuantitativas deja una laguna que el sistema propuesto busca cubrir
-reportando precisión, recall e IDF1 con datos etiquetados.
+cuantitativas deja una laguna que el sistema propuesto cubre: la precisión
+y el recall del detector, el IDF1 del seguidor y el acierto entre cámaras se
+midieron con videos etiquetados (Sección~\ref{sec:validacion-modelos}).
 
 \begin{figure}[H]
 \centering
@@ -1584,9 +1589,10 @@ mejorable en este dominio. La diferencia de 7.3 puntos de MOTA sugiere
 que migrar a una arquitectura especializada no sería decisivo a corto
 plazo, lo que justifica un seguidor local liviano cuya asociación en dos
 etapas se inspira en ByteTrack, reforzado con apariencia corporal y
-memoria visual para los cruces y oclusiones. La evaluación de
-arquitecturas como AirMOTR queda como trabajo futuro, cuando se disponga
-de suficientes datos propios.
+memoria visual para los cruces y oclusiones. AirMOTR no se adoptó
+porque se entrena con video anotado del propio aeropuerto (AirportPassenger
+es privado) y AeroVision usa modelos preentrenados, sin entrenamiento
+propio.
 
 \begin{figure}[H]
 \centering
@@ -3282,11 +3288,11 @@ Histórico & Comparación con trayectorias conocidas. \\
 \end{tabular}
 \end{table}
 
-No se establece una precisión única para todo el sistema antes de contar
-con suficiente \textit{ground truth}, ya que detección, seguimiento,
-calibración, asociación multicámara y eventos son problemas distintos que
-requieren evaluaciones independientes. Los umbrales de asociación se
-calibraron con tracklets etiquetados manualmente.
+No se fija una precisión única para todo el sistema, ya que detección,
+seguimiento, calibración, asociación multicámara y eventos son problemas
+distintos que se evalúan por separado; los resultados del detector, el
+seguidor y el Re-ID están en la Sección~\ref{sec:validacion-modelos}. Los
+umbrales de asociación se calibraron con tracklets etiquetados manualmente.
 
 \subsection{Trazabilidad de datos}
 
@@ -6387,7 +6393,7 @@ análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 \hline
 FO & Usar el contacto en LAP para llegar a las tiendas del terminal y a JCDecaux, y llevar esos casos a malls, galerías y cadenas \\
 \hline
-DO & Usar ProInnóvate e incubadoras para financiar la validación independiente de precisión mientras el equipo trabaja a medio tiempo \\
+DO & Usar ProInnóvate e incubadoras para financiar las primeras pruebas de precisión en tiendas mientras el equipo trabaja a medio tiempo \\
 \hline
 FA & Vender privacidad por diseño y procesamiento dentro de la red del cliente como respuesta a la Ley N.\textdegree~29733 \\
 \hline
