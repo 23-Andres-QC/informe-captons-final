@@ -86,6 +86,13 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     }%
 }
 
+% Imagen dentro de un cuadro de lado #1, centrada y sin deformarla
+\newcommand{\cuadro}[2]{%
+    {\setlength{\fboxsep}{0pt}\fcolorbox{gray!40}{white}{%
+        \parbox[c][#1][c]{#1}{\centering
+            \safeincludegraphics[width=#1,height=#1,keepaspectratio]{#2}}}}%
+}
+
 \newcommand{\confirmar}[1]{\colorbox{yellow}{\footnotesize [CONFIRMAR: #1]}}
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -190,9 +197,7 @@ codificador de re-identificación YOLO26s-ReID con una galería global
 compartida entre cámaras. Para videos de cualquier origen, la sección
 Videos usa una variante más sensible del mismo modelo: detector a 1280
 píxeles en la GPU y re-identificación con OSNet-AIN y PersonViT, que
-siguen a una persona entre varias cámaras grabadas a la vez. De forma
-opcional, un modelo CLIP local estima la presentación de género a partir
-del cuerpo, solo para reportes agregados. Todo se despliega con un
+siguen a una persona entre varias cámaras grabadas a la vez. El sistema no estima el género ni otros atributos demográficos de las personas. Todo se despliega con un
 servicio de visión en Python, dos backends en Go, PostgreSQL/PostGIS y
 pgvector como bases de datos y un frontend en Vue.js, en contenedores
 Docker, sobre una computadora local con GPU. La plataforma suma cuentas
@@ -216,8 +221,7 @@ plano y guardó cada captura para analizarla en el tablero. Una segunda prueba
 en el comedor de ESAN, con dos teléfonos grabando el mismo espacio, dio el
 mismo identificador a cada persona en las dos cámaras. Las pruebas de estrés
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
-16 cuadros por segundo por video con dos cámaras 1080p, que la estimación de
-género es lo que más carga la CPU y que siete cámaras de 60~fps se procesan
+16 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
 completas a 5 cuadros por segundo por cámara en 3 veces la duración del
 video. El informe cierra con el plan de negocio de AeroVision, que
 lleva la misma tecnología a la medición de captación de tiendas y de audiencia
@@ -538,14 +542,7 @@ defina el alcance permitido de los datos. Sin ese marco, el uso podría
 constituir una vulneración ética y regulatoria, ya que las cámaras se
 instalaron exclusivamente con fines de seguridad.
 
-Los modelos de inferencia demográfica, además, pueden reproducir sesgos
-del dataset de entrenamiento cuando se aplican fuera de su dominio
-original~\cite{jin2024}. En un aeropuerto, esto puede producir
-estimaciones de edad o género inconsistentes entre grupos de pasajeros y
-afectar la equidad de los insights. Por ello, el módulo de
-estimación de género solo usa vistas grandes del cuerpo completo, consolida
-los votos por identidad, deja como ``sin determinar'' a quien no tuvo
-evidencia suficiente y se muestra únicamente de forma agregada.
+Los modelos de inferencia demográfica, además, pueden reproducir sesgos del dataset de entrenamiento cuando se aplican fuera de su dominio original~\cite{jin2024}. En un aeropuerto, esto puede producir estimaciones inconsistentes entre grupos de pasajeros, clasificaciones binarias o estereotipadas y afectar la equidad de los insights. Por ello, el sistema no estima el género de las personas: el módulo opcional que lo hacía se retiró del prototipo por razones éticas, ya que no es necesario para medir tráfico, permanencia ni captación.
 
 Finalmente, la transparencia es crucial. La señalización visible sobre el
 uso de analítica de video resulta indispensable para garantizar la
@@ -580,7 +577,7 @@ proyecto establece seis salvaguardas:
     vence su ventana de re-entrada, y solo se conservan trayectorias
     seudónimas y métricas agregadas. En el modo en vivo, la memoria de
     identidades guarda únicamente vectores de apariencia y las cámaras
-    donde se vio a cada persona, sin su género, y los borra tras 24 horas
+    donde se vio a cada persona, y los borra tras 24 horas
     sin verla o al pulsar ``Olvidar a todos''. Los puntos de trayectoria
     se borran a los 90 días, una vez agregado su tráfico, y solo los
     conteos y promedios se conservan sin límite.
@@ -595,11 +592,7 @@ proyecto establece seis salvaguardas:
     \textit{Riesgo:} el modelo puede ser menos preciso en ciertos grupos
     demográficos y sesgar los insights. \\
     \textit{Solución:} evaluación con datos diversos y reporte de
-    métricas desagregadas antes del despliegue. La estimación de género
-    no se usa como identificación ni como base única de decisiones, se
-    guarda solo como conteo por sesión, conserva la categoría ``sin
-    determinar'' y oculta toda categoría de menos de 5 personas (y la
-    siguiente, si permitiera deducirla).
+    métricas desagregadas antes del despliegue. El sistema no infiere el género de las personas ni lo usa como base de decisión alguna.
 
     \item \textbf{6. Uso del sistema} \\
     \textit{Riesgo:} los datos capturados por seguridad podrían
@@ -640,7 +633,7 @@ E3 & Sesgos y errores del modelo & Grupos mal representados & Alta & Pruebas por
 \hline
 E4 & Menores y personas vulnerables & Niños, adultos mayores y personas con discapacidad & Alta & Excluir en lugar de perfilar \\
 \hline
-E5 & Inferencia de atributos (género, edad, emociones) & Pasajeros & Media & Eliminar las inferencias y publicar el compromiso de no hacerlas \\
+E5 & Inferencia de atributos (género, edad, emociones) & Pasajeros & Media & Género eliminado; publicar el compromiso de no inferir atributos \\
 \hline
 E6 & Uso secundario de los datos & Pasajeros y cliente & Alta & Política de usos prohibidos, cláusula contractual y auditoría \\
 \hline
@@ -683,12 +676,7 @@ E11 & Idoneidad del lugar & Pasajeros y cliente & Alta & Mapa de zonas prohibida
     prototipo actual; antes de un despliegue falta medir qué fracción de los
     seguimientos corresponde a niños.
 
-    \item \textbf{Inferencia de atributos (E5).} Inferir género por apariencia
-    produce clasificaciones binarias y estereotipadas que además pueden ser
-    incorrectas, y las emociones son sensibles y poco fiables. La parte de
-    género de los reportes se está cambiando; la recomendación es eliminar la
-    inferencia y, si el negocio la pidiera, usar solo agregados con supresión de
-    conteos pequeños.
+    \item \textbf{Inferencia de atributos (E5).} Inferir género por apariencia produce clasificaciones binarias y estereotipadas que además pueden ser incorrectas, y las emociones son sensibles y poco fiables. Por esa razón el equipo eliminó del sistema la estimación de género, tanto del procesamiento como de los reportes, y se recomienda publicar el compromiso de no inferir género, edad ni emociones con fines comerciales.
 
     \item \textbf{Uso secundario y trabajadores (E6 y E7).} Los datos
     comerciales pueden derivar en seguridad, control del personal, perfilado
@@ -1004,15 +992,7 @@ peatonales en múltiples dominios.
     puntos que los autores documentan explícitamente.
 \end{itemize}
 
-Para el sistema propuesto, este antecedente es relevante en la inferencia
-demográfica aproximada: muestra que atributos generales como el rango
-etario o el género aparente pueden estimarse a partir de la apariencia
-corporal, sin reconocimiento facial, lo que resulta más compatible con la
-Ley N.\textdegree~29733. En AeroVision esta idea se aplica, de forma
-opcional, en la estimación de género por votación descrita en la
-metodología. La caída de desempeño entre dominios es, sin embargo, una
-advertencia: cualquier módulo demográfico deberá validarse con imágenes
-del aeropuerto de Lima antes de asumir un desempeño equivalente.
+Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial. AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: cualquier módulo basado en apariencia deberá validarse con imágenes del aeropuerto de Lima antes de asumir un desempeño equivalente.
 
 \begin{figure}[H]
 \centering
@@ -1496,7 +1476,7 @@ dirección.
 \textbf{Flujo principal:}
 \begin{enumerate}
     \item El usuario abre la pantalla ``Teléfonos''.
-    \item El sistema muestra cada teléfono con las cajas, el ID y el género que publica el modelo.
+    \item El sistema muestra cada teléfono con las cajas y el ID que publica el modelo.
     \item El usuario puede quitar un teléfono de la lista.
 \end{enumerate}
 
@@ -1704,7 +1684,7 @@ RF-09 & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos tem
 \hline
 RNF-01 & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
 \hline
-RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; género solo en conteos de grupos de 5 o más; cumplimiento de la Ley N.\textdegree~29733 \\
+RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; sin inferencia de género; cumplimiento de la Ley N.\textdegree~29733 \\
 \hline
 RNF-03 & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
 \hline
@@ -1762,9 +1742,7 @@ El núcleo metodológico está compuesto por YOLO26m para la detección de
 personas; un seguidor local híbrido basado en movimiento, IoU, escala,
 apariencia corporal (histogramas de color y ResNet18) y memoria visual;
 el codificador YOLO26s-ReID con una galería global compartida para la
-asociación entre cámaras; homografía para la proyección espacial; un
-modelo CLIP local, opcional, para la estimación agregada de género;
-PostGIS para el almacenamiento espacial; y Vue.js para la visualización.
+asociación entre cámaras; homografía para la proyección espacial; PostGIS para el almacenamiento espacial; y Vue.js para la visualización.
 La misma metodología se aplica, con ajustes más sensibles, a los videos de
 cualquier origen que se suben a la sección Videos: detector a 1280~px y
 codificador de re-identificación que promedia OSNet-AIN y PersonViT, ambos
@@ -2599,32 +2577,6 @@ guardan recortes ni cuadros sueltos. Al finalizar la sesión, lo único
 que persiste es la base de datos con las trayectorias seudónimas, los
 eventos y las métricas agregadas.
 
-\subsubsection{Estimación agregada de género (opcional)}
-
-Como atributo demográfico aproximado, en la línea de Jin et
-al.~\cite{jin2024}, el prototipo incorpora un clasificador CLIP local que
-estima la presentación de género a partir del cuerpo completo mediante
-clasificación sin entrenamiento adicional (\textit{zero-shot}), con dos
-descripciones textuales de referencia. No utiliza el rostro como entrada
-específica ni estima la edad.
-
-Para limitar errores, solo se evalúan cajas grandes y fiables (altura de
-al menos 72 píxeles y confianza de detección de al menos 0.50), una vez
-cada 0.6~s y con un máximo de 12 votos por tracklet. El recorte se coloca
-completo en un cuadro con relleno, para no cortar la cabeza. Cada voto se
-pondera por su confianza, y la etiqueta se fija como Hombre o Mujer con al
-menos dos votos, una confianza de al menos 0.55 y un margen de al menos 0.10
-frente a la alternativa. Después de la re-identificación, los votos se
-consolidan de nuevo por \textit{global\_id}; si no hay evidencia
-suficiente, la identidad queda como ``sin determinar''.
-
-Este resultado es una estimación visual: no se usa como identificación
-ni como base única de decisiones y se reporta solo de forma agregada en
-los insights. Al publicar una sesión, el backend cuenta cuántas personas hay
-de cada género y descarta el de cada una; un conteo solo muestra las
-categorías con al menos 5 personas (umbral ajustable por sitio), y si ocultar
-una permitiera deducirla a partir del total, se oculta también la siguiente.
-
 \subsubsection{Configuración del mapa y zonas}
 
 El plano 2D utiliza un único sistema de coordenadas para todas las
@@ -2680,8 +2632,7 @@ se completa al asignar las zonas, y como las cámaras con solape pueden
 observar a la misma persona a la vez, la consolidación de filas
 simultáneas se realiza en la Parte III.
 
-Junto con esta tabla se registran, para cada sesión, las identidades
-con su estimación de género consolidada y el manifiesto de
+Junto con esta tabla se registran, para cada sesión, las identidades y el manifiesto de
 reproducibilidad. Los videos anotados con los identificadores solo se
 generan de forma opcional durante el piloto, para la validación visual
 del seguimiento; no forman parte de la operación y se conservan solo como
@@ -2966,8 +2917,7 @@ Seguimiento local & IDF1 y cambios de ID frente a anotaciones; fragmentación (I
 \hline
 Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sobre pares de tracklets etiquetados; personas contadas frente a reales. \\
 \hline
-Estimación de género & Proporción de identidades sin determinar y precisión desagregada frente a etiquetas manuales. \\
-\hline
+
 Homografía & Error de reproyección en puntos de control. \\
 \hline
 Eventos & Precisión, recall y F1. \\
@@ -3206,8 +3156,7 @@ conveniente tener \textbf{4 puntos}:}
     (\textit{Should}), lo que se \textit{podría} (\textit{Could}) y lo que no se
     hará esta vez (\textit{Won't}). \textit{Debe:} RF-01,
     RF-02, RF-06, RNF-02 y RNF-11. \textit{Debería:} RF-03, RF-04, RF-05 y
-    RF-08. \textit{Podría:} RF-07, RF-09 y la estimación de género.
-    \textit{No esta vez:} clasificador de edad, predicción de congestión y
+    RF-08. \textit{Podría:} RF-07 y RF-09. \textit{No esta vez:} estimación de género, clasificador de edad, predicción de congestión y
     entrenamiento propio.
 
     \item \textbf{EDT en nueve paquetes.} El Cuadro~\ref{tab:edt} descompone el
@@ -3487,8 +3436,7 @@ Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & por fijar \\
 \hline
 IDs que mezclan personas & 28\,\% (antes 60\,\%) & por fijar \\
 \hline
-Acierto del género & 91\,\% & por fijar \\
-\hline
+
 Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & por fijar \\
 \hline
 \end{tabular}
@@ -3670,8 +3618,7 @@ consideró conveniente tener \textbf{3 puntos}:}
     nube (Cuadro~\ref{tab:costos}).
 
     \item \textbf{Modelos y software.} YOLO26 (Ultralytics) es gratuito con
-    licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT,
-    CLIP y ResNet18 son preentrenados y su licencia debe verificarse.
+    licencia AGPL, a resolver antes de un uso comercial. OSNet-AIN, PersonViT y ResNet18 son preentrenados y su licencia debe verificarse.
     PostgreSQL, PostGIS, pgvector, Go, Vue y Docker son
     de código abierto.
 
@@ -3697,7 +3644,7 @@ Máquina virtual de Google Cloud & Servicio & Google Cloud & $\approx$ US\$~334.
 \hline
 YOLO26 (detector) & Modelo & Ultralytics & Gratuito, licencia AGPL; resolver antes de uso comercial \\
 \hline
-OSNet-AIN, PersonViT, CLIP, ResNet18 & Modelos & Preentrenados & Verificar licencia \\
+OSNet-AIN, PersonViT, ResNet18 & Modelos & Preentrenados & Verificar licencia \\
 \hline
 PostgreSQL, PostGIS, pgvector, Go, Vue, Docker & Software & Código abierto & Sin costo \\
 \hline
@@ -3720,17 +3667,15 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
     anotado del aeropuerto; R3 re-identificación imperfecta; R4 dependencia de
     una sola computadora con GPU; R5 retraso del cronograma; R6
     incumplimiento de la Ley N.\textdegree~29733; R7 licencia AGPL del
-    detector; R8 acceso a datos con LAP; R9 cámaras de calidad variable; R10
-    sesgo en la estimación de género.
+    detector; R8 acceso a datos con LAP; R9 cámaras de calidad variable.
 
     \item \textbf{Análisis cualitativo.} Probabilidad (P) e impacto (I) de 1 a
     5; nivel $=$ P $\times$ I (Cuadros~\ref{tab:riesgos} y~\ref{tab:matriz-riesgos}).
     Altos: R2 y R3 ($4 \times 4 = 16$). Medios: R4, R5 y R8 (12), R1 y R6
-    (10), R7, R9 y R10 (9).
+    (10), R7 y R9 (9).
 
     \item \textbf{Estructura de desglose (RBS).} Técnico: R2, R3, R9.
-    Infraestructura: R4. Gestión y organización: R1, R5. Legal y ético: R6,
-    R7, R10. Externo: R8.
+    Infraestructura: R4. Gestión y organización: R1, R5. Legal y ético: R6, R7. Externo: R8.
 
     \item \textbf{Respuesta y seguimiento.} Mitigar con documentación, actas y
     Git (R1); modelos preentrenados y validación en ESAN (R2); galería global
@@ -3768,8 +3713,7 @@ R8 & Acceso a datos con LAP & Externo & 3 & 4 & 12 \\
 \hline
 R9 & Cámaras de calidad variable & Técnico & 3 & 3 & 9 \\
 \hline
-R10 & Sesgo en la estimación de género & Legal y ético & 3 & 3 & 9 \\
-\hline
+
 \end{tabular}
 \end{table}
 
@@ -3788,7 +3732,7 @@ R10 & Sesgo en la estimación de género & Legal y ético & 3 & 3 & 9 \\
 \hline
 \textbf{4} & \cellcolor{gray!25} & \cellcolor{gray!25} & \cellcolor{gray!45}R5 & \cellcolor{gray!70}R2, R3 & \cellcolor{gray!70} \\
 \hline
-\textbf{3} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!45}R7, R9, R10 & \cellcolor{gray!45}R4, R8 & \cellcolor{gray!70} \\
+\textbf{3} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!45}R7, R9 & \cellcolor{gray!45}R4, R8 & \cellcolor{gray!70} \\
 \hline
 \textbf{2} & \cellcolor{gray!10} & \cellcolor{gray!25} & \cellcolor{gray!25} & \cellcolor{gray!45} & \cellcolor{gray!45}R1, R6 \\
 \hline
@@ -3930,11 +3874,11 @@ I. Seguimiento local & YOLO26m y seguidor híbrido con asociación en cascada (H
 \hline
 II. Multicámara & YOLO26s-ReID y galería global con reglas físicas & \textit{global\_id} seudónimo por persona \\
 \hline
-II. Mapa y género & Homografía imagen--plano y CLIP con votación & Posición en metros, velocidad, dirección y género \\
+II. Mapa & Homografía imagen--plano & Posición en metros, velocidad y dirección \\
 \hline
 III. Histórico & Piso transitable, consolidación, máquina de eventos, KDE, PrefixSpan y grafo origen-destino & Eventos, métricas e insights por zona y local \\
 \hline
-En vivo & Modelo de tres carriles con memoria de identidades & Cajas, ID y género en tiempo real desde teléfonos \\
+En vivo & Modelo de dos carriles con memoria de identidades & Cajas e ID en tiempo real desde teléfonos \\
 \hline
 En vivo & Ubicación desde un teléfono & Posición en el plano de cada persona detectada \\
 \hline
@@ -4006,28 +3950,21 @@ global que solo admite candidatas físicamente compatibles
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Proyección al plano y estimación de género (Parte II)}
+\subsection{Proyección al plano (Parte II)}
 
-Cada observación con los pies visibles se lleva al plano en metros con la
-homografía de su cámara. En paralelo, CLIP vota el género de cada identidad a
-partir de vistas del cuerpo completo (Algoritmo~\ref{alg:mapa}).
+Cada observación con los pies visibles se lleva al plano en metros con la homografía de su cámara (Algoritmo~\ref{alg:mapa}).
 
 \begin{algorithm}[H]
-\caption{Proyección al plano y estimación de género}
+\caption{Proyección al plano}
 \label{alg:mapa}
 \begin{algorithmic}[1]
-\REQUIRE caja $(x_1,y_1,x_2,y_2)$, homografía $H$ de la cámara y recortes de la persona
-\ENSURE posición $(X,Y)$ en metros y género de la identidad
+\REQUIRE caja $(x_1,y_1,x_2,y_2)$ y homografía $H$ de la cámara
+\ENSURE posición $(X,Y)$ en metros, velocidad y dirección
 \IF{la caja no está cortada por el borde inferior}
   \STATE $(u,v) \leftarrow \big((x_1+x_2)/2,\ y_2\big)$, punto de los pies
   \STATE $[X',Y',W']^{\top} \leftarrow H\,[u,v,1]^{\top}$; \ $(X,Y) \leftarrow (X'/W',\ Y'/W')$
   \STATE calcular velocidad y dirección sobre 1~s del tracklet
 \ENDIF
-\IF{alto $\geq 72$~px, $c \geq 0.5$ y pasaron 0.6~s desde la última muestra (máximo 12 por tracklet)}
-  \STATE $p \leftarrow$ CLIP(persona completa en un cuadro con relleno, frases de Hombre y de Mujer)
-  \STATE sumar a la identidad un voto ponderado por $p$
-\ENDIF
-\STATE género $\leftarrow$ etiqueta ganadora con al menos 2 votos, certeza $\geq 0.55$ y margen $\geq 0.10$; si no, sin determinar
 \end{algorithmic}
 \end{algorithm}
 
@@ -4058,21 +3995,18 @@ las reglas de eventos y los algoritmos de minería (Algoritmo~\ref{alg:historico
 
 \subsection{Modelo en vivo sobre teléfonos}
 
-Procesa a la vez todos los teléfonos conectados. Separa el trabajo en tres
-carriles para que las cajas no esperen a los modelos más pesados: el rápido
-detecta y sigue, y los IDs y el género corren en hilos aparte y en paralelo.
+Procesa a la vez todos los teléfonos conectados. Separa el trabajo en dos carriles para que las cajas no esperen al modelo más pesado: el rápido detecta y sigue, y el de IDs corre en un hilo aparte y en paralelo.
 Una memoria de identidades hace que cada persona conserve su ID aunque salga
 y vuelva, pase a otro teléfono o el modelo se reinicie
 (Algoritmo~\ref{alg:vivo}). Sobre el video, cada persona se marca con un
-punto de su color sobre la cabeza, su ID global y su género, en lugar de una
-caja que la tape.
+punto de su color sobre la cabeza, y su ID global, en lugar de una caja que la tape.
 
 \begin{algorithm}[H]
-\caption{Modelo en vivo de tres carriles}
+\caption{Modelo en vivo de dos carriles}
 \label{alg:vivo}
 \begin{algorithmic}[1]
 \REQUIRE flujos de video de los teléfonos y memoria de identidades
-\ENSURE cajas, ID y género de cada persona, publicados en tiempo real
+\ENSURE cajas e ID de cada persona, publicados en tiempo real
 \STATE \textbf{Carril rápido}, por cada cuadro de cada teléfono:
 \STATE \hspace{1.2em} detectar personas (YOLO26s a 640~px en CPU; YOLO26m a 960~px y $c \geq 0.15$ en GPU)
 \STATE \hspace{1.2em} armar la caja con YOLO26s-pose (cabeza, hombros, caderas, rodillas y tobillos)
@@ -4084,9 +4018,7 @@ caja que la tape.
 \STATE \hspace{1.2em} si coincide sin ambigüedad, recuperar su ID y su color
 \STATE \hspace{1.2em} durante 60~s, fusionar un ID nuevo con uno ya visto si es la misma persona
 \STATE \hspace{1.2em} guardar la memoria cada 2~s y olvidar a quien no se ve en 24~horas
-\STATE \textbf{Carril de género}, en paralelo:
-\STATE \hspace{1.2em} cada 0.3~s, votar con CLIP sobre la mitad superior del cuerpo
-\STATE \hspace{1.2em} mostrar la etiqueta que va ganando y fijarla con 2 votos de certeza $\geq 0.80$ (hasta 10 cuadros)
+
 \end{algorithmic}
 \end{algorithm}
 
@@ -4145,9 +4077,7 @@ ajustes más sensibles sobre la misma lógica de las Partes I y II:
     entrenados en MSMT17. Una identidad solo se une a otra si cada tramo se
     parece a cada uno de la otra, para que una fusión equivocada no termine
     absorbiendo a cualquiera.
-    \item \textbf{Género:} vota desde la primera vista y muestra la etiqueta
-    más votada con su certeza; la que ya se mostró solo cambia si la otra gana
-    con margen.
+    
     \item \textbf{Velocidad:} los cuadros se decodifican en la GPU, cada video
     en su hilo; las redes de Re-ID van grabadas en \textit{CUDA graphs} y el
     asociador compara todas las identidades vigentes de una vez.
@@ -4161,31 +4091,26 @@ margen de ambigüedad y preferencia mutua), en modo visual-temporal porque los
 videos no traen calibración: cada video es una cámara, todas se consideran
 solapadas y una persona puede pasar de una a otra en hasta 60~s. Cambian solo
 el codificador de apariencia y sus umbrales, llevados a la escala de
-OSNet-AIN y PersonViT. Para evaluar cada parte por separado, el usuario elige
-qué hace el modelo: \textit{solo multitracking} (IDs compartidos, sin CLIP),
-\textit{solo género} (cada video con sus propios IDs) o \textit{ambos}
-(Algoritmo~\ref{alg:videos}). El video se guarda en disco temporal solo
+OSNet-AIN y PersonViT. El procesamiento se resume en el Algoritmo~\ref{alg:videos}. El video se guarda en disco temporal solo
 mientras se procesa y queda únicamente un resumen.
 
 \begin{algorithm}[H]
 \caption{Procesamiento de una tanda de videos}
 \label{alg:videos}
 \begin{algorithmic}[1]
-\REQUIRE videos $V_1,\dots,V_n$ ($n \leq 10$) y análisis $a \in \{$multitracking, género, ambos$\}$
-\ENSURE cajas, ID global y género por cuadro, y resumen de cada video
-\STATE crear un asociador común para la tanda (uno por video si $a$ = género)
+\REQUIRE videos $V_1,\dots,V_n$ ($n \leq 10$)
+\ENSURE cajas e ID global por cuadro, y resumen de cada video
+\STATE crear un asociador común para la tanda
 \STATE esperar a que todos los videos estén listos y arrancar un reloj común
 \WHILE{quede algún video sin terminar}
   \STATE tomar de cada video el cuadro que corresponde al reloj (saltar los atrasados)
   \STATE detectar en una sola pasada de YOLO26 a 1280~px los cuadros de todos los videos
   \STATE seguir cada video con su seguidor local
   \STATE muestrear cada 0.4~s vistas Re-ID (OSNet-AIN + PersonViT) y asociarlas en el asociador de la tanda
-  \IF{$a \neq$ multitracking}
-    \STATE votar el género con CLIP cada 1~s por persona
-  \ENDIF
+  
   \STATE publicar cajas, \textit{global\_id}, FPS y ms por cuadro de cada video
 \ENDWHILE
-\STATE guardar el resumen (personas, género agregado, segundos en que aparece cada ID) y borrar el video
+\STATE guardar el resumen (personas y segundos en que aparece cada ID) y borrar el video
 \end{algorithmic}
 \end{algorithm}
 
@@ -4429,9 +4354,7 @@ backends aplican al iniciar.
     original del modelo junto a la ajustada al piso.
     \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
     calculada en la base, y \texttt{session\_analytics}, con los parámetros y
-    los resultados de la Parte~III; \texttt{session\_gender\_counts}, con
-    cuántas personas de cada género tuvo cada sesión, sin el género de cada
-    una.
+    los resultados de la Parte~III.
     \item \textbf{Tráfico:} \texttt{traffic\_buckets} (personas, visitas,
     quienes se detienen e interesados por zona en ventanas de 5, 15 y 60
     minutos), \texttt{heat\_cells} (segundos-persona por celda de 1~m y hora),
@@ -4445,8 +4368,7 @@ backends aplican al iniciar.
     \texttt{account\_requests} (solicitudes), \texttt{store\_api\_keys} y
     \texttt{audit\_log} (bitácora).
     \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
-    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes ni
-    género, borrados a las 24 horas.
+    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes, borrados a las 24 horas.
 \end{itemize}
 
 Una pasada diaria aplica la retención: borra los puntos de trayectoria de las
@@ -4563,8 +4485,7 @@ nueve secciones, y cada rol ve solo las suyas:
     \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
     con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
     \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
-    umbrales de tráfico y tamaño mínimo de grupo para el género
-    (Figura~\ref{fig:web-config}).
+    umbrales de tráfico (Figura~\ref{fig:web-config}).
     \item \textbf{Teléfonos:} código de unión en QR, cámaras de teléfono con el
     proceso del modelo y memoria de personas (Figura~\ref{fig:web-telefonos}).
     \item \textbf{Cuentas:} cuentas, accesos, bitácora y privacidad.
@@ -4582,7 +4503,7 @@ nueve secciones, y cada rol ve solo las suyas:
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/arquitectura/web-configuracion.png}
 \caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio,
-umbrales de tráfico y privacidad del género.}
+umbrales de tráfico.}
 \label{fig:web-config}
 \end{figure}
 
@@ -4590,15 +4511,14 @@ umbrales de tráfico y privacidad del género.}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/videos.png}
 \caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
-el selector de análisis y el resumen de cada video.}
+el resumen de cada video.}
 \label{fig:web-videos}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/plataforma/insights.png}
-\caption{Insights de una captura en vivo: el género se muestra solo en grupos
-de 5 o más personas.}
+\caption{Insights de una captura en vivo: personas, permanencia, captación y densidad.}
 \label{fig:web-insights}
 \end{figure}
 
@@ -4698,8 +4618,7 @@ Velocidad mediana al caminar & 0.87~m/s \\
 \begin{minipage}[t]{0.49\linewidth}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-camara-01.jpg}
-\caption{Cámara cam01 procesada: identificador global (G), local (L) y
-género.}
+\caption{Cámara cam01 procesada: identificador global (G) y local (L).}
 \label{fig:dataset-camara}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.49\linewidth}
@@ -4722,9 +4641,7 @@ instante.}
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/dataset-insights.png}
-\caption{Insights de la sesión en la versión actual: personas, permanencia,
-captación, densidad y género, que se muestra solo como ``sin determinar''
-porque hombres y mujeres quedan, cada uno, bajo el grupo mínimo de 5.}
+\caption{Insights de la sesión en la versión actual: personas, permanencia, captación y densidad.}
 \label{fig:dataset-insights}
 \end{figure}
 
@@ -4740,7 +4657,7 @@ teléfonos se unen a la computadora local con un código QR
     (\texttt{https://<servidor>/camara/}) y pulsó ``Unirse con la cámara'',
     sin instalar ninguna aplicación.
     \item El modelo en vivo procesó todos los teléfonos a la vez, y la sección
-    Teléfonos mostró sus cajas, ID y género, junto con la memoria de
+    Teléfonos mostró sus cajas e ID, junto con la memoria de
     personas (Figura~\ref{fig:telefonos-memoria}).
     \item En el modo en vivo, los teléfonos tomaron el lugar de cam01, cam02 y
     cam03 por orden de llegada, con su posición y rumbo ajustados en
@@ -4760,9 +4677,7 @@ personas en total. La memoria de identidades reunió a 10 personas: la que más
 se vio apareció en cuatro teléfonos distintos y conservó el mismo ID en todos.
 En el servidor, sin GPU, el modelo en vivo procesó unos 9 cuadros por segundo
 sin personas y entre 4 y 6 con una a cuatro personas, mientras cada teléfono
-enviaba 15 cuadros por segundo. La estimación de género, evaluada sobre 169
-recortes del patio etiquetados manualmente, acertó en el 91\,\% de los casos
-(92\,\% en el servidor, con 19~ms por recorte).
+enviaba 15 cuadros por segundo. 
 
 \begin{figure}[H]
 \centering
@@ -4777,8 +4692,7 @@ reproduce sobre el plano.}
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/validacion/telefonos-memoria.png}
 \caption{Teléfonos, el 6 de octubre: memoria de personas con las cámaras donde
-se vio a cada una y cuándo. Esa versión guardaba también el género; hoy la
-memoria ya no lo guarda.}
+se vio a cada una y cuándo. }
 \label{fig:telefonos-memoria}
 \end{figure}
 
@@ -5050,24 +4964,25 @@ desde que todos los videos de la tanda empezaban. Cada segundo se registró el
 uso de CPU y la memoria del proceso del modelo, el uso de CPU de todo el
 equipo, y el uso, la memoria y la potencia de la GPU; del canal de estado del
 modelo se tomaron los cuadros procesados y saltados, los milisegundos por
-cuadro y las personas contadas de cada video. Cada caso se corrió con los
-tres análisis: \textit{solo multitracking}, \textit{solo género} y
-\textit{ambos}. Los casos fueron:
+cuadro y las personas contadas de cada video. Los casos fueron:
 
 \begin{itemize}
     \item \textbf{Validación:} cinco pares de videos (P1 a P5) de dos cámaras
     que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 90
     personas por video.
-    \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido
-    (análisis \textit{ambos}) y siete cámaras 1080p a 60~fps del mismo lugar,
+    \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar,
     con unas 25 personas a la vista en cada una.
 \end{itemize}
+
+Los casos de estrés se midieron antes de retirar del sistema el módulo
+opcional de estimación de género, que consumía CPU adicional. Por eso la carga
+de CPU de esos casos es una cota superior de la actual y conviene repetir la
+medición con la versión final.
 
 El modelo procesa como una cámara en vivo: si no alcanza al video, salta
 cuadros en lugar de atrasarse, por lo que la carga se lee en los cuadros por
 segundo que logra procesar y en la fracción de cuadros que salta. Las siete
-cámaras se procesaron con el mismo modelo, el análisis \textit{ambos}, el
-mismo lector en la GPU y la misma preparación de la pasada siguiente mientras
+cámaras se procesaron con el mismo modelo, el mismo lector en la GPU y la misma preparación de la pasada siguiente mientras
 se procesa la anterior, pero sin el reloj del tiempo real, sobre sus primeros
 2 minutos y con tres ritmos:
 1.5 y 5 cuadros por segundo fijos, y uno adaptado en el que el video avanza 3
@@ -5077,7 +4992,7 @@ elegido de las siete cámaras, sin saltar ninguno por atraso.
 
 \subsection{Resultados de la validación con pares de cámaras}
 
-El Cuadro~\ref{tab:pares-modos} promedia los cinco pares por análisis y el
+El Cuadro~\ref{tab:pares-modos} promedia los cinco pares y el
 Cuadro~\ref{tab:pares-detalle} muestra cada par.
 
 \begin{table}[H]
@@ -5086,34 +5001,34 @@ Cuadro~\ref{tab:pares-detalle} muestra cada par.
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.38\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|R{0.15\textwidth}|}
+\begin{tabular}{|L{0.55\textwidth}|R{0.20\textwidth}|}
 \hline
-\textbf{Medición} & \textbf{Solo multitracking} & \textbf{Solo género} & \textbf{Ambos} \\
+\textbf{Medición} & \textbf{Resultado} \\
 \hline
-Cuadros procesados por segundo, por video & 17.0 & 15.5 & 15.9 \\
+Cuadros procesados por segundo, por video & 17.0 \\
 \hline
-Milisegundos por cuadro & 46 & 50 & 51 \\
+Milisegundos por cuadro & 46 \\
 \hline
-Cuadros saltados & 27\,\% & 34\,\% & 33\,\% \\
+Cuadros saltados & 27\,\% \\
 \hline
-Núcleos de CPU del modelo, promedio (p95) & 1.7 (1.8) & 4.4 (5.8) & 4.4 (5.7) \\
+Núcleos de CPU del modelo, promedio (p95) & 1.7 (1.8) \\
 \hline
-CPU de todo el equipo & 28\,\% & 46\,\% & 44\,\% \\
+CPU de todo el equipo & 28\,\% \\
 \hline
-Uso de la GPU & 68\,\% & 63\,\% & 63\,\% \\
+Uso de la GPU & 68\,\% \\
 \hline
-Memoria de la GPU & 2.8~GB & 2.8~GB & 2.8~GB \\
+Memoria de la GPU & 2.8~GB \\
 \hline
-Memoria RAM del modelo & 1.4~GB & 1.5~GB & 1.5~GB \\
+Memoria RAM del modelo & 1.4~GB \\
 \hline
-Potencia de la GPU & 59~W & 57~W & 57~W \\
+Potencia de la GPU & 59~W \\
 \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[H]
 \caption{Detalle por par: cuadros por segundo por video, núcleos de CPU y uso
-de la GPU según el análisis (multitracking / género / ambos)}
+de la GPU}
 \label{tab:pares-detalle}
 \centering
 \footnotesize
@@ -5122,15 +5037,15 @@ de la GPU según el análisis (multitracking / género / ambos)}
 \hline
 \textbf{Par} & \textbf{Personas por cámara} & \textbf{Cuadros por segundo} & \textbf{Núcleos de CPU} & \textbf{Uso de la GPU} \\
 \hline
-P1 & 46 y 46 & 18.1 / 16.9 / 16.0 & 1.7 / 4.7 / 4.8 & 72 / 67 / 65\,\% \\
+P1 & 46 y 46 & 18.1 & 1.7 & 72\,\% \\
 \hline
-P2 & 86 y 81 & 13.1 / 12.4 / 12.7 & 1.7 / 5.7 / 5.8 & 58 / 52 / 50\,\% \\
+P2 & 86 y 81 & 13.1 & 1.7 & 58\,\% \\
 \hline
-P3 & 35 y 26 & 18.2 / 17.7 / 18.6 & 1.7 / 3.7 / 3.7 & 69 / 66 / 66\,\% \\
+P3 & 35 y 26 & 18.2 & 1.7 & 69\,\% \\
 \hline
-P4 & 70 y 64 & 17.7 / 15.3 / 15.4 & 1.7 / 4.7 / 4.7 & 71 / 65 / 67\,\% \\
+P4 & 70 y 64 & 17.7 & 1.7 & 71\,\% \\
 \hline
-P5 & 16 y 33 & 17.7 / 15.4 / 16.8 & 1.6 / 3.0 / 3.0 & 68 / 65 / 67\,\% \\
+P5 & 16 y 33 & 17.7 & 1.6 & 68\,\% \\
 \hline
 \end{tabular}
 \end{table}
@@ -5138,7 +5053,7 @@ P5 & 16 y 33 & 17.7 / 15.4 / 16.8 & 1.6 / 3.0 / 3.0 & 68 / 65 / 67\,\% \\
 \subsection{Resultados de las pruebas de estrés}
 
 Con dos cámaras de 60~fps y mucha gente (227 y 148 personas contadas en
-2~minutos), el análisis \textit{ambos} procesó 7.7 cuadros por segundo por
+2~minutos), el modelo procesó 7.7 cuadros por segundo por
 video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
 6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
 la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
@@ -5150,8 +5065,7 @@ lo mismo pero procesó menos, 3.9 cuadros por segundo por cámara: cuando una
 pasada se demora, salta al cuadro que marca el reloj.
 
 \begin{table}[H]
-\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (análisis
-\textit{ambos}, primeros 2 minutos)}
+\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (primeros 2 minutos)}
 \label{tab:siete}
 \centering
 \footnotesize
@@ -5206,21 +5120,15 @@ persona entre dos cuadros procesados seguidos.}
 
 \begin{itemize}
     \item \textbf{Dos cámaras van casi al ritmo del video.} Con dos cámaras
-    1080p a 23~fps el modelo procesa unos 16 cuadros por segundo por video
-    (unos 32 en total), alrededor del 70\,\% de los cuadros, con cualquiera de
-    los tres análisis.
-    \item \textbf{El género es lo que más carga la CPU.} Sin CLIP, el modelo
-    usa 1.7 núcleos; con el género, 4.4 en promedio y hasta 5.8 en el p95, y
-    pierde 1 a 1.5 cuadros por segundo. \textit{Ambos} cuesta lo mismo que
-    \textit{solo género}: el multitracking entre cámaras agrega poco sobre el
-    género.
+    1080p a 23~fps el modelo procesa unos 16 a 17 cuadros por segundo por video
+    (unos 34 en total), alrededor del 70\,\% de los cuadros.
     \item \textbf{La cantidad de gente baja el ritmo.} El par con más personas
     (P2, más de 80 por cámara) procesa unos 13 cuadros por segundo, frente a
-    18 del que tiene menos (P3); con el género, su CPU llega a 5.8 núcleos.
+    18 del que tiene menos (P3).
     \item \textbf{La GPU no es el cuello de botella.} En los pares la GPU
-    trabaja entre 50\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
-    que sube con el género y con la gente; con siete cámaras la GPU trabaja
-    solo entre 28 y 38\,\%.
+    trabaja entre 58\,\% y 72\,\% y usa 2.8 de sus 8~GB, mientras la CPU es la
+    que sube con la gente (1.7 núcleos en los pares y más de 6 con dos cámaras
+    de 60~fps); con siete cámaras la GPU trabaja solo entre 28 y 38\,\%.
     \item \textbf{Siete cámaras de 60~fps se procesan completas a 5 cuadros
     por segundo.} Sin el reloj del tiempo real, una pasada de las siete
     cámaras toma 0.6~s, tres cuartos en el seguimiento en la CPU, y 2 minutos
@@ -5409,18 +5317,18 @@ Insights y tráfico & Visitas, exposición, captación, permanencia, densidad, c
 \hline
 Ventas & Tickets de caja (CSV), emparejamiento de cada compra con una visita, conversión por local, patrones por hora, pronóstico Holt-Winters y simulador de escenarios & Une tráfico con ingresos \\
 \hline
-En vivo y Videos & Teléfonos como cámaras unidos con un código QR; hasta 10 grabaciones a la vez con IDs compartidos entre cámaras y análisis elegible & Demo inmediata en cualquier local, sin instalar nada \\
+En vivo y Videos & Teléfonos como cámaras unidos con un código QR; hasta 10 grabaciones a la vez con IDs compartidos entre cámaras & Demo inmediata en cualquier local, sin instalar nada \\
 \hline
 Plataforma & API en Go, PostgreSQL/PostGIS y pgvector, web Vue; roles superadmin, seguridad y negocio; argon2id; bitácora; solicitudes de permisos & Base seria para vender a empresas \\
 \hline
-Privacidad & Sin reconocimiento facial ni imágenes guardadas, IDs seudónimos, vectores Re-ID borrados a las 24 horas, género solo en conteos de 5 o más, puntos borrados a los 90 días & Argumento de venta frente a la Ley N.\textdegree~29733 \\
+Privacidad & Sin reconocimiento facial ni imágenes guardadas, IDs seudónimos, sin inferencia de género, vectores Re-ID borrados a las 24 horas, puntos borrados a los 90 días & Argumento de venta frente a la Ley N.\textdegree~29733 \\
 \hline
 \end{tabular}
 \end{table}
 
 \textbf{Por construir:} lectura de grabaciones del NVR por fecha y hora; zona
 de visión por pantalla; modo liviano para cámaras de tienda (detector y conteo
-por línea, sin Re-ID ni género); precisión medida contra conteo manual en
+por línea, sin Re-ID); precisión medida contra conteo manual en
 tienda; detector con licencia libre (hoy YOLO, AGPL); consola multicliente.
 
 \subsection{Mercado y competencia}
@@ -5676,9 +5584,7 @@ entonces unas 5 horas de proceso nocturno, dentro del día. Una cámara de
 tienda, con 12 horas de apertura, suma 216\,000 cuadros al día: diez cámaras
 exigen unos 25 cuadros por segundo sostenidos todo el día, cerca del límite
 medido con el modelo completo;
-por eso el tope de 10 cámaras por computadora supone el modo liviano, sin Re-ID
-ni género, que según las mismas pruebas libera la mayor parte de la CPU
-(\textit{solo multitracking} usa 1.7 núcleos frente a 4.4 con el género).
+por eso el tope de 10 cámaras por computadora supone el modo liviano, sin Re-ID, que reduce la carga de la CPU.
 
 \begin{table}[H]
 \caption{Costo por cámara al mes}
@@ -6105,18 +6011,12 @@ Las cámaras fueron teléfonos que se unieron desde el navegador, sin instalar
 ninguna aplicación. La Figura~\ref{fig:comedor-telefonos} muestra la pantalla
 de cada teléfono durante la prueba: un Android (cámara~1) y un iPhone
 (cámara~2), ambos con el aviso ``En vivo'' y las cajas de las personas
-detectadas, con su ID global (G), su ID local (L) y el género estimado.
+detectadas, con su ID global (G) y su ID local (L).
 
 \begin{figure}[H]
 \centering
-\begin{minipage}[t]{0.40\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-telefono-android.png}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.40\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/validacion/comedor-telefono-iphone.png}
-\end{minipage}
+\cuadro{0.44\linewidth}{figuras/validacion/comedor-telefono-android.png}\hfill
+\cuadro{0.44\linewidth}{figuras/validacion/comedor-telefono-iphone.png}
 \caption{Vista en los teléfonos durante la prueba del comedor: Android,
 cámara~1 (izquierda) e iPhone, cámara~2 (derecha).}
 \label{fig:comedor-telefonos}
@@ -6127,7 +6027,7 @@ prueba (Figura~\ref{fig:comedor-participantes}).
 
 \begin{figure}[H]
 \centering
-\safeincludegraphics[width=0.40\linewidth]{figuras/validacion/comedor-participantes.png}
+\cuadro{0.44\linewidth}{figuras/validacion/comedor-participantes.png}
 \caption{Participantes de la prueba en el comedor de ESAN, todos con
 autorización para ser grabados.}
 \label{fig:comedor-participantes}
