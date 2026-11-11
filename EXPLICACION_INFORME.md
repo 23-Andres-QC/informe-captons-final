@@ -408,8 +408,7 @@ Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra secci
 9. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
 10. Planificación y gestión del proyecto (PMBOK, Scrum y riesgos)
 11. Plan de negocio
-12. Conclusiones y recomendaciones
 - Referencias bibliográficas
 - Anexo
 
-Orden: qué se construye (1 a 7), cómo se probó (8 y 9), cómo se gestiona y se vende (10 y 11) y qué queda (12).
+Orden: qué se construye (1 a 7), cómo se probó (8 y 9) y cómo se gestiona y se vende (10 y 11). Conclusiones y recomendaciones aún no van: su borrador está en `conclusiones.tex` y entra como sección 12 quitando el `%` de `% \input{conclusiones}`, antes de las Referencias.

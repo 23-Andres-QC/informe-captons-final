@@ -1,0 +1,64 @@
+\section{Conclusiones y recomendaciones}
+\label{sec:conclusiones}
+
+\subsection{Conclusiones}
+
+\begin{enumerate}
+    \item \textbf{Detección y seguimiento local.} YOLO26m con el seguidor
+    híbrido por cámara siguió a las 16 personas de la primera prueba; el
+    ajuste de umbrales bajó los identificadores locales de 88 a 80 y los
+    de personas lejanas de 7 a 1, de modo que una persona aún puede
+    partirse en varios tramos dentro de una cámara. El modelo procesa unos
+    17 cuadros por segundo por video con dos cámaras 1080p en la RTX~4060
+    Laptop (Secciones~\ref{sec:pruebas} y~\ref{sec:validacion-esan}).
+    \item \textbf{Re-identificación sin rostro.} La apariencia corporal
+    bastó para asociar personas entre cámaras con una precisión de 0.99 y
+    un \textit{recall} de 0.86 en la primera prueba; en el comedor cada
+    persona recibió el mismo identificador en los dos teléfonos, y en las
+    grabaciones del 9 de noviembre se siguió a 149 personas en el patio
+    (41 en las dos cámaras) y a 128 en el pasillo (20 en las dos)
+    (Sección~\ref{sec:mas-gente}).
+    \item \textbf{Plano 2D.} La homografía ubicó en el plano el 93\,\% de
+    las detecciones con un error de calibración mediano de 0.28 a 0.48~m,
+    y las referencias del en vivo ubicaron grabaciones sin modelo de
+    cámara (24 de 24 cuadros reconocidos).
+    \item \textbf{Patrones históricos.} KDE, PrefixSpan y el grafo
+    origen-destino generan mapas de calor, rutas frecuentes y flujos entre
+    zonas a partir de las sesiones guardadas (Sección~\ref{sec:algoritmos}).
+    \item \textbf{Métricas y tablero.} La plataforma muestra en vivo y por
+    sesión los conteos, permanencias, mapas de calor y rutas, exporta el
+    reporte en PDF y controla el acceso por roles, con permisos de
+    exportación aprobados por el superadmin (Sección~\ref{sec:arquitectura}).
+    \item \textbf{Datos.} PostgreSQL/PostGIS conserva la trazabilidad de
+    cámara, identidad seudónima, trayectoria y evento sin imágenes. La
+    memoria de identidades del en vivo sí guarda vectores de apariencia,
+    que se borran a las 24~horas sin ver a la persona; los puntos crudos se
+    borran a los 90 días y quedan solo los agregados.
+    \item \textbf{Salvaguardas.} El sistema no usa el rostro ni estima el
+    género, y la retención es corta; quedan abiertas las brechas legales
+    de la Sección~\ref{sec:analisis-legal}, en especial el tratamiento de
+    menores y la calificación de los vectores de Re-ID como dato
+    biométrico.
+    \item \textbf{Costos y negocio.} Procesar en una computadora propia
+    cuesta unos US\$~70 al mes, frente a US\$~379--389 de una T4 a demanda
+    en las grandes nubes (Cuadro~\ref{tab:nube-proveedores}); con ese costo,
+    el plan de negocio da un VAN de S/~798\,320 al 20\,\% y sigue positivo
+    con los flujos reducidos a la cuarta parte (Cuadro~\ref{tab:van-sens}).
+\end{enumerate}
+
+\subsection{Recomendaciones}
+
+\begin{itemize}
+    \item Validar el sistema con el CCTV real del aeropuerto, en un piloto
+    acordado con LAP, porque las pruebas se hicieron en ESAN con tres
+    cámaras fijas y con teléfonos.
+    \item Cerrar antes de cualquier despliegue las decisiones legales
+    pendientes: opinión legal sobre los vectores de Re-ID, tratamiento de
+    menores, contrato de encargo con el cliente y registro del banco de
+    datos (Cuadro~\ref{tab:matriz-legal}).
+    \item Medir el sesgo del detector y del Re-ID con grupos diversos de
+    personas, como propone la matriz de cumplimiento~\cite{matrices2026}.
+    \item Cotizar la computadora con GPU, que hoy es un supuesto de
+    S/~4\,500, y elegir entre computadora propia y nube según las horas de
+    uso al mes (Cuadro~\ref{tab:nube-proveedores}).
+\end{itemize}
