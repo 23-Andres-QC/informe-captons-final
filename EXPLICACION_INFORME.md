@@ -400,19 +400,19 @@ Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra solo 
 
 - Resumen ejecutivo
 1. Introducción y objetivos
-2. Planteamiento del problema y análisis del contexto (variables, restricciones, análisis técnico, legal, ético, social y ambiental, y normas ISO e IEC)
-3. Planificación: resumen del alcance, las 7 fases en 16 semanas, los hitos (pruebas en ESAN), Scrum con su Scrum Master y las herramientas (GitHub, Visual Studio Code, panel Scrum, Gantt y actas, Docker y LaTeX)
+2. Planteamiento del problema y análisis del contexto (descripción del caso, solución propuesta, variables, restricciones, análisis técnico, legal, ético, social y ambiental, y normas ISO e IEC)
+3. Planificación: análisis FODA y sus estrategias cruzadas, resumen del alcance, las 7 fases en 16 semanas, los hitos (pruebas en ESAN), Scrum con su Scrum Master y las herramientas (GitHub, Visual Studio Code, panel Scrum, Gantt y actas, Docker y LaTeX)
 4. Marco teórico: bases conceptuales (detección, seguimiento, Re-ID, homografía, KDE, rutas frecuentes, sincronía por audio, seudonimización) y 9 antecedentes
 5. Metodología (Partes I, II y III, con los datos y modelos que usa cada una)
-6. Algoritmos
+6. Algoritmos y dataset (los pesos preentrenados y los videos con que se construyó y se midió el sistema)
 7. Pruebas de validación y estrés del modelo: métricas de cada componente, validación con videos etiquetados y pruebas de carga
 8. Flujo del sistema: flujo general y trazabilidad de los datos entre las tres partes
 9. Casos de prueba en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
 10. Casos de uso y requisitos: cuadro resumen, dos ejemplos (CU-02 y CU-08) y requisitos funcionales y no funcionales
 11. Arquitectura del sistema
 12. Planificación y gestión del proyecto (PMBOK, Scrum y riesgos)
-13. Plan de negocio
+13. Plan de negocio (clientes, mercado y competencia, Canvas, precios, costos, pronóstico, VAN y TIR, validación comercial y normativa)
 - Referencias bibliográficas
 - Anexo (participantes y evidencia de las pruebas, casos de uso detallados, calculadoras de costos y repositorio)
 
-Orden: el problema y su plan (1 a 3), los antecedentes (4), cómo funciona y cómo se midió (5 a 8), las pruebas de campo (9), qué hace cada usuario y cómo está construido (10 y 11), y cómo se gestiona y se vende (12 y 13).
+Orden: el problema, su solución y su plan (1 a 3), los antecedentes (4), cómo funciona y cómo se midió (5 a 8), las pruebas de campo (9), qué hace cada usuario y cómo está construido (10 y 11), y cómo se gestiona y se vende (12 y 13).

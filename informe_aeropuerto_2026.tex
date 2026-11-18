@@ -416,6 +416,32 @@ terminal. Esta complejidad, sumada a la falta de herramientas
 automáticas, afecta tanto la gestión operativa de la congestión como las
 decisiones comerciales de los locales.
 
+\subsection{Solución propuesta}
+\label{sec:solucion}
+
+TrackFlow aprovecha las cámaras CCTV que ya existen, sin agregar hardware ni
+reconocimiento facial. La solución se organiza en tres partes encadenadas
+(Sección~\ref{sec:metodologia}):
+
+\begin{enumerate}
+    \item \textbf{Seguimiento local:} detecta a las personas en cada cámara
+    con YOLO26m y sigue a cada una con un identificador local estable, aun
+    ante cruces y oclusiones.
+    \item \textbf{Procesamiento multicámara y mapa 2D:} re-identifica a la
+    misma persona entre cámaras con un identificador global seudónimo y
+    proyecta su posición sobre el plano del lugar mediante homografía.
+    \item \textbf{Procesamiento histórico:} convierte las trayectorias en
+    eventos e insights por zona y local: permanencia, mapas de calor, rutas
+    frecuentes, flujos origen-destino y tasa de captación.
+\end{enumerate}
+
+Los resultados se consultan en una plataforma web con cuentas y roles, que
+además recibe teléfonos usados como cámaras en vivo, procesa videos subidos y
+cruza el tráfico con las ventas de cada local
+(Sección~\ref{sec:arquitectura}). El sistema no guarda imágenes ni rostros,
+no estima el género ni otros atributos de las personas y borra los vectores
+de apariencia a las 24 horas.
+
 \subsection{Identificación de variables}
 
 El proyecto distingue tres grupos de variables: operativas y de datos,
@@ -1049,9 +1075,91 @@ El proyecto se planificó en 16 semanas con un enfoque híbrido: el acta, el
 alcance, los hitos del curso y las entregas tienen fechas fijas, y el
 desarrollo avanza en sprints semanales con Scrum, porque los requisitos
 cambiaron durante el proyecto (Sección~\ref{sec:enfoque}). Esta sección
-resume el alcance, las fases, los hitos y la forma de trabajo; el plan
+parte del análisis FODA y sus estrategias cruzadas, y resume el alcance, las
+fases, los hitos y la forma de trabajo; el plan
 completo, con la EDT, la ruta crítica, los costos, los riesgos y el
 seguimiento, está en la Sección~\ref{sec:gestion}.
+
+\subsection{Análisis FODA}
+\label{sec:foda}
+
+El análisis FODA (fortalezas, oportunidades, debilidades y amenazas) es una
+herramienta de planificación estratégica que separa lo que depende de
+TrackFlow (fortalezas y debilidades) de lo que viene del entorno
+(oportunidades y amenazas). El Cuadro~\ref{tab:foda} lo resume.
+
+\begin{table}[H]
+\caption{FODA de TrackFlow, octubre de 2026}
+\label{tab:foda}
+\centering
+\footnotesize
+\setlength{\fboxsep}{0pt}
+\newcommand{\fodacelda}[3]{\colorbox{#1}{\parbox[t][5.6cm][t]{0.455\textwidth}{%
+    \vspace{3pt}\centering\textbf{#2}\par\vspace{2pt}\hrule\vspace{2pt}
+    \begin{minipage}{0.42\textwidth}\raggedright\footnotesize
+    \begin{itemize}[leftmargin=1.1em,itemsep=1pt,topsep=1pt]
+    #3
+    \end{itemize}\end{minipage}}}}
+\begin{tabular}{@{}c@{\hspace{3pt}\vrule\hspace{3pt}}c@{}}
+\fodacelda{green!14}{Fortalezas}{%
+    \item Plataforma completa y funcionando: visión, tráfico, ventas, cuentas y Videos
+    \item Usa las cámaras del cliente, sin hardware nuevo
+    \item Privacidad por diseño, sin reconocimiento facial
+    \item Procesamiento en una computadora propia de bajo costo fijo
+    \item Contacto en LAP y presencia en Lima} &
+\fodacelda{orange!16}{Debilidades}{%
+    \item Equipo de cuatro fundadores a medio tiempo
+    \item Precisión medida en videos etiquetados, no en tiendas
+    \item Detector con licencia AGPL
+    \item Lectura del NVR y modo liviano por construir
+    \item Sin clientes pagados todavía} \\[3pt]
+\hline\noalign{\vskip3pt}
+\fodacelda{blue!12}{Oportunidades}{%
+    \item Mercado de conteo de personas que crece $\sim$13\,\% al año
+    \item Sin medición de audiencia dentro de los recintos
+    \item JCDecaux en el nuevo Jorge Chávez y pantallas en malls y estaciones
+    \item Miles de locales en malls, galerías, supermercados y boticas
+    \item Fondos de ProInnóvate~\cite{proinnovate} e incubadoras} &
+\fodacelda{red!12}{Amenazas}{%
+    \item Competidores que también usan el CCTV existente
+    \item Analítica incluida en las cámaras nuevas
+    \item Desconfianza hacia las cámaras y exigencias de la Ley N.\textdegree~29733
+    \item Proveedores globales con comparativos de retail
+    \item Cámaras de los clientes de calidad o ángulo variables}
+\end{tabular}
+\end{table}
+
+\subsection{Estrategias cruzadas del FODA}
+\label{sec:foda-cruces}
+
+Al cruzar ambos lados se obtienen las estrategias: usar las fortalezas para
+aprovechar oportunidades (FO), superar debilidades con oportunidades (DO),
+usar fortalezas frente a amenazas (FA) y reducir debilidades para evitar
+amenazas (DA). El Cuadro~\ref{tab:foda-cruces} muestra las de TrackFlow; el
+Plan de negocio (Sección~\ref{sec:negocio}) las desarrolla.
+
+\begin{table}[H]
+\caption{Estrategias cruzadas del FODA}
+\label{tab:foda-cruces}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.12\textwidth}|L{0.78\textwidth}|}
+\hline
+\textbf{Cruce} & \textbf{Estrategia} \\
+\hline
+FO & Usar el contacto en LAP para llegar a las tiendas del terminal y a JCDecaux, y llevar esos casos a malls, galerías y cadenas \\
+\hline
+DO & Usar ProInnóvate e incubadoras para financiar las primeras pruebas de precisión en tiendas mientras el equipo trabaja a medio tiempo \\
+\hline
+FA & Vender privacidad por diseño y procesamiento dentro de la red del cliente como respuesta a la Ley N.\textdegree~29733 \\
+\hline
+DA & Estudios cortos y pagados con métricas firmadas; resolver la licencia del detector antes del primer contrato \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 \subsection{Alcance y fases}
 
@@ -1748,6 +1856,7 @@ AirMOTR no se presentan como componentes implementados, sino como trabajo
 futuro.
 
 \section{Metodología}
+\label{sec:metodologia}
 
 TrackFlow propone una metodología de tres partes encadenadas para
 transformar el video CCTV en trayectorias espaciales seudónimas y,
@@ -2931,10 +3040,11 @@ conversión y pronóstico, y el registro de capturas. Los identificadores global
 construir las trayectorias y no se presentan como información de identidad
 personal.
 
-\section{Algoritmos}
+\section{Algoritmos y dataset}
 \label{sec:algoritmos}
 
-Esta sección resume los algoritmos que ejecuta el sistema en cada parte. Los
+Esta sección resume los algoritmos que ejecuta el sistema en cada parte y, al
+final, los datos con que se construyó y se midió (Sección~\ref{sec:dataset}). Los
 umbrales corresponden a la configuración vigente (\texttt{config\_lap01.json},
 versión~2.0, y \texttt{config\_insights.json}) y su fundamento se expone en la
 Metodología. El Cuadro~\ref{tab:algoritmos} relaciona cada algoritmo con lo que
@@ -3257,6 +3367,38 @@ En la primera grabación del pasillo del Edificio D, de los 285 cortes del
 seguidor en cam06, 140 conservaron su número (antes, 7), las cajas sin
 número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
 con el mismo número a la vez (antes, 53).
+
+\subsection{Dataset}
+\label{sec:dataset}
+
+Ningún modelo se entrena dentro del proyecto: los pesos son preentrenados y
+los videos sirven para construir, calibrar y medir el sistema, no para
+entrenarlo. El Cuadro~\ref{tab:dataset} resume los datos usados.
+
+\begin{table}[H]
+\caption{Datos y videos del proyecto}
+\label{tab:dataset}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.17\textwidth}|L{0.41\textwidth}|L{0.21\textwidth}|L{0.09\textwidth}|}
+\hline
+\textbf{Datos} & \textbf{Características} & \textbf{Uso} & \textbf{Sección} \\
+\hline
+Pesos preentrenados & YOLO26m y YOLO26s (COCO, clase \textit{person}); ResNet18 (ImageNet); YOLO26s-ReID, OSNet-AIN y PersonViT (MSMT17~\cite{wei2018}) & Detección, apariencia y re-identificación & \ref{sec:metodologia} \\
+\hline
+Videos del patio de ESAN (dataset del Build) & Tres cámaras fijas, $1280\times720$ a 15~FPS y 126~s en común; 16 personas & Construir y calibrar el Build: seguimiento, asociación y mapa 2D & \ref{sec:validacion-esan} \\
+\hline
+Videos etiquetados & Seis pares de cámaras de interiores que observan el mismo lugar: 12 videos de unos 5~min, 1080p a 23~fps, con 308 personas etiquetadas cuadro por cuadro y el mismo ID en las dos cámaras & Comparar detector, Re-ID, seguidor y asociación; pruebas de carga & \ref{sec:validacion-modelos} \\
+\hline
+Videos de estrés & Dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar, con unas 25 personas a la vista en cada una & Pruebas de estrés & \ref{sec:pruebas} \\
+\hline
+Grabaciones de campo en ESAN & Patio de los Edificios A y B con teléfonos, comedor con dos teléfonos, pasillo del Edificio D y patio y pasillo con más gente (9 de noviembre: 149 y 128 personas) & Casos de prueba & \ref{sec:validacion-esan} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 \section{Pruebas de validación y estrés del modelo}
 \label{sec:pruebas}
@@ -5988,7 +6130,7 @@ indica dónde está cada elemento.
 \hline
 \textbf{Elemento del plan} & \textbf{Equivalente en PMBOK} & \textbf{Dónde} \\
 \hline
-El problema y quién paga; mercado y competencia; FODA & Caso de negocio: necesidad del negocio y análisis de la situación (PMBOK 6, cap.~1) & Cuadros~\ref{tab:clientes}, \ref{tab:mercado}, \ref{tab:competencia} y~\ref{tab:foda} \\
+El problema y quién paga; mercado y competencia & Caso de negocio: necesidad del negocio y análisis de la situación (PMBOK 6, cap.~1) & Cuadros~\ref{tab:clientes}, \ref{tab:mercado} y~\ref{tab:competencia}; FODA en la Planificación (Cuadros~\ref{tab:foda} y~\ref{tab:foda-cruces}) \\
 \hline
 Productos, precios y valor para el cliente & Entrega de valor (PMBOK 7, cap.~2) & Cuadros~\ref{tab:productos} y~\ref{tab:precios} \\
 \hline
@@ -6194,79 +6336,6 @@ Conteo manual o consultora & Estudio puntual & S/~3\,000 a 10\,000 por estudio (
 Usar el CCTV existente ya no es una ventaja única. Lo que defiende el negocio
 es el recorrido completo con la vitrina, la audiencia por pantalla dentro de
 recintos y estar en Lima con precios en soles.
-
-\subsection{Análisis FODA}
-
-El análisis FODA (fortalezas, oportunidades, debilidades y amenazas) es una
-herramienta de planificación estratégica que separa lo que depende del propio
-negocio (fortalezas y debilidades) de lo que viene del entorno (oportunidades
-y amenazas). Al cruzar ambos lados se obtienen estrategias: usar las
-fortalezas para aprovechar oportunidades (FO), superar debilidades con
-oportunidades (DO), usar fortalezas frente a amenazas (FA) y reducir
-debilidades para evitar amenazas (DA). El Cuadro~\ref{tab:foda} resume el
-análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
-
-\begin{table}[H]
-\caption{FODA de TrackFlow, octubre de 2026}
-\label{tab:foda}
-\centering
-\footnotesize
-\setlength{\fboxsep}{0pt}
-\newcommand{\fodacelda}[3]{\colorbox{#1}{\parbox[t][5.6cm][t]{0.455\textwidth}{%
-    \vspace{3pt}\centering\textbf{#2}\par\vspace{2pt}\hrule\vspace{2pt}
-    \begin{minipage}{0.42\textwidth}\raggedright\footnotesize
-    \begin{itemize}[leftmargin=1.1em,itemsep=1pt,topsep=1pt]
-    #3
-    \end{itemize}\end{minipage}}}}
-\begin{tabular}{@{}c@{\hspace{3pt}\vrule\hspace{3pt}}c@{}}
-\fodacelda{green!14}{Fortalezas}{%
-    \item Plataforma completa y funcionando: visión, tráfico, ventas, cuentas y Videos
-    \item Usa las cámaras del cliente, sin hardware nuevo
-    \item Privacidad por diseño, sin reconocimiento facial
-    \item Procesamiento en una computadora propia de bajo costo fijo
-    \item Contacto en LAP y presencia en Lima} &
-\fodacelda{orange!16}{Debilidades}{%
-    \item Equipo de cuatro fundadores a medio tiempo
-    \item Precisión medida en videos etiquetados, no en tiendas
-    \item Detector con licencia AGPL
-    \item Lectura del NVR y modo liviano por construir
-    \item Sin clientes pagados todavía} \\[3pt]
-\hline\noalign{\vskip3pt}
-\fodacelda{blue!12}{Oportunidades}{%
-    \item Mercado de conteo de personas que crece $\sim$13\,\% al año
-    \item Sin medición de audiencia dentro de los recintos
-    \item JCDecaux en el nuevo Jorge Chávez y pantallas en malls y estaciones
-    \item Miles de locales en malls, galerías, supermercados y boticas
-    \item Fondos de ProInnóvate~\cite{proinnovate} e incubadoras} &
-\fodacelda{red!12}{Amenazas}{%
-    \item Competidores que también usan el CCTV existente
-    \item Analítica incluida en las cámaras nuevas
-    \item Desconfianza hacia las cámaras y exigencias de la Ley N.\textdegree~29733
-    \item Proveedores globales con comparativos de retail
-    \item Cámaras de los clientes de calidad o ángulo variables}
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Estrategias cruzadas del FODA}
-\label{tab:foda-cruces}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.12\textwidth}|L{0.78\textwidth}|}
-\hline
-\textbf{Cruce} & \textbf{Estrategia} \\
-\hline
-FO & Usar el contacto en LAP para llegar a las tiendas del terminal y a JCDecaux, y llevar esos casos a malls, galerías y cadenas \\
-\hline
-DO & Usar ProInnóvate e incubadoras para financiar las primeras pruebas de precisión en tiendas mientras el equipo trabaja a medio tiempo \\
-\hline
-FA & Vender privacidad por diseño y procesamiento dentro de la red del cliente como respuesta a la Ley N.\textdegree~29733 \\
-\hline
-DA & Estudios cortos y pagados con métricas firmadas; resolver la licencia del detector antes del primer contrato \\
-\hline
-\end{tabular}
-\end{table}
 
 \subsection{Modelo Canvas}
 
