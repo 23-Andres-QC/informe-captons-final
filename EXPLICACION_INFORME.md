@@ -347,8 +347,8 @@ En el informe, el cuadro resume los 11 y se detallan dos como ejemplo, uno por a
 
 **9.7 Carga y estrés.**
 - **2 cámaras 1080p a 23 fps:** unos 17 cuadros/s por video (34 en total), alrededor del 73 % de los cuadros.
-- **2 cámaras de 60 fps con mucha gente:** 7.7 cuadros/s por video.
-- **7 cámaras de 60 fps, sin el reloj del tiempo real:**
+- **2 cámaras de 60 fps con mucha gente (WILDTRACK, conjunto público de una plaza de la ETH de Zúrich):** 7.7 cuadros/s por video.
+- **Las 7 cámaras de 60 fps de WILDTRACK, sin el reloj del tiempo real:**
 
 | Ritmo | Cuadros/s por cámara | Tiempo (veces el video) | Continuidad (p90) | Con ID global |
 |---|---|---|---|---|

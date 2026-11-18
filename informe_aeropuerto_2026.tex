@@ -253,7 +253,8 @@ personas en el patio (41 vistas por las dos cámaras) y a 128 en el pasillo
 modelo en vivo (24 de 24 cuadros reconocidos, a 0.05--0.15~m de la mediana) y las
 dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las pruebas de carga
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
-17 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
+17 cuadros por segundo por video con dos cámaras 1080p, y que las siete cámaras de 60~fps del conjunto
+público WILDTRACK~\cite{chavdarova2018} se procesan
 completas a 5 cuadros por segundo por cámara en 3 veces la duración del
 video.
 
@@ -3397,7 +3398,7 @@ Videos del patio de ESAN (dataset del Build) & Tres cámaras fijas, $1280\times7
 \hline
 Videos etiquetados & Seis pares de cámaras de interiores que observan el mismo lugar: 12 videos de unos 5~min, 1080p a 23~fps, con 308 personas etiquetadas cuadro por cuadro y el mismo ID en las dos cámaras & Comparar detector, Re-ID, seguidor y asociación; pruebas de carga & \ref{sec:validacion-modelos} \\
 \hline
-Videos de estrés & Dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar, con unas 25 personas a la vista en cada una & Pruebas de estrés & \ref{sec:pruebas} \\
+Videos de estrés & WILDTRACK~\cite{chavdarova2018}, conjunto público de siete cámaras fijas 1080p a 60~fps que graban la misma plaza concurrida, frente al edificio principal de la ETH de Zúrich, con unas 25 personas a la vista en cada una; se usaron dos de sus cámaras y las siete & Pruebas de estrés & \ref{sec:pruebas} \\
 \hline
 Grabaciones de campo en ESAN & Patio de los Edificios A y B con teléfonos, comedor con dos teléfonos, pasillo del Edificio D y patio y pasillo con más gente (9 de noviembre: 149 y 128 personas) & Casos de prueba & \ref{sec:validacion-esan} \\
 \hline
@@ -3684,8 +3685,10 @@ cuadro y las personas contadas de cada video. Los casos fueron:
     \item \textbf{Validación:} cinco pares de videos (P1 a P5) de dos cámaras
     que observan el mismo lugar, en 1080p a 23~fps, con entre 16 y 86
     personas contadas por cámara (Cuadro~\ref{tab:pares-detalle}).
-    \item \textbf{Estrés:} dos cámaras 1080p a 60~fps de un lugar concurrido y siete cámaras 1080p a 60~fps del mismo lugar,
-    con unas 25 personas a la vista en cada una.
+    \item \textbf{Estrés:} videos de WILDTRACK~\cite{chavdarova2018}, un
+    conjunto público de siete cámaras fijas 1080p a 60~fps que graban la misma
+    plaza concurrida, con unas 25 personas a la vista en cada una: primero dos
+    de sus cámaras y después las siete a la vez.
 \end{itemize}
 
 El modelo procesa como una cámara en vivo: si no alcanza al video, salta
@@ -3761,8 +3764,8 @@ P5 & 16 y 33 & 17.7 & 1.6 & 68\,\% \\
 
 \subsection{Resultados de las pruebas de estrés}
 
-Con dos cámaras de 60~fps y mucha gente (227 y 148 personas contadas en
-2~minutos), el modelo procesó 7.7 cuadros por segundo por
+Con dos cámaras de WILDTRACK, de 60~fps y con mucha gente (227 y 148
+personas contadas en 2~minutos), el modelo procesó 7.7 cuadros por segundo por
 video, con 158~ms por cuadro, y saltó el 86\,\% de los cuadros; el modelo usó
 6.9 núcleos de CPU en promedio (7.5 en el p95), el equipo el 52\,\% de su CPU y
 la GPU el 48\,\%, con 2.8~GB de memoria de la GPU y 51~W. El
@@ -3774,7 +3777,7 @@ lo mismo pero procesó menos, 3.9 cuadros por segundo por cámara: cuando una
 pasada se demora, salta al cuadro que marca el reloj.
 
 \begin{table}[H]
-\caption{Siete cámaras 1080p a 60~fps procesadas a la vez (primeros 2 minutos)}
+\caption{Las siete cámaras de WILDTRACK, 1080p a 60~fps, procesadas a la vez (primeros 2 minutos)}
 \label{tab:siete}
 \centering
 \footnotesize
@@ -3819,7 +3822,7 @@ IDs vistos en más de una cámara & 326 & 342 & 393 \\
 \begin{figure}[H]
 \centering
 \safeincludegraphics[width=\linewidth]{figuras/pruebas/siete-camaras.png}
-\caption{Siete cámaras 1080p a 60~fps según el ritmo: cuadros procesados por
+\caption{Las siete cámaras de WILDTRACK (1080p a 60~fps) según el ritmo: cuadros procesados por
 cámara, tiempo de proceso frente a la duración del video y movimiento de una
 persona entre dos cuadros procesados seguidos.}
 \label{fig:siete-ritmos}
@@ -6928,6 +6931,11 @@ Vision}, 2.\textordfeminine{} ed. Cambridge: Cambridge University Press,
 K.~He, X.~Zhang, S.~Ren y J.~Sun, ``Deep Residual Learning for Image
 Recognition,'' en \textit{Proc. IEEE Conf. Computer Vision and Pattern
 Recognition (CVPR)}, 2016, pp.~770--778.
+
+\bibitem{chavdarova2018}
+T.~Chavdarova \textit{et al.}, ``WILDTRACK: A Multi-camera HD Dataset for Dense
+Unscripted Pedestrian Detection,'' en \textit{Proc. IEEE CVPR}, 2018,
+pp.~5030--5039.
 
 \bibitem{wei2018}
 L.~Wei, S.~Zhang, W.~Gao y Q.~Tian, ``Person Transfer GAN to Bridge Domain
