@@ -1,6 +1,6 @@
-# AeroVision · guía de estudio del informe y del proyecto
+# TrackFlow · guía de estudio del informe y del proyecto
 
-**AeroVision: Analítica Aeroportuaria Multicámara para Tracking, Identificación de Aglomeraciones e Insights Comerciales.** Capstone con apoyo de Lima Airport Partners (LAP).
+**TrackFlow: Analítica Aeroportuaria Multicámara para Tracking, Identificación de Aglomeraciones e Insights Comerciales.** Capstone con apoyo de Lima Airport Partners (LAP).
 
 ---
 
@@ -230,6 +230,8 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 | CU-10 | Exportar el reporte (CSV o PDF, o enviarlo por correo) |
 | CU-11 | Procesar videos multicámara |
 
+En el informe, el cuadro resume los 11 y se detallan dos como ejemplo, uno por actor: CU-02 (administrador) y CU-08 (comercial). Los demás están en el Anexo, en «Casos de uso detallados».
+
 - **Funcionales:**
   - RF-01: roles.
   - RF-02 a RF-05: en vivo, configuración del mapa, histórico e insights.
@@ -361,8 +363,8 @@ Trabaja solo con las trayectorias, sin volver a correr la visión.
 ## 10. Ética y gestión
 - **Privacidad por diseño:** sin rostro ni género, sin video guardado, seudónimos por sesión, vectores del en vivo borrados a las 24 h sin ver a la persona y puntos crudos a los 90 días.
 - **Matriz legal (L1–L11, normas del Perú):** Ley 29733, D.S. 016-2024-JUS, Directiva 01-2020-JUS/DGTAIPD y Ley 31814. Prioridad alta: base legal y deber de informar, finalidad, vectores de Re-ID como posible dato biométrico y menores de edad (incumpliría si se despliega sin cambios).
-- **Sugerencias S1–S11:** aplicadas S4 (sin inferencia de atributos) y S9 (detector, seguidor y Re-ID validados con videos etiquetados, sección 8.1); parciales S1, S2, S6, S8, S10 y S11; S3 (privacidad por diseño para todos en lugar de detectar niños), S5 y S7 son propuestas de diseño.
-- **Normas ISO e IEC (sección 2.5):** el reglamento de la Ley 31814 (D.S. 115-2025-PCM) exige la NTP-ISO/IEC 42001:2025 solo a entidades públicas (art. 28.2) y promueve 27002, 38507, 42001, 23053 y 27005 (art. 33.1); para AeroVision y LAP son referencia. El cuadro cruza 13 normas con lo que ya hace el prototipo: 42001 y 23894 (gestión y riesgos de IA), 23053 y 38507, 27001/27002/27005 y 31000 (seguridad y riesgos), 27701 y 20889 (privacidad y seudónimos), TR 24027 (sesgo), 25010 (calidad, RNF) e IEC 62676-4 (densidad de píxeles: la gente lejana, ~29 px/m, cae entre los dos primeros niveles). AeroVision no está certificado en ninguna.
+- **Sugerencias S1–S11:** aplicadas S4 (sin inferencia de atributos) y S9 (detector, seguidor y Re-ID validados con videos etiquetados, sección 7.2); parciales S1, S2, S6, S8, S10 y S11; S3 (privacidad por diseño para todos en lugar de detectar niños), S5 y S7 son propuestas de diseño.
+- **Normas ISO e IEC (sección 2.5):** el reglamento de la Ley 31814 (D.S. 115-2025-PCM) exige la NTP-ISO/IEC 42001:2025 solo a entidades públicas (art. 28.2) y promueve 27002, 38507, 42001, 23053 y 27005 (art. 33.1); para TrackFlow y LAP son referencia. El cuadro cruza 13 normas con lo que ya hace el prototipo: 42001 y 23894 (gestión y riesgos de IA), 23053 y 38507, 27001/27002/27005 y 31000 (seguridad y riesgos), 27701 y 20889 (privacidad y seudónimos), TR 24027 (sesgo), 25010 (calidad, RNF) e IEC 62676-4 (densidad de píxeles: la gente lejana, ~29 px/m, cae entre los dos primeros niveles). TrackFlow no está certificado en ninguna.
 - **Riesgos cubiertos:** menores de edad, re-identificación indirecta, retención de datos, transparencia, sesgo algorítmico y mal uso del sistema.
 - **Gestión:** Scrum por sprints con Gantt, actas, roles y matriz de riesgos.
 
@@ -399,16 +401,18 @@ Resumen ejecutivo, Referencias y Anexo van sin número; el índice muestra solo 
 - Resumen ejecutivo
 1. Introducción y objetivos
 2. Planteamiento del problema y análisis del contexto (variables, restricciones, análisis técnico, legal, ético, social y ambiental, y normas ISO e IEC)
-3. Marco teórico: bases conceptuales (detección, seguimiento, Re-ID, homografía, KDE, rutas frecuentes, sincronía por audio, seudonimización) y 9 antecedentes
-4. Especificación de requisitos (casos de uso, requisitos funcionales y no funcionales)
-5. Metodología (Partes I, II y III)
+3. Planificación: resumen del alcance, las 7 fases en 16 semanas, los hitos (pruebas en ESAN), Scrum con su Scrum Master y las herramientas (GitHub, Visual Studio Code, panel Scrum, Gantt y actas, Docker y LaTeX)
+4. Marco teórico: bases conceptuales (detección, seguimiento, Re-ID, homografía, KDE, rutas frecuentes, sincronía por audio, seudonimización) y 9 antecedentes
+5. Metodología (Partes I, II y III, con los datos y modelos que usa cada una)
 6. Algoritmos
-7. Arquitectura del sistema
-8. Pruebas de validación y estrés del modelo (va antes porque las pruebas en ESAN la citan)
-9. Pruebas de validación en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
-10. Planificación y gestión del proyecto (PMBOK, Scrum y riesgos)
-11. Plan de negocio
+7. Pruebas de validación y estrés del modelo: métricas de cada componente, validación con videos etiquetados y pruebas de carga
+8. Flujo del sistema: flujo general y trazabilidad de los datos entre las tres partes
+9. Casos de prueba en ESAN: Edificios A y B, comedor, pasillo del Edificio D y grabaciones con más gente (patio y pasillo, 9 de noviembre)
+10. Casos de uso y requisitos: cuadro resumen, dos ejemplos (CU-02 y CU-08) y requisitos funcionales y no funcionales
+11. Arquitectura del sistema
+12. Planificación y gestión del proyecto (PMBOK, Scrum y riesgos)
+13. Plan de negocio
 - Referencias bibliográficas
-- Anexo
+- Anexo (participantes y evidencia de las pruebas, casos de uso detallados, calculadoras de costos y repositorio)
 
-Orden: qué se construye (1 a 7), cómo se probó (8 y 9) y cómo se gestiona y se vende (10 y 11).
+Orden: el problema y su plan (1 a 3), los antecedentes (4), cómo funciona y cómo se midió (5 a 8), las pruebas de campo (9), qué hace cada usuario y cómo está construido (10 y 11), y cómo se gestiona y se vende (12 y 13).

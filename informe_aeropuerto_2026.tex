@@ -117,7 +117,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
     \vspace{0.7cm}
 
-    {\huge \bfseries AeroVision: Analítica Aeroportuaria Multicámara para Tracking, \\
+    {\huge \bfseries TrackFlow: Analítica Aeroportuaria Multicámara para Tracking, \\
     Identificación de Aglomeraciones e Insights Comerciales \par}
 
     \vspace{1cm}
@@ -171,7 +171,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \section*{Resumen ejecutivo}
 \addcontentsline{toc}{section}{Resumen ejecutivo}
 
-El proyecto AeroVision desarrolla un sistema de visión computacional
+El proyecto TrackFlow desarrolla un sistema de visión computacional
 multicámara orientado a asistir la gestión operativa y comercial del
 Aeropuerto Internacional Jorge Chávez mediante el análisis automatizado
 del video de vigilancia (CCTV) ya instalado en la terminal. El trabajo se
@@ -255,7 +255,7 @@ dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
 17 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
 completas a 5 cuadros por segundo por cámara en 3 veces la duración del
-video. El informe cierra con el plan de negocio de AeroVision, que
+video. El informe cierra con el plan de negocio de TrackFlow, que
 lleva la misma tecnología a la medición de captación de tiendas y de audiencia
 de espacios publicitarios. El diseño incluye salvaguardas frente a menores de
 edad, re-identificación indirecta, retención de datos, transparencia, sesgo
@@ -284,7 +284,7 @@ cámaras: ¿cuánto tiempo permaneció frente a una tienda antes de decidir
 no comprar?, ¿qué tienda visitó durante su recorrido?, ¿la aglomeración
 detectada en el pasillo principal está afectando las visitas a los
 locales cercanos? Esta desconexión entre la gestión del espacio comercial
-y la analítica del comportamiento del pasajero es el vacío que AeroVision
+y la analítica del comportamiento del pasajero es el vacío que TrackFlow
 busca cerrar.
 
 \subsection{Importancia e impacto}
@@ -345,7 +345,7 @@ dashboard útil tanto para el equipo de operaciones de LAP como para los
 locales comerciales, cumpliendo requisitos de privacidad, retención de
 datos y trazabilidad propios de un entorno regulado.
 
-AeroVision surge como respuesta a esta necesidad: reducir la congestión
+TrackFlow surge como respuesta a esta necesidad: reducir la congestión
 mal gestionada en las zonas comerciales del aeropuerto Jorge Chávez y
 generar insights confiables sobre el comportamiento del pasajero,
 integrando detección, seguimiento multicámara, re-identificación sin
@@ -540,7 +540,7 @@ restricciones clásicas son alcance, tiempo, costo, calidad, recursos y
 riesgo, pero también deben considerarse las dimensiones éticas, legales,
 sociales y ambientales, especialmente al trabajar con video de espacios
 públicos regulados e inteligencia artificial aplicada a infraestructura
-crítica de transporte. En AeroVision, estas dimensiones se concretan de
+crítica de transporte. En TrackFlow, estas dimensiones se concretan de
 la siguiente manera.
 
 \subsubsection{Análisis técnico}
@@ -574,7 +574,7 @@ N.\textdegree~01-2020-JUS/DGTAIPD sobre videovigilancia~\cite{directiva-videovig
 y la Ley N.\textdegree~31814 de inteligencia artificial con su reglamento, el
 D.S. N.\textdegree~115-2025-PCM~\cite{cele-ia,cuatrecasas-ia}. Supone un
 despliegue hipotético en un aeropuerto con zonas de acceso público, donde el
-cliente es el operador o la aerolínea y AeroVision es el proveedor. Cada punto
+cliente es el operador o la aerolínea y TrackFlow es el proveedor. Cada punto
 recibe un nivel: \textit{incumple} (el sistema hace hoy algo que la norma exige
 o prohíbe de otra forma), \textit{incumpliría si se despliega sin cambios} (el
 problema aparece al operar en el escenario real), \textit{brecha por verificar}
@@ -587,7 +587,7 @@ L11) con el estado actual del prototipo.
 
 \begin{table}[!htbp]
 \centering
-\caption{Matriz de cumplimiento legal de AeroVision (normas del Perú)}
+\caption{Matriz de cumplimiento legal de TrackFlow (normas del Perú)}
 \label{tab:matriz-legal}
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
@@ -606,7 +606,7 @@ L4 & Menores de edad & D.S. 016-2024-JUS & Incumpliría si se despliega sin camb
 \hline
 L5 & Vigilancia y biometría en tiempo real & Ley 31814; D.S. 115-2025-PCM & Brecha por verificar & Media & Modo en vivo en tiempo real; propuesta: clasificarlo bajo la ley de IA y evaluación de impacto voluntaria (S2, S10) \\
 \hline
-L6 & Roles del cliente y de AeroVision; contrato & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Cliente titular y AeroVision encargado; proceso local, nubes solo cotizadas; propuesta: contrato de encargo con cada cliente \\
+L6 & Roles del cliente y de TrackFlow; contrato & Ley 29733; D.S. 016-2024-JUS & Brecha por verificar & Media & Cliente titular y TrackFlow encargado; proceso local, nubes solo cotizadas; propuesta: contrato de encargo con cada cliente \\
 \hline
 L7 & Retención y supresión & Ley 29733 & Parcialmente mitigado & Media & Sin video ni recortes; vectores borrados a las 24~h; puntos a los 90 días; agregados sin límite \\
 \hline
@@ -844,7 +844,7 @@ proyecto establece seis salvaguardas:
 
 Las salvaguardas anteriores cubren lo que el sistema hace con los datos. Además,
 la matriz ética~\cite{matrices2026} evalúa qué podría ser un inconveniente para
-el cliente según el lugar donde se use AeroVision, aunque no sea ilegal, y toma
+el cliente según el lugar donde se use TrackFlow, aunque no sea ilegal, y toma
 como marco la minimización, la proporcionalidad, la transparencia, la equidad,
 la no maleficencia y la rendición de cuentas. El Cuadro~\ref{tab:matriz-etica}
 resume los once riesgos (E1 a E11) con su severidad, y a continuación se
@@ -853,7 +853,7 @@ Cuadro~\ref{tab:sugerencias-diseno}.
 
 \begin{table}[!htbp]
 \centering
-\caption{Matriz de riesgos éticos de AeroVision}
+\caption{Matriz de riesgos éticos de TrackFlow}
 \label{tab:matriz-etica}
 \footnotesize
 \renewcommand{\arraystretch}{1.15}
@@ -991,26 +991,26 @@ entidades de la Administración Pública que desarrollen sistemas de IA
 27005:2022 (art.~33.1); pide a quien desarrolla, implementa o usa la IA aplicar
 estándares para identificar y reducir los sesgos (art.~27.1), y obliga a las
 entidades públicas a usar la NTP-ISO/IEC 27002 y la NTP-ISO 31000 (sexta
-disposición complementaria final)~\cite{ds115}. Para AeroVision y para LAP,
+disposición complementaria final)~\cite{ds115}. Para TrackFlow y para LAP,
 que son privados, las normas son una referencia; con un cliente público
 pasarían a ser obligatorias. El Cuadro~\ref{tab:normas-iso} resume las que
 aplican al sistema y qué parte del prototipo ya se alinea con cada una.
-AeroVision no está certificado en ninguna.
+TrackFlow no está certificado en ninguna.
 
 {\footnotesize
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.12}
 \begin{longtable}{|L{0.22\textwidth}|L{0.33\textwidth}|L{0.37\textwidth}|}
-\caption{Normas técnicas ISO e IEC aplicables a AeroVision}
+\caption{Normas técnicas ISO e IEC aplicables a TrackFlow}
 \label{tab:normas-iso} \\
 \hline
-\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con AeroVision} \\
+\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con TrackFlow} \\
 \hline
 \endfirsthead
 \hline
-\multicolumn{3}{|l|}{\textit{Normas técnicas ISO e IEC aplicables a AeroVision (continuación)}} \\
+\multicolumn{3}{|l|}{\textit{Normas técnicas ISO e IEC aplicables a TrackFlow (continuación)}} \\
 \hline
-\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con AeroVision} \\
+\textbf{Norma} & \textbf{Qué establece} & \textbf{Relación con TrackFlow} \\
 \hline
 \endhead
 ISO/IEC 42001:2023 (NTP-ISO/IEC 42001:2025)~\cite{iso42001} & Sistema de gestión de la IA: política, roles, evaluación de impacto, ciclo de vida, datos y supervisión humana, con mejora continua & Obligatoria solo para entidades públicas (art.~28.2). El prototipo cubre parte de sus controles con las matrices legal y ética y con el registro de pesos y configuración de cada modelo (RNF-13) \\
@@ -1029,7 +1029,7 @@ ISO/IEC 27005:2022 (NTP-ISO/IEC 27005:2022)~\cite{iso27005} & Gestión de riesgo
 \hline
 ISO 31000:2018 (NTP-ISO 31000)~\cite{iso31000} & Principios, marco y proceso para gestionar riesgos de cualquier tipo & La matriz de riesgos del proyecto los evalúa por probabilidad e impacto (Cuadros~\ref{tab:riesgos} y~\ref{tab:matriz-riesgos}) \\
 \hline
-ISO/IEC 27701:2025~\cite{iso27701} & Sistema de gestión de la privacidad, con controles para responsables y encargados del tratamiento & AeroVision actúa como encargado del cliente (L6): sin rostros, recortes ni video almacenados, identificadores seudónimos, vectores borrados a las 24~horas y puntos a los 90 días (RNF-02) \\
+ISO/IEC 27701:2025~\cite{iso27701} & Sistema de gestión de la privacidad, con controles para responsables y encargados del tratamiento & TrackFlow actúa como encargado del cliente (L6): sin rostros, recortes ni video almacenados, identificadores seudónimos, vectores borrados a las 24~horas y puntos a los 90 días (RNF-02) \\
 \hline
 ISO/IEC 20889:2018~\cite{iso20889} & Terminología y clasificación de las técnicas de desidentificación, como la seudonimización y la agregación & El \texttt{global\_id} es un seudónimo, no una anonimización; los reportes entregan conteos y tasas agregados \\
 \hline
@@ -1041,6 +1041,102 @@ IEC 62676-4:2025~\cite{iec62676} & Guía para planificar, instalar y mantener si
 \hline
 \end{longtable}
 }
+
+\section{Planificación}
+\label{sec:planificacion}
+
+El proyecto se planificó en 16 semanas con un enfoque híbrido: el acta, el
+alcance, los hitos del curso y las entregas tienen fechas fijas, y el
+desarrollo avanza en sprints semanales con Scrum, porque los requisitos
+cambiaron durante el proyecto (Sección~\ref{sec:enfoque}). Esta sección
+resume el alcance, las fases, los hitos y la forma de trabajo; el plan
+completo, con la EDT, la ruta crítica, los costos, los riesgos y el
+seguimiento, está en la Sección~\ref{sec:gestion}.
+
+\subsection{Alcance y fases}
+
+El producto cubre los requisitos RF-01 a RF-09 y los casos de uso CU-01 a
+CU-11 (Sección~\ref{sec:requisitos}): detección, seguimiento local,
+re-identificación entre cámaras, mapa 2D, procesamiento histórico, tablero de
+insights, teléfonos como cámaras, videos subidos y ventas. El proyecto incluye
+además la validación, la documentación y el plan de negocio. Quedan fuera el
+clasificador de edad, la predicción de congestión y el entrenamiento de
+modelos propios. El Cuadro~\ref{tab:fases-resumen} resume las fases.
+
+\begin{table}[!htbp]
+\centering
+\caption{Fases del proyecto (16 semanas)}
+\label{tab:fases-resumen}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.05\textwidth}|L{0.46\textwidth}|R{0.12\textwidth}|R{0.16\textwidth}|}
+\hline
+\textbf{N.\textdegree} & \textbf{Fase} & \textbf{Semanas} & \textbf{Hasta la semana} \\
+\hline
+1 & Planificación y datos & 2 & 2 \\
+\hline
+2 & Seguimiento local & 3 & 5 \\
+\hline
+3 & Re-ID multicámara & 3 & 8 \\
+\hline
+4 & Histórico e Insights & 3 & 11 \\
+\hline
+5 & Teléfonos, Videos y Ventas & 2 & 13 \\
+\hline
+6 & Validaciones y pruebas & 2 & 15 \\
+\hline
+7 & Informe final y negocio & 1 & 16 \\
+\hline
+\end{tabular}
+\end{table}
+
+Los hitos son las pruebas de campo en ESAN: el patio entre los Edificios A y
+B (6 de octubre de 2026), el comedor (27 de octubre), el pasillo del
+Edificio D (7 de noviembre) y las grabaciones con más personas en el patio y
+el pasillo (9 de noviembre); el cierre es el sprint~16.
+
+\subsection{Forma de trabajo y herramientas}
+
+El equipo trabajó con Scrum. El rol de Scrum Master lo cumple Neciosup,
+líder del proyecto, y el equipo de desarrollo lo forman Quiliche, Almeyda,
+López y Neciosup. Cada sprint dura una semana: en el Sprint Planning se reparten las
+tareas en el panel y en las actas, y en el Sprint Review de los miércoles se
+revisa el avance frente al diagrama de Gantt (Sección~\ref{sec:scrum}). El
+Cuadro~\ref{tab:herramientas} resume las herramientas de trabajo.
+
+\begin{table}[!htbp]
+\centering
+\caption{Herramientas de trabajo del proyecto}
+\label{tab:herramientas}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.24\textwidth}|L{0.68\textwidth}|}
+\hline
+\textbf{Herramienta} & \textbf{Uso en el proyecto} \\
+\hline
+GitHub & Repositorio y control de versiones
+(\url{https://github.com/23-Andres-QC/Aeropuerto}): cada cambio se registra
+como \textit{commit} en la rama principal, se integra con \textit{pull} y se
+publica con \textit{push}; el servidor se actualiza con \textit{pull}. Al 28 de
+octubre de 2026 sumaba 247 \textit{commits} de tres autores. \\
+\hline
+Visual Studio Code & Editor del código del modelo (Python), de los backends
+(Go) y de la aplicación web (Vue), con su terminal integrada. \\
+\hline
+Panel Scrum, diagrama de Gantt y actas semanales & Reparto y seguimiento de
+las tareas por sprint, avance por integrante y registro de lo acordado en cada
+reunión (Sección~\ref{sec:cronograma}). \\
+\hline
+Docker y Docker Compose & La misma instalación de la base de datos, los
+backends y la web en la computadora con GPU y en el servidor
+(Sección~\ref{sec:arquitectura}). \\
+\hline
+LaTeX & Redacción de este informe. \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 \section{Marco teórico}
 \label{sec:related}
@@ -1177,7 +1273,7 @@ liviano, dejando la carga computacional más pesada para la
 re-identificación multicámara. Su fiabilidad y baja latencia se derivan
 de un diseño modular y tolerante a fallos, principio que se traslada a la
 arquitectura en contenedores del sistema propuesto. Cabe notar que este
-antecedente usa cámaras térmicas, mientras que AeroVision trabaja sobre
+antecedente usa cámaras térmicas, mientras que TrackFlow trabaja sobre
 CCTV RGB, lo que exige anonimización algorítmica en lugar de la
 anonimización física que ofrece el sensor térmico.
 
@@ -1288,7 +1384,7 @@ evaluado en un entorno comercial real durante siete días consecutivos.
 Este es el precedente técnico más cercano al sistema propuesto, ya que
 valida la combinación de un detector YOLO, un seguimiento local por
 cámara y una re-identificación basada en apariencia y restricciones
-espacio-temporales (Figura~\ref{fig:ant3}), que AeroVision implementa con el codificador
+espacio-temporales (Figura~\ref{fig:ant3}), que TrackFlow implementa con el codificador
 YOLO26s-ReID y una galería global compartida. Confirma además que el
 enfoque es viable en un despliegue comercial real y respalda la decisión
 de no procesar rasgos faciales. Su margen de error cercano al 18\,\%
@@ -1340,7 +1436,7 @@ peatonales en múltiples dominios.
     puntos que los autores documentan explícitamente.
 \end{itemize}
 
-Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial (Figura~\ref{fig:ant4}). AeroVision, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: por eso el Re-ID de AeroVision, también basado en apariencia, no se dio por bueno con las cifras de otros conjuntos y se validó con videos etiquetados (Sección~\ref{sec:validacion-modelos}).
+Para el sistema propuesto, este antecedente muestra que atributos generales pueden estimarse a partir de la apariencia corporal, sin reconocimiento facial (Figura~\ref{fig:ant4}). TrackFlow, por razones éticas, no estima atributos demográficos como el género de las personas. La caída de desempeño entre dominios es, sin embargo, una advertencia útil: por eso el Re-ID de TrackFlow, también basado en apariencia, no se dio por bueno con las cifras de otros conjuntos y se validó con videos etiquetados (Sección~\ref{sec:validacion-modelos}).
 
 \begin{figure}[H]
 \centering
@@ -1390,9 +1486,9 @@ de MOTA e IDF1 en escenas con más de 300 personas
 factibilidad de un seguimiento multicámara de calidad en horas pico. No
 obstante, WILDTRACK y MMPTRACK son espacios relativamente controlados,
 distintos de una terminal con mobiliario, equipaje y señalética, por lo
-que AeroVision midió el seguimiento y la asociación entre cámaras con
+que TrackFlow midió el seguimiento y la asociación entre cámaras con
 videos etiquetados de interiores (Sección~\ref{sec:validacion-modelos}).
-En AeroVision, este tipo de verificación geométrica se activa en el modo
+En TrackFlow, este tipo de verificación geométrica se activa en el modo
 calibrado, cuando las homografías de las cámaras están validadas.
 
 \begin{figure}[H]
@@ -1588,7 +1684,7 @@ plazo, lo que justifica un seguidor local liviano cuya asociación en dos
 etapas se inspira en ByteTrack, reforzado con apariencia corporal y
 memoria visual para los cruces y oclusiones. AirMOTR no se adoptó
 porque se entrena con video anotado del propio aeropuerto (AirportPassenger
-es privado) y AeroVision usa modelos preentrenados, sin entrenamiento
+es privado) y TrackFlow usa modelos preentrenados, sin entrenamiento
 propio.
 
 \begin{figure}[H]
@@ -1619,7 +1715,7 @@ Zhao et al.~\cite{zhao2023} & Aeropuerto real (Shanghai) & Detección de grupo e
 \hline
 Mendes et al.~\cite{mendes2023} & Entorno comercial real & 82\,\% de re-ID correcta & Precedente directo de la re-identificación multicámara sin rostro \\
 \hline
-Jin et al.~\cite{jin2024} & 8 dominios (MSP60K) & F1 86.94 / 72.05 entre dominios & Muestra la caída entre dominios; AeroVision no infiere atributos \\
+Jin et al.~\cite{jin2024} & 8 dominios (MSP60K) & F1 86.94 / 72.05 entre dominios & Muestra la caída entre dominios; TrackFlow no infiere atributos \\
 \hline
 Yang et al.~\cite{yang2023} & WILDTRACK / MMPTRACK & MOTA 95.2\,\% & Valida la verificación geométrica sobre un plano común \\
 \hline
@@ -1651,426 +1747,9 @@ congestión y la especialización del seguimiento con arquitecturas tipo
 AirMOTR no se presentan como componentes implementados, sino como trabajo
 futuro.
 
-\section{Especificación de requisitos}
-\label{sec:requisitos}
-
-\subsection{Casos de uso del sistema}
-
-Esta sección presenta los casos de uso del sistema, que describen cómo cada
-actor interactúa con las funciones definidas en los requisitos
-funcionales. Cada caso de uso indica su actor principal, el requisito
-que cubre, su historia de usuario, precondiciones, flujo principal, flujos
-alternativos y postcondiciones. El sistema tiene dos actores: el
-\textbf{Usuario comercial}, que consulta el análisis y los insights, y el
-\textbf{Usuario administrador}, que monitorea, configura el mapa y procesa
-los videos. En la aplicación, el usuario comercial corresponde al rol
-negocio y el administrador a los roles superadmin y seguridad
-(Sección~\ref{sec:arquitectura}).
-
-\textbf{CU-01: Iniciar y cerrar sesión}
-
-\textbf{Actor principal:} Usuario comercial, Usuario administrador \\
-\textbf{Requisito:} RF-01
-
-\textbf{Historia de usuario:} Como usuario del sistema, quiero iniciar sesión con mis credenciales y cerrarla al terminar, para acceder de forma segura solo a las funciones permitidas por mi rol.
-
-\textbf{Precondiciones:} El usuario está registrado y activo.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario ingresa su usuario y contraseña.
-    \item El sistema valida las credenciales y el rol.
-    \item El sistema redirige a la vista permitida para su rol.
-    \item Al pulsar ``Cerrar sesión'', el sistema invalida la sesión.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si las credenciales son inválidas, el sistema
-muestra un error; tras varios intentos fallidos, bloquea el acceso
-temporalmente.
-
-\textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada (Figura~\ref{fig:cu01}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-01.png}
-\caption{CU-01: Iniciar y cerrar sesión}
-\label{fig:cu01}
-\end{figure}
-
-\textbf{CU-02: Monitorear personas y trayectorias en vivo}
-
-\textbf{Actor principal:} Usuario administrador \\
-\textbf{Requisito:} RF-02
-
-\textbf{Historia de usuario:} Como usuario administrador, quiero visualizar en tiempo real a las personas y sus trayectorias sobre el plano del aeropuerto, para conocer el estado de la operación y actuar ante aglomeraciones o incidencias.
-
-\textbf{Precondiciones:} Sesión iniciada, plano y zonas configurados, y
-trayectorias disponibles.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario accede a la pantalla ``En vivo''.
-    \item El sistema muestra el plano 2D con las personas, su estado y su zona.
-    \item El usuario activa las capas de trayectorias, zonas o cámaras.
-    \item El usuario selecciona una persona.
-    \item El sistema aísla su recorrido y sus eventos.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si no hay datos en la ventana, el sistema
-muestra el aviso ``sin observaciones''.
-
-\textbf{Postcondiciones:} Estado actual del aeropuerto visible con
-identificadores seudónimos (Figura~\ref{fig:cu02}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-02.png}
-\caption{CU-02: Monitorear personas y trayectorias en vivo}
-\label{fig:cu02}
-\end{figure}
-
-\textbf{CU-03: Reproducir histórico de movimiento}
-
-\textbf{Actor principal:} Usuario comercial, Usuario administrador \\
-\textbf{Requisito:} RF-04
-
-\textbf{Historia de usuario:} Como usuario del sistema, quiero reproducir el movimiento histórico de las personas en un periodo específico, para entender cómo se comportó el flujo en un momento pasado.
-
-\textbf{Precondiciones:} Existen posiciones registradas en el periodo.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario elige la ventana temporal.
-    \item El sistema carga la reproducción.
-    \item El usuario reproduce, pausa, arrastra la línea de tiempo o cambia la velocidad.
-    \item El sistema recalcula los indicadores en el instante reproducido.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si el filtro es inválido, el sistema lo
-rechaza con un mensaje.
-
-\textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas (Figura~\ref{fig:cu03}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-03.png}
-\caption{CU-03: Reproducir histórico de movimiento}
-\label{fig:cu03}
-\end{figure}
-
-\textbf{CU-04: Configurar zonas del mapa}
-
-\textbf{Actor principal:} Usuario administrador \\
-\textbf{Requisito:} RF-03
-
-\textbf{Historia de usuario:} Como usuario administrador, quiero crear, modificar y eliminar zonas sobre el plano, para reflejar en el sistema la distribución real de puestos y áreas del aeropuerto.
-
-\textbf{Precondiciones:} Sesión de usuario administrador en la pantalla ``Configuración''.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario pulsa ``Editar'' y luego ``+ Zona''.
-    \item El usuario marca los vértices sobre el plano y pulsa ``Terminar zona''.
-    \item El usuario define nombre, tipo, color y, si es INTERIOR o FRONTAGE, su local.
-    \item El sistema valida la geometría y registra la zona.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si cancela, se descarta el borrador. Si la
-geometría es inválida, el sistema rechaza el cambio. Para quitar una zona,
-el usuario pulsa ``Eliminar zona''.
-
-\textbf{Postcondiciones:} Zona disponible en el mapa y en los insights (Figura~\ref{fig:cu04}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-04.png}
-\caption{CU-04: Configurar zonas del mapa}
-\label{fig:cu04}
-\end{figure}
-
-\textbf{CU-05: Configurar cámaras y cobertura}
-
-\textbf{Actor principal:} Usuario administrador \\
-\textbf{Requisito:} RF-03
-
-\textbf{Historia de usuario:} Como usuario administrador, quiero ubicar y orientar las cámaras en el plano, para que el sistema sepa qué zona física observa cada una.
-
-\textbf{Precondiciones:} Sesión de usuario administrador en la pantalla ``Configuración''.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario pulsa ``Editar'' y luego ``+ Cámara'', y marca su ubicación.
-    \item El usuario define su nombre, su posición (X, Y) y su dirección.
-    \item El usuario arrastra la cámara para moverla y su círculo para girarla; el plano muestra su campo de visión.
-    \item El sistema guarda la pose al soltarla.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Una cámara con trayectorias no se puede
-eliminar. Volver a publicar el Build no reemplaza una pose ajustada a mano.
-
-\textbf{Postcondiciones:} Cámara registrada en el plano con su posición y
-dirección (Figura~\ref{fig:cu05}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-05.png}
-\caption{CU-05: Configurar cámaras y cobertura}
-\label{fig:cu05}
-\end{figure}
-
-\textbf{CU-06: Ver cámara en vivo}
-
-\textbf{Actor principal:} Usuario administrador \\
-\textbf{Requisito:} RF-02
-
-\textbf{Historia de usuario:} Como usuario administrador, quiero ver en vivo lo que capta cada teléfono conectado como cámara, con las detecciones del modelo, para verificar directamente lo que ocurre en una zona.
-
-\textbf{Precondiciones:} Teléfonos unidos desde la página de cámara.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario abre la pantalla ``Teléfonos''.
-    \item El sistema muestra cada teléfono con las cajas y el ID que publica el modelo.
-    \item El usuario puede quitar un teléfono de la lista.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si el modelo no está procesando, se ve el
-video directo del teléfono.
-
-\textbf{Postcondiciones:} El teléfono quitado deja de enviar video (Figura~\ref{fig:cu06}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-06.png}
-\caption{CU-06: Ver cámara en vivo}
-\label{fig:cu06}
-\end{figure}
-
-\textbf{CU-07: Consultar mapa de calor}
-
-\textbf{Actor principal:} Usuario comercial \\
-\textbf{Requisito:} RF-04
-
-\textbf{Historia de usuario:} Como usuario comercial, quiero visualizar un mapa de calor de las zonas con mayor aglomeración en un periodo, para identificar los puntos de mayor tránsito y tomar decisiones comerciales informadas.
-
-\textbf{Precondiciones:} Existen posiciones históricas registradas.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario accede a la pantalla ``Insights''.
-    \item El usuario selecciona el periodo.
-    \item El sistema superpone el mapa de calor sobre el plano con su leyenda.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si el periodo no tiene datos, el sistema
-muestra el mapa vacío con un aviso.
-
-\textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas (Figura~\ref{fig:cu07}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-07.png}
-\caption{CU-07: Consultar mapa de calor}
-\label{fig:cu07}
-\end{figure}
-
-\textbf{CU-08: Consultar insights por zona}
-
-\textbf{Actor principal:} Usuario comercial \\
-\textbf{Requisito:} RF-05
-
-\textbf{Historia de usuario:} Como usuario comercial, quiero consultar las visitas, la permanencia y la captación por zona y periodo, para evaluar el desempeño de cada punto comercial y comparar su evolución.
-
-\textbf{Precondiciones:} Zonas configuradas y visitas registradas.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario accede a la pantalla ``Insights''.
-    \item El usuario selecciona el periodo y la zona.
-    \item El sistema muestra visitas, pass-by, permanencia, captación, densidad y su evolución en el tiempo.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} El usuario marca hasta cinco rangos de tiempo
-en la línea de tiempo de la sesión; el tablero muestra solo esos rangos y
-compara sus indicadores con la sesión completa.
-
-\textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales (Figura~\ref{fig:cu08}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-08.png}
-\caption{CU-08: Consultar insights por zona}
-\label{fig:cu08}
-\end{figure}
-
-\textbf{CU-09: Analizar flujos entre zonas}
-
-\textbf{Actor principal:} Usuario comercial \\
-\textbf{Requisito:} RF-04
-
-\textbf{Historia de usuario:} Como usuario comercial, quiero visualizar los flujos de personas entre zonas y su volumen, para entender las rutas más frecuentes y optimizar la ubicación de los puntos comerciales.
-
-\textbf{Precondiciones:} Existen entradas y salidas de zonas registradas.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario activa la capa de flujos.
-    \item El sistema dibuja las transiciones de origen a destino con su volumen.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si no hay transiciones en el periodo, el
-sistema muestra un aviso.
-
-\textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles (Figura~\ref{fig:cu09}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-09.png}
-\caption{CU-09: Analizar flujos entre zonas}
-\label{fig:cu09}
-\end{figure}
-
-\textbf{CU-10: Exportar reporte}
-
-\textbf{Actor principal:} Usuario comercial \\
-\textbf{Requisito:} RF-05
-
-\textbf{Historia de usuario:} Como usuario comercial, quiero exportar los insights de un periodo en CSV o PDF, para compartir los resultados con mi equipo o usarlos fuera del sistema.
-
-\textbf{Precondiciones:} Insights cargados para un periodo y, para el rol
-negocio, un permiso de exportación vigente aprobado en Solicitudes.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario pulsa ``Exportar'' o ``Enviar'' (por correo).
-    \item El usuario elige el formato CSV o PDF.
-    \item El sistema genera y descarga el archivo.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si la generación es prolongada, el sistema
-muestra el progreso.
-
-\textbf{Postcondiciones:} Reporte descargado (Figura~\ref{fig:cu10}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-10.png}
-\caption{CU-10: Exportar reporte}
-\label{fig:cu10}
-\end{figure}
-
-\textbf{CU-11: Procesar videos multicámara}
-
-\textbf{Actor principal:} Usuario administrador \\
-\textbf{Requisito:} RF-06
-
-\textbf{Historia de usuario:} Como usuario administrador, quiero que el sistema procese los videos de varias cámaras y siga a las personas de forma seudónima entre ellas, para obtener trayectorias completas sin identificar a nadie.
-
-\textbf{Precondiciones:} Videos y configuración de cámaras disponibles.
-
-\textbf{Flujo principal:}
-\begin{enumerate}
-    \item El usuario inicia el procesamiento de los videos.
-    \item El sistema abre una sesión de análisis con su configuración y
-    el manifiesto de los modelos.
-    \item El sistema detecta y sigue a las personas en cada cámara.
-    \item El sistema asocia a la misma persona entre cámaras.
-    \item El sistema ubica cada posición en el plano.
-    \item El sistema reconcilia las identidades y registra las
-    trayectorias seudónimas.
-\end{enumerate}
-
-\textbf{Flujos alternativos:} Si una cámara no está calibrada, la
-trayectoria se registra sin coordenadas en el plano. Si el usuario
-interrumpe el procesamiento, se conserva y reconcilia lo procesado hasta
-ese momento.
-
-\textbf{Postcondiciones:} Trayectorias disponibles para el mapa y los insights (Figura~\ref{fig:cu11}).
-
-\FloatBarrier
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-11.png}
-\caption{CU-11: Procesar videos multicámara}
-\label{fig:cu11}
-\end{figure}
-
-\subsection{Requisitos funcionales y no funcionales}
-
-{\footnotesize
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.1}
-\begin{longtable}{|L{0.08\textwidth}|L{0.30\textwidth}|L{0.52\textwidth}|}
-\caption{Requisitos Funcionales y No Funcionales}
-\label{tab:requisitos} \\
-\hline
-\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
-\hline
-\endfirsthead
-\hline
-\multicolumn{3}{|l|}{\textit{Requisitos (continuación)}} \\
-\hline
-\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
-\hline
-\endhead
-\hline
-\endlastfoot
-\multicolumn{3}{|l|}{\textbf{Funcionales}} \\[2pt]
-\hline
-RF-01 & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; superadmin hace todo, seguridad opera En vivo, Teléfonos y Videos, y negocio consulta Insights y Ventas \\
-\hline
-RF-02 & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
-\hline
-RF-03 & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
-\hline
-RF-04 & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
-\hline
-RF-05 & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
-\hline
-RF-06 & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
-\hline
-RF-07 & Ventas y conversión por local & Cargar tickets de caja, emparejar cada compra con una visita, mostrar conversión, patrones por hora y pronóstico \\
-\hline
-RF-08 & Procesamiento de videos subidos & Procesar hasta 10 videos a la vez, con IDs compartidos entre los del mismo lugar, sin guardar el video \\
-\hline
-RF-09 & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos temporales de exportación \\
-\hline
-\multicolumn{3}{|l|}{\textbf{No funcionales}} \\[2pt]
-\hline
-RNF-01 & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
-\hline
-RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; sin inferencia de género; cumplimiento de la Ley N.\textdegree~29733 \\
-\hline
-RNF-03 & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
-\hline
-RNF-04 & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
-\hline
-RNF-05 & Fluidez de visualización & Animación continua y respuesta inmediata a la interacción \\
-\hline
-RNF-06 & Disponibilidad & Verificación de estado y recuperación automática ante fallos \\
-\hline
-RNF-07 & Portabilidad & Despliegue en contenedores; plano local sin servicios externos \\
-\hline
-RNF-08 & Usabilidad & Confirmación antes de borrar; interfaz aprendible sin capacitación extensa \\
-\hline
-RNF-09 & Mantenibilidad & API versionada, migraciones de base de datos versionadas y pruebas automatizadas \\
-\hline
-RNF-10 & Compatibilidad & Funcionamiento en navegadores modernos; cámara solo con conexión segura \\
-\hline
-RNF-11 & Precisión del seguimiento & Identidades consistentes dentro de cada cámara y entre cámaras, validadas con videos etiquetados \\
-\hline
-RNF-12 & Rendimiento del procesamiento de video & Procesamiento de varias cámaras simultáneas al ritmo del video \\
-\hline
-RNF-13 & Reproducibilidad & Pesos, configuración y versiones de dependencias registrados con huella SHA-256 en cada sesión de análisis \\
-\end{longtable}
-}
-
-\FloatBarrier
-
 \section{Metodología}
 
-AeroVision propone una metodología de tres partes encadenadas para
+TrackFlow propone una metodología de tres partes encadenadas para
 transformar el video CCTV en trayectorias espaciales seudónimas y,
 posteriormente, convertir esas trayectorias en indicadores operativos y
 comerciales. En la primera parte se construye y estabiliza el seguimiento
@@ -3014,7 +2693,7 @@ en un evento mediante reglas operativas definidas previamente
 cuando corresponde y su confianza.
 
 \begin{table}[H]
-\caption{Eventos espaciales de AeroVision}
+\caption{Eventos espaciales de TrackFlow}
 \label{tab:spatial_events}
 \centering
 \footnotesize
@@ -3251,105 +2930,6 @@ el tráfico por franja y fecha con el embudo de cada tienda, las ventas con su
 conversión y pronóstico, y el registro de capturas. Los identificadores globales solo se usan para
 construir las trayectorias y no se presentan como información de identidad
 personal.
-
-\subsection{Validación transversal}
-
-La metodología se valida por componentes, cada uno con métricas
-coherentes con el problema que resuelve
-(Cuadro~\ref{tab:validation_methodology}).
-
-\begin{table}[H]
-\caption{Validación de los componentes}
-\label{tab:validation_methodology}
-\centering
-\footnotesize
-\begin{tabular}{|p{0.30\columnwidth}|p{0.62\columnwidth}|}
-\hline
-\textbf{Componente} & \textbf{Validación} \\
-\hline
-Detección & Precisión, recall y mAP. \\
-\hline
-Seguimiento local & IDF1 y cambios de ID frente a anotaciones; fragmentación (IDs de uno o dos cuadros y duración mediana), reapariciones y cruces como auditoría sin anotaciones. \\
-\hline
-Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sobre pares de tracklets etiquetados; personas contadas frente a reales. \\
-\hline
-
-Homografía & Error de reproyección en puntos de control. \\
-\hline
-Eventos & Precisión, recall y F1. \\
-\hline
-Rendimiento & Cuadros por segundo por cámara, cuadros saltados, CPU, GPU, memoria y potencia (Sección~\ref{sec:pruebas}). \\
-\hline
-Histórico & Comparación con trayectorias conocidas. \\
-\hline
-\end{tabular}
-\end{table}
-
-No se fija una precisión única para todo el sistema, ya que detección,
-seguimiento, calibración, asociación multicámara y eventos son problemas
-distintos que se evalúan por separado; los resultados del detector, el
-seguidor y el Re-ID están en la Sección~\ref{sec:validacion-modelos}. Los
-umbrales de asociación se calibraron con tracklets etiquetados manualmente.
-
-\subsection{Trazabilidad de datos}
-
-La salida de cada parte es la entrada de la siguiente, sin generar
-conjuntos de datos paralelos innecesarios. La Parte I produce:
-
-\begin{equation}
-\begin{aligned}
-(&local\_id,\ bbox,\ confidence,\\
-&appearance,\ timestamp).
-\end{aligned}
-\end{equation}
-
-En la Parte II, esta información se transforma en tracklets con
-prototipos de apariencia y, cuando hay calibración, coordenadas reales:
-
-\begin{equation}
-\begin{aligned}
-(&tracklet\_id,\ X,Y,t,\ speed,\\
-&direction,\ \bar{e}_T).
-\end{aligned}
-\end{equation}
-
-Los prototipos $\bar{e}_T$ existen solo en memoria y se eliminan
-cuando la identidad se cierra al salir la persona de la cobertura. La
-salida final de la Parte II contiene:
-
-\begin{equation}
-\begin{aligned}
-(&global\_id,\ tracklet\_id,\ timestamp,\ x,\ y,\\
-&zone\_id,\ speed\_mps,\ direction\_deg,\ confidence).
-\end{aligned}
-\end{equation}
-
-Finalmente, la Parte III transforma estos registros en información
-agregada:
-
-\begin{equation}
-\begin{aligned}
-\text{Trayectorias}
-&\rightarrow \text{Heatmaps}\\
-&\rightarrow \text{Rutas}\\
-&\rightarrow \text{Flujos}\\
-&\rightarrow \text{KPIs}.
-\end{aligned}
-\end{equation}
-
-\subsection{Flujo de la metodología}
-
-La Figura~\ref{fig:flujo} resume el flujo general de la metodología, desde
-la captura del video CCTV hasta la generación de insights: seguimiento
-local por cámara, asociación multicámara con mapeo 2D, y procesamiento
-histórico de las trayectorias.
-
-\begin{figure}[H]
-    \centering
-    \safeincludegraphics[width=\linewidth]{figuras/metodologia/flujo.png}
-    \caption{Flujo de la metodología del proyecto.}
-    \label{fig:flujo}
-\end{figure}
 
 \section{Algoritmos}
 \label{sec:algoritmos}
@@ -3678,623 +3258,55 @@ seguidor en cam06, 140 conservaron su número (antes, 7), las cajas sin
 número bajaron de 1\,608 a 174 y desaparecieron los cuadros con dos personas
 con el mismo número a la vez (antes, 53).
 
-\section{Arquitectura del sistema}
-\label{sec:arquitectura}
-
-El sistema se compone de servicios en contenedores Docker que se ejecutan en
-una computadora local con GPU; el modelo en vivo corre directamente en Windows
-(\texttt{camara\_telefono.py}) o en Docker con la GPU (servicio
-\texttt{modelo-gpu}, perfil \texttt{gpu}). El análisis de sesiones grabadas y el
-monitoreo en vivo usan backends y bases de datos separados, y la aplicación
-web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
-El código fuente de todos los componentes, las migraciones de la base de datos
-y los notebooks del modelo están en
-\url{https://github.com/23-Andres-QC/Aeropuerto}.
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
-\caption{Arquitectura de AeroVision.}
-\label{fig:arquitectura}
-\end{figure}
-
-\begin{table}[H]
-\caption{Componentes del sistema}
-\label{tab:componentes}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.17\textwidth}|L{0.27\textwidth}|L{0.48\textwidth}|}
-\hline
-\textbf{Componente} & \textbf{Tecnología} & \textbf{Función} \\
-\hline
-\texttt{web} & Vue~3, TypeScript, nginx & Interfaz y proxy hacia los backends y la cámara \\
-\hline
-\texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones, insights, tráfico, ventas, cuentas y solicitudes \\
-\hline
-\texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias, analítica, ventas y cuentas \\
-\hline
-\texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
-\hline
-\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
-\hline
-\texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
-\hline
-\texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
-\hline
-Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-\subsection{Usuarios y acceso}
-
-El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
-hace en él.
-
-\begin{table}[H]
-\caption{Usuarios del sistema}
-\label{tab:usuarios}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.16\textwidth}|L{0.19\textwidth}|L{0.33\textwidth}|L{0.22\textwidth}|}
-\hline
-\textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
-\hline
-Superadmin & Web, con cuenta & Configura sitios, cámaras, locales y zonas; crea cuentas; aprueba solicitudes; aplica la retención & Todas las secciones \\
-\hline
-Seguridad & Web, con cuenta & Activa el modo en vivo, une teléfonos y procesa videos & En vivo, Videos y Teléfonos \\
-\hline
-Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permiso aprobado & Insights y Ventas \\
-\hline
-Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
-\hline
-Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/}\allowbreak\texttt{\{sitio\}/...} \\
-\hline
-Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
-\hline
-\end{tabular}
-\end{table}
-
-No hay registro público: el superadmin crea cada cuenta en la sección Cuentas
-(Figura~\ref{fig:cuentas}), que entrega una contraseña temporal una sola vez y
-obliga a elegir una propia en el primer ingreso (Figura~\ref{fig:login}). Las
-contraseñas se guardan como hash argon2id; la sesión es una cookie
-\textit{HttpOnly} cuyo secreto la base guarda solo como SHA-256, por lo que
-revocarla sobrevive a un reinicio; ocho contraseñas equivocadas bloquean la
-cuenta 15 minutos, y una bitácora registra ingresos, cambios de cuentas y de
-retención, sin contraseñas ni llaves. Desde Solicitudes
-(Figura~\ref{fig:solicitudes}) el superadmin aprueba los cambios de correo y
-los permisos de exportación, que dejan a una cuenta descargar y enviar por
-correo los reportes de Insights solo durante el tiempo elegido. La página de
-cámara se une con un código que el superadmin crea en Teléfonos y que viaja en
-el primer mensaje del WebSocket, nunca en la URL.
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
-\caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
-se taparon en la figura).}
-\label{fig:cuentas}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/login.png}
-\caption{Ingreso a la aplicación.}
-\label{fig:login}
-\end{minipage}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/solicitudes.png}
-\caption{Solicitudes de cambio de correo y de permisos de exportación.}
-\label{fig:solicitudes}
-\end{figure}
-
-\subsection{Infraestructura de despliegue}
-
-El sistema corre en una computadora local con GPU (Cuadro~\ref{tab:infra}).
-Los servicios web, los backends y las bases van en Docker Compose; el modelo
-en vivo, que también procesa los videos subidos, usa la GPU de dos formas:
-directamente en Windows (\texttt{camara\_telefono.py}) o, si el Control
-inteligente de aplicaciones de Windows bloquea las DLL de PyTorch, dentro de
-Docker (servicio \texttt{modelo-gpu}, perfil \texttt{gpu}). Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
-Docker con YOLO26s a 640~px.
-
-\begin{table}[H]
-\caption{Configuración del equipo de despliegue}
-\label{tab:infra}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.22\textwidth}|L{0.70\textwidth}|}
-\hline
-\textbf{Elemento} & \textbf{Configuración} \\
-\hline
-Procesador & Intel Core i7-13620H: 10 núcleos y 16 hilos \\
-\hline
-GPU & NVIDIA GeForce RTX~4060 Laptop, 8~GB \\
-\hline
-Memoria & 16~GB de RAM \\
-\hline
-Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
-\hline
-Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, en Windows o en Docker (\texttt{modelo-gpu}), para teléfonos y videos subidos \\
-\hline
-Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
-\hline
-Configuración & \texttt{.env} con las contraseñas de las bases, la cuenta semilla y la llave de los scripts \\
-\hline
-\end{tabular}
-\end{table}
-
-La primera versión se desplegó en una máquina virtual de Google Cloud sin GPU
-(\texttt{c4a-highcpu-8}, 8 vCPU Arm y 16~GB de RAM, en Santiago de Chile),
-donde el modelo en vivo corría en CPU a unos 4 a 6 cuadros por segundo con
-pocas personas. El sistema pasó a la computadora local porque el modelo de
-Videos, la re-identificación con OSNet-AIN y PersonViT y el procesamiento de
-varias cámaras a la vez necesitan una GPU. Cada imagen ejecuta sus pruebas al
-construirse; si una falla, los servicios en marcha no se reemplazan. La web y
-la página de cámara se sirven por HTTPS, requisito de los navegadores para usar
-la cámara del teléfono.
-
-\subsection{Costos de la infraestructura}
-
-El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
-computadora propia con el de la nube. El servidor de Google Cloud se calculó
-con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
-impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
-(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
-Para la computadora propia se toma una PC de escritorio con Core
-i5-12400F, 16~GB de RAM, 1~TB de SSD y una RTX~4060 de 8~GB, que Promart
-vende en S/~4\,579 y Falabella en S/~4\,799 (S/~5\,500 de lista en las
-dos; consultado el 11 de noviembre de 2026)~\cite{promart-pc,falabella-pc}.
-Los S/~4\,579 (US\$~1\,220), amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
-de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
-propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
-horario de uso y menos que cualquier nube con GPU a demanda; el video no
-sale de la red y el costo es fijo. Este cálculo sostiene el costo por cámara
-del plan de negocio (Sección~\ref{sec:negocio}).
-
-\begin{table}[H]
-\caption{Costo mensual del procesamiento: computadora propia y nube}
-\label{tab:costos}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.30\textwidth}|L{0.44\textwidth}|R{0.16\textwidth}|}
-\hline
-\textbf{Opción} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
-\hline
-Computadora propia con GPU & US\$~1\,220 (S/~4\,579) en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
-\hline
-\multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
-\hline
-Máquina virtual & Bajo demanda: US\$0.4333 por hora & 316.34 \\
-\hline
-Disco, IP y tráfico & 77~GB, IP externa y 20~GB de salida & 18.46 \\
-\hline
-\textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
-\hline
-Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
-\hline
-Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
-\hline
-Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
-\hline
-Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
-\hline
-\multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
-\hline
-A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
-\hline
-Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
-\hline
-\end{tabular}
-\end{table}
-
-Los valores anteriores del servidor y de la computadora propia son de un equipo
-sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
-estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
-de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
-dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
-horas encendida (720 horas equivale a tenerla prendida todo el mes). El
-Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
-Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
-Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
-cada calculadora están en el Anexo.
-
-\begin{table}[H]
-\caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
-\label{tab:nube-resumen}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.24\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|}
-\hline
-\textbf{Horas al mes} & \textbf{Google Cloud} & \textbf{AWS} & \textbf{Azure} \\
-\hline
-240 & 130.60 & 129.35 & 137.04 \\
-\hline
-360 & 195.40 & 192.07 & 200.76 \\
-\hline
-720 & 389.80 & 386.52 & 391.92 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Configuración usada en cada calculadora}
-\label{tab:nube-config}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.14\textwidth}|L{0.20\textwidth}|L{0.58\textwidth}|}
-\hline
-\textbf{Proveedor} & \textbf{Región} & \textbf{Configuración} \\
-\hline
-Google Cloud (Compute Engine) & Iowa (\texttt{us-central1}) & \texttt{n1-standard-4} (4 vCPU, 15~GB de RAM) con 1 GPU NVIDIA T4, sistema libre (Debian o Ubuntu), modelo regular (a demanda), disco \textit{balanced} de 10~GiB, 1 instancia, sin descuentos por uso sostenido ni comprometido \\
-\hline
-AWS (Amazon EC2) & Este de EE.\,UU. (Ohio) & Instancia con GPU T4 llamada ``AeroVision GPU T4'', a demanda, con tenencia compartida y sin costo inicial \\
-\hline
-Azure & East US & Máquina virtual con GPU T4, 1 dirección IP estática estándar (ARM), soporte Basic incluido y contrato de cliente de Microsoft (MCA) \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\caption{Desglose del cálculo de Google Cloud (US\$ al mes)}
-\label{tab:nube-gcp}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.40\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|}
-\hline
-\textbf{Componente} & \textbf{240 h} & \textbf{360 h} & \textbf{720 h} \\
-\hline
-Máquina \texttt{n1-standard-4} (US\$0.19 por hora) & 45.60 & 68.40 & 136.80 \\
-\hline
-GPU NVIDIA T4 (US\$0.35 por hora) & 84.00 & 126.00 & 252.00 \\
-\hline
-Disco \textit{balanced} de 10~GiB & 1.00 & 1.00 & 1.00 \\
-\hline
-\textbf{Total} & \textbf{130.60} & \textbf{195.40} & \textbf{389.80} \\
-\hline
-\end{tabular}
-\end{table}
-
-En Azure, la calculadora sumó además una dirección IP estática (1.20, 1.80 y
-3.60 al mes en los tres escenarios). Frente a los $\approx$ US\$~70 al mes de la
-computadora propia, la nube con GPU cuesta casi el doble con 240 horas
-encendida y unas cinco veces y media con 720 horas, y los tres proveedores
-quedan a menos de 6\,\% entre sí en cada escenario, por lo que la decisión
-depende más de las horas de uso, la ubicación de los datos y el costo de
-transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
-fija ni la salida de datos, que se suman aparte.
-
-Fuera de las tres grandes nubes hay opciones más baratas para correr el
-modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
-Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
-las que se pudieron verificar en noviembre de 2026, con el precio por hora
-publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
-tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
-nube comunitaria cambian cada día y la máquina puede detenerse o no estar
-disponible; Hetzner cobra por hora hasta un tope mensual y una tarifa de
-instalación de 209~euros, y sus euros se pasaron a dólares con la referencia
-del BCE del 10 de noviembre de 2026 (1.1214)~\cite{ecb-eurusd}.
-
-\begin{table}[!ht]
-\caption{Nubes con GPU para correr el modelo, de la más económica a la más cara (US\$, noviembre de 2026)}
-\label{tab:nube-proveedores}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular}{|L{0.45\textwidth}|L{0.13\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|}
-\hline
-\textbf{Proveedor y máquina} & \textbf{GPU} & \textbf{US\$/h} & \textbf{240~h} & \textbf{360~h} & \textbf{720~h} \\
-\hline
-Vast.ai, mercado de GPU~\cite{vast-3060} & RTX 3060 & 0.076 & 18.24 & 27.36 & 54.72 \\
-\hline
-Azure \texttt{NC4as\_T4\_v3}, \textit{spot}, East US~\cite{sparecores-t4} & T4 & 0.1641 & 39.38 & 59.08 & 118.15 \\
-\hline
-AWS \texttt{g4dn.xlarge}, \textit{spot}, us-east-1~\cite{doit-g4dn} & T4 & 0.2137 & 51.29 & 76.93 & 153.86 \\
-\hline
-RunPod, nube comunitaria~\cite{runpod} & RTX 4090 & 0.34 & 81.60 & 122.40 & 244.80 \\
-\hline
-Hetzner GEX45, servidor dedicado~\cite{hetzner-gex} & RTX PRO 4000 & 0.3845 & 92.29 & 138.43 & 239.98 \\
-\hline
-AWS \texttt{g6.xlarge}, \textit{spot}, us-east-1~\cite{doit-g6} & L4 & 0.3941 & 94.58 & 141.88 & 283.75 \\
-\hline
-RunPod, nube comunitaria~\cite{runpod} & L4 & 0.44 & 105.60 & 158.40 & 316.80 \\
-\hline
-AWS \texttt{g4dn.xlarge}, a demanda, us-east-1~\cite{doit-g4dn} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
-\hline
-Azure \texttt{NC4as\_T4\_v3}, a demanda, East US~\cite{azurespeed-t4} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
-\hline
-Google Cloud \texttt{n1-standard-4} + T4~\cite{gcp-vm,gcp-gpu} & T4 & 0.54 & 129.60 & 194.40 & 388.80 \\
-\hline
-Paperspace~\cite{paperspace} & RTX 4000 & 0.56 & 134.40 & 201.60 & 403.20 \\
-\hline
-RunPod, nube segura~\cite{runpod} & L4 & 0.59 & 141.60 & 212.40 & 424.80 \\
-\hline
-Google Cloud \texttt{g2-standard-4}~\cite{gcp-g2} & L4 & 0.7068 & 169.64 & 254.46 & 508.92 \\
-\hline
-DigitalOcean, GPU Droplet~\cite{do-gpu} & RTX 4000 Ada & 0.76 & 182.40 & 273.60 & 547.20 \\
-\hline
-Paperspace~\cite{paperspace} & A4000 & 0.76 & 182.40 & 273.60 & 547.20 \\
-\hline
-AWS \texttt{g6.xlarge}, a demanda, us-east-1~\cite{doit-g6} & L4 & 0.8048 & 193.15 & 289.73 & 579.46 \\
-\hline
-RunPod, nube segura~\cite{runpod} & RTX 4090 & 0.89 & 213.60 & 320.40 & 640.80 \\
-\hline
-\hline
-\textit{Referencia: computadora propia} (Cuadro~\ref{tab:costos}) & RTX 4060 & -- & 70 & 70 & 70 \\
-\hline
-\end{tabular}
-\end{table}
-
-Con 240 horas al mes, Vast.ai y las máquinas \textit{spot} con T4 cuestan
-menos que la computadora propia; encendidas todo el mes, solo Vast.ai
-queda por debajo. Sin contar las \textit{spot}, la opción más barata todo
-el mes después de Vast.ai es el servidor dedicado de Hetzner (US\$~240 con
-el tope mensual, más la instalación), y las T4 a demanda de AWS, Azure y
-Google Cloud quedan entre US\$~379 y 389.
-
-\FloatBarrier
-\subsection{Base de datos}
-
-Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
-todo lo que se analiza en ellos; \texttt{vivo-db} (PostgreSQL~17 con pgvector)
-guarda solo la memoria de identidades del modo en vivo
-(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
-backends aplican al iniciar.
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.65\linewidth]{figuras/arquitectura/base-de-datos.png}
-\caption{Modelo entidad-relación de las bases de datos.}
-\label{fig:bd}
-\end{figure}
-
-\begin{itemize}\sloppy
-    \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
-    y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
-    INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
-    válida.
-    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD, LIVE o VIDEO),
-    \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
-    geometría de cada punto se calcula en la base y se conserva la posición
-    original del modelo junto a la ajustada al piso.
-    \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
-    calculada en la base, y \texttt{session\_analytics}, con los parámetros y
-    los resultados de la Parte~III.
-    \item \textbf{Tráfico:} \texttt{traffic\_buckets} (personas, visitas,
-    quienes se detienen e interesados por zona en ventanas de 5, 15 y 60
-    minutos), \texttt{heat\_cells} (segundos-persona por celda de 1~m y hora),
-    \texttt{traffic\_runs} y \texttt{traffic\_params} (umbrales por sitio).
-    \item \textbf{Ventas:} \texttt{sales\_tickets} y \texttt{sales\_items}
-    (compras reales o simuladas, en centavos), \texttt{sales\_matches} y
-    \texttt{sales\_match\_runs} (cada compra con la visita que la hizo y su
-    confianza) y \texttt{visit\_counts}.
-    \item \textbf{Cuentas:} \texttt{users} (con hash argon2id y rol),
-    \texttt{auth\_sessions}, \texttt{password\_reset\_tokens},
-    \texttt{account\_requests} (solicitudes), \texttt{store\_api\_keys} y
-    \texttt{audit\_log} (bitácora).
-    \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
-    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes, borrados a las 24 horas.
-\end{itemize}
-
-Una pasada diaria aplica la retención: borra los puntos de trayectoria de las
-sesiones de más de 90 días cuyo tráfico ya se agregó, y conserva sin límite los
-eventos espaciales, los análisis y los agregados.
-
-\subsection{Backend}
-
-El backend se divide en dos servicios en Go (Figura~\ref{fig:backend} y
-Cuadro~\ref{tab:api}):
-
-\begin{itemize}
-    \item \textbf{\texttt{backend}:} arquitectura hexagonal. El núcleo
-    (\texttt{domain}, \texttt{ports} y \texttt{services}) contiene las
-    entidades, las validaciones y los casos de uso, sin depender de HTTP ni de
-    SQL. Los adaptadores de entrada (\texttt{httpapi} y \texttt{relay})
-    exponen la API REST y el relevo por WebSocket, y los de salida
-    (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
-    PostGIS y en memoria.
-    \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
-    lista de videos subidos en disco temporal, el relevo de video y
-    detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
-    todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
-    guardado anterior.
-\end{itemize}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
-\caption{Arquitectura de los servicios del backend.}
-\label{fig:backend}
-\end{figure}
-
-{\footnotesize
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{longtable}{|L{0.42\textwidth}|L{0.50\textwidth}|}
-\caption{Recursos de las API}
-\label{tab:api} \\
-\hline
-\textbf{Ruta} & \textbf{Uso} \\
-\hline
-\endfirsthead
-\hline
-\multicolumn{2}{|l|}{\textit{Recursos de las API (continuación)}} \\
-\hline
-\textbf{Ruta} & \textbf{Uso} \\
-\hline
-\endhead
-\multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
-\hline
-\texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
-\hline
-\texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
-\hline
-\texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
-\hline
-\texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
-\hline
-\texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
-\hline
-\texttt{/media/\{archivo\}} & Videos procesados del Build \\
-\hline
-\texttt{/trafico/...} & Resumen, serie, calor, permanencia y embudo por período y franja; umbrales \\
-\hline
-\texttt{/ventas/...} & Tickets, resumen, patrones, pronóstico, simulados y emparejamiento \\
-\hline
-\multicolumn{2}{|l|}{\textit{backend}: cuentas y privacidad, \texttt{/api/v1}} \\
-\hline
-\texttt{/auth/...} & Ingreso, salida, cambio y recuperación de contraseña \\
-\hline
-\texttt{/usuarios} · \texttt{/usuarios/solicitudes} & Cuentas, roles y solicitudes \\
-\hline
-\texttt{/mi/...} & Perfil, cambio de correo y exportación con permiso \\
-\hline
-\texttt{/auditoria} · \texttt{/privacidad} & Bitácora, retención y depuración \\
-\hline
-\multicolumn{2}{|l|}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
-\hline
-\texttt{/telefonos} & Teléfonos conectados como cámaras \\
-\hline
-\texttt{/videos} & Videos subidos por tandas y resumen de cada uno \\
-\hline
-\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
-\hline
-\texttt{/personas} & Memoria de identidades \\
-\hline
-\end{longtable}
-}
-
-\FloatBarrier
-\subsection{Frontend}
-
-Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
-servida por nginx, que además redirige \texttt{/api/}, \texttt{/vivo/} y
-\texttt{/camara/} a sus servicios, verifica la sesión antes de dejar pasar a
-cada servicio según el rol, añade cabeceras de seguridad y limita las
-peticiones por IP. El código se organiza por funcionalidades sobre un núcleo
-común (Figura~\ref{fig:frontend}). Tras el ingreso, cada sitio tiene las mismas
-nueve secciones, y cada rol ve solo las suyas:
-
-\begin{enumerate}
-    \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
-    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio,
-    comedor o pasillo del Edificio D), o, en modo en vivo, muestra lo que ven
-    los teléfonos y permite iniciar y guardar una captura. Lo grabado se ve
-    zona por zona: al elegir Patio, Comedor o Pasillo del Edificio D (en la
-    fila ``Ir a'' o con un clic en el campus) el plano queda fijo en esa zona
-    y dibuja solo su plano, sus zonas y sus cámaras; ``Todo el campus'' lo
-    suelta. Al activar el en vivo se elige la zona que se graba: la captura
-    se guarda solo en ella, el plano no sale de su marco y los teléfonos
-    toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
-    \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
-    procesados todos a la vez sin guardarse, con un resumen de cada uno
-    (Figura~\ref{fig:web-videos}).
-    \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
-    calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
-    franja y fecha, y una línea de tiempo de la sesión en la que se marcan
-    hasta cinco rangos (arrastrando, escribiendo el inicio y el fin o
-    haciendo clic en la línea): todo el tablero muestra solo esos rangos, los
-    mapas distinguen cada uno por color y una tabla compara sus indicadores
-    con la sesión completa. Es exportable a PDF y CSV, con los rangos y los
-    mapas de cada uno, y enviable por correo
-    (Figuras~\ref{fig:web-insights} y~\ref{fig:web-insights-pdf}).
-    \item \textbf{Ventas:} tickets reales o simulados, conversión por local
-    elegido en el plano, cuándo se vende, emparejamiento de cada compra con la
-    visita que la hizo y pronóstico con simulador de escenarios
-    (Figura~\ref{fig:web-ventas}).
-    \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
-    con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
-    \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
-    umbrales de tráfico (Figura~\ref{fig:web-config}).
-    \item \textbf{Teléfonos:} código de unión en QR, cámaras de teléfono con el
-    proceso del modelo y memoria de personas (Figura~\ref{fig:web-telefonos}).
-    \item \textbf{Cuentas:} cuentas, accesos, bitácora y privacidad.
-    \item \textbf{Solicitudes:} cambios de correo y permisos de exportación.
-\end{enumerate}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/frontend.png}
-\caption{Arquitectura del frontend.}
-\label{fig:frontend}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/web-configuracion.png}
-\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
-las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
-cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
-pegada al comedor), y umbrales de tráfico.}
-\label{fig:web-config}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/videos.png}
-\caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
-el resumen de cada video.}
-\label{fig:web-videos}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/insights.png}
-\caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
-Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
-de tiempo y resumen de la sesión.}
-\label{fig:web-insights}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\safeincludegraphics[width=0.55\linewidth]{figuras/plataforma/insights-pdf.png}
-\caption{Reporte de Insights exportado a PDF.}
-\label{fig:web-insights-pdf}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
-\caption{Ventas: selección de locales en el plano y pestañas de resumen,
-pronóstico, patrones, emparejamiento, tickets y datos.}
-\label{fig:web-ventas}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
-\caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
-conectadas y memoria de personas, que se olvida tras 24 horas.}
-\label{fig:web-telefonos}
-\end{minipage}
-\end{figure}
-
-\FloatBarrier
 \section{Pruebas de validación y estrés del modelo}
 \label{sec:pruebas}
 
 Esta sección mide el modelo de Videos, que es el que procesa varias cámaras a
-la vez. Primero presenta la validación de cada pieza del modelo con videos
+la vez. Primero resume con qué métricas se valida cada componente; después
+presenta la validación de cada pieza del modelo con videos
 etiquetados (detector, Re-ID, seguidor y asociación entre cámaras), que
 explica por qué el modelo actual usa esos componentes, y luego las pruebas de
 carga: cuánto procesa el equipo de despliegue (Cuadro~\ref{tab:infra}) y qué
 consume cada parte del modelo.
+
+\subsection{Métricas de validación por componente}
+
+El sistema se valida por componentes, cada uno con métricas
+coherentes con el problema que resuelve
+(Cuadro~\ref{tab:validation_methodology}).
+
+\begin{table}[H]
+\caption{Validación de los componentes}
+\label{tab:validation_methodology}
+\centering
+\footnotesize
+\begin{tabular}{|p{0.30\columnwidth}|p{0.62\columnwidth}|}
+\hline
+\textbf{Componente} & \textbf{Validación} \\
+\hline
+Detección & Precisión, recall y mAP. \\
+\hline
+Seguimiento local & IDF1 y cambios de ID frente a anotaciones; fragmentación (IDs de uno o dos cuadros y duración mediana), reapariciones y cruces como auditoría sin anotaciones. \\
+\hline
+Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sobre pares de tracklets etiquetados; personas contadas frente a reales. \\
+\hline
+
+Homografía & Error de reproyección en puntos de control. \\
+\hline
+Eventos & Precisión, recall y F1. \\
+\hline
+Rendimiento & Cuadros por segundo por cámara, cuadros saltados, CPU, GPU, memoria y potencia. \\
+\hline
+Histórico & Comparación con trayectorias conocidas. \\
+\hline
+\end{tabular}
+\end{table}
+
+No se fija una precisión única para todo el sistema, ya que detección,
+seguimiento, calibración, asociación multicámara y eventos son problemas
+distintos que se evalúan por separado; los resultados del detector, el
+seguidor y el Re-ID están en la Sección~\ref{sec:validacion-modelos}. Los
+umbrales de asociación se calibraron con tracklets etiquetados manualmente.
 
 \subsection{Validación de los modelos con videos etiquetados}
 \label{sec:validacion-modelos}
@@ -4698,7 +3710,74 @@ seguimiento corresponde a la Sección~\ref{sec:validacion-modelos}.
 Cada caso se midió durante 2 minutos en un solo equipo portátil, cuyo
 rendimiento puede variar con la temperatura y la energía disponible.
 
-\section{Pruebas de validación en ESAN}
+\section{Flujo del sistema}
+\label{sec:flujo-sistema}
+
+Esta sección muestra cómo recorre el sistema la información, desde el video
+hasta los insights: el flujo general de las tres partes de la metodología y
+los datos que cada parte entrega a la siguiente.
+
+\subsection{Flujo general}
+
+La Figura~\ref{fig:flujo} resume el flujo general del sistema, desde
+la captura del video CCTV hasta la generación de insights: seguimiento
+local por cámara, asociación multicámara con mapeo 2D, y procesamiento
+histórico de las trayectorias.
+
+\begin{figure}[H]
+    \centering
+    \safeincludegraphics[width=\linewidth]{figuras/metodologia/flujo.png}
+    \caption{Flujo del sistema.}
+    \label{fig:flujo}
+\end{figure}
+
+\subsection{Trazabilidad de datos}
+
+La salida de cada parte es la entrada de la siguiente, sin generar
+conjuntos de datos paralelos innecesarios. La Parte I produce:
+
+\begin{equation}
+\begin{aligned}
+(&local\_id,\ bbox,\ confidence,\\
+&appearance,\ timestamp).
+\end{aligned}
+\end{equation}
+
+En la Parte II, esta información se transforma en tracklets con
+prototipos de apariencia y, cuando hay calibración, coordenadas reales:
+
+\begin{equation}
+\begin{aligned}
+(&tracklet\_id,\ X,Y,t,\ speed,\\
+&direction,\ \bar{e}_T).
+\end{aligned}
+\end{equation}
+
+Los prototipos $\bar{e}_T$ existen solo en memoria y se eliminan
+cuando la identidad se cierra al salir la persona de la cobertura. La
+salida final de la Parte II contiene:
+
+\begin{equation}
+\begin{aligned}
+(&global\_id,\ tracklet\_id,\ timestamp,\ x,\ y,\\
+&zone\_id,\ speed\_mps,\ direction\_deg,\ confidence).
+\end{aligned}
+\end{equation}
+
+Finalmente, la Parte III transforma estos registros en información
+agregada:
+
+\begin{equation}
+\begin{aligned}
+\text{Trayectorias}
+&\rightarrow \text{Heatmaps}\\
+&\rightarrow \text{Rutas}\\
+&\rightarrow \text{Flujos}\\
+&\rightarrow \text{KPIs}.
+\end{aligned}
+\end{equation}
+
+\section{Casos de prueba en ESAN}
 \label{sec:validacion-esan}
 
 Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}, en el Anexo).
@@ -5212,6 +4291,802 @@ el calor va de la escalera de cam06 al brazo este de cam07.}
 \end{figure}
 
 \FloatBarrier
+
+\section{Casos de uso y requisitos}
+\label{sec:requisitos}
+
+\subsection{Resumen de los casos de uso}
+
+Esta sección presenta los casos de uso del sistema, que describen cómo cada
+actor interactúa con las funciones definidas en los requisitos
+funcionales (Cuadro~\ref{tab:requisitos}). El Cuadro~\ref{tab:casos-uso} los
+resume y dos de ellos se detallan como ejemplo, uno por actor; los demás se
+detallan en el Anexo, en Casos de uso detallados
+(página~\pageref{anexo:casos-uso}). Cada caso detallado indica su actor principal, el requisito
+que cubre, su historia de usuario, precondiciones, flujo principal, flujos
+alternativos y postcondiciones. El sistema tiene dos actores: el
+\textbf{Usuario comercial}, que consulta el análisis y los insights, y el
+\textbf{Usuario administrador}, que monitorea, configura el mapa y procesa
+los videos. En la aplicación, el usuario comercial corresponde al rol
+negocio y el administrador a los roles superadmin y seguridad
+(Sección~\ref{sec:arquitectura}).
+
+\begin{table}[!htbp]
+\centering
+\caption{Resumen de los casos de uso}
+\label{tab:casos-uso}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.08\textwidth}|L{0.40\textwidth}|L{0.28\textwidth}|L{0.12\textwidth}|}
+\hline
+\textbf{ID} & \textbf{Caso de uso} & \textbf{Actor principal} & \textbf{Requisito} \\
+\hline
+CU-01 & Iniciar y cerrar sesión & Usuario comercial, Usuario administrador & RF-01 \\
+\hline
+CU-02 & Monitorear personas y trayectorias en vivo & Usuario administrador & RF-02 \\
+\hline
+CU-03 & Reproducir histórico de movimiento & Usuario comercial, Usuario administrador & RF-04 \\
+\hline
+CU-04 & Configurar zonas del mapa & Usuario administrador & RF-03 \\
+\hline
+CU-05 & Configurar cámaras y cobertura & Usuario administrador & RF-03 \\
+\hline
+CU-06 & Ver cámara en vivo & Usuario administrador & RF-02 \\
+\hline
+CU-07 & Consultar mapa de calor & Usuario comercial & RF-04 \\
+\hline
+CU-08 & Consultar insights por zona & Usuario comercial & RF-05 \\
+\hline
+CU-09 & Analizar flujos entre zonas & Usuario comercial & RF-04 \\
+\hline
+CU-10 & Exportar reporte & Usuario comercial & RF-05 \\
+\hline
+CU-11 & Procesar videos multicámara & Usuario administrador & RF-06 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Ejemplo 1: CU-02, monitorear personas y trayectorias en vivo}
+\textbf{Actor principal:} Usuario administrador \\
+\textbf{Requisito:} RF-02
+
+\textbf{Historia de usuario:} Como usuario administrador, quiero visualizar en tiempo real a las personas y sus trayectorias sobre el plano del aeropuerto, para conocer el estado de la operación y actuar ante aglomeraciones o incidencias.
+
+\textbf{Precondiciones:} Sesión iniciada, plano y zonas configurados, y
+trayectorias disponibles.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario accede a la pantalla ``En vivo''.
+    \item El sistema muestra el plano 2D con las personas, su estado y su zona.
+    \item El usuario activa las capas de trayectorias, zonas o cámaras.
+    \item El usuario selecciona una persona.
+    \item El sistema aísla su recorrido y sus eventos.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si no hay datos en la ventana, el sistema
+muestra el aviso ``sin observaciones''.
+
+\textbf{Postcondiciones:} Estado actual del aeropuerto visible con
+identificadores seudónimos (Figura~\ref{fig:cu02}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-02.png}
+\caption{CU-02: Monitorear personas y trayectorias en vivo}
+\label{fig:cu02}
+\end{figure}
+
+\subsection{Ejemplo 2: CU-08, consultar insights por zona}
+\textbf{Actor principal:} Usuario comercial \\
+\textbf{Requisito:} RF-05
+
+\textbf{Historia de usuario:} Como usuario comercial, quiero consultar las visitas, la permanencia y la captación por zona y periodo, para evaluar el desempeño de cada punto comercial y comparar su evolución.
+
+\textbf{Precondiciones:} Zonas configuradas y visitas registradas.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario accede a la pantalla ``Insights''.
+    \item El usuario selecciona el periodo y la zona.
+    \item El sistema muestra visitas, pass-by, permanencia, captación, densidad y su evolución en el tiempo.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} El usuario marca hasta cinco rangos de tiempo
+en la línea de tiempo de la sesión; el tablero muestra solo esos rangos y
+compara sus indicadores con la sesión completa.
+
+\textbf{Postcondiciones:} Métricas agregadas por zona sin datos personales (Figura~\ref{fig:cu08}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-08.png}
+\caption{CU-08: Consultar insights por zona}
+\label{fig:cu08}
+\end{figure}
+
+\FloatBarrier
+\subsection{Requisitos funcionales y no funcionales}
+
+{\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{|L{0.08\textwidth}|L{0.30\textwidth}|L{0.52\textwidth}|}
+\caption{Requisitos Funcionales y No Funcionales}
+\label{tab:requisitos} \\
+\hline
+\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
+\hline
+\endfirsthead
+\hline
+\multicolumn{3}{|l|}{\textit{Requisitos (continuación)}} \\
+\hline
+\textbf{ID} & \textbf{Requisito} & \textbf{Criterio de aceptación / Verificación} \\
+\hline
+\endhead
+\hline
+\endlastfoot
+\multicolumn{3}{|l|}{\textbf{Funcionales}} \\[2pt]
+\hline
+RF-01 & Autenticación y control de acceso por roles & Solo usuarios autenticados acceden; superadmin hace todo, seguridad opera En vivo, Teléfonos y Videos, y negocio consulta Insights y Ventas \\
+\hline
+RF-02 & Monitoreo en vivo sobre el mapa 2D & Plano con personas seudónimas, estado, zona actual, trayectorias y video de las cámaras asignadas \\
+\hline
+RF-03 & Personalización del mapa, cámaras y zonas & Ubicar y orientar cámaras y dibujar zonas con nombre, tipo y color; crear, modificar y eliminar con cambios persistentes \\
+\hline
+RF-04 & Análisis histórico del movimiento & Reproducción temporal, mapa de calor y flujos entre zonas para un periodo filtrado \\
+\hline
+RF-05 & Insights comerciales segmentados por zona & Visitas, pass-by, permanencia, captación y densidad por zona y periodo; exportables \\
+\hline
+RF-06 & Seguimiento multicámara seudónimo de personas & Detectar y seguir personas, asociarlas entre cámaras sin reconocimiento facial, asignar identificador seudónimo y registrar trayectorias \\
+\hline
+RF-07 & Ventas y conversión por local & Cargar tickets de caja, emparejar cada compra con una visita, mostrar conversión, patrones por hora y pronóstico \\
+\hline
+RF-08 & Procesamiento de videos subidos & Procesar hasta 10 videos a la vez, con IDs compartidos entre los del mismo lugar, sin guardar el video \\
+\hline
+RF-09 & Solicitudes de cuenta & Pedir y aprobar cambios de correo y permisos temporales de exportación \\
+\hline
+\multicolumn{3}{|l|}{\textbf{No funcionales}} \\[2pt]
+\hline
+RNF-01 & Seguridad & Conexión segura (HTTPS) y límite de peticiones por IP; contraseñas con hash argon2id, sesiones revocables, bloqueo tras 8 intentos y bitácora de accesos \\
+\hline
+RNF-02 & Privacidad y normativa & Sin rostros, recortes ni video almacenados; identificadores seudónimos de sesión; vectores de apariencia solo en la memoria en vivo, borrados tras 24 horas sin ver a la persona; sin inferencia de género; cumplimiento de la Ley N.\textdegree~29733 \\
+\hline
+RNF-03 & Integridad de datos & Rechazo de cambios simultáneos conflictivos, de geometrías inválidas y de filas que violen las restricciones del esquema \\
+\hline
+RNF-04 & Rendimiento & Consultas y actualización del mapa en tiempos aceptables para la operación \\
+\hline
+RNF-05 & Fluidez de visualización & Animación continua y respuesta inmediata a la interacción \\
+\hline
+RNF-06 & Disponibilidad & Verificación de estado y recuperación automática ante fallos \\
+\hline
+RNF-07 & Portabilidad & Despliegue en contenedores; plano local sin servicios externos \\
+\hline
+RNF-08 & Usabilidad & Confirmación antes de borrar; interfaz aprendible sin capacitación extensa \\
+\hline
+RNF-09 & Mantenibilidad & API versionada, migraciones de base de datos versionadas y pruebas automatizadas \\
+\hline
+RNF-10 & Compatibilidad & Funcionamiento en navegadores modernos; cámara solo con conexión segura \\
+\hline
+RNF-11 & Precisión del seguimiento & Identidades consistentes dentro de cada cámara y entre cámaras, validadas con videos etiquetados \\
+\hline
+RNF-12 & Rendimiento del procesamiento de video & Procesamiento de varias cámaras simultáneas al ritmo del video \\
+\hline
+RNF-13 & Reproducibilidad & Pesos, configuración y versiones de dependencias registrados con huella SHA-256 en cada sesión de análisis \\
+\end{longtable}
+}
+
+\FloatBarrier
+
+\section{Arquitectura del sistema}
+\label{sec:arquitectura}
+
+El sistema se compone de servicios en contenedores Docker que se ejecutan en
+una computadora local con GPU; el modelo en vivo corre directamente en Windows
+(\texttt{camara\_telefono.py}) o en Docker con la GPU (servicio
+\texttt{modelo-gpu}, perfil \texttt{gpu}). El análisis de sesiones grabadas y el
+monitoreo en vivo usan backends y bases de datos separados, y la aplicación
+web reúne ambos (Figura~\ref{fig:arquitectura} y Cuadro~\ref{tab:componentes}).
+El código fuente de todos los componentes, las migraciones de la base de datos
+y los notebooks del modelo están en
+\url{https://github.com/23-Andres-QC/Aeropuerto}.
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/arquitectura.png}
+\caption{Arquitectura de TrackFlow.}
+\label{fig:arquitectura}
+\end{figure}
+
+\begin{table}[H]
+\caption{Componentes del sistema}
+\label{tab:componentes}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.17\textwidth}|L{0.27\textwidth}|L{0.48\textwidth}|}
+\hline
+\textbf{Componente} & \textbf{Tecnología} & \textbf{Función} \\
+\hline
+\texttt{web} & Vue~3, TypeScript, nginx & Interfaz y proxy hacia los backends y la cámara \\
+\hline
+\texttt{backend} & Go & API REST de sitios, cámaras, locales, zonas, sesiones, insights, tráfico, ventas, cuentas y solicitudes \\
+\hline
+\texttt{db} & PostgreSQL~17 y PostGIS & Plano, zonas, sesiones, trayectorias, analítica, ventas y cuentas \\
+\hline
+\texttt{camara-web} & Go & Convierte el navegador de un teléfono en cámara \\
+\hline
+\texttt{modelo-vivo} & Python, PyTorch, ONNX Runtime & Modelo en vivo sobre los teléfonos y los videos subidos \\
+\hline
+\texttt{backend-vivo} & Go & Teléfonos, videos subidos, relevo de video y detecciones, memoria de identidades \\
+\hline
+\texttt{vivo-db} & PostgreSQL~17 y pgvector & Memoria de identidades en vivo \\
+\hline
+Build e Insights & Python & Partes I y II sobre video grabado, y Parte~III \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+\subsection{Usuarios y acceso}
+
+El Cuadro~\ref{tab:usuarios} resume quién usa el sistema, cómo accede y qué
+hace en él.
+
+\begin{table}[H]
+\caption{Usuarios del sistema}
+\label{tab:usuarios}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.16\textwidth}|L{0.19\textwidth}|L{0.33\textwidth}|L{0.22\textwidth}|}
+\hline
+\textbf{Usuario} & \textbf{Acceso} & \textbf{Qué hace} & \textbf{Secciones y servicios} \\
+\hline
+Superadmin & Web, con cuenta & Configura sitios, cámaras, locales y zonas; crea cuentas; aprueba solicitudes; aplica la retención & Todas las secciones \\
+\hline
+Seguridad & Web, con cuenta & Activa el modo en vivo, une teléfonos y procesa videos & En vivo, Videos y Teléfonos \\
+\hline
+Negocio & Web, con cuenta & Consulta métricas y ventas; exporta solo con permiso aprobado & Insights y Ventas \\
+\hline
+Operador de cámara & Página de cámara del teléfono, con código de unión & Une su teléfono como cámara del sitio & \texttt{/camara/} \\
+\hline
+Procesos por lotes & API REST & El Build publica sesiones y la Parte~III, eventos y métricas & \texttt{/api/v1/sites/}\allowbreak\texttt{\{sitio\}/...} \\
+\hline
+Modelo en vivo & Red interna del servidor & Lee el video de los teléfonos y publica detecciones e identidades & \texttt{camara-web} y \texttt{backend-vivo} \\
+\hline
+\end{tabular}
+\end{table}
+
+No hay registro público: el superadmin crea cada cuenta en la sección Cuentas
+(Figura~\ref{fig:cuentas}), que entrega una contraseña temporal una sola vez y
+obliga a elegir una propia en el primer ingreso (Figura~\ref{fig:login}). Las
+contraseñas se guardan como hash argon2id; la sesión es una cookie
+\textit{HttpOnly} cuyo secreto la base guarda solo como SHA-256, por lo que
+revocarla sobrevive a un reinicio; ocho contraseñas equivocadas bloquean la
+cuenta 15 minutos, y una bitácora registra ingresos, cambios de cuentas y de
+retención, sin contraseñas ni llaves. Desde Solicitudes
+(Figura~\ref{fig:solicitudes}) el superadmin aprueba los cambios de correo y
+los permisos de exportación, que dejan a una cuenta descargar y enviar por
+correo los reportes de Insights solo durante el tiempo elegido. La página de
+cámara se une con un código que el superadmin crea en Teléfonos y que viaja en
+el primer mensaje del WebSocket, nunca en la URL.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/cuentas.png}
+\caption{Cuentas: usuarios con sus roles, estado y último ingreso (los correos
+se taparon en la figura).}
+\label{fig:cuentas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/login.png}
+\caption{Ingreso a la aplicación.}
+\label{fig:login}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/solicitudes.png}
+\caption{Solicitudes de cambio de correo y de permisos de exportación.}
+\label{fig:solicitudes}
+\end{figure}
+
+\subsection{Infraestructura de despliegue}
+
+El sistema corre en una computadora local con GPU (Cuadro~\ref{tab:infra}).
+Los servicios web, los backends y las bases van en Docker Compose; el modelo
+en vivo, que también procesa los videos subidos, usa la GPU de dos formas:
+directamente en Windows (\texttt{camara\_telefono.py}) o, si el Control
+inteligente de aplicaciones de Windows bloquea las DLL de PyTorch, dentro de
+Docker (servicio \texttt{modelo-gpu}, perfil \texttt{gpu}). Sin GPU, el perfil \texttt{modelo} lo ejecuta en CPU dentro de
+Docker con YOLO26s a 640~px.
+
+\begin{table}[H]
+\caption{Configuración del equipo de despliegue}
+\label{tab:infra}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.22\textwidth}|L{0.70\textwidth}|}
+\hline
+\textbf{Elemento} & \textbf{Configuración} \\
+\hline
+Procesador & Intel Core i7-13620H: 10 núcleos y 16 hilos \\
+\hline
+GPU & NVIDIA GeForce RTX~4060 Laptop, 8~GB \\
+\hline
+Memoria & 16~GB de RAM \\
+\hline
+Contenedores & Docker Compose: \texttt{web}, \texttt{backend}, \texttt{db}, \texttt{camara-web}, \texttt{backend-vivo} y \texttt{vivo-db}, con reinicio automático \\
+\hline
+Modelo en vivo & Proceso de Python con PyTorch y CUDA sobre la GPU, en Windows o en Docker (\texttt{modelo-gpu}), para teléfonos y videos subidos \\
+\hline
+Red & Web en \texttt{http://localhost:8080} y \texttt{https://localhost:8443}; página de cámara en \texttt{https://<IP-de-la-computadora>:8444} para los teléfonos de la misma Wi-Fi \\
+\hline
+Configuración & \texttt{.env} con las contraseñas de las bases, la cuenta semilla y la llave de los scripts \\
+\hline
+\end{tabular}
+\end{table}
+
+La primera versión se desplegó en una máquina virtual de Google Cloud sin GPU
+(\texttt{c4a-highcpu-8}, 8 vCPU Arm y 16~GB de RAM, en Santiago de Chile),
+donde el modelo en vivo corría en CPU a unos 4 a 6 cuadros por segundo con
+pocas personas. El sistema pasó a la computadora local porque el modelo de
+Videos, la re-identificación con OSNet-AIN y PersonViT y el procesamiento de
+varias cámaras a la vez necesitan una GPU. Cada imagen ejecuta sus pruebas al
+construirse; si una falla, los servicios en marcha no se reemplazan. La web y
+la página de cámara se sirven por HTTPS, requisito de los navegadores para usar
+la cámara del teléfono.
+
+\subsection{Costos de la infraestructura}
+
+El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
+computadora propia con el de la nube. El servidor de Google Cloud se calculó
+con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
+impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
+(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
+Para la computadora propia se toma una PC de escritorio con Core
+i5-12400F, 16~GB de RAM, 1~TB de SSD y una RTX~4060 de 8~GB, que Promart
+vende en S/~4\,579 y Falabella en S/~4\,799 (S/~5\,500 de lista en las
+dos; consultado el 11 de noviembre de 2026)~\cite{promart-pc,falabella-pc}.
+Los S/~4\,579 (US\$~1\,220), amortizados en 36 meses y con 250~W encendidos todo el día, a la tarifa
+de Osinergmin~\cite{osinergmin}, suman unos US\$~70 al mes. La computadora
+propia cuesta casi lo mismo que el servidor sin GPU encendido solo en
+horario de uso y menos que cualquier nube con GPU a demanda; el video no
+sale de la red y el costo es fijo. Este cálculo sostiene el costo por cámara
+del plan de negocio (Sección~\ref{sec:negocio}).
+
+\begin{table}[H]
+\caption{Costo mensual del procesamiento: computadora propia y nube}
+\label{tab:costos}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.30\textwidth}|L{0.44\textwidth}|R{0.16\textwidth}|}
+\hline
+\textbf{Opción} & \textbf{Base de cálculo} & \textbf{US\$ al mes} \\
+\hline
+Computadora propia con GPU & US\$~1\,220 (S/~4\,579) en 36 meses más energía (250~W, S/~0.72 por kWh) & $\approx$ 70 \\
+\hline
+\multicolumn{3}{|l|}{\textit{Primer despliegue: Google Cloud sin GPU (\texttt{c4a-highcpu-8})}} \\
+\hline
+Máquina virtual & Bajo demanda: US\$0.4333 por hora & 316.34 \\
+\hline
+Disco, IP y tráfico & 77~GB, IP externa y 20~GB de salida & 18.46 \\
+\hline
+\textbf{Total, encendido todo el mes} & & \textbf{334.80} \\
+\hline
+Compromiso de 1 año & Descuento por uso comprometido & 208.69 \\
+\hline
+Compromiso de 3 años & Descuento por uso comprometido & 142.39 \\
+\hline
+Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 \\
+\hline
+Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
+\hline
+\multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
+\hline
+A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
+\hline
+Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
+\hline
+\end{tabular}
+\end{table}
+
+Los valores anteriores del servidor y de la computadora propia son de un equipo
+sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
+estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
+de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
+dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
+horas encendida (720 horas equivale a tenerla prendida todo el mes). El
+Cuadro~\ref{tab:nube-resumen} reúne los totales mensuales, el
+Cuadro~\ref{tab:nube-config} indica la configuración de cada calculadora y el
+Cuadro~\ref{tab:nube-gcp} desglosa el cálculo de Google Cloud. Las capturas de
+cada calculadora están en el Anexo.
+
+\begin{table}[H]
+\caption{Costo mensual de una máquina virtual con GPU T4 en la nube (calculadoras oficiales, US\$)}
+\label{tab:nube-resumen}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.24\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|R{0.17\textwidth}|}
+\hline
+\textbf{Horas al mes} & \textbf{Google Cloud} & \textbf{AWS} & \textbf{Azure} \\
+\hline
+240 & 130.60 & 129.35 & 137.04 \\
+\hline
+360 & 195.40 & 192.07 & 200.76 \\
+\hline
+720 & 389.80 & 386.52 & 391.92 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Configuración usada en cada calculadora}
+\label{tab:nube-config}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.14\textwidth}|L{0.20\textwidth}|L{0.58\textwidth}|}
+\hline
+\textbf{Proveedor} & \textbf{Región} & \textbf{Configuración} \\
+\hline
+Google Cloud (Compute Engine) & Iowa (\texttt{us-central1}) & \texttt{n1-standard-4} (4 vCPU, 15~GB de RAM) con 1 GPU NVIDIA T4, sistema libre (Debian o Ubuntu), modelo regular (a demanda), disco \textit{balanced} de 10~GiB, 1 instancia, sin descuentos por uso sostenido ni comprometido \\
+\hline
+AWS (Amazon EC2) & Este de EE.\,UU. (Ohio) & Instancia con GPU T4 llamada ``TrackFlow GPU T4'', a demanda, con tenencia compartida y sin costo inicial \\
+\hline
+Azure & East US & Máquina virtual con GPU T4, 1 dirección IP estática estándar (ARM), soporte Basic incluido y contrato de cliente de Microsoft (MCA) \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Desglose del cálculo de Google Cloud (US\$ al mes)}
+\label{tab:nube-gcp}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{|L{0.40\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|R{0.12\textwidth}|}
+\hline
+\textbf{Componente} & \textbf{240 h} & \textbf{360 h} & \textbf{720 h} \\
+\hline
+Máquina \texttt{n1-standard-4} (US\$0.19 por hora) & 45.60 & 68.40 & 136.80 \\
+\hline
+GPU NVIDIA T4 (US\$0.35 por hora) & 84.00 & 126.00 & 252.00 \\
+\hline
+Disco \textit{balanced} de 10~GiB & 1.00 & 1.00 & 1.00 \\
+\hline
+\textbf{Total} & \textbf{130.60} & \textbf{195.40} & \textbf{389.80} \\
+\hline
+\end{tabular}
+\end{table}
+
+En Azure, la calculadora sumó además una dirección IP estática (1.20, 1.80 y
+3.60 al mes en los tres escenarios). Frente a los $\approx$ US\$~70 al mes de la
+computadora propia, la nube con GPU cuesta casi el doble con 240 horas
+encendida y unas cinco veces y media con 720 horas, y los tres proveedores
+quedan a menos de 6\,\% entre sí en cada escenario, por lo que la decisión
+depende más de las horas de uso, la ubicación de los datos y el costo de
+transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
+fija ni la salida de datos, que se suman aparte.
+
+Fuera de las tres grandes nubes hay opciones más baratas para correr el
+modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
+Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
+las que se pudieron verificar en noviembre de 2026, con el precio por hora
+publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
+tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
+nube comunitaria cambian cada día y la máquina puede detenerse o no estar
+disponible; Hetzner cobra por hora hasta un tope mensual y una tarifa de
+instalación de 209~euros, y sus euros se pasaron a dólares con la referencia
+del BCE del 10 de noviembre de 2026 (1.1214)~\cite{ecb-eurusd}.
+
+\begin{table}[!ht]
+\caption{Nubes con GPU para correr el modelo, de la más económica a la más cara (US\$, noviembre de 2026)}
+\label{tab:nube-proveedores}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{|L{0.45\textwidth}|L{0.13\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|R{0.06\textwidth}|}
+\hline
+\textbf{Proveedor y máquina} & \textbf{GPU} & \textbf{US\$/h} & \textbf{240~h} & \textbf{360~h} & \textbf{720~h} \\
+\hline
+Vast.ai, mercado de GPU~\cite{vast-3060} & RTX 3060 & 0.076 & 18.24 & 27.36 & 54.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, \textit{spot}, East US~\cite{sparecores-t4} & T4 & 0.1641 & 39.38 & 59.08 & 118.15 \\
+\hline
+AWS \texttt{g4dn.xlarge}, \textit{spot}, us-east-1~\cite{doit-g4dn} & T4 & 0.2137 & 51.29 & 76.93 & 153.86 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & RTX 4090 & 0.34 & 81.60 & 122.40 & 244.80 \\
+\hline
+Hetzner GEX45, servidor dedicado~\cite{hetzner-gex} & RTX PRO 4000 & 0.3845 & 92.29 & 138.43 & 239.98 \\
+\hline
+AWS \texttt{g6.xlarge}, \textit{spot}, us-east-1~\cite{doit-g6} & L4 & 0.3941 & 94.58 & 141.88 & 283.75 \\
+\hline
+RunPod, nube comunitaria~\cite{runpod} & L4 & 0.44 & 105.60 & 158.40 & 316.80 \\
+\hline
+AWS \texttt{g4dn.xlarge}, a demanda, us-east-1~\cite{doit-g4dn} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Azure \texttt{NC4as\_T4\_v3}, a demanda, East US~\cite{azurespeed-t4} & T4 & 0.526 & 126.24 & 189.36 & 378.72 \\
+\hline
+Google Cloud \texttt{n1-standard-4} + T4~\cite{gcp-vm,gcp-gpu} & T4 & 0.54 & 129.60 & 194.40 & 388.80 \\
+\hline
+Paperspace~\cite{paperspace} & RTX 4000 & 0.56 & 134.40 & 201.60 & 403.20 \\
+\hline
+RunPod, nube segura~\cite{runpod} & L4 & 0.59 & 141.60 & 212.40 & 424.80 \\
+\hline
+Google Cloud \texttt{g2-standard-4}~\cite{gcp-g2} & L4 & 0.7068 & 169.64 & 254.46 & 508.92 \\
+\hline
+DigitalOcean, GPU Droplet~\cite{do-gpu} & RTX 4000 Ada & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+Paperspace~\cite{paperspace} & A4000 & 0.76 & 182.40 & 273.60 & 547.20 \\
+\hline
+AWS \texttt{g6.xlarge}, a demanda, us-east-1~\cite{doit-g6} & L4 & 0.8048 & 193.15 & 289.73 & 579.46 \\
+\hline
+RunPod, nube segura~\cite{runpod} & RTX 4090 & 0.89 & 213.60 & 320.40 & 640.80 \\
+\hline
+\hline
+\textit{Referencia: computadora propia} (Cuadro~\ref{tab:costos}) & RTX 4060 & -- & 70 & 70 & 70 \\
+\hline
+\end{tabular}
+\end{table}
+
+Con 240 horas al mes, Vast.ai y las máquinas \textit{spot} con T4 cuestan
+menos que la computadora propia; encendidas todo el mes, solo Vast.ai
+queda por debajo. Sin contar las \textit{spot}, la opción más barata todo
+el mes después de Vast.ai es el servidor dedicado de Hetzner (US\$~240 con
+el tope mensual, más la instalación), y las T4 a demanda de AWS, Azure y
+Google Cloud quedan entre US\$~379 y 389.
+
+\FloatBarrier
+\subsection{Base de datos}
+
+Se usan dos bases. \texttt{db} (PostgreSQL~17 con PostGIS) guarda los sitios y
+todo lo que se analiza en ellos; \texttt{vivo-db} (PostgreSQL~17 con pgvector)
+guarda solo la memoria de identidades del modo en vivo
+(Figura~\ref{fig:bd}). Ambas se crean con migraciones versionadas que los
+backends aplican al iniciar.
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.65\linewidth]{figuras/arquitectura/base-de-datos.png}
+\caption{Modelo entidad-relación de las bases de datos.}
+\label{fig:bd}
+\end{figure}
+
+\begin{itemize}\sloppy
+    \item \textbf{Espacio:} \texttt{sites}, \texttt{cameras}, \texttt{locales}
+    y \texttt{zones}, en metros en un sistema local (SRID~0). Las zonas
+    INTERIOR y FRONTAGE deben pertenecer a un local y toda geometría debe ser
+    válida.
+    \item \textbf{Sesiones y trayectorias:} \texttt{sessions} (BUILD, LIVE o VIDEO),
+    \texttt{identities}, \texttt{tracklets} y \texttt{trajectory\_points}. La
+    geometría de cada punto se calcula en la base y se conserva la posición
+    original del modelo junto a la ajustada al piso.
+    \item \textbf{Analítica:} \texttt{spatial\_events}, con la duración
+    calculada en la base, y \texttt{session\_analytics}, con los parámetros y
+    los resultados de la Parte~III.
+    \item \textbf{Tráfico:} \texttt{traffic\_buckets} (personas, visitas,
+    quienes se detienen e interesados por zona en ventanas de 5, 15 y 60
+    minutos), \texttt{heat\_cells} (segundos-persona por celda de 1~m y hora),
+    \texttt{traffic\_runs} y \texttt{traffic\_params} (umbrales por sitio).
+    \item \textbf{Ventas:} \texttt{sales\_tickets} y \texttt{sales\_items}
+    (compras reales o simuladas, en centavos), \texttt{sales\_matches} y
+    \texttt{sales\_match\_runs} (cada compra con la visita que la hizo y su
+    confianza) y \texttt{visit\_counts}.
+    \item \textbf{Cuentas:} \texttt{users} (con hash argon2id y rol),
+    \texttt{auth\_sessions}, \texttt{password\_reset\_tokens},
+    \texttt{account\_requests} (solicitudes), \texttt{store\_api\_keys} y
+    \texttt{audit\_log} (bitácora).
+    \item \textbf{Memoria en vivo:} \texttt{personas}, \texttt{vistas} y
+    \texttt{numeracion}, con vectores Re-ID de 512 valores, sin imágenes, borrados a las 24 horas.
+\end{itemize}
+
+Una pasada diaria aplica la retención: borra los puntos de trayectoria de las
+sesiones de más de 90 días cuyo tráfico ya se agregó, y conserva sin límite los
+eventos espaciales, los análisis y los agregados.
+
+\subsection{Backend}
+
+El backend se divide en dos servicios en Go (Figura~\ref{fig:backend} y
+Cuadro~\ref{tab:api}):
+
+\begin{itemize}
+    \item \textbf{\texttt{backend}:} arquitectura hexagonal. El núcleo
+    (\texttt{domain}, \texttt{ports} y \texttt{services}) contiene las
+    entidades, las validaciones y los casos de uso, sin depender de HTTP ni de
+    SQL. Los adaptadores de entrada (\texttt{httpapi} y \texttt{relay})
+    exponen la API REST y el relevo por WebSocket, y los de salida
+    (\texttt{postgres} y \texttt{memory}) implementan los puertos sobre
+    PostGIS y en memoria.
+    \item \textbf{\texttt{backend-vivo}:} mantiene la lista de teléfonos, la
+    lista de videos subidos en disco temporal, el relevo de video y
+    detecciones, y la memoria de identidades sobre pgvector. ``Olvidar a
+    todos'' vacía la memoria, reinicia la numeración y rechaza cualquier
+    guardado anterior.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/arquitectura/backend.png}
+\caption{Arquitectura de los servicios del backend.}
+\label{fig:backend}
+\end{figure}
+
+{\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{|L{0.42\textwidth}|L{0.50\textwidth}|}
+\caption{Recursos de las API}
+\label{tab:api} \\
+\hline
+\textbf{Ruta} & \textbf{Uso} \\
+\hline
+\endfirsthead
+\hline
+\multicolumn{2}{|l|}{\textit{Recursos de las API (continuación)}} \\
+\hline
+\textbf{Ruta} & \textbf{Uso} \\
+\hline
+\endhead
+\multicolumn{2}{|l|}{\textit{backend}: \texttt{/api/v1/sites/\{sitio\}}} \\
+\hline
+\texttt{GET /config} · \texttt{PUT /plano} & Plano calibrado, dibujo del plano, cámaras, locales y zonas \\
+\hline
+\texttt{/cameras} · \texttt{/locales} · \texttt{/zones} & Crear, editar y borrar \\
+\hline
+\texttt{/sessions} & Listar, publicar (Build y capturas en vivo) y borrar sesiones \\
+\hline
+\texttt{/sessions/\{id\}/replay} · \texttt{/insights} & Reproducción sobre el plano y agregados \\
+\hline
+\texttt{/sessions/\{id\}/points} · \texttt{/analytics} & Entrada y resultados de la Parte~III \\
+\hline
+\texttt{/media/\{archivo\}} & Videos procesados del Build \\
+\hline
+\texttt{/trafico/...} & Resumen, serie, calor, permanencia y embudo por período y franja; umbrales \\
+\hline
+\texttt{/ventas/...} & Tickets, resumen, patrones, pronóstico, simulados y emparejamiento \\
+\hline
+\multicolumn{2}{|l|}{\textit{backend}: cuentas y privacidad, \texttt{/api/v1}} \\
+\hline
+\texttt{/auth/...} & Ingreso, salida, cambio y recuperación de contraseña \\
+\hline
+\texttt{/usuarios} · \texttt{/usuarios/solicitudes} & Cuentas, roles y solicitudes \\
+\hline
+\texttt{/mi/...} & Perfil, cambio de correo y exportación con permiso \\
+\hline
+\texttt{/auditoria} · \texttt{/privacidad} & Bitácora, retención y depuración \\
+\hline
+\multicolumn{2}{|l|}{\textit{backend-vivo}: \texttt{/vivo/api/v1}} \\
+\hline
+\texttt{/telefonos} & Teléfonos conectados como cámaras \\
+\hline
+\texttt{/videos} & Videos subidos por tandas y resumen de cada uno \\
+\hline
+\texttt{/cameras/\{id\}/publish} · \texttt{/watch} & Relevo de video y detecciones por WebSocket \\
+\hline
+\texttt{/personas} & Memoria de identidades \\
+\hline
+\end{longtable}
+}
+
+\FloatBarrier
+\subsection{Frontend}
+
+Aplicación de una sola página en Vue~3 con TypeScript, compilada con Vite y
+servida por nginx, que además redirige \texttt{/api/}, \texttt{/vivo/} y
+\texttt{/camara/} a sus servicios, verifica la sesión antes de dejar pasar a
+cada servicio según el rol, añade cabeceras de seguridad y limita las
+peticiones por IP. El código se organiza por funcionalidades sobre un núcleo
+común (Figura~\ref{fig:frontend}). Tras el ingreso, cada sitio tiene las mismas
+nueve secciones, y cada rol ve solo las suyas:
+
+\begin{enumerate}
+    \item \textbf{En vivo:} reproduce una sesión sobre el plano con los videos
+    sincronizados, el seguimiento y el mapa de calor de la misma zona (patio,
+    comedor o pasillo del Edificio D), o, en modo en vivo, muestra lo que ven
+    los teléfonos y permite iniciar y guardar una captura. Lo grabado se ve
+    zona por zona: al elegir Patio, Comedor o Pasillo del Edificio D (en la
+    fila ``Ir a'' o con un clic en el campus) el plano queda fijo en esa zona
+    y dibuja solo su plano, sus zonas y sus cámaras; ``Todo el campus'' lo
+    suelta. Al activar el en vivo se elige la zona que se graba: la captura
+    se guarda solo en ella, el plano no sale de su marco y los teléfonos
+    toman las cámaras de esa zona (cam06 y cam07 en el pasillo).
+    \item \textbf{Videos:} videos de cualquier origen, subidos por tandas y
+    procesados todos a la vez sin guardarse, con un resumen de cada uno
+    (Figura~\ref{fig:web-videos}).
+    \item \textbf{Insights:} tablero de métricas, mapas de movimiento y de
+    calor, rutas y flujos, filtrable por sesión y zona, con el tráfico por
+    franja y fecha, y una línea de tiempo de la sesión en la que se marcan
+    hasta cinco rangos (arrastrando, escribiendo el inicio y el fin o
+    haciendo clic en la línea): todo el tablero muestra solo esos rangos, los
+    mapas distinguen cada uno por color y una tabla compara sus indicadores
+    con la sesión completa. Es exportable a PDF y CSV, con los rangos y los
+    mapas de cada uno, y enviable por correo
+    (Figuras~\ref{fig:web-insights} y~\ref{fig:web-insights-pdf}).
+    \item \textbf{Ventas:} tickets reales o simulados, conversión por local
+    elegido en el plano, cuándo se vende, emparejamiento de cada compra con la
+    visita que la hizo y pronóstico con simulador de escenarios
+    (Figura~\ref{fig:web-ventas}).
+    \item \textbf{Registros:} capturas en vivo, videos y grabaciones guardadas,
+    con fecha, duración, personas y puntos (Figura~\ref{fig:telefonos-registros}).
+    \item \textbf{Configuración:} zonas, tiendas y cámaras sobre el plano,
+    umbrales de tráfico (Figura~\ref{fig:web-config}).
+    \item \textbf{Teléfonos:} código de unión en QR, cámaras de teléfono con el
+    proceso del modelo y memoria de personas (Figura~\ref{fig:web-telefonos}).
+    \item \textbf{Cuentas:} cuentas, accesos, bitácora y privacidad.
+    \item \textbf{Solicitudes:} cambios de correo y permisos de exportación.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/frontend.png}
+\caption{Arquitectura del frontend.}
+\label{fig:frontend}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/arquitectura/web-configuracion.png}
+\caption{Configuración: zonas, tiendas y cámaras sobre el plano del sitio, con
+las tres zonas grabadas de ESAN (el patio con cam01 a cam03, el comedor con
+cam04 y cam05, y el pasillo del Edificio D con cam06 y cam07, la L celeste
+pegada al comedor), y umbrales de tráfico.}
+\label{fig:web-config}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/videos.png}
+\caption{Videos: dos cámaras del mismo lugar procesadas como una tanda, con
+el resumen de cada video.}
+\label{fig:web-videos}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.8\linewidth]{figuras/plataforma/insights.png}
+\caption{Insights de una captura en vivo con dos teléfonos en el pasillo del
+Edificio D (9 de noviembre): personas, permanencia, captación, densidad, línea
+de tiempo y resumen de la sesión.}
+\label{fig:web-insights}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.55\linewidth]{figuras/plataforma/insights-pdf.png}
+\caption{Reporte de Insights exportado a PDF.}
+\label{fig:web-insights-pdf}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/ventas.png}
+\caption{Ventas: selección de locales en el plano y pestañas de resumen,
+pronóstico, patrones, emparejamiento, tickets y datos.}
+\label{fig:web-ventas}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\safeincludegraphics[width=\linewidth]{figuras/plataforma/telefonos.png}
+\caption{Teléfonos: código de unión en QR (borroso en la figura), cámaras
+conectadas y memoria de personas, que se olvida tras 24 horas.}
+\label{fig:web-telefonos}
+\end{minipage}
+\end{figure}
+
+\FloatBarrier
+
 \section{Planificación y gestión del proyecto}
 \label{sec:gestion}
 
@@ -5680,7 +5555,7 @@ Dispersión & Más personas por cámara, menos cuadros por segundo (el par con m
 \hline
 Gráfico de control & Error de calibración frente al límite de 0.75~m \\
 \hline
-Diagrama de flujo & Flujo de la metodología (Figura~\ref{fig:flujo}) \\
+Diagrama de flujo & Flujo del sistema (Figura~\ref{fig:flujo}) \\
 \hline
 \end{tabular}
 \end{table}
@@ -6071,7 +5946,7 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
 \section{Plan de negocio}
 \label{sec:negocio}
 
-El plan de negocio lleva la tecnología de AeroVision fuera del aeropuerto, a
+El plan de negocio lleva la tecnología de TrackFlow fuera del aeropuerto, a
 cualquier lugar con público: tiendas a la calle o en galerías, malls,
 supermercados, farmacias, estaciones, terminales y aeropuertos. Las cifras de
 mercado y de precios son de fuentes públicas consultadas el 27 de octubre de
@@ -6085,7 +5960,7 @@ nadie responde con datos: una tienda no sabe cuántas de las personas que pasan
 por su puerta entran ni cuántas compran, y quien vende o compra publicidad no
 sabe cuánta gente ve realmente cada pantalla o espacio.
 
-\textbf{Idea.} AeroVision usa las cámaras que ya existen y una computadora que
+\textbf{Idea.} TrackFlow usa las cámaras que ya existen y una computadora que
 procesa las grabaciones de noche para medir dos cosas: la \textbf{captación de
 una tienda} (pasan, se detienen frente a la vitrina, entran y compran) y la
 \textbf{audiencia de un lugar} (cuántos lo ven y cuánto tiempo). Se vende como
@@ -6176,7 +6051,7 @@ Los dos productos funcionan en cualquier lugar con una cámara que vea la
 entrada o el espacio a medir (Cuadro~\ref{tab:productos}).
 
 \begin{table}[H]
-\caption{Productos de AeroVision}
+\caption{Productos de TrackFlow}
 \label{tab:productos}
 \centering
 \footnotesize
@@ -6213,7 +6088,7 @@ calcula, para el operador, el valor de cada local según su tráfico.
 
 \subsection{Lo que ya está construido}
 
-AeroVision ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
+TrackFlow ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
 código está en el repositorio
 \url{https://github.com/23-Andres-QC/Aeropuerto}, que suma 284 commits entre
 el 30 de septiembre y el 10 de noviembre de 2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
@@ -6290,14 +6165,14 @@ estaciones~\cite{energiminas}. El Cuadro~\ref{tab:competencia} compara a los
 competidores.
 
 \begin{table}[H]
-\caption{Competidores y diferencia de AeroVision}
+\caption{Competidores y diferencia de TrackFlow}
 \label{tab:competencia}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
 \begin{tabular}{|L{0.18\textwidth}|L{0.22\textwidth}|L{0.22\textwidth}|L{0.28\textwidth}|}
 \hline
-\textbf{Competidor} & \textbf{Tipo} & \textbf{Precio de referencia} & \textbf{Diferencia de AeroVision} \\
+\textbf{Competidor} & \textbf{Tipo} & \textbf{Precio de referencia} & \textbf{Diferencia de TrackFlow} \\
 \hline
 V-Count~\cite{vcount} & Sensor 3D propio y nube & $\sim$US\$~50 por sensor al mes & Usa la cámara existente y mide también a quienes pasan y se detienen \\
 \hline
@@ -6332,7 +6207,7 @@ debilidades para evitar amenazas (DA). El Cuadro~\ref{tab:foda} resume el
 análisis y el Cuadro~\ref{tab:foda-cruces}, las estrategias cruzadas.
 
 \begin{table}[H]
-\caption{FODA de AeroVision, octubre de 2026}
+\caption{FODA de TrackFlow, octubre de 2026}
 \label{tab:foda}
 \centering
 \footnotesize
@@ -6857,7 +6732,7 @@ Dic 2027 & 10 tiendas y 10 pantallas (25 cámaras); tercera computadora \\
 \label{sec:normativa}
 
 El tratamiento de datos se rige por la Ley N.\textdegree~29733~\cite{ley29733} y su reglamento,
-aprobado por el D.S. N.\textdegree~016-2024-JUS~\cite{reglamento29733}. AeroVision
+aprobado por el D.S. N.\textdegree~016-2024-JUS~\cite{reglamento29733}. TrackFlow
 actúa como encargado del tratamiento del cliente: procesa las grabaciones
 dentro de su red o en su propia computadora, no guarda imágenes ni rostros,
 borra el video al terminar y entrega solo conteos y tasas.
@@ -7289,7 +7164,7 @@ Biométricos,'' 2026. [En línea]. Disponible:
 \url{https://modelo.pe/clausula-de-consentimiento-para-tratamiento-de-datos-sensibles-y-biometricos/}
 
 \bibitem{matrices2026}
-AeroVision, ``Matrices de cumplimiento legal y ético,'' borrador v2, documento
+TrackFlow, ``Matrices de cumplimiento legal y ético,'' borrador v2, documento
 interno del proyecto, 7 de noviembre de 2026.
 
 
@@ -7404,6 +7279,282 @@ el sistema ubica a cada persona sobre el plano.
 \caption{Proceso de prueba y ubicación de las personas en el área mapeada.}
 \label{fig:pruebas-area-mapeada}
 \end{figure}
+
+\subsection*{Casos de uso detallados}
+\label{anexo:casos-uso}
+
+Detalle de los casos de uso del Cuadro~\ref{tab:casos-uso} que no se
+desarrollan como ejemplo en la Sección~\ref{sec:requisitos}.
+
+\textbf{CU-01: Iniciar y cerrar sesión}
+
+\textbf{Actor principal:} Usuario comercial, Usuario administrador \\
+\textbf{Requisito:} RF-01
+
+\textbf{Historia de usuario:} Como usuario del sistema, quiero iniciar sesión con mis credenciales y cerrarla al terminar, para acceder de forma segura solo a las funciones permitidas por mi rol.
+
+\textbf{Precondiciones:} El usuario está registrado y activo.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario ingresa su usuario y contraseña.
+    \item El sistema valida las credenciales y el rol.
+    \item El sistema redirige a la vista permitida para su rol.
+    \item Al pulsar ``Cerrar sesión'', el sistema invalida la sesión.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si las credenciales son inválidas, el sistema
+muestra un error; tras varios intentos fallidos, bloquea el acceso
+temporalmente.
+
+\textbf{Postcondiciones:} Sesión activa con los permisos del rol, o sesión cerrada (Figura~\ref{fig:cu01}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-01.png}
+\caption{CU-01: Iniciar y cerrar sesión}
+\label{fig:cu01}
+\end{figure}
+
+\textbf{CU-03: Reproducir histórico de movimiento}
+
+\textbf{Actor principal:} Usuario comercial, Usuario administrador \\
+\textbf{Requisito:} RF-04
+
+\textbf{Historia de usuario:} Como usuario del sistema, quiero reproducir el movimiento histórico de las personas en un periodo específico, para entender cómo se comportó el flujo en un momento pasado.
+
+\textbf{Precondiciones:} Existen posiciones registradas en el periodo.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario elige la ventana temporal.
+    \item El sistema carga la reproducción.
+    \item El usuario reproduce, pausa, arrastra la línea de tiempo o cambia la velocidad.
+    \item El sistema recalcula los indicadores en el instante reproducido.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si el filtro es inválido, el sistema lo
+rechaza con un mensaje.
+
+\textbf{Postcondiciones:} Movimiento del periodo reproducido junto con sus métricas (Figura~\ref{fig:cu03}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-03.png}
+\caption{CU-03: Reproducir histórico de movimiento}
+\label{fig:cu03}
+\end{figure}
+
+\textbf{CU-04: Configurar zonas del mapa}
+
+\textbf{Actor principal:} Usuario administrador \\
+\textbf{Requisito:} RF-03
+
+\textbf{Historia de usuario:} Como usuario administrador, quiero crear, modificar y eliminar zonas sobre el plano, para reflejar en el sistema la distribución real de puestos y áreas del aeropuerto.
+
+\textbf{Precondiciones:} Sesión de usuario administrador en la pantalla ``Configuración''.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario pulsa ``Editar'' y luego ``+ Zona''.
+    \item El usuario marca los vértices sobre el plano y pulsa ``Terminar zona''.
+    \item El usuario define nombre, tipo, color y, si es INTERIOR o FRONTAGE, su local.
+    \item El sistema valida la geometría y registra la zona.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si cancela, se descarta el borrador. Si la
+geometría es inválida, el sistema rechaza el cambio. Para quitar una zona,
+el usuario pulsa ``Eliminar zona''.
+
+\textbf{Postcondiciones:} Zona disponible en el mapa y en los insights (Figura~\ref{fig:cu04}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-04.png}
+\caption{CU-04: Configurar zonas del mapa}
+\label{fig:cu04}
+\end{figure}
+
+\textbf{CU-05: Configurar cámaras y cobertura}
+
+\textbf{Actor principal:} Usuario administrador \\
+\textbf{Requisito:} RF-03
+
+\textbf{Historia de usuario:} Como usuario administrador, quiero ubicar y orientar las cámaras en el plano, para que el sistema sepa qué zona física observa cada una.
+
+\textbf{Precondiciones:} Sesión de usuario administrador en la pantalla ``Configuración''.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario pulsa ``Editar'' y luego ``+ Cámara'', y marca su ubicación.
+    \item El usuario define su nombre, su posición (X, Y) y su dirección.
+    \item El usuario arrastra la cámara para moverla y su círculo para girarla; el plano muestra su campo de visión.
+    \item El sistema guarda la pose al soltarla.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Una cámara con trayectorias no se puede
+eliminar. Volver a publicar el Build no reemplaza una pose ajustada a mano.
+
+\textbf{Postcondiciones:} Cámara registrada en el plano con su posición y
+dirección (Figura~\ref{fig:cu05}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-05.png}
+\caption{CU-05: Configurar cámaras y cobertura}
+\label{fig:cu05}
+\end{figure}
+
+\textbf{CU-06: Ver cámara en vivo}
+
+\textbf{Actor principal:} Usuario administrador \\
+\textbf{Requisito:} RF-02
+
+\textbf{Historia de usuario:} Como usuario administrador, quiero ver en vivo lo que capta cada teléfono conectado como cámara, con las detecciones del modelo, para verificar directamente lo que ocurre en una zona.
+
+\textbf{Precondiciones:} Teléfonos unidos desde la página de cámara.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario abre la pantalla ``Teléfonos''.
+    \item El sistema muestra cada teléfono con las cajas y el ID que publica el modelo.
+    \item El usuario puede quitar un teléfono de la lista.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si el modelo no está procesando, se ve el
+video directo del teléfono.
+
+\textbf{Postcondiciones:} El teléfono quitado deja de enviar video (Figura~\ref{fig:cu06}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-06.png}
+\caption{CU-06: Ver cámara en vivo}
+\label{fig:cu06}
+\end{figure}
+
+\textbf{CU-07: Consultar mapa de calor}
+
+\textbf{Actor principal:} Usuario comercial \\
+\textbf{Requisito:} RF-04
+
+\textbf{Historia de usuario:} Como usuario comercial, quiero visualizar un mapa de calor de las zonas con mayor aglomeración en un periodo, para identificar los puntos de mayor tránsito y tomar decisiones comerciales informadas.
+
+\textbf{Precondiciones:} Existen posiciones históricas registradas.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario accede a la pantalla ``Insights''.
+    \item El usuario selecciona el periodo.
+    \item El sistema superpone el mapa de calor sobre el plano con su leyenda.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si el periodo no tiene datos, el sistema
+muestra el mapa vacío con un aviso.
+
+\textbf{Postcondiciones:} Zonas de mayor aglomeración identificadas (Figura~\ref{fig:cu07}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-07.png}
+\caption{CU-07: Consultar mapa de calor}
+\label{fig:cu07}
+\end{figure}
+
+\textbf{CU-09: Analizar flujos entre zonas}
+
+\textbf{Actor principal:} Usuario comercial \\
+\textbf{Requisito:} RF-04
+
+\textbf{Historia de usuario:} Como usuario comercial, quiero visualizar los flujos de personas entre zonas y su volumen, para entender las rutas más frecuentes y optimizar la ubicación de los puntos comerciales.
+
+\textbf{Precondiciones:} Existen entradas y salidas de zonas registradas.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario activa la capa de flujos.
+    \item El sistema dibuja las transiciones de origen a destino con su volumen.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si no hay transiciones en el periodo, el
+sistema muestra un aviso.
+
+\textbf{Postcondiciones:} Rutas más frecuentes entre zonas visibles (Figura~\ref{fig:cu09}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-09.png}
+\caption{CU-09: Analizar flujos entre zonas}
+\label{fig:cu09}
+\end{figure}
+
+\textbf{CU-10: Exportar reporte}
+
+\textbf{Actor principal:} Usuario comercial \\
+\textbf{Requisito:} RF-05
+
+\textbf{Historia de usuario:} Como usuario comercial, quiero exportar los insights de un periodo en CSV o PDF, para compartir los resultados con mi equipo o usarlos fuera del sistema.
+
+\textbf{Precondiciones:} Insights cargados para un periodo y, para el rol
+negocio, un permiso de exportación vigente aprobado en Solicitudes.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario pulsa ``Exportar'' o ``Enviar'' (por correo).
+    \item El usuario elige el formato CSV o PDF.
+    \item El sistema genera y descarga el archivo.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si la generación es prolongada, el sistema
+muestra el progreso.
+
+\textbf{Postcondiciones:} Reporte descargado (Figura~\ref{fig:cu10}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-10.png}
+\caption{CU-10: Exportar reporte}
+\label{fig:cu10}
+\end{figure}
+
+\textbf{CU-11: Procesar videos multicámara}
+
+\textbf{Actor principal:} Usuario administrador \\
+\textbf{Requisito:} RF-06
+
+\textbf{Historia de usuario:} Como usuario administrador, quiero que el sistema procese los videos de varias cámaras y siga a las personas de forma seudónima entre ellas, para obtener trayectorias completas sin identificar a nadie.
+
+\textbf{Precondiciones:} Videos y configuración de cámaras disponibles.
+
+\textbf{Flujo principal:}
+\begin{enumerate}
+    \item El usuario inicia el procesamiento de los videos.
+    \item El sistema abre una sesión de análisis con su configuración y
+    el manifiesto de los modelos.
+    \item El sistema detecta y sigue a las personas en cada cámara.
+    \item El sistema asocia a la misma persona entre cámaras.
+    \item El sistema ubica cada posición en el plano.
+    \item El sistema reconcilia las identidades y registra las
+    trayectorias seudónimas.
+\end{enumerate}
+
+\textbf{Flujos alternativos:} Si una cámara no está calibrada, la
+trayectoria se registra sin coordenadas en el plano. Si el usuario
+interrumpe el procesamiento, se conserva y reconcilia lo procesado hasta
+ese momento.
+
+\textbf{Postcondiciones:} Trayectorias disponibles para el mapa y los insights (Figura~\ref{fig:cu11}).
+
+\FloatBarrier
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figuras/casos-de-uso/cu-11.png}
+\caption{CU-11: Procesar videos multicámara}
+\label{fig:cu11}
+\end{figure}
+
+\FloatBarrier
 
 \subsection*{Capturas de las calculadoras de costos en la nube}
 \label{anexo:nube}
@@ -7535,3 +7686,4 @@ Figura~\ref{fig:qr-demo}.
 \end{figure}
 
 \end{document}
+
