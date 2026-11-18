@@ -255,11 +255,13 @@ dos cámaras de cada lugar sincronizadas por el audio y por la propia gente. Las
 sobre cinco pares de cámaras del mismo lugar mostraron que la GPU procesa unos
 17 cuadros por segundo por video con dos cámaras 1080p, y que siete cámaras de 60~fps se procesan
 completas a 5 cuadros por segundo por cámara en 3 veces la duración del
-video. El informe cierra con el plan de negocio de TrackFlow, que
-lleva la misma tecnología a la medición de captación de tiendas y de audiencia
-de espacios publicitarios. El diseño incluye salvaguardas frente a menores de
-edad, re-identificación indirecta, retención de datos, transparencia, sesgo
-algorítmico y uso del sistema.
+video.
+
+El diseño incluye salvaguardas frente a menores de edad, re-identificación
+indirecta, retención de datos, transparencia, sesgo algorítmico y uso del
+sistema. El informe cierra con el plan de negocio de TrackFlow, que lleva la
+misma tecnología a la medición de captación de tiendas y de audiencia de
+espacios publicitarios.
 
 \section{Introducción}
 
@@ -302,8 +304,8 @@ por franja horaria.
 
 Según la literatura revisada en la Sección~\ref{sec:related}, los
 sistemas de tracking multicámara sin biometría facial han alcanzado tasas
-de re-identificación correcta cercanas al 82\,\%~\cite{mendes2023} y valores de MOTA
-superiores al 90\,\%~\cite{yang2023} en escenas de alta densidad peatonal. Esto sugiere
+de re-identificación correcta cercanas al 82\,\%~\cite{mendes2023} y una exactitud
+de seguimiento (MOTA) superior al 90\,\%~\cite{yang2023} en escenas de alta densidad peatonal. Esto sugiere
 que este tipo de analítica puede ofrecer una precisión operativa útil sin
 recurrir a reconocimiento facial. Su adopción en el aeropuerto Jorge
 Chávez tendría además implicancias para la industria: una medición más
@@ -491,8 +493,11 @@ y Law~\cite{wonglaw2023}.
 
 \subsubsection{Variables de desempeño y evaluación}
 \begin{itemize}
-    \item \textbf{Métricas de seguimiento y re-identificación:} MOTA,
-    IDF1, precisión y recall sobre pares de tracklets, y AUC de la
+    \item \textbf{Métricas de seguimiento y re-identificación:} MOTA
+    (exactitud del seguimiento, que descuenta las personas perdidas, las
+    detecciones falsas y los cambios de identidad), IDF1 (fracción del tiempo
+    en que cada persona conserva su identificador), precisión y recall sobre
+    pares de tracklets, y AUC de la
     similitud entre cámaras, siguiendo los estándares de Yang et
     al.~\cite{yang2023} y Zhou et al.~\cite{zhou2026}.
     \item \textbf{Métricas de robustez y rendimiento:} estabilidad ante
@@ -534,8 +539,8 @@ y Law~\cite{wonglaw2023}.
 
 \subsubsection{Restricciones éticas}
 El sistema debe proteger la confidencialidad de las imágenes de los
-pasajeros, no procesar rasgos faciales~\cite{mendes2023,ryan2023}, excluir a
-los menores de edad del análisis individualizado, controlar el sesgo
+pasajeros, no procesar rasgos faciales~\cite{mendes2023,ryan2023}, proteger a
+los menores de edad sin clasificar a nadie por su edad, controlar el sesgo
 algorítmico~\cite{jin2024} e informar a los pasajeros mediante señalización
 visible, conforme a la Ley N.\textdegree~29733~\cite{ley29733}. El riesgo y la medida de cada
 una se detallan en el análisis ético.
@@ -765,7 +770,7 @@ S4 & Eliminar la inferencia de atributos & Retirar el clasificador de género y 
 \hline
 S5 & Zonas de exclusión y de personal & Polígonos de exclusión en el plano (baños, lactancia, oración, controles migratorios, seguridad y personal) enmascarados antes del detector; revisión previa de cada sitio & L10, E2, E7, E11 & Propuesta de diseño \\
 \hline
-S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, L11, E6, E8 & Parcial: exportar exige permiso temporal \\
+S6 & Conteos pequeños en todos los reportes & Umbral mínimo configurable en todos los reportes y menor granularidad con el tiempo; sin consultas por ID ni exportación de trayectorias individuales & L2, L9, E6, E8 & Parcial: exportar exige permiso temporal \\
 \hline
 S7 & Empareja\-miento ticket-persona agregado & Emparejar por zona y ventana de tiempo, descartar las parejas de baja confianza, no guardar el vínculo individual y mostrar la confianza & L7, E6, E8, E9 & Propuesta de diseño: hoy el emparejamiento es por persona y guarda su confianza \\
 \hline
@@ -802,7 +807,7 @@ defina el alcance permitido de los datos. Sin ese marco, el uso podría
 constituir una vulneración ética y regulatoria, ya que las cámaras se
 instalaron exclusivamente con fines de seguridad.
 
-Los modelos de inferencia demográfica, además, pueden reproducir sesgos del dataset de entrenamiento cuando se aplican fuera de su dominio original~\cite{jin2024}. En un aeropuerto, esto puede producir estimaciones inconsistentes entre grupos de pasajeros, clasificaciones binarias o estereotipadas y afectar la equidad de los insights. Por ello, el sistema no estima el género de las personas: el módulo opcional que lo hacía se retiró del prototipo por razones éticas, ya que no es necesario para medir tráfico, permanencia ni captación.
+Los modelos de inferencia demográfica, además, pueden reproducir sesgos del dataset de entrenamiento cuando se aplican fuera de su dominio original~\cite{jin2024}. En un aeropuerto, esto puede producir estimaciones inconsistentes entre grupos de pasajeros y afectar la equidad de los insights; por eso el sistema no estima atributos de las personas (riesgo E5, más abajo).
 
 Finalmente, la transparencia es crucial. La señalización visible sobre el
 uso de analítica de video resulta indispensable para garantizar la
@@ -855,7 +860,7 @@ proyecto establece seis salvaguardas:
     demográficos y sesgar los insights. \\
     \textit{Solución:} el detector, el seguidor y el Re-ID se validaron con
     videos etiquetados distintos de ESAN y con sus límites documentados
-    (Sección~\ref{sec:validacion-modelos}). El sistema no infiere el género de las personas ni lo usa como base de decisión alguna.
+    (Sección~\ref{sec:validacion-modelos}).
 
     \item \textbf{6. Uso del sistema} \\
     \textit{Riesgo:} los datos capturados por seguridad podrían
@@ -893,7 +898,7 @@ E2 & Asimetría de poder & Pasajeros & Alta & Minimizar datos; recorridos sin c�
 \hline
 E3 & Sesgos y errores del modelo & Grupos mal representados & Alta & Validación con videos etiquetados, informe de límites y supervisión humana \\
 \hline
-E4 & Menores y personas vulnerables & Niños, adultos mayores y personas con discapacidad & Alta & Excluir en lugar de perfilar \\
+E4 & Menores y personas vulnerables & Niños, adultos mayores y personas con discapacidad & Alta & Privacidad por diseño para todos en lugar de clasificar por edad \\
 \hline
 E5 & Inferencia de atributos (género, edad, emociones) & Pasajeros & Media & Género eliminado; publicar el compromiso de no inferir atributos \\
 \hline
@@ -1111,7 +1116,7 @@ TrackFlow (fortalezas y debilidades) de lo que viene del entorno
     \item Equipo de cuatro fundadores a medio tiempo
     \item Precisión medida en videos etiquetados, no en tiendas
     \item Detector con licencia AGPL
-    \item Lectura del NVR y modo liviano por construir
+    \item Lectura del grabador de las cámaras (NVR) y modo liviano por construir
     \item Sin clientes pagados todavía} \\[3pt]
 \hline\noalign{\vskip3pt}
 \fodacelda{blue!12}{Oportunidades}{%
@@ -1167,9 +1172,9 @@ El producto cubre los requisitos RF-01 a RF-09 y los casos de uso CU-01 a
 CU-11 (Sección~\ref{sec:requisitos}): detección, seguimiento local,
 re-identificación entre cámaras, mapa 2D, procesamiento histórico, tablero de
 insights, teléfonos como cámaras, videos subidos y ventas. El proyecto incluye
-además la validación, la documentación y el plan de negocio. Quedan fuera el
-clasificador de edad, la predicción de congestión y el entrenamiento de
-modelos propios. El Cuadro~\ref{tab:fases-resumen} resume las fases.
+además la validación, la documentación y el plan de negocio. Quedan fuera la
+estimación del género o la edad, la predicción de congestión y el
+entrenamiento de modelos propios. El Cuadro~\ref{tab:fases-resumen} resume las fases.
 
 \begin{table}[!htbp]
 \centering
@@ -1207,10 +1212,10 @@ el pasillo (9 de noviembre); el cierre es el sprint~16.
 
 El equipo trabajó con Scrum. El rol de Scrum Master lo cumple Neciosup,
 líder del proyecto, y el equipo de desarrollo lo forman Quiliche, Almeyda,
-López y Neciosup. Cada sprint dura una semana: en el Sprint Planning se reparten las
-tareas en el panel y en las actas, y en el Sprint Review de los miércoles se
-revisa el avance frente al diagrama de Gantt (Sección~\ref{sec:scrum}). El
-Cuadro~\ref{tab:herramientas} resume las herramientas de trabajo.
+López y Neciosup. Cada sprint dura una semana y cierra los miércoles; los
+eventos, los artefactos y la Definición de Terminado están en la
+Sección~\ref{sec:scrum}. El Cuadro~\ref{tab:herramientas} resume las
+herramientas de trabajo.
 
 \begin{table}[!htbp]
 \centering
@@ -1225,8 +1230,8 @@ Cuadro~\ref{tab:herramientas} resume las herramientas de trabajo.
 GitHub & Repositorio y control de versiones
 (\url{https://github.com/23-Andres-QC/Aeropuerto}): cada cambio se registra
 como \textit{commit} en la rama principal, se integra con \textit{pull} y se
-publica con \textit{push}; el servidor se actualiza con \textit{pull}. Al 28 de
-octubre de 2026 sumaba 247 \textit{commits} de tres autores. \\
+publica con \textit{push}; el servidor se actualiza con \textit{pull}. Al 17 de
+noviembre de 2026 sumaba 291 \textit{commits}. \\
 \hline
 Visual Studio Code & Editor del código del modelo (Python), de los backends
 (Go) y de la aplicación web (Vue), con su terminal integrada. \\
@@ -1887,7 +1892,8 @@ personas; un seguidor local híbrido basado en movimiento, IoU, escala,
 apariencia corporal (histogramas de color y ResNet18~\cite{he2016}) y memoria visual;
 el codificador YOLO26s-ReID con una galería global compartida para la
 asociación entre cámaras; homografía para la proyección espacial; PostGIS para el almacenamiento espacial; y Vue.js para la visualización.
-La misma metodología se aplica, con ajustes más sensibles, a los videos de
+En el resto del informe, este procesamiento de video grabado con las Partes~I y~II
+se llama \textit{Build}. La misma metodología se aplica, con ajustes más sensibles, a los videos de
 cualquier origen que se suben a la sección Videos: detector a 1280~px y
 codificador de re-identificación que promedia OSNet-AIN~\cite{zhou2022osnet} y PersonViT~\cite{hu2024personvit}, ambos
 preentrenados en MSMT17~\cite{wei2018} (Sección~\ref{sec:algoritmos}).
@@ -3371,9 +3377,9 @@ con el mismo número a la vez (antes, 53).
 \subsection{Dataset}
 \label{sec:dataset}
 
-Ningún modelo se entrena dentro del proyecto: los pesos son preentrenados y
-los videos sirven para construir, calibrar y medir el sistema, no para
-entrenarlo. El Cuadro~\ref{tab:dataset} resume los datos usados.
+Como los pesos son preentrenados (Sección~\ref{sec:metodologia}), los videos
+del proyecto no sirven para entrenar, sino para construir, calibrar y medir el
+sistema. El Cuadro~\ref{tab:dataset} resume los datos usados.
 
 \begin{table}[H]
 \caption{Datos y videos del proyecto}
@@ -3432,7 +3438,6 @@ Seguimiento local & IDF1 y cambios de ID frente a anotaciones; fragmentación (I
 \hline
 Re-ID multicámara & AUC de la similitud entre cámaras; precisión y recall sobre pares de tracklets etiquetados; personas contadas frente a reales. \\
 \hline
-
 Homografía & Error de reproyección en puntos de control. \\
 \hline
 Eventos & Precisión, recall y F1. \\
@@ -3447,8 +3452,8 @@ Histórico & Comparación con trayectorias conocidas. \\
 No se fija una precisión única para todo el sistema, ya que detección,
 seguimiento, calibración, asociación multicámara y eventos son problemas
 distintos que se evalúan por separado; los resultados del detector, el
-seguidor y el Re-ID están en la Sección~\ref{sec:validacion-modelos}. Los
-umbrales de asociación se calibraron con tracklets etiquetados manualmente.
+seguidor y el Re-ID están en la Sección~\ref{sec:validacion-modelos}, y los de
+la homografía, en los casos de prueba (Sección~\ref{sec:validacion-esan}).
 
 \subsection{Validación de los modelos con videos etiquetados}
 \label{sec:validacion-modelos}
@@ -3922,7 +3927,7 @@ agregada:
 \section{Casos de prueba en ESAN}
 \label{sec:validacion-esan}
 
-Las pruebas de validación se realizaron en la Universidad ESAN en cuatro pruebas: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En la prueba de campo ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}, en el Anexo).
+El sistema se probó en el campus de la Universidad ESAN en cuatro pruebas de campo: la primera en el patio en forma de L entre los Edificios A y B, la segunda en el comedor, la tercera en el pasillo exterior del Edificio D y la cuarta, con mucha más gente, de nuevo en el patio y en el pasillo. En ellas ayudaron estudiantes de ESAN, que recorrieron las zonas grabadas frente a las cámaras (Figura~\ref{fig:pruebas-participantes}, en el Anexo).
 
 \subsection{Primera prueba: ESAN, Edificios A y B}
 
@@ -4780,7 +4785,10 @@ La primera versión se desplegó en una máquina virtual de Google Cloud sin GPU
 donde el modelo en vivo corría en CPU a unos 4 a 6 cuadros por segundo con
 pocas personas. El sistema pasó a la computadora local porque el modelo de
 Videos, la re-identificación con OSNet-AIN y PersonViT y el procesamiento de
-varias cámaras a la vez necesitan una GPU. Cada imagen ejecuta sus pruebas al
+varias cámaras a la vez necesitan una GPU. Para consultar las sesiones desde
+fuera de la red local, una copia de la web, los backends y las bases, sin el
+modelo, corre además en un servidor Linux, que se actualiza desde el
+repositorio con \textit{pull} y Docker Compose. Cada imagen ejecuta sus pruebas al
 construirse; si una falla, los servicios en marcha no se reemplazan. La web y
 la página de cámara se sirven por HTTPS, requisito de los navegadores para usar
 la cámara del teléfono.
@@ -4790,8 +4798,7 @@ la cámara del teléfono.
 El Cuadro~\ref{tab:costos} compara el costo mensual de procesar en la
 computadora propia con el de la nube. El servidor de Google Cloud se calculó
 con sus precios de lista para \texttt{southamerica-west1}~\cite{gcp-vm} (en dólares, sin
-impuestos, octubre de 2026) sobre 730 horas al mes; una instancia de AWS con GPU T4
-(\texttt{g4dn.xlarge})~\cite{doit,doit-g4dn} sirve de referencia para un equipo comparable al local.
+impuestos, octubre de 2026) sobre 730 horas al mes.
 Para la computadora propia se toma una PC de escritorio con Core
 i5-12400F, 16~GB de RAM, 1~TB de SSD y una RTX~4060 de 8~GB, que Promart
 vende en S/~4\,579 y Falabella en S/~4\,799 (S/~5\,500 de lista en las
@@ -4831,18 +4838,11 @@ Spot & US\$0.181 por hora; Google puede detenerla en cualquier momento & 132.13 
 \hline
 Solo en horario de uso & 8 horas al día, 22 días al mes (176 horas) & 76.26 \\
 \hline
-\multicolumn{3}{|l|}{\textit{Nube con GPU T4 (\texttt{g4dn.xlarge})}} \\
-\hline
-A demanda, todo el mes & US\$0.526 por hora & 384.00 \\
-\hline
-Spot, todo el mes & $\approx$ US\$0.18 por hora & $\approx$ 131 \\
-\hline
 \end{tabular}
 \end{table}
 
-Los valores anteriores del servidor y de la computadora propia son de un equipo
-sin GPU o local. Para comparar con una nube que ofrezca la misma GPU, se
-estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
+El servidor de Google Cloud no tenía GPU. Para comparar la computadora propia
+con una nube que sí la tenga, se estimó una máquina virtual con una GPU NVIDIA T4 en las calculadoras oficiales
 de precios de Google Cloud, Amazon Web Services (AWS) y Microsoft Azure, en
 dólares y sin impuestos, con tres escenarios de uso al mes: 240, 360 y 720
 horas encendida (720 horas equivale a tenerla prendida todo el mes). El
@@ -4919,10 +4919,11 @@ depende más de las horas de uso, la ubicación de los datos y el costo de
 transferencia que del proveedor. Las cifras de Google Cloud no incluyen una IP
 fija ni la salida de datos, que se suman aparte.
 
-Fuera de las tres grandes nubes hay opciones más baratas para correr el
-modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
+Además de la T4 a demanda de las tres grandes nubes, hay opciones más baratas
+(\textit{spot}, mercados de GPU y servidores dedicados) o con GPU más nuevas
+para correr el modelo, que hoy usa una RTX~4060 Laptop de 8~GB. El
 Cuadro~\ref{tab:nube-proveedores} ordena de la más económica a la más cara
-las que se pudieron verificar en noviembre de 2026, con el precio por hora
+todas las que se pudieron verificar en noviembre de 2026, con el precio por hora
 publicado por cada proveedor (en dólares, sin impuestos ni disco, IP o
 tráfico) y su costo en los tres escenarios. Los precios \textit{spot} y de
 nube comunitaria cambian cada día y la máquina puede detenerse o no estar
@@ -5261,8 +5262,8 @@ consideró conveniente tener \textbf{6 puntos}:}
 
     \item \textbf{Alcance y exclusiones.} Incluye detección, seguimiento local,
     re-identificación, mapa 2D, minería histórica, tablero de insights,
-    teléfonos como cámaras, videos subidos, ventas y plan de negocio. Queda
-    fuera el clasificador de edad, la predicción de congestión y el
+    teléfonos como cámaras, videos subidos, ventas y plan de negocio. Quedan
+    fuera la estimación del género o la edad, la predicción de congestión y el
     entrenamiento de modelos propios.
 
     \item \textbf{Entregables e hitos.} Sistema desplegado en computadora con
@@ -5468,8 +5469,9 @@ conveniente tener \textbf{3 puntos}:}
     diagrama de Gantt (Figura~\ref{fig:gantt}) muestra, por semana, quién
     ejecuta cada tarea y su porcentaje de avance, y facilita la identificación
     de plazos, dependencias y cargas de trabajo. La ruta crítica propuesta
-    (Cuadro~\ref{tab:ruta}) suma 16 semanas; la calibración y el mapa 2D, y la
-    plataforma web, tienen holgura.
+    encadena las siete fases de la Planificación (Cuadro~\ref{tab:fases-resumen})
+    y suma 16 semanas; la calibración y el mapa 2D, y la plataforma web, tienen
+    holgura.
 
     \item \textbf{Burndown y velocidad.} Los datos de gestión (cronograma,
     avance y valor ganado) tienen corte el 26 de octubre, en el sprint~11,
@@ -5486,35 +5488,6 @@ conveniente tener \textbf{3 puntos}:}
     el backlog con MoSCoW (Sección~\ref{sec:alcance}) para asegurar los
     entregables que se deben y se reasigna carga si hace falta.
 \end{enumerate}
-
-\begin{table}[H]
-\centering
-\caption{Ruta crítica propuesta (16 semanas)}
-\label{tab:ruta}
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|L{0.05\textwidth}|L{0.50\textwidth}|R{0.14\textwidth}|}
-\hline
-\textbf{N.\textdegree} & \textbf{Fase} & \textbf{Semanas} \\
-\hline
-1 & Planificación y datos & 2 \\
-\hline
-2 & Seguimiento local & 3 \\
-\hline
-3 & Re-ID multicámara & 3 \\
-\hline
-4 & Histórico e Insights & 3 \\
-\hline
-5 & Teléfonos, Videos y Ventas & 2 \\
-\hline
-6 & Validaciones y pruebas & 2 \\
-\hline
-7 & Informe final y negocio & 1 \\
-\hline
-\multicolumn{2}{|l|}{\textbf{Total}} & \textbf{16} \\
-\hline
-\end{tabular}
-\end{table}
 
 \begin{figure}[H]
     \centering
@@ -5557,11 +5530,8 @@ computadora del equipo y teléfonos conectados como cámaras
 \end{figure}
 
 En conjunto, los sprints, el diagrama de Gantt y las actas semanales
-fueron los instrumentos principales de control del proyecto. El
-código fuente, incluidas las migraciones de la base de datos y los
-notebooks del modelo, se encuentra en
-\url{https://github.com/23-Andres-QC/Aeropuerto}, con 247 commits de tres
-autores entre el 30 de septiembre y el 28 de octubre de 2026.
+fueron los instrumentos principales de control del proyecto, junto con el
+repositorio de GitHub (Cuadro~\ref{tab:herramientas}).
 
 \subsection{Costos y valor ganado (Budget y Earned Value)}
 \label{sec:costos}
@@ -5584,8 +5554,10 @@ conveniente tener \textbf{3 puntos}:}
     (sobre los S/~17\,758 de las actividades, sin la reserva)
     68.75\,\% $\times$ S/~17\,758 $=$ S/~12\,209. Valor ganado:
     65.5\,\% $\times$ S/~17\,758 $=$ S/~11\,631. Variación del cronograma:
-    $-$S/~578. SPI $=$ 0.95 (0.91 si se mide solo por tareas completadas). El
-    costo real y el CPI requieren las horas efectivamente trabajadas.
+    $-$S/~578. Índice de desempeño del cronograma (SPI, valor ganado entre
+    valor planificado) $=$ 0.95 (0.91 si se mide solo por tareas completadas).
+    El costo real y el índice de desempeño del costo (CPI) requieren las horas
+    efectivamente trabajadas.
 
     \item \textbf{Pronóstico.} Si el ritmo se mantiene, el cierre tomaría
     $\approx$ 16.8 sprints, casi uno más de lo previsto.
@@ -5662,7 +5634,7 @@ Detecciones ubicadas en el plano & 93\,\% & $>$ 90\,\% \\
 \hline
 Precisión de la asociación multicámara & 0.99 & $\geq$ 0.95 \\
 \hline
-Recall de la asociación multicámara & 0.86 & Mejorar la versión anterior \\
+Recall de la asociación multicámara & 0.91 (antes 0.86) & Mejorar la versión anterior \\
 \hline
 IDF1 del seguimiento local & 40\,\% (antes 35\,\%) & Mejorar la versión anterior \\
 \hline
@@ -5670,7 +5642,7 @@ Re-ID: acierto en la otra cámara & 78\,\% (antes 58\,\%) & Mejorar la versión 
 \hline
 IDs que mezclan personas & 28\,\% (antes 60\,\%) & Mejorar la versión anterior \\
 \hline
-Cuadros por segundo por video (2 cámaras 1080p) & $\approx$ 16 & $\geq$ 5 \\
+Cuadros por segundo por video (2 cámaras 1080p) & 17 & $\geq$ 5 \\
 \hline
 \end{tabular}
 \end{table}
@@ -5907,7 +5879,7 @@ Video real del aeropuerto & Datos & LAP & Marco contractual de tratamiento de da
     Altos: R2 y R3 ($4 \times 4 = 16$). Medios: R4, R5 y R8 (12), R1 y R6
     (10), R7 y R9 (9).
 
-    \item \textbf{Estructura de desglose (RBS).} Técnico: R2, R3, R9.
+    \item \textbf{Estructura de desglose de riesgos (RBS).} Técnico: R2, R3, R9.
     Infraestructura: R4. Gestión y organización: R1, R5. Legal y ético: R6, R7. Externo: R8.
 
     \item \textbf{Respuesta y seguimiento.} Mitigar con documentación, actas y
@@ -5975,9 +5947,9 @@ R9 & Cámaras de calidad variable & Técnico & 3 & 3 & 9 \\
 \end{table}
 
 El plan principal de gestión de riesgos, vigente desde el inicio de la
-ejecución, se centra en el \textbf{posible abandono de un integrante},
-considerado el riesgo más crítico por la dependencia de actividades
-especializadas. Tiene los siguientes componentes.
+ejecución, se centra en el \textbf{posible abandono de un integrante}: es
+menos probable que R2 y R3, pero su impacto es el máximo (5), porque cada
+integrante lleva actividades especializadas. Tiene los siguientes componentes.
 
 \begin{itemize}
     \item \textbf{Propósito.} Definir acciones preventivas y correctivas
@@ -6056,9 +6028,9 @@ conveniente tener \textbf{4 puntos}:}
     repositorio y el acta.
 
     \item \textbf{Mejora continua.} Mejoras ya documentadas: pasar de la
-    máquina virtual sin GPU (4 a 6 cuadros por segundo) a la computadora con
-    GPU; aceptar cambios de modelo solo si mejoran la medición; procesar por
-    lotes a 5 cuadros por segundo para siete cámaras.
+    máquina virtual sin GPU a la computadora con GPU; aceptar cambios de modelo
+    solo si mejoran la medición; procesar por lotes a 5 cuadros por segundo
+    para siete cámaras.
 \end{enumerate}
 
 \subsection{Lecciones aprendidas (Lessons Learned)}
@@ -6073,16 +6045,17 @@ proyecto, se consideró conveniente tener \textbf{4 puntos}:}
     por segundo; el hardware debe dimensionarse al inicio.
 
     \item \textbf{Validación con datos.} Comparar cada componente con
-    alternativas evita decidir a ojo; mantener un conjunto etiquetado de
-    validación.
+    alternativas evita decidir a ojo y muestra dónde está el límite: hoy es el
+    seguimiento local (IDF1 de 40\,\%). Conviene mantener un conjunto
+    etiquetado de validación.
 
     \item \textbf{Calibración.} En el comedor, usar la focal de otra grabación
     impedía unir a los caminantes; conviene calibrar con referencias de cada
     escenario.
 
-    \item \textbf{Gestión.} La privacidad se diseñó desde el inicio, el
-    seguimiento semanal detectó el leve atraso (SPI 0.95) y el seguimiento
-    local (IDF1 40\,\%) sigue siendo el límite técnico.
+    \item \textbf{Gestión.} Diseñar la privacidad desde el inicio evitó rehacer
+    el sistema después, y el seguimiento semanal detectó a tiempo el leve
+    atraso (SPI 0.95).
 \end{enumerate}
 
 \section{Plan de negocio}
@@ -6217,10 +6190,9 @@ calcula, para el operador, el valor de cada local según su tráfico.
 
 \subsection{Lo que ya está construido}
 
-TrackFlow ya funciona como plataforma (Cuadro~\ref{tab:construido}): el
-código está en el repositorio
-\url{https://github.com/23-Andres-QC/Aeropuerto}, que suma 284 commits entre
-el 30 de septiembre y el 10 de noviembre de 2026, de tres autores. El sistema actual ya cuenta, por zona y tienda,
+TrackFlow ya funciona como plataforma (Cuadro~\ref{tab:construido}), con su
+código en el repositorio de GitHub (Cuadro~\ref{tab:herramientas}). El sistema
+actual ya cuenta, por zona y tienda,
 personas que pasan por el frente, las que se detienen (estancia de al menos
 5~s), las que entran y las que compran (Secciones~\ref{sec:arquitectura}
 y~\ref{sec:pruebas}).
@@ -6257,93 +6229,80 @@ tienda; detector con licencia libre (hoy YOLO, AGPL); consola multicliente.
 
 \subsection{Mercado y competencia}
 
-El mercado mundial de sistemas de conteo de personas vale unos US\$~1\,450
-millones en 2025 y crecería cerca de 13\,\% al año hasta US\$~2\,670 millones
-en 2030~\cite{mordor}. El hardware aún concentra el 63\,\% del ingreso~\cite{mordor}, pero
-los servicios gestionados son lo que más crece: el espacio de un software que
-reutiliza cámaras. El Cuadro~\ref{tab:mercado} dimensiona el mercado peruano
-por locales comerciales con tres niveles: el TAM (mercado total disponible)
-es todo lo que se podría vender si todos los locales compraran; el SAM
-(mercado al que se puede servir) es la parte del TAM que el producto puede
-atender hoy, aquí los locales de Lima con cámara IP utilizable; y el SOM
-(mercado que se espera captar) es la parte del SAM que el plan se propone
-ganar.
+El tamaño del mercado se mide en tres niveles, de lo más amplio a lo más
+concreto:
+
+\begin{itemize}
+    \item \textbf{TAM} (\textit{Total Addressable Market}, mercado total): todo
+    el mercado de este tipo de producto. Se da en el mundo, como contexto, y en
+    el Perú, como lo que se vendería si todos los locales comerciales del país
+    contrataran el monitoreo mensual de S/~149 por tienda
+    (Cuadro~\ref{tab:precios}).
+    \item \textbf{SAM} (\textit{Serviceable Available Market}, mercado
+    atendible): la parte del TAM peruano que el producto puede atender hoy. Se
+    da como un rango: como mínimo, las tiendas de los centros comerciales,
+    donde TrackFlow ya tiene casos de uso; como máximo, los locales de Lima con
+    una cámara IP que se pueda usar, que se suponen el 30\,\% del TAM.
+    \item \textbf{SOM} (\textit{Serviceable Obtainable Market}, mercado que se
+    espera captar): lo que el plan se propone ganar según el pronóstico
+    (Sección~\ref{sec:pronostico}), en 2027 y en 2031.
+\end{itemize}
+
+En soles, el ingreso anual de cada nivel es el número de locales por S/~149 al
+mes por 12 meses (en el SOM, más las pantallas a S/~180 al mes). El
+Cuadro~\ref{tab:mercado} reúne los tres niveles.
 
 \begin{table}[H]
-\caption{Mercado en Perú por locales (supuesto de trabajo)}
+\caption{Embudo de mercado: TAM, SAM y SOM (cifras de terceros y estimaciones propias)}
 \label{tab:mercado}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.15\textwidth}|L{0.45\textwidth}|L{0.12\textwidth}|L{0.18\textwidth}|}
+\begin{tabular}{|L{0.12\textwidth}|L{0.50\textwidth}|L{0.26\textwidth}|}
 \hline
-\textbf{Nivel} & \textbf{Cálculo} & \textbf{Unidades} & \textbf{Ingreso anual potencial} \\
+\textbf{Nivel} & \textbf{Qué se cuenta} & \textbf{Tamaño} \\
 \hline
-TAM Perú & 9\,000+ comercios en los 88 malls de ACCEP~\cite{accep}, 20\,000+ tiendas de Gamarra~\cite{peruretail}, 1\,911 supermercados y tiendas de conveniencia~\cite{forbes}, $\sim$2\,800 boticas de cadena~\cite{gestion} y más de 1\,000 tiendas Mass~\cite{massretail} & $\sim$34\,700 locales & $\sim$S/~62.0 millones (S/~149 al mes) \\
+TAM mundial (contexto) & Conteo de personas, según tres consultoras: US\$~1.3 mil millones (2024) a US\$~2.6 mil millones (2030), 13.7\,\% al año~\cite{grandview}; US\$~1.45 mil millones (2025) a US\$~2.67 mil millones (2030), cerca de 13\,\% al año~\cite{mordor}; US\$~1.83 mil millones (2025)~\cite{intelmr} & US\$~1.3 a 1.8 mil millones \\
+\cline{2-3}
+ & Medición de audiencia en retail: US\$~1.7 mil millones (2025) a US\$~6.6 mil millones (2034), 15.9\,\% al año~\cite{gmi} & US\$~1.7 mil millones \\
 \hline
-SAM & Lima, locales con cámara IP utilizable ($\sim$30\,\% del TAM) & $\sim$10\,400 locales & $\sim$S/~18.6 millones \\
+TAM Perú & 9\,155 tiendas en 91 centros comerciales~\cite{accepclicc}, 20\,000+ tiendas de Gamarra~\cite{peruretail}, 1\,911 supermercados y tiendas de conveniencia~\cite{forbes}, $\sim$2\,800 boticas de cadena~\cite{gestion} y más de 1\,000 tiendas Mass~\cite{massretail}: $\sim$34\,900 locales & $\sim$S/~62.3 millones al año \\
 \hline
-SOM a 2031 & Meta del plan; ingreso anual al ritmo de fin de 2031 & 750 locales y 350 pantallas & $\sim$S/~2.1 millones \\
+SAM Perú & Mínimo: las 9\,155 tiendas de los 91 centros comerciales de 24 ciudades, con 62.8 millones de visitas al mes~\cite{accepclicc} & $\sim$S/~16.4 millones al año \\
+\cline{2-3}
+ & Máximo: locales de Lima con cámara IP utilizable, 30\,\% del TAM: $\sim$10\,500 locales & $\sim$S/~18.7 millones al año \\
+\hline
+SOM & 2027: 10 tiendas y 10 pantallas (10 $\times$ S/~149 + 10 $\times$ S/~180), el 0.11\,\% de las tiendas de centros comerciales; con diagnósticos y estudios, S/~51 mil de ingresos en el año (Cuadro~\ref{tab:crecimiento}) & S/~3\,290 al mes al cierre \\
+\cline{2-3}
+ & 2031: 750 locales y 350 pantallas, del 7 al 8\,\% del SAM en locales (Cuadro~\ref{tab:crecimiento}) & $\sim$S/~2.1 millones al año \\
 \hline
 \end{tabular}
 \end{table}
 
-El TAM no incluye bodegas, universidades, clínicas, bancos ni pantallas: solo
-la Línea~1 del Metro de Lima movió 203.9 millones de pasajeros en 2025 en 26
-estaciones~\cite{energiminas}.
+\textbf{Cómo leerlo.} El TAM mundial no se suma al peruano: muestra el tamaño
+del negocio en el mundo, y sus cifras difieren porque cada consultora define el
+mercado a su manera (la de Technavio, de US\$~2.45 mil millones, es
+crecimiento de 2024 a 2029 y no tamaño de mercado, por eso no se usa). La
+analítica de retail en general, de la que este mercado es una parte, vale
+US\$~12.1 mil millones (2025)~\cite{imarc}. El hardware (sensores y
+contadores) concentra todavía el 63\,\% del ingreso del conteo de personas,
+pero lo que más crece son los servicios gestionados~\cite{mordor}, que es donde
+entra un software que usa las cámaras que ya existen.
 
-\subsubsection*{Dimensionamiento global y peruano: TAM, SAM y SOM}
+En el Perú, el cálculo es conservador. No cuenta bodegas, universidades,
+clínicas, bancos ni pantallas publicitarias, ni tampoco los aeropuertos, que
+todavía no tienen una tarifa en soles: los del país movieron más de 40
+millones de pasajeros en 2024, el Jorge Chávez 24.5 millones ese año y 25.5
+millones en 2025, y la red regional concesionada suma 17 aeropuertos (12 de
+ADP y 5 de AAP)~\cite{andina2025,andina2026}; la Línea~1 del Metro de Lima, por
+su parte, movió 203.9 millones de pasajeros en 2025 por sus 26
+estaciones~\cite{energiminas}. Las metas del SOM son una fracción pequeña del
+SAM, así que el plan no depende de captar una parte grande del mercado.
 
-El Cuadro~\ref{tab:embudo} ordena el mercado en tres niveles, de lo global a lo
-que el plan se propone captar. El TAM global se muestra como un rango, porque
-las consultoras miden el mercado con alcances distintos. El SAM toma los
-centros comerciales y los aeropuertos del Perú, los dos entornos donde
-TrackFlow ya tiene casos de uso. El SOM son las metas de 2027 del plan. Las
-cifras de consultoras privadas provienen de resúmenes públicos y deben
-validarse contra el reporte completo antes de publicarse; todo cálculo propio
-es una estimación o hipótesis, no un resultado ya obtenido.
-
-\begin{table}[H]
-\caption{Embudo de mercado TAM, SAM y SOM (cifras de terceros y estimaciones propias)}
-\label{tab:embudo}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.10\textwidth}|L{0.50\textwidth}|L{0.28\textwidth}|}
-\hline
-\textbf{Nivel} & \textbf{Dato} & \textbf{Fuente / estado} \\
-\hline
-TAM global & Conteo de personas: US\$~1.3 mil millones (2024) a US\$~2.6 mil millones (2030), crecimiento anual compuesto (CAGR) de 13.7\,\%~\cite{grandview} & Consultora privada \\
-\cline{2-3}
- & Conteo de personas: US\$~1.83 mil millones (2025)~\cite{intelmr} & Consultora privada \\
-\cline{2-3}
- & Medición de audiencia en retail: US\$~1.7 mil millones (2025) a US\$~6.6 mil millones (2034), CAGR de 15.9\,\%~\cite{gmi} & Consultora privada \\
-\cline{2-3}
- & Contexto, no es TAM: la analítica de retail en general vale US\$~12.1 mil millones (2025)~\cite{imarc} & Consultora privada \\
-\hline
-SAM Perú & 91 centros comerciales en 24 ciudades, 9\,155 tiendas, 62.8 millones de visitas al mes y ventas de S/~37\,397 millones al cierre de 2025~\cite{accepclicc} & ACCEP \\
-\cline{2-3}
- & Aeropuertos: más de 40 millones de pasajeros en 2024; el Jorge Chávez, 24.5 millones (2024) y 25.5 millones (2025); red regional concesionada de 12 aeropuertos (ADP) y 5 (AAP)~\cite{andina2025,andina2026} & Andina, Ositrán \\
-\cline{2-3}
- & Techo teórico solo en tiendas de centros comerciales: 9\,155 tiendas $\times$ S/~149 al mes $\times$ 12 $\approx$ S/~16.4 millones al año & Estimación propia (supuesto: todas las tiendas contratan el plan de monitoreo) \\
-\hline
-SOM 2027 & 10 tiendas y 10 pantallas; ingresos de S/~51\,000 en el año; ingreso mensual recurrente de S/~3\,300 al cierre (10 $\times$ S/~149 + 10 $\times$ S/~180 = S/~3\,290) & Meta del plan (hipótesis, Cuadro~\ref{tab:crecimiento}) \\
-\cline{2-3}
- & Penetración: 10 de 9\,155 tiendas $\approx$ 0.11\,\% del SAM de tiendas & Estimación propia \\
-\hline
-\end{tabular}
-\end{table}
-
-\textbf{Cómo leerlo.} El TAM global no se suma al peruano: es el contexto del
-tamaño del negocio de conteo de personas en el mundo, y sus cifras difieren
-porque cada consultora define el mercado a su manera (la de Technavio, de
-US\$~2.45 mil millones, es crecimiento incremental de 2024 a 2029, no tamaño de
-mercado, y por eso no se usa). El SAM de tiendas de centros comerciales (9\,155)
-es más estrecho que el TAM por locales del Cuadro~\ref{tab:mercado}, que suma
-además Gamarra, supermercados, boticas y tiendas Mass; las dos tablas miden
-cosas distintas y no se contradicen. La meta de 2027 equivale a una fracción
-mínima del SAM, por lo que el plan no depende de captar una parte grande del
-mercado.
+El Cuadro~\ref{tab:supuestos-mercado} indica de dónde sale cada cifra y cuáles
+son supuestos: las de consultoras privadas vienen de resúmenes públicos y
+deben validarse contra el reporte completo, y todo cálculo propio es una
+estimación, no un resultado.
 
 \begin{table}[H]
 \caption{Supuestos y fuentes del dimensionamiento}
@@ -6355,31 +6314,31 @@ mercado.
 \hline
 \textbf{Supuesto o dato} & \textbf{Qué se asume o de dónde sale} & \textbf{Estado} \\
 \hline
-Tamaño y crecimiento del TAM global & Resúmenes públicos de tres consultoras~\cite{grandview,intelmr,gmi}; el rango refleja definiciones distintas & Por validar contra el reporte completo \\
+Tamaño y crecimiento del TAM mundial & Resúmenes públicos de cuatro consultoras~\cite{grandview,mordor,intelmr,gmi}; el rango refleja definiciones distintas & Por validar contra el reporte completo \\
 \hline
 Analítica de retail (US\$~12.1 mil millones) & Solo contexto~\cite{imarc} & Por validar \\
 \hline
-Centros comerciales y tiendas del Perú & Cifras de cierre de 2025 de ACCEP, citadas por la prensa~\cite{accepclicc} & Dato de tercero \\
+Locales comerciales del Perú (TAM) & Suma de centros comerciales, Gamarra, supermercados, boticas y tiendas Mass~\cite{accepclicc,peruretail,forbes,gestion,massretail} & Datos de terceros, sumados por el equipo \\
 \hline
-Pasajeros de aeropuertos & Cifras de Andina con datos de Ositrán~\cite{andina2025,andina2026} & Dato de tercero \\
+Centros comerciales y tiendas del Perú (SAM mínimo) & Cifras de cierre de 2025 de ACCEP, citadas por la prensa~\cite{accepclicc} & Dato de tercero \\
 \hline
-Concentración empresarial en Lima & Lima Metropolitana concentra el 42.2\,\% de las empresas (INEI)~\cite{inei} & Dato de tercero \\
+Locales de Lima con cámara IP (SAM máximo) & 30\,\% del TAM; Lima Metropolitana concentra el 42.2\,\% de las empresas del país (INEI)~\cite{inei} & Hipótesis \\
 \hline
-Todas las tiendas contratarían el plan & Supuesto para el techo teórico de S/~16.4 millones; no es una proyección de ventas & Hipótesis \\
+Todos los locales contratarían el plan & Supuesto de los montos en soles del TAM y del SAM; no es una proyección de ventas & Hipótesis \\
 \hline
 Precio de S/~149 por tienda y S/~180 por pantalla & Precios del Cuadro~\ref{tab:precios} & Hipótesis de precio \\
 \hline
-Metas de 2027 (10 tiendas, 10 pantallas, S/~3\,300 al mes) & Plan base de crecimiento (Cuadro~\ref{tab:crecimiento}) & Hipótesis, sin ventas aún \\
+Metas de 2027 y 2031 & Escenario base del pronóstico (Cuadro~\ref{tab:crecimiento}) & Hipótesis, sin ventas aún \\
 \hline
-Ingresos o mercado del aeropuerto en soles & No se calcula aquí; falta una tarifa por pasajero o por zona & Por validar \\
+Pasajeros de aeropuertos & Cifras de Andina con datos de Ositrán~\cite{andina2025,andina2026} & Dato de tercero \\
+\hline
+Ingresos o mercado del aeropuerto en soles & No se calcula; falta una tarifa por pasajero o por zona & Por validar \\
 \hline
 \end{tabular}
 \end{table}
 
-\textit{Nota:} cifras de consultoras privadas tomadas de resúmenes públicos;
-validar contra el reporte completo antes de publicar.
-
-El Cuadro~\ref{tab:competencia} compara a los competidores.
+Frente a ese mercado, el Cuadro~\ref{tab:competencia} compara a los
+competidores.
 
 \begin{table}[H]
 \caption{Competidores y diferencia de TrackFlow}
@@ -6590,15 +6549,17 @@ Precio por cámara & $\sim$S/~99 & $\sim$S/~99 & S/~180 & S/~180 \\
 
 El costo crece por bloques: cada 10 cámaras se necesita otra computadora
 (S/~255 al mes), más S/~17 por cámara de tienda o S/~20 por cámara de pantalla.
-Así, 10 cámaras cuestan S/~425 al mes en tiendas y 100 cámaras, S/~4\,250. Con
-el tope de 10 cámaras, la computadora propia cuesta unos S/~26 por cámara al mes.
-Procesar en vivo las 24 horas en la nube, con una GPU por cada dos cámaras como
+Así, 10 cámaras cuestan S/~425 al mes en tiendas y 100 cámaras, S/~4\,250. En
+tiendas, el precio por cámara es el de S/~149 por tienda repartido entre las
+1.5 cámaras que tiene una tienda en promedio (supuesto del pronóstico), unos
+S/~99. Procesar en vivo las 24 horas en la nube, con una GPU por cada dos cámaras como
 la RTX~4060 en las pruebas de carga, cuesta de unos US\$~27 por cámara al mes
 en Vast.ai a US\$~320 en la nube segura de RunPod, y de US\$~189 a 194 con una
 T4 a demanda en AWS, Azure o Google Cloud (Cuadro~\ref{tab:nube-proveedores}). La energía se calcula a S/~0.72 por kWh, tarifa
 BT5B de Luz del Sur~\cite{osinergmin}.
 
 \subsection{Pronóstico financiero}
+\label{sec:pronostico}
 
 El pronóstico financiero estima los ingresos y la caja del negocio en el
 tiempo: la caja es el dinero disponible al cierre de cada período, es decir, lo
@@ -6879,7 +6840,8 @@ El tratamiento de datos se rige por la Ley N.\textdegree~29733~\cite{ley29733} y
 aprobado por el D.S. N.\textdegree~016-2024-JUS~\cite{reglamento29733}. TrackFlow
 actúa como encargado del tratamiento del cliente: procesa las grabaciones
 dentro de su red o en su propia computadora, no guarda imágenes ni rostros,
-borra el video al terminar y entrega solo conteos y tasas.
+borra el video al terminar y entrega solo conteos y tasas. Los riesgos legales
+y las medidas propuestas se analizan en la Sección~\ref{sec:analisis-legal}.
 
 \section*{Referencias bibliográficas}
 \addcontentsline{toc}{section}{Referencias bibliográficas}
@@ -7059,11 +7021,6 @@ Gestión, ``Boticas: Perú duplica su stock por El Niño y reordena su red con f
 en provincias,'' 2025. [En línea]. Disponible:
 \url{https://gestion.pe/economia/boticas-peru-duplica-su-stock-por-el-nino-y-reorden-su-red-con-foco-en-provincias-noticia/}
 
-\bibitem{accep}
-Gestión, ``Centros comerciales alcanzarían ventas por S/ 40\,000 millones este
-año y crecerían 10\,\% según ACCEP,'' 2025. [En línea]. Disponible:
-\url{https://gestion.pe/economia/centros-comerciales-alcanzarian-ventas-por-s-40000-millones-este-ano-y-crecerian-10-segun-accep-noticia/}
-
 \bibitem{massretail}
 Perú Retail, ``Tiendas Mass supera los 1\,000 locales en Perú: ¿cuántos más
 sumará este año?,'' 2025. [En línea]. Disponible:
@@ -7098,10 +7055,6 @@ Hikvision, ``How to configure people counting function for DVR,'' 2026.
 \bibitem{axis}
 Axis Communications, ``AXIS People Counter: product support information,''
 2026. [En línea]. Disponible: \url{https://www.axis.com/products/axis-people-counter}
-
-\bibitem{doit}
-DoiT, ``g4dn.xlarge spot pricing in us-east-2,'' 2026. [En línea].
-Disponible: \url{https://www.doit.com/compute/spot/us-east-2/g4dn.xlarge}
 
 \bibitem{promart-pc}
 Promart, ``Computadora PC Gamer PRO Intel Core i5 12400F RAM 16GB SSD 1TB RTX
