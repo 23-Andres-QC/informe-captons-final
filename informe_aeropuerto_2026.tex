@@ -6290,8 +6290,96 @@ SOM a 2031 & Meta del plan; ingreso anual al ritmo de fin de 2031 & 750 locales 
 
 El TAM no incluye bodegas, universidades, clínicas, bancos ni pantallas: solo
 la Línea~1 del Metro de Lima movió 203.9 millones de pasajeros en 2025 en 26
-estaciones~\cite{energiminas}. El Cuadro~\ref{tab:competencia} compara a los
-competidores.
+estaciones~\cite{energiminas}.
+
+\subsubsection*{Dimensionamiento global y peruano: TAM, SAM y SOM}
+
+El Cuadro~\ref{tab:embudo} ordena el mercado en tres niveles, de lo global a lo
+que el plan se propone captar. El TAM global se muestra como un rango, porque
+las consultoras miden el mercado con alcances distintos. El SAM toma los
+centros comerciales y los aeropuertos del Perú, los dos entornos donde
+TrackFlow ya tiene casos de uso. El SOM son las metas de 2027 del plan. Las
+cifras de consultoras privadas provienen de resúmenes públicos y deben
+validarse contra el reporte completo antes de publicarse; todo cálculo propio
+es una estimación o hipótesis, no un resultado ya obtenido.
+
+\begin{table}[H]
+\caption{Embudo de mercado TAM, SAM y SOM (cifras de terceros y estimaciones propias)}
+\label{tab:embudo}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.10\textwidth}|L{0.50\textwidth}|L{0.28\textwidth}|}
+\hline
+\textbf{Nivel} & \textbf{Dato} & \textbf{Fuente / estado} \\
+\hline
+TAM global & Conteo de personas: US\$~1.3 mil millones (2024) a US\$~2.6 mil millones (2030), crecimiento anual compuesto (CAGR) de 13.7\,\%~\cite{grandview} & Consultora privada \\
+\cline{2-3}
+ & Conteo de personas: US\$~1.83 mil millones (2025)~\cite{intelmr} & Consultora privada \\
+\cline{2-3}
+ & Medición de audiencia en retail: US\$~1.7 mil millones (2025) a US\$~6.6 mil millones (2034), CAGR de 15.9\,\%~\cite{gmi} & Consultora privada \\
+\cline{2-3}
+ & Contexto, no es TAM: la analítica de retail en general vale US\$~12.1 mil millones (2025)~\cite{imarc} & Consultora privada \\
+\hline
+SAM Perú & 91 centros comerciales en 24 ciudades, 9\,155 tiendas, 62.8 millones de visitas al mes y ventas de S/~37\,397 millones al cierre de 2025~\cite{accepclicc} & ACCEP \\
+\cline{2-3}
+ & Aeropuertos: más de 40 millones de pasajeros en 2024; el Jorge Chávez, 24.5 millones (2024) y 25.5 millones (2025); red regional concesionada de 12 aeropuertos (ADP) y 5 (AAP)~\cite{andina2025,andina2026} & Andina, Ositrán \\
+\cline{2-3}
+ & Techo teórico solo en tiendas de centros comerciales: 9\,155 tiendas $\times$ S/~149 al mes $\times$ 12 $\approx$ S/~16.4 millones al año & Estimación propia (supuesto: todas las tiendas contratan el plan de monitoreo) \\
+\hline
+SOM 2027 & 10 tiendas y 10 pantallas; ingresos de S/~51\,000 en el año; ingreso mensual recurrente de S/~3\,300 al cierre (10 $\times$ S/~149 + 10 $\times$ S/~180 = S/~3\,290) & Meta del plan (hipótesis, Cuadro~\ref{tab:crecimiento}) \\
+\cline{2-3}
+ & Penetración: 10 de 9\,155 tiendas $\approx$ 0.11\,\% del SAM de tiendas & Estimación propia \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Cómo leerlo.} El TAM global no se suma al peruano: es el contexto del
+tamaño del negocio de conteo de personas en el mundo, y sus cifras difieren
+porque cada consultora define el mercado a su manera (la de Technavio, de
+US\$~2.45 mil millones, es crecimiento incremental de 2024 a 2029, no tamaño de
+mercado, y por eso no se usa). El SAM de tiendas de centros comerciales (9\,155)
+es más estrecho que el TAM por locales del Cuadro~\ref{tab:mercado}, que suma
+además Gamarra, supermercados, boticas y tiendas Mass; las dos tablas miden
+cosas distintas y no se contradicen. La meta de 2027 equivale a una fracción
+mínima del SAM, por lo que el plan no depende de captar una parte grande del
+mercado.
+
+\begin{table}[H]
+\caption{Supuestos y fuentes del dimensionamiento}
+\label{tab:supuestos-mercado}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.30\textwidth}|L{0.38\textwidth}|L{0.20\textwidth}|}
+\hline
+\textbf{Supuesto o dato} & \textbf{Qué se asume o de dónde sale} & \textbf{Estado} \\
+\hline
+Tamaño y crecimiento del TAM global & Resúmenes públicos de tres consultoras~\cite{grandview,intelmr,gmi}; el rango refleja definiciones distintas & Por validar contra el reporte completo \\
+\hline
+Analítica de retail (US\$~12.1 mil millones) & Solo contexto~\cite{imarc} & Por validar \\
+\hline
+Centros comerciales y tiendas del Perú & Cifras de cierre de 2025 de ACCEP, citadas por la prensa~\cite{accepclicc} & Dato de tercero \\
+\hline
+Pasajeros de aeropuertos & Cifras de Andina con datos de Ositrán~\cite{andina2025,andina2026} & Dato de tercero \\
+\hline
+Concentración empresarial en Lima & Lima Metropolitana concentra el 42.2\,\% de las empresas (INEI)~\cite{inei} & Dato de tercero \\
+\hline
+Todas las tiendas contratarían el plan & Supuesto para el techo teórico de S/~16.4 millones; no es una proyección de ventas & Hipótesis \\
+\hline
+Precio de S/~149 por tienda y S/~180 por pantalla & Precios del Cuadro~\ref{tab:precios} & Hipótesis de precio \\
+\hline
+Metas de 2027 (10 tiendas, 10 pantallas, S/~3\,300 al mes) & Plan base de crecimiento (Cuadro~\ref{tab:crecimiento}) & Hipótesis, sin ventas aún \\
+\hline
+Ingresos o mercado del aeropuerto en soles & No se calcula aquí; falta una tarifa por pasajero o por zona & Por validar \\
+\hline
+\end{tabular}
+\end{table}
+
+\textit{Nota:} cifras de consultoras privadas tomadas de resúmenes públicos;
+validar contra el reporte completo antes de publicar.
+
+El Cuadro~\ref{tab:competencia} compara a los competidores.
 
 \begin{table}[H]
 \caption{Competidores y diferencia de TrackFlow}
@@ -7252,6 +7340,42 @@ John Wiley \& Sons, 2010.
 \bibitem{proinnovate}
 ProInnóvate, ``Programa Nacional de Desarrollo Tecnológico e Innovación,'' 2026.
 [En línea]. Disponible: \url{https://www.proinnovate.gob.pe}
+
+\bibitem{grandview}
+Grand View Research, ``People counting system market report, 2025--2030,''
+2025. [En línea]. Disponible:
+\url{https://www.grandviewresearch.com/industry-analysis/people-counting-system-market-report}
+
+\bibitem{intelmr}
+Intel Market Research, ``Global people counting solution market,'' 2026. [En línea]. Disponible:
+\url{https://www.intelmarketresearch.com/global-people-counting-solution-forecast-market-26634}
+
+\bibitem{gmi}
+Global Market Insights, ``Retail audience measurement solutions market,''
+2025. [En línea]. Disponible:
+\url{https://www.gminsights.com/industry-analysis/retail-audience-measurement-solutions-market}
+
+\bibitem{imarc}
+IMARC Group, ``Retail analytics market.'' [En línea]. Disponible:
+\url{https://www.imarcgroup.com/retail-analytics-market}
+
+\bibitem{accepclicc}
+Revista Economía, ``Perú será sede del Congreso CLICC 2027'' (datos de ACCEP),
+2026. [En línea]. Disponible: \url{https://www.revistaeconomia.com/?p=137921}
+
+\bibitem{andina2025}
+Andina, ``Aeropuertos nacionales superan cifra prepandemia,'' 2025. [En línea]. Disponible:
+\url{https://andina.pe/agencia/noticia-aeropuertos-nacionales-superan-cifra-prepandemia-movilizacion-pasajeros-1017851.aspx}
+
+\bibitem{andina2026}
+Andina, ``Nuevo Aeropuerto Jorge Chávez movilizó cerca de 26 millones de
+pasajeros en su primer año'' (datos de Ositrán), 2026. [En línea]. Disponible:
+\url{https://andina.pe/agencia/noticia-nuevo-aeropuerto-jorge-chavez-movilizo-cerca-26-millones-pasajeros-su-primer-ano-1077213.aspx}
+
+\bibitem{inei}
+El Peruano, ``Lima Metropolitana concentra el 42,2 \% de las empresas'' (datos
+del INEI), 2026. [En línea]. Disponible:
+\url{https://elperuano.pe/noticia/287288-inei-lima-metropolitana-concentra-el-422-de-las-empresas-que-existen-en-el-pais}
 
 \end{thebibliography}
 \endgroup
