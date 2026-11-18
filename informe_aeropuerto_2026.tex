@@ -6233,27 +6233,25 @@ El tamaño del mercado se mide en tres niveles, de lo más amplio a lo más
 concreto:
 
 \begin{itemize}
-    \item \textbf{TAM} (\textit{Total Addressable Market}, mercado total): todo
-    el mercado de este tipo de producto. Se da en el mundo, como contexto, y en
-    el Perú, como lo que se vendería si todos los locales comerciales del país
-    contrataran el monitoreo mensual de S/~149 por tienda
-    (Cuadro~\ref{tab:precios}).
-    \item \textbf{SAM} (\textit{Serviceable Available Market}, mercado
-    atendible): la parte del TAM peruano que el producto puede atender hoy. Se
-    da como un rango: como mínimo, las tiendas de los centros comerciales,
-    donde TrackFlow ya tiene casos de uso; como máximo, los locales de Lima con
-    una cámara IP que se pueda usar, que se suponen el 30\,\% del TAM.
-    \item \textbf{SOM} (\textit{Serviceable Obtainable Market}, mercado que se
-    espera captar): lo que el plan se propone ganar según el pronóstico
-    (Sección~\ref{sec:pronostico}), en 2027 y en 2031.
+    \item \textbf{Mercado total:} todo el mercado de este tipo de producto. Se
+    da en el mundo, como contexto, y en el Perú, como lo que se vendería si
+    todos los locales comerciales del país contrataran el monitoreo mensual de
+    S/~149 por tienda (Cuadro~\ref{tab:precios}).
+    \item \textbf{Mercado atendible:} la parte del mercado total del Perú que
+    el producto puede atender hoy. Se da como un rango: como mínimo, las
+    tiendas de los centros comerciales, donde TrackFlow ya tiene casos de uso;
+    como máximo, los locales de Lima con una cámara IP que se pueda usar, que
+    se suponen el 30\,\% del mercado total.
+    \item \textbf{Mercado objetivo:} lo que el plan se propone ganar según el
+    pronóstico (Sección~\ref{sec:pronostico}), en 2027 y en 2031.
 \end{itemize}
 
 En soles, el ingreso anual de cada nivel es el número de locales por S/~149 al
-mes por 12 meses (en el SOM, más las pantallas a S/~180 al mes). El
-Cuadro~\ref{tab:mercado} reúne los tres niveles.
+mes por 12 meses (en el mercado objetivo, más las pantallas a S/~180 al mes).
+El Cuadro~\ref{tab:mercado} reúne los tres niveles.
 
 \begin{table}[H]
-\caption{Embudo de mercado: TAM, SAM y SOM (cifras de terceros y estimaciones propias)}
+\caption{Embudo de mercado: total, atendible y objetivo (cifras de terceros y estimaciones propias)}
 \label{tab:mercado}
 \centering
 \footnotesize
@@ -6262,24 +6260,24 @@ Cuadro~\ref{tab:mercado} reúne los tres niveles.
 \hline
 \textbf{Nivel} & \textbf{Qué se cuenta} & \textbf{Tamaño} \\
 \hline
-TAM mundial (contexto) & Conteo de personas, según tres consultoras: US\$~1.3 mil millones (2024) a US\$~2.6 mil millones (2030), 13.7\,\% al año~\cite{grandview}; US\$~1.45 mil millones (2025) a US\$~2.67 mil millones (2030), cerca de 13\,\% al año~\cite{mordor}; US\$~1.83 mil millones (2025)~\cite{intelmr} & US\$~1.3 a 1.8 mil millones \\
+Total mundial (contexto) & Conteo de personas, según tres consultoras: US\$~1.3 mil millones (2024) a US\$~2.6 mil millones (2030), 13.7\,\% al año~\cite{grandview}; US\$~1.45 mil millones (2025) a US\$~2.67 mil millones (2030), cerca de 13\,\% al año~\cite{mordor}; US\$~1.83 mil millones (2025)~\cite{intelmr} & US\$~1.3 a 1.8 mil millones \\
 \cline{2-3}
  & Medición de audiencia en retail: US\$~1.7 mil millones (2025) a US\$~6.6 mil millones (2034), 15.9\,\% al año~\cite{gmi} & US\$~1.7 mil millones \\
 \hline
-TAM Perú & 9\,155 tiendas en 91 centros comerciales~\cite{accepclicc}, 20\,000+ tiendas de Gamarra~\cite{peruretail}, 1\,911 supermercados y tiendas de conveniencia~\cite{forbes}, $\sim$2\,800 boticas de cadena~\cite{gestion} y más de 1\,000 tiendas Mass~\cite{massretail}: $\sim$34\,900 locales & $\sim$S/~62.3 millones al año \\
+Total del Perú & 9\,155 tiendas en 91 centros comerciales~\cite{accepclicc}, 20\,000+ tiendas de Gamarra~\cite{peruretail}, 1\,911 supermercados y tiendas de conveniencia~\cite{forbes}, $\sim$2\,800 boticas de cadena~\cite{gestion} y más de 1\,000 tiendas Mass~\cite{massretail}: $\sim$34\,900 locales & $\sim$S/~62.3 millones al año \\
 \hline
-SAM Perú & Mínimo: las 9\,155 tiendas de los 91 centros comerciales de 24 ciudades, con 62.8 millones de visitas al mes~\cite{accepclicc} & $\sim$S/~16.4 millones al año \\
+Atendible del Perú & Mínimo: las 9\,155 tiendas de los 91 centros comerciales de 24 ciudades, con 62.8 millones de visitas al mes~\cite{accepclicc} & $\sim$S/~16.4 millones al año \\
 \cline{2-3}
- & Máximo: locales de Lima con cámara IP utilizable, 30\,\% del TAM: $\sim$10\,500 locales & $\sim$S/~18.7 millones al año \\
+ & Máximo: locales de Lima con cámara IP utilizable, 30\,\% del mercado total: $\sim$10\,500 locales & $\sim$S/~18.7 millones al año \\
 \hline
-SOM & 2027: 10 tiendas y 10 pantallas (10 $\times$ S/~149 + 10 $\times$ S/~180), el 0.11\,\% de las tiendas de centros comerciales; con diagnósticos y estudios, S/~51 mil de ingresos en el año (Cuadro~\ref{tab:crecimiento}) & S/~3\,290 al mes al cierre \\
+Objetivo & 2027: 10 tiendas y 10 pantallas (10 $\times$ S/~149 + 10 $\times$ S/~180), el 0.11\,\% de las tiendas de centros comerciales; con diagnósticos y estudios, S/~51 mil de ingresos en el año (Cuadro~\ref{tab:crecimiento}) & S/~3\,290 al mes al cierre \\
 \cline{2-3}
- & 2031: 750 locales y 350 pantallas, del 7 al 8\,\% del SAM en locales (Cuadro~\ref{tab:crecimiento}) & $\sim$S/~2.1 millones al año \\
+ & 2031: 750 locales y 350 pantallas, del 7 al 8\,\% del mercado atendible en locales (Cuadro~\ref{tab:crecimiento}) & $\sim$S/~2.1 millones al año \\
 \hline
 \end{tabular}
 \end{table}
 
-\textbf{Cómo leerlo.} El TAM mundial no se suma al peruano: muestra el tamaño
+\textbf{Cómo leerlo.} El mercado total mundial no se suma al del Perú: muestra el tamaño
 del negocio en el mundo, y sus cifras difieren porque cada consultora define el
 mercado a su manera (la de Technavio, de US\$~2.45 mil millones, es
 crecimiento de 2024 a 2029 y no tamaño de mercado, por eso no se usa). La
@@ -6296,8 +6294,8 @@ millones de pasajeros en 2024, el Jorge Chávez 24.5 millones ese año y 25.5
 millones en 2025, y la red regional concesionada suma 17 aeropuertos (12 de
 ADP y 5 de AAP)~\cite{andina2025,andina2026}; la Línea~1 del Metro de Lima, por
 su parte, movió 203.9 millones de pasajeros en 2025 por sus 26
-estaciones~\cite{energiminas}. Las metas del SOM son una fracción pequeña del
-SAM, así que el plan no depende de captar una parte grande del mercado.
+estaciones~\cite{energiminas}. Las metas del mercado objetivo son una fracción pequeña del
+mercado atendible, así que el plan no depende de captar una parte grande del mercado.
 
 El Cuadro~\ref{tab:supuestos-mercado} indica de dónde sale cada cifra y cuáles
 son supuestos: las de consultoras privadas vienen de resúmenes públicos y
@@ -6314,17 +6312,17 @@ estimación, no un resultado.
 \hline
 \textbf{Supuesto o dato} & \textbf{Qué se asume o de dónde sale} & \textbf{Estado} \\
 \hline
-Tamaño y crecimiento del TAM mundial & Resúmenes públicos de cuatro consultoras~\cite{grandview,mordor,intelmr,gmi}; el rango refleja definiciones distintas & Por validar contra el reporte completo \\
+Tamaño y crecimiento del mercado total mundial & Resúmenes públicos de cuatro consultoras~\cite{grandview,mordor,intelmr,gmi}; el rango refleja definiciones distintas & Por validar contra el reporte completo \\
 \hline
 Analítica de retail (US\$~12.1 mil millones) & Solo contexto~\cite{imarc} & Por validar \\
 \hline
-Locales comerciales del Perú (TAM) & Suma de centros comerciales, Gamarra, supermercados, boticas y tiendas Mass~\cite{accepclicc,peruretail,forbes,gestion,massretail} & Datos de terceros, sumados por el equipo \\
+Locales comerciales del Perú (mercado total) & Suma de centros comerciales, Gamarra, supermercados, boticas y tiendas Mass~\cite{accepclicc,peruretail,forbes,gestion,massretail} & Datos de terceros, sumados por el equipo \\
 \hline
-Centros comerciales y tiendas del Perú (SAM mínimo) & Cifras de cierre de 2025 de ACCEP, citadas por la prensa~\cite{accepclicc} & Dato de tercero \\
+Centros comerciales y tiendas del Perú (mercado atendible mínimo) & Cifras de cierre de 2025 de ACCEP, citadas por la prensa~\cite{accepclicc} & Dato de tercero \\
 \hline
-Locales de Lima con cámara IP (SAM máximo) & 30\,\% del TAM; Lima Metropolitana concentra el 42.2\,\% de las empresas del país (INEI)~\cite{inei} & Hipótesis \\
+Locales de Lima con cámara IP (mercado atendible máximo) & 30\,\% del mercado total; Lima Metropolitana concentra el 42.2\,\% de las empresas del país (INEI)~\cite{inei} & Hipótesis \\
 \hline
-Todos los locales contratarían el plan & Supuesto de los montos en soles del TAM y del SAM; no es una proyección de ventas & Hipótesis \\
+Todos los locales contratarían el plan & Supuesto de los montos en soles del mercado total y del atendible; no es una proyección de ventas & Hipótesis \\
 \hline
 Precio de S/~149 por tienda y S/~180 por pantalla & Precios del Cuadro~\ref{tab:precios} & Hipótesis de precio \\
 \hline
