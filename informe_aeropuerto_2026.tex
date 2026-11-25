@@ -6615,7 +6615,7 @@ cuatro fundadores (S/~4\,400 al mes); el resto lo cubren los diagnósticos y est
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.06\textwidth}|R{0.08\textwidth}|R{0.09\textwidth}|R{0.08\textwidth}|R{0.06\textwidth}|R{0.09\textwidth}|R{0.10\textwidth}|L{0.24\textwidth}|}
+\begin{tabular}{|L{0.06\textwidth}|R{0.08\textwidth}|R{0.09\textwidth}|R{0.095\textwidth}|R{0.06\textwidth}|R{0.09\textwidth}|R{0.10\textwidth}|L{0.225\textwidth}|}
 \hline
 \textbf{Año} & \textbf{Locales} & \textbf{Pantallas} & \textbf{Cámaras} & \textbf{PCs} & \textbf{Ingresos} & \textbf{Caja para el equipo} & \textbf{Equivale a} \\
 \hline
@@ -6685,89 +6685,113 @@ y el proyecto crea valor si es mayor que cero. La \textbf{TIR} (tasa interna de
 retorno) es la tasa que hace el VAN igual a cero; el proyecto es atractivo si
 supera al COK.
 
-\textbf{Datos usados.} La inversión inicial $I_0$ es la línea base de costos del
-proyecto, S/~19\,534 (Cuadro~\ref{tab:presupuesto}); la reserva de S/~5\,000 no
-se gasta y no se incluye. Los flujos $F_t$ son la caja para el equipo de cada
-año del escenario base (Cuadro~\ref{tab:crecimiento}): S/~30\,800 (2027),
-S/~79\,000 (2028), S/~222\,000 (2029), S/~490\,000 (2030) y S/~927\,000 (2031),
-sin valor de rescate al final del horizonte de cinco años. El \textbf{COK} es un
-supuesto de trabajo de 20\,\% anual, propio de un negocio de tecnología en etapa
-inicial, y debe confirmarse con el docente; por eso se muestra también con otros
-valores. El Cuadro~\ref{tab:van-base} muestra el cálculo del escenario base.
+\textbf{Datos usados.} La evaluación usa el flujo de caja del proyecto a diez
+años (2027 a 2036), calculado en el libro \textit{Flujo de Caja\_TrackFlow}
+(hojas Supuestos, Depreciación, Flujo de Caja y Flujo de Inversionista). La
+inversión inicial es la línea base de costos, S/~19\,534
+(Cuadro~\ref{tab:presupuesto}), más la reserva de S/~5\,000 como capital de
+trabajo: $I_0 = $ S/~24\,534. Cada flujo $F_t$ resta los costos por cámara del
+Cuadro~\ref{tab:costo-camara}, los gastos de venta (8\,\% de los ingresos), el
+impuesto a la renta (29.5\,\%), el pago del personal desde el primer año (los
+cuatro fundadores y luego hasta 11 personas en 2031) y la compra y renovación
+de computadoras cada tres años. El valor de desecho del año diez es el 50\,\%
+del valor en libros de los equipos. El \textbf{COK} es un supuesto de trabajo de
+20\,\% anual, propio de un negocio de tecnología en etapa inicial, y debe
+confirmarse con el docente; por eso se muestra también con otros valores.
+
+El escenario base es más prudente que el cuadro de crecimiento
+(Cuadro~\ref{tab:crecimiento}): llega al 60\,\% de las cámaras (885 en 2031 y
+no 1\,475), con los mismos precios. Es también una evaluación más exigente que
+el plan de caja del Cuadro~\ref{tab:caja}, porque carga el pago al personal
+desde 2027, mientras que el plan lo difiere hasta que haya caja para pagarlo.
+Por eso la columna «Caja para el equipo» del Cuadro~\ref{tab:crecimiento} (antes
+de pagar al equipo, de impuestos y de renovar equipos) no es comparable con los
+flujos del Cuadro~\ref{tab:van-base}.
 
 \begin{table}[H]
-\caption{VAN y TIR del escenario base, con COK de 20\,\%}
+\caption{Flujo de caja, VAN y TIR del escenario base, con COK de 20\,\%}
 \label{tab:van-base}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.14\textwidth}|R{0.20\textwidth}|R{0.20\textwidth}|R{0.22\textwidth}|}
+\begin{tabular}{|L{0.16\textwidth}|R{0.12\textwidth}|R{0.18\textwidth}|R{0.14\textwidth}|R{0.18\textwidth}|}
 \hline
-\textbf{Año} & \textbf{Flujo (S/)} & \textbf{Factor $1/(1.20)^t$} & \textbf{Valor presente (S/)} \\
+\textbf{Año} & \textbf{Cámaras} & \textbf{Flujo (S/)} & \textbf{Factor $1/(1.20)^t$} & \textbf{Valor presente (S/)} \\
 \hline
-0 (inversión) & $-$19\,534 & 1.0000 & $-$19\,534 \\
+0 (inversión) & -- & $-$24\,534 & 1.0000 & $-$24\,534 \\
 \hline
-2027 & 30\,800 & 0.8333 & 25\,667 \\
+1 (2027) & 25 & $-$27\,228 & 0.8333 & $-$22\,690 \\
 \hline
-2028 & 79\,000 & 0.6944 & 54\,861 \\
+2 (2028) & 78 & $-$51\,191 & 0.6944 & $-$35\,549 \\
 \hline
-2029 & 222\,000 & 0.5787 & 128\,472 \\
+3 (2029) & 222 & $-$4\,517 & 0.5787 & $-$2\,614 \\
 \hline
-2030 & 490\,000 & 0.4823 & 236\,304 \\
+4 (2030) & 480 & 38\,288 & 0.4823 & 18\,465 \\
 \hline
-2031 & 927\,000 & 0.4019 & 372\,541 \\
+5 (2031) & 885 & 104\,725 & 0.4019 & 42\,087 \\
 \hline
-\textbf{VAN} & & & \textbf{S/~798\,311} \\
+6 (2032) & 1\,062 & 248\,151 & 0.3349 & 83\,105 \\
 \hline
-\textbf{TIR} & & & \textbf{$\approx$ 294\,\%} \\
+7 (2033) & 1\,221 & 268\,311 & 0.2791 & 74\,881 \\
 \hline
-Relación beneficio--costo & & & $\approx$ 41.9 \\
+8 (2034) & 1\,343 & 268\,340 & 0.2326 & 62\,407 \\
+\hline
+9 (2035) & 1\,424 & 382\,839 & 0.1938 & 74\,197 \\
+\hline
+10 (2036) & 1\,481 & 609\,749 & 0.1615 & 98\,478 \\
+\hline
+\textbf{VAN} & & & & \textbf{S/~368\,232} \\
+\hline
+\textbf{TIR} & & & & \textbf{$\approx$ 58\,\%} \\
 \hline
 \end{tabular}
 \end{table}
 
-El VAN es positivo y la TIR (294\,\%) supera con holgura al COK (20\,\%), por lo
-que el negocio crea valor en el escenario base. La inversión se recupera dentro
-del primer año de ventas (2027), cuando entran S/~30\,800 frente a S/~19\,534
-invertidos. La TIR es muy alta porque la inversión es pequeña: el software ya se
-desarrolló en el curso y la caja inicial no se compromete hasta la primera
-venta. Por eso conviene leerla junto con el VAN y con los escenarios adversos
-del Cuadro~\ref{tab:van-sens}, que reducen todos los flujos por igual (un
-recorte simple, no una proyección por año).
+El VAN es positivo y la TIR (58\,\%) supera al COK (20\,\%), por lo que el
+negocio crea valor en el escenario base. La inversión se recupera en el año
+cinco (2031), después de tres años con flujo negativo: la caja acumulada llega
+a su punto más bajo, $-$S/~107\,000, a fines de 2029, y ese hueco debe cubrirse
+con ventas anticipadas, con el aplazamiento del pago al equipo o con
+financiamiento. La TIR es alta porque la inversión inicial es pequeña (el
+software ya se desarrolló en el curso), pero no es una cifra para mostrar
+sola: conviene leerla junto con el VAN y con los escenarios del
+Cuadro~\ref{tab:van-sens}.
 
 \begin{table}[H]
-\caption{Sensibilidad del VAN y la TIR}
+\caption{Escenarios y sensibilidad del VAN y la TIR}
 \label{tab:van-sens}
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
-\begin{tabular}{|L{0.38\textwidth}|R{0.16\textwidth}|R{0.16\textwidth}|R{0.14\textwidth}|}
+\begin{tabular}{|L{0.34\textwidth}|R{0.08\textwidth}|R{0.15\textwidth}|R{0.10\textwidth}|R{0.15\textwidth}|}
 \hline
-\textbf{Escenario} & \textbf{COK} & \textbf{VAN (S/)} & \textbf{TIR} \\
+\textbf{Escenario} & \textbf{COK} & \textbf{VAN (S/)} & \textbf{TIR} & \textbf{Recuperación} \\
 \hline
-Base & 15\,\% & 953\,994 & 294\,\% \\
+Plan del informe (1\,475 cámaras en 2031) & 20\,\% & 689\,553 & 76\,\% & año 5 \\
 \hline
-Base & 20\,\% & 798\,311 & 294\,\% \\
+Base: 60\,\% de las cámaras (885) & 20\,\% & 368\,232 & 58\,\% & año 5 \\
 \hline
-Base & 25\,\% & 673\,793 & 294\,\% \\
+Pesimista: 35\,\% de las cámaras (516) y precios $-$15\,\% & 20\,\% & $-$13\,281 & 18\,\% & año 8 \\
 \hline
-Base & 30\,\% & 573\,181 & 294\,\% \\
+Base & 15\,\% & 539\,489 & 58\,\% & año 5 \\
 \hline
-Base & 40\,\% & 423\,588 & 294\,\% \\
+Base & 25\,\% & 251\,803 & 58\,\% & año 5 \\
 \hline
-Flujos al 50\,\% & 20\,\% & 389\,388 & 194\,\% \\
+Base & 30\,\% & 171\,184 & 58\,\% & año 5 \\
 \hline
-Flujos al 25\,\% & 20\,\% & 184\,927 & 130\,\% \\
+Base & 40\,\% & 73\,895 & 58\,\% & año 5 \\
 \hline
 \end{tabular}
 \end{table}
 
-El VAN sigue siendo positivo con cualquier COK probado (15 a 40\,\%) y aun si los
-flujos se reducen a la cuarta parte, lo que coincide con la prueba de estrés del
-Cuadro~\ref{tab:estres-financiero}. Las limitaciones son que el COK es un
-supuesto, que los flujos son proyecciones sin ventas reales todavía y que la
-inversión excluye el costo de oportunidad de los fundadores más allá de las
-640~horas valoradas a S/~25.
+El VAN del escenario base sigue siendo positivo con cualquier COK probado (15 a
+40\,\%). El escenario pesimista queda en el límite: su VAN es ligeramente
+negativo y su TIR (18\,\%) queda bajo el COK, de modo que el negocio solo se
+sostiene si se consigue al menos la mitad de las cámaras del plan. Las
+limitaciones son que el COK es un supuesto, que los flujos son proyecciones sin
+ventas reales todavía, que los porcentajes de los escenarios son supuestos del
+equipo y que el costo de los fundadores se valora a un sueldo de mercado de
+S/~3\,000 al mes por persona a tiempo completo.
 
 \subsection{Plan de validación comercial y cronograma}
 
